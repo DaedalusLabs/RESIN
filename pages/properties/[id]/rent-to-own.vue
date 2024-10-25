@@ -13,10 +13,15 @@
          :title="section.title"
          :text="section.text"
       />
-      <DetailsBottomBar v-if="!showDrawer" @show-drawer="handleShowDrawer" />
+      <DetailsBottomBar
+         v-if="!showDrawer"
+         class="z-top"
+         @show-drawer="handleShowDrawer"
+      />
       <VerificationDrawer
          :show="showDrawer"
-         class="z-top fixed bottom-0 left-0 w-full p-4"
+         class="fixed bottom-0 left-0 w-full p-4"
+         :class="{ 'z-top': showDrawer }"
          @close="showDrawer = false"
       />
    </div>
