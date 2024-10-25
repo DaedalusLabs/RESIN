@@ -11,7 +11,7 @@
          <NuxtLink
             :to="localePath(`/properties/${route.params.id}/rent-to-own`)"
          >
-            <FlowbiteButton :text="buttonText" />
+            <FlowbiteButton :text="buttonText" @click="handleClick" />
          </NuxtLink>
       </div>
    </div>
@@ -19,12 +19,21 @@
 
 <script setup>
 const route = useRoute();
-
 const buttonText = computed(() => {
    return route.path.includes("rent-to-own")
       ? "Rent this property"
       : "Rent-to-own";
 });
+
+const emit = defineEmits(["show-drawer"]);
+
+const handleClick = () => {
+   if (buttonText.value === "Rent this property") {
+      emit("show-drawer");
+   } else {
+      console.log("Rent-to-own");
+   }
+};
 </script>
 
 <style scoped>
