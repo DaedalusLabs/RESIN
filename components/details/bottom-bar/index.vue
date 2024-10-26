@@ -30,8 +30,6 @@ const emit = defineEmits(["show-drawer"]);
 const handleClick = () => {
    if (buttonText.value === "Rent this property") {
       emit("show-drawer");
-   } else {
-      console.log("Rent-to-own");
    }
 };
 </script>

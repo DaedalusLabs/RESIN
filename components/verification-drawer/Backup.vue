@@ -112,7 +112,6 @@ const handleCloseDrawer = () => {
 
 const handleNext = () => {
    propertiesStore.recoveryPhrase = recoveryPhrase.value;
-   console.log("Recovery Phrase: ", recoveryPhrase.value);
    emit("next");
 };
 </script>

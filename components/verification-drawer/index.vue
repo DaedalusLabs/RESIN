@@ -16,6 +16,12 @@
          @next="handleNext"
          @back="handleBack"
       />
+      <VerificationDrawerValidated
+         :show="currentStep === 4"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+         @back="handleBack"
+      />
    </div>
 </template>
 
@@ -45,11 +51,8 @@ const handleCloseDrawer = () => {
 
 const handleNext = () => {
    currentStep.value += 1;
-   console.log(currentStep.value);
 
    if (currentStep.value > MAX_STEPS) {
-      console.log("Verification completed");
-
       currentStep.value = -1;
    }
 };
