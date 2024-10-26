@@ -37,6 +37,9 @@
 </template>
 
 <script setup>
+import { usePropertiesStore } from "~/stores/properties";
+const propertiesStore = usePropertiesStore();
+
 const showDrawer = ref(true);
 const recoveryPhrase = ref([]);
 
@@ -98,7 +101,9 @@ const generateRecoveryPhrase = () => {
 
 watchEffect(() => {
    showDrawer.value = props.show;
-   recoveryPhrase.value = generateRecoveryPhrase();
+   if (showDrawer.value) {
+      recoveryPhrase.value = generateRecoveryPhrase();
+   }
 });
 
 const handleCloseDrawer = () => {
@@ -106,6 +111,8 @@ const handleCloseDrawer = () => {
 };
 
 const handleNext = () => {
+   propertiesStore.recoveryPhrase = recoveryPhrase.value;
+   console.log("Recovery Phrase: ", recoveryPhrase.value);
    emit("next");
 };
 </script>
