@@ -1,7 +1,7 @@
 <template>
    <FlowbiteDrawer :is-open="showDrawer" class="p-4" @close="handleCloseDrawer">
       <template #title>
-         <h3 class="text-xl font-semibold text-gray-900">
+         <h3 class="text-xl font-semibold text-pirate-950">
             Let's verify your identity
          </h3>
       </template>
@@ -15,7 +15,7 @@
                   <span class="text-sm font-semibold text-gray-500"
                      >Step 1</span
                   >
-                  <span class="text-md font-semibold text-gray-900"
+                  <span class="text-md font-semibold text-pirate-950"
                      >Provide an identity document</span
                   >
                </div>
@@ -28,7 +28,7 @@
                   <span class="text-sm font-semibold text-gray-500"
                      >Step 2</span
                   >
-                  <span class="text-md font-semibold text-gray-900"
+                  <span class="text-md font-semibold text-pirate-950"
                      >Get ready for a live face scan</span
                   >
                </div>

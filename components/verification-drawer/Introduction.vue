@@ -1,7 +1,7 @@
 <template>
    <FlowbiteDrawer :is-open="showDrawer" class="p-4" @close="handleCloseDrawer">
       <template #title>
-         <h3 class="text-xl font-semibold text-gray-900">
+         <h3 class="text-xl font-semibold text-pirate-950">
             Follow the steps below
          </h3>
       </template>

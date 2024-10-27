@@ -27,12 +27,17 @@
          @close="handleCloseDrawer"
          @next="handleNext"
       />
+      <VerificationDrawerCountrySelect
+         :show="currentStep === 6"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
    </div>
 </template>
 
 <script setup>
 const currentStep = ref(-1);
-const MAX_STEPS = 5;
+const MAX_STEPS = 6;
 
 const emit = defineEmits(["close"]);
 
