@@ -64,7 +64,6 @@
                      !isCompleteAndCorrect,
                   'hover:bg-gray-100': !isCompleteAndCorrect,
                }"
-               :disabled="!isCompleteAndCorrect"
                @click="handleNext"
             >
                <template #icon-append>
@@ -170,9 +169,7 @@ const handleCloseDrawer = () => {
 };
 
 const handleNext = () => {
-   if (isCompleteAndCorrect.value) {
-      emit("next");
-   }
+   emit("next");
 };
 
 const handleBack = () => {

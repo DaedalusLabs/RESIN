@@ -22,12 +22,17 @@
          @next="handleNext"
          @back="handleBack"
       />
+      <VerificationDrawerIdentity
+         :show="currentStep === 5"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
    </div>
 </template>
 
 <script setup>
 const currentStep = ref(-1);
-const MAX_STEPS = 4;
+const MAX_STEPS = 5;
 
 const emit = defineEmits(["close"]);
 
