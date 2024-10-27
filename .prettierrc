@@ -2,5 +2,6 @@
    "endOfLine": "auto",
    "tabWidth": 3,
    "quoteProps": "consistent",
-   "plugins": ["prettier-plugin-tailwindcss"]
+   "plugins": ["prettier-plugin-tailwindcss"],
+   "htmlWhitespaceSensitivity": "ignore"
 }

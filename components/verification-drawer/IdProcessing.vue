@@ -34,7 +34,6 @@ watchEffect(() => {
    showDrawer.value = props.show;
    if (props.show) {
       setTimeout(() => {
-         console.log("IdProcessing next");
          emit("next");
       }, 3000);
    }

@@ -93,7 +93,6 @@ const handleNext = () => {
 };
 
 const handleBack = () => {
-   console.log("handleBack");
    if (currentStep.value > 1) {
       currentStep.value -= 1;
    }
