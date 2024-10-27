@@ -17,13 +17,13 @@
                      class="flex w-full items-center justify-between rounded-md border border-gray-300 bg-gray-100 p-2.5 text-left focus:border-resin-500 focus:ring-resin-500"
                      @click="toggleDropdown"
                   >
-                     <p v-if="selectedCountry">
+                     <p v-if="selectedCountry" class="text-sm">
                         <span class="flag-emoji">{{
                            getFlagEmoji(selectedCountry.cca2)
                         }}</span>
                         {{ selectedCountry.name.common }}
                      </p>
-                     <span v-else>Select a country</span>
+                     <span v-else class="text-sm"> Select a country </span>
                      <PhCaretDown :size="20" />
                   </button>
                   <div
@@ -89,14 +89,23 @@
                   <PhArrowLeft :size="24" weight="bold" />
                </template>
             </FlowbiteBorderButton>
-            <FlowbiteButton text="Next" class="px-5 py-3" @click="handleNext" />
+            <FlowbiteButton
+               text="Next"
+               class="px-5 py-3"
+               :disabled="!isFormValid"
+               :class="{
+                  'cursor-not-allowed bg-gray-100 opacity-50 hover:bg-gray-100':
+                     !isFormValid,
+               }"
+               @click="handleNext"
+            />
          </div>
       </template>
    </FlowbiteDrawer>
 </template>
 
 <script setup>
-import { PhArrowLeft } from "@phosphor-icons/vue";
+import { PhArrowLeft, PhCaretDown } from "@phosphor-icons/vue";
 
 const showDrawer = ref(true);
 const emit = defineEmits(["close", "next", "back"]);
@@ -124,6 +133,16 @@ const getFlagEmoji = (countryCode) => {
          String.fromCodePoint(127397 + char.charCodeAt()),
       );
    return flag;
+};
+
+const isFormValid = computed(() => {
+   return selectedCountry.value && selectedDocumentType.value;
+});
+
+const handleNext = () => {
+   if (isFormValid.value) {
+      emit("next");
+   }
 };
 
 onMounted(async () => {
@@ -156,10 +175,6 @@ watchEffect(() => {
 
 const handleCloseDrawer = () => {
    emit("close");
-};
-
-const handleNext = () => {
-   emit("next");
 };
 
 const handleBack = () => {
