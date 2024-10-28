@@ -1,20 +1,20 @@
 <template>
    <FlowbiteDrawer :is-open="showDrawer" class="p-4" @close="handleCloseDrawer">
       <template #title>
-         <h3 class="text-xl font-semibold text-gray-900">
+         <h3 class="text-xl font-semibold text-pirate-950">
             Verify your recovery phrase
          </h3>
-         <p class="mt-2 text-sm font-normal text-pirate-800">
+         <p class="mt-2 text-sm font-normal text-pirate-950">
             Tap the words in the order they appear in your recovery phrase and
             click next.
          </p>
       </template>
       <template #content>
-         <div class="mt-4 grid grid-cols-2 gap-4 text-gray-800">
+         <div class="mt-4 grid grid-cols-2 gap-4 text-pirate-950">
             <button
                v-for="(word, index) in shuffledWords"
                :key="index"
-               class="flex items-center rounded-md border p-2 px-3 transition-colors duration-200"
+               class="flex items-center rounded-md border border-gray-300 bg-gray-50 p-2 px-3 font-semibold transition-colors duration-200"
                :disabled="shouldDisableWord(word)"
                :class="{
                   'bg-green-500 text-white':
@@ -60,11 +60,9 @@
                text="Next"
                class="px-5 py-3 transition-all duration-200"
                :class="{
-                  'cursor-not-allowed bg-gray-100 opacity-50':
+                  'cursor-not-allowed bg-gray-100 opacity-50 hover:bg-gray-100':
                      !isCompleteAndCorrect,
-                  'hover:bg-gray-100': !isCompleteAndCorrect,
                }"
-               :disabled="!isCompleteAndCorrect"
                @click="handleNext"
             >
                <template #icon-append>
@@ -170,9 +168,7 @@ const handleCloseDrawer = () => {
 };
 
 const handleNext = () => {
-   if (isCompleteAndCorrect.value) {
-      emit("next");
-   }
+   emit("next");
 };
 
 const handleBack = () => {

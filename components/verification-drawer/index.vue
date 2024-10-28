@@ -22,12 +22,46 @@
          @next="handleNext"
          @back="handleBack"
       />
+      <VerificationDrawerIdentity
+         :show="currentStep === 5"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
+      <VerificationDrawerCountrySelect
+         :show="currentStep === 6"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+         @back="handleBack"
+      />
+      <VerificationDrawerIdUploadTips
+         :show="currentStep === 7"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+         @back="handleBack"
+      />
+      <VerificationDrawerIdUpload
+         :show="currentStep === 8"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+         @back="handleBack"
+      />
+      <VerificationDrawerIdProcessing
+         :show="currentStep === 9"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+         @back="handleBack"
+      />
+      <VerificationDrawerPassed
+         :show="currentStep === 10"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
    </div>
 </template>
 
 <script setup>
 const currentStep = ref(-1);
-const MAX_STEPS = 4;
+const MAX_STEPS = 10;
 
 const emit = defineEmits(["close"]);
 
@@ -54,6 +88,7 @@ const handleNext = () => {
 
    if (currentStep.value > MAX_STEPS) {
       currentStep.value = -1;
+      emit("close");
    }
 };
 

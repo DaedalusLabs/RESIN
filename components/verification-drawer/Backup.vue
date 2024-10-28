@@ -1,10 +1,10 @@
 <template>
-   <FlowbiteDrawer :is-open="showDrawer" class="p-4" @close="handleCloseDrawer">
+   <FlowbiteDrawer :is-open="showDrawer" @close="handleCloseDrawer">
       <template #title>
-         <h3 class="text-xl font-semibold text-gray-900">
+         <h3 class="text-xl font-semibold text-pirate-950">
             Back up your recovery phrase
          </h3>
-         <p class="mt-2 text-sm font-normal text-pirate-800">
+         <p class="mt-2 text-xs font-normal text-pirate-800">
             These words let you recreate your account in case you lose access.
             Write them down in a safe place.
          </p>
