@@ -13,15 +13,27 @@
          :title="section.title"
          :text="section.text"
       />
-      <DetailsBottomBar />
+      <DetailsBottomBar
+         v-if="!showDrawer"
+         class="z-top"
+         @show-drawer="handleShowDrawer"
+      />
+      <VerificationDrawer
+         :show="showDrawer"
+         class="fixed bottom-0 left-0 w-full p-4"
+         :class="{ 'z-top': showDrawer }"
+         @close="showDrawer = false"
+      />
    </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { usePropertiesStore } from "~/stores/properties";
 
 const propertiesStore = usePropertiesStore();
 const route = useRoute();
+const showDrawer = ref(false);
 
 const property = propertiesStore.properties.find(
    (p) => p.id === parseInt(route.params.id),
@@ -45,6 +57,10 @@ const sections = ref([
       text: "Flexible rent payment plans are available to suit your financial    situation and help you transition into homeownership with ease.",
    },
 ]);
+
+function handleShowDrawer() {
+   showDrawer.value = !showDrawer.value;
+}
 
 definePageMeta({
    layout: "white",
