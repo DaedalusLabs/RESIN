@@ -56,12 +56,18 @@
          @close="handleCloseDrawer"
          @next="handleNext"
       />
+      <VerificationDrawerIntroduction
+         :is-verified="true"
+         :show="currentStep === 11"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
    </div>
 </template>
 
 <script setup>
 const currentStep = ref(-1);
-const MAX_STEPS = 10;
+const MAX_STEPS = 11;
 
 const emit = defineEmits(["close"]);
 

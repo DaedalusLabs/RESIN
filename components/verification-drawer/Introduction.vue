@@ -13,8 +13,15 @@
             <div class="flex items-center space-x-3">
                <div class="flex-shrink-0">
                   <PhArrowRight
+                     v-if="!isVerified"
                      :size="20"
                      weight="bold"
+                     class="text-resin-600"
+                  />
+                  <PhCheckCircle
+                     v-else
+                     :size="20"
+                     weight="fill"
                      class="text-resin-600"
                   />
                </div>
@@ -30,6 +37,9 @@
                      :size="20"
                      weight="fill"
                      class="text-gray-400"
+                     :class="{
+                        'text-resin-600': isVerified,
+                     }"
                   />
                </div>
                <div class="flex-grow">
@@ -41,9 +51,16 @@
             <div class="flex items-center space-x-3">
                <div class="flex-shrink-0">
                   <PhCheckCircle
+                     v-if="!isVerified"
                      :size="20"
                      weight="fill"
                      class="text-gray-400"
+                  />
+                  <PhArrowRight
+                     v-else
+                     :size="20"
+                     weight="bold"
+                     class="text-resin-600"
                   />
                </div>
                <div class="flex-grow">
@@ -68,6 +85,10 @@ const emit = defineEmits(["close", "next"]);
 
 const props = defineProps({
    show: {
+      type: Boolean,
+      default: false,
+   },
+   isVerified: {
       type: Boolean,
       default: false,
    },
