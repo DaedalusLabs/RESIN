@@ -10,6 +10,7 @@ export const usePropertiesStore = defineStore("properties", {
          viewedProperties: [],
          trendingAreas: [],
          hasSeenMapToast: false,
+         recoveryPhrase: [],
       };
    },
    getters: {
@@ -31,6 +32,9 @@ export const usePropertiesStore = defineStore("properties", {
          return this.properties.filter((location) =>
             this.viewedProperties.includes(location.id),
          );
+      },
+      getRecoveredPhrase() {
+         return this.recoveryPhrase;
       },
    },
 
