@@ -67,12 +67,17 @@
          @close="handleCloseDrawer"
          @next="handleNext"
       />
+      <VerificationDrawerContract
+         :show="currentStep === 13"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
    </div>
 </template>
 
 <script setup>
 const currentStep = ref(-1);
-const MAX_STEPS = 12;
+const MAX_STEPS = 13;
 
 const emit = defineEmits(["close"]);
 
@@ -96,8 +101,6 @@ const handleCloseDrawer = () => {
 
 const handleNext = () => {
    currentStep.value += 1;
-
-   console.log(currentStep.value);
 
    if (currentStep.value > MAX_STEPS) {
       currentStep.value = -1;
