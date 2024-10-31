@@ -8,7 +8,7 @@
       </div>
       <transition name="slide-up">
          <div
-            v-show="show"
+            v-if="show"
             v-touch:swipe.down="swipeHandler"
             class="absolute inset-x-0 bottom-0 z-50 flex max-h-[70vh] w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
          >

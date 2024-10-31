@@ -11,6 +11,7 @@ export const usePropertiesStore = defineStore("properties", {
          trendingAreas: [],
          hasSeenMapToast: false,
          recoveryPhrase: [],
+         ownedProperties: [],
       };
    },
    getters: {
@@ -43,6 +44,9 @@ export const usePropertiesStore = defineStore("properties", {
          if (!this.viewedProperties.includes(propertyId)) {
             this.viewedProperties.push(propertyId);
          }
+      },
+      addOwnedProperty(propertyId) {
+         this.ownedProperties.push(propertyId);
       },
       addSearch(searchTerm) {
          this.searches.push(searchTerm);

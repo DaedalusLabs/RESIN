@@ -20,6 +20,7 @@
       />
       <VerificationDrawer
          :show="showDrawer"
+         :property-id="property.id"
          class="fixed bottom-0 left-0 w-full p-4"
          :class="{ 'z-top': showDrawer }"
          @close="showDrawer = false"
