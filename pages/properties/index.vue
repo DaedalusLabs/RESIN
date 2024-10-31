@@ -41,11 +41,11 @@ const properties = ref([]);
 const showFilterDrawer = ref(false);
 
 onMounted(() => {
+   const propertiesStore = usePropertiesStore();
+   properties.value = propertiesStore.filteredProperties;
    setTimeout(() => {
       isLoading.value = false;
-      const propertiesStore = usePropertiesStore();
-      properties.value = propertiesStore.filteredProperties;
-   }, 3000);
+   }, 1000);
 });
 
 const showDrawer = ref(false);

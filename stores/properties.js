@@ -6,6 +6,11 @@ export const usePropertiesStore = defineStore("properties", {
          properties: [],
          filteredProperties: [],
          favorites: [],
+         searches: [],
+         viewedProperties: [],
+         trendingAreas: [],
+         hasSeenMapToast: false,
+         recoveryPhrase: [],
       };
    },
    getters: {
@@ -23,9 +28,25 @@ export const usePropertiesStore = defineStore("properties", {
             this.favorites.includes(location.id),
          );
       },
+      viewedLocations() {
+         return this.properties.filter((location) =>
+            this.viewedProperties.includes(location.id),
+         );
+      },
+      getRecoveredPhrase() {
+         return this.recoveryPhrase;
+      },
    },
 
    actions: {
+      addViewedProperty(propertyId) {
+         if (!this.viewedProperties.includes(propertyId)) {
+            this.viewedProperties.push(propertyId);
+         }
+      },
+      addSearch(searchTerm) {
+         this.searches.push(searchTerm);
+      },
       setFilteredLocations(filteredProperties) {
          this.filteredProperties = filteredProperties;
       },
@@ -57,6 +78,20 @@ export const usePropertiesStore = defineStore("properties", {
       },
       isFavorite(locationId) {
          return this.favorites.includes(locationId);
+      },
+      findPropertyBySearchQuery(searchTerm) {
+         const [street, city, country] = searchTerm.split(", ");
+
+         return this.properties.find((property) => {
+            return (
+               property.location.address.street.toLowerCase() ===
+                  street.toLowerCase() &&
+               property.location.address.city.toLowerCase() ===
+                  city.toLowerCase() &&
+               property.location.address.country.toLowerCase() ===
+                  country.toLowerCase()
+            );
+         });
       },
    },
 });
