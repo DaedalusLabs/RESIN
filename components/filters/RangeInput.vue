@@ -2,23 +2,39 @@
    <div class="mb-6">
       <label class="filter-title" :for="id">{{ label }}</label>
       <div class="mt-2 flex items-center space-x-2">
-         <input
+         <!-- Start Range Dropdown -->
+         <select
+            :id="id + '-start'"
+            class="input-base"
             :value="modelStartValue"
-            type="number"
-            class="input-base"
-            :placeholder="placeholder"
-            min="0"
             @change="updateStartValue"
-         />
+         >
+            <option
+               v-for="option in rangeOptions"
+               :key="option"
+               :value="option"
+            >
+               {{ option }} {{ unit }}
+            </option>
+         </select>
+
          <span>To</span>
-         <input
-            :value="modelEndValue"
-            type="number"
+
+         <!-- End Range Dropdown -->
+         <select
+            :id="id + '-end'"
             class="input-base"
-            :placeholder="placeholder"
-            :min="modelStartValue"
+            :value="modelEndValue"
             @change="updateEndValue"
-         />
+         >
+            <option
+               v-for="option in rangeOptions"
+               :key="option"
+               :value="option"
+            >
+               {{ option !== Infinity ? option + " " + unit : "No max." }}
+            </option>
+         </select>
       </div>
    </div>
 </template>
@@ -42,12 +58,21 @@ const props = defineProps({
    modelStartValue: {
       type: Number,
       required: true,
+      default: 0,
    },
    modelEndValue: {
       type: Number,
       required: true,
+      default: Infinity,
+   },
+   unit: {
+      type: String,
+      required: true,
    },
 });
+
+// Define the range options for dropdown
+const rangeOptions = [0, 500, 1000, 5000, 10000, 20000, Infinity];
 
 const updateStartValue = (event) => {
    const value = Number(event.target.value);

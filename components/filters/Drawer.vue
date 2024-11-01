@@ -33,6 +33,7 @@
                placeholder="0"
                :model-start-value="filtersStore.price.from"
                :model-end-value="filtersStore.price.to"
+               unit="SRD"
                @update:model-start-value="
                   (value) =>
                      filtersStore.updateRangeFilter('price', 'from', value)
@@ -102,6 +103,7 @@
                placeholder="0"
                :model-start-value="filtersStore.livingArea.from"
                :model-end-value="filtersStore.livingArea.to"
+               unit="m²"
                @update:model-start-value="
                   (value) =>
                      filtersStore.updateRangeFilter('livingArea', 'from', value)
@@ -121,6 +123,7 @@
                placeholder="0"
                :model-start-value="filtersStore.plotArea.from"
                :model-end-value="filtersStore.plotArea.to"
+               unit="m²"
                @update:model-start-value="
                   (value) =>
                      filtersStore.updateRangeFilter('plotArea', 'from', value)
@@ -195,6 +198,7 @@
                placeholder="0"
                :model-start-value="filtersStore.gardenArea.from"
                :model-end-value="filtersStore.gardenArea.to"
+               unit="m²"
                @update:model-start-value="
                   (value) =>
                      filtersStore.updateRangeFilter('gardenArea', 'from', value)

@@ -3,10 +3,10 @@ import { defineStore } from "pinia";
 export const useFiltersStore = defineStore("filters", {
    state: () => ({
       // Range filters
-      price: { from: 0, to: 0 },
-      livingArea: { from: 0, to: 0 },
-      plotArea: { from: 0, to: 0 },
-      gardenArea: { from: 0, to: 0 },
+      price: { from: 0, to: Infinity },
+      livingArea: { from: 0, to: Infinity },
+      plotArea: { from: 0, to: Infinity },
+      gardenArea: { from: 0, to: Infinity },
 
       // Number filters
       rooms: 0,
@@ -132,10 +132,10 @@ export const useFiltersStore = defineStore("filters", {
    actions: {
       clearAllFilters() {
          // Reset range filters
-         this.price = { from: 0, to: 0 };
-         this.livingArea = { min: 0, max: 0 };
-         this.plotArea = { min: 0, max: 0 };
-         this.gardenArea = { min: 0, max: 0 };
+         this.price = { from: 0, to: Infinity };
+         this.livingArea = { from: 0, to: Infinity };
+         this.plotArea = { from: 0, to: Infinity };
+         this.gardenArea = { from: 0, to: Infinity };
 
          // Reset number filters
          this.rooms = 0;
