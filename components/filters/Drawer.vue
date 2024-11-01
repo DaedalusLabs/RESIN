@@ -332,7 +332,6 @@ const handleReset = () => {
 
 const applyFilters = () => {
    // TODO: send to api to get filtered results
-   console.log("apply filters");
    emit("close");
 };
 </script>

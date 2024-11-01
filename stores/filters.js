@@ -159,7 +159,6 @@ export const useFiltersStore = defineStore("filters", {
          this.locations = [];
          this.garages = [];
          this.display = [];
-         console.log("Filters cleared");
       },
 
       // Specific filter update actions
@@ -183,7 +182,6 @@ export const useFiltersStore = defineStore("filters", {
          } else {
             this[filterName].push(value);
          }
-         console.log(this[filterName]);
       },
 
       // Helper action to get current filter state
