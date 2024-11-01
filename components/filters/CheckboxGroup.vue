@@ -48,7 +48,6 @@ watch(props.modelValue, (newVal) => {
 });
 
 const handleChange = (event) => {
-   console.log(event.target.value);
    emit("update:modelValue", event.target.value);
 };
 </script>

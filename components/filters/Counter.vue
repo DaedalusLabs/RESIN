@@ -10,7 +10,7 @@
             <PhMinus class="h-3 w-3" />
          </button>
          <input
-            v-model="displayValue"
+            v-model="localValue"
             type="text"
             class="counter-input"
             @input="updateValue"
@@ -28,45 +28,47 @@
 
 <script setup>
 import { PhMinus, PhPlus } from "@phosphor-icons/vue";
+const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps({
-   modelValue: {
-      type: Number,
-      required: true,
-   },
    label: {
       type: String,
       required: true,
    },
-   min: {
+   id: {
+      type: String,
+      required: true,
+   },
+   placeholder: {
+      type: String,
+      required: true,
+   },
+   modelValue: {
       type: Number,
-      default: 0,
+      required: true,
    },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const localValue = ref(props.modelValue);
 
-const displayValue = ref(props.modelValue);
+watch(props.modelValue, (newVal) => {
+   localValue.value = newVal;
+});
 
-const updateValue = () => {
-   const value = parseInt(displayValue.value) || 0;
+const updateValue = (event) => {
+   const value = Number(event.target.value);
    emit("update:modelValue", value);
 };
 
 const decrease = () => {
-   if (props.modelValue > (props.min ?? 0)) {
-      emit("update:modelValue", props.modelValue - 1);
+   if (localValue.value > 0) {
+      localValue.value -= 1;
+      emit("update:modelValue", localValue.value);
    }
 };
 
 const increase = () => {
-   emit("update:modelValue", props.modelValue + 1);
+   localValue.value += 1;
+   emit("update:modelValue", localValue.value);
 };
-
-watch(
-   () => props.modelValue,
-   (newValue) => {
-      displayValue.value = newValue;
-   },
-);
 </script>

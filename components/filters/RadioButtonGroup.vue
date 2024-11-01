@@ -3,15 +3,14 @@
       <span class="filter-title">{{ label }}</span>
       <div class="mt-2">
          <div class="flex flex-col space-y-2">
-            <!-- Add 'v-bind:key' here with a unique identifier -->
             <div v-for="option in options" :key="option">
                <input
                   :id="option"
-                  v-model="displayValue"
-                  :value="option"
+                  :checked="modelValue.includes(option)"
                   type="radio"
                   class="radio-base"
-                  @input="updateValue"
+                  :value="option"
+                  @change="handleChange"
                />
                <span class="ml-2 text-sm">{{ option }}</span>
             </div>
@@ -20,14 +19,20 @@
    </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
+const emit = defineEmits(["update:modelValue"]);
+
 const props = defineProps({
    label: {
       type: String,
       required: true,
    },
+   id: {
+      type: String,
+      required: true,
+   },
    options: {
-      type: Array as PropType<string[]>,
+      type: Array,
       required: true,
    },
    modelValue: {
@@ -36,15 +41,14 @@ const props = defineProps({
    },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const localModelValue = ref(props.modelValue);
 
-const updateValue = () => {
-   emit("update:modelValue", props.modelValue);
-};
-
-const displayValue = ref(props.modelValue);
-
-watch(displayValue, (value) => {
-   emit("update:modelValue", value);
+watch(props.modelValue, (newVal) => {
+   localModelValue.value = newVal;
 });
+
+const handleChange = (event) => {
+   console.log(event.target.value);
+   emit("update:modelValue", event.target.value);
+};
 </script>

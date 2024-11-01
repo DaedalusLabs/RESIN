@@ -18,7 +18,7 @@
             >
                Filters
                <span class="count-badge">
-                  {{ filtersStore.fi }}
+                  {{ filtersStore.activeFilterCount }}
                </span>
             </h2>
             <hr class="my-4" />
@@ -45,9 +45,9 @@
 
             <FiltersCheckboxGroup
                id="rentalPeriod"
-               label="Rental Period"
+               label="Rental period"
                :options="filtersStore.filterOptions.rentalPeriod"
-               :model-value="rentalPeriod"
+               :model-value="filtersStore.rentalPeriod"
                @update:model-value="
                   (value) =>
                      filtersStore.updateCheckboxFilter('rentalPeriod', value)
@@ -67,149 +67,236 @@
             />
 
             <hr class="my-8" />
-            <!-- 
+
             <FiltersRadioButtonGroup
-               :key="'availableSince'"
-               v-model="filters.availableSince"
+               id="availableSince"
+               v-model="filtersStore.availableSince"
                label="Available since"
-               :options="filterOptions.availableSince"
+               :options="filtersStore.filterOptions.availableSince"
+               :model-value="filtersStore.availableSince"
+               @update:model-value="
+                  (value) =>
+                     filtersStore.updateSelectFilter('availableSince', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'availability'"
-               v-model="filters.availability"
+               id="availability"
                label="Availability"
-               :options="filterOptions.availability"
+               :options="filtersStore.filterOptions.availability"
+               :model-value="filtersStore.availability"
+               @update:model-value="
+                  (value) =>
+                     filtersStore.updateCheckboxFilter('availability', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersRangeInput
                id="livingArea"
-               v-model="filters.livingArea"
+               v-model="filtersStore.livingArea"
                label="Living Area"
                placeholder="0"
+               :model-start-value="filtersStore.livingArea.from"
+               :model-end-value="filtersStore.livingArea.to"
+               @update:model-start-value="
+                  (value) =>
+                     filtersStore.updateRangeFilter('livingArea', 'from', value)
+               "
+               @update:model-end-value="
+                  (value) =>
+                     filtersStore.updateRangeFilter('livingArea', 'to', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersRangeInput
                id="plotArea"
-               v-model="filters.plotArea"
+               v-model="filtersStore.plotArea"
                label="Plot Area"
                placeholder="0"
+               :model-start-value="filtersStore.plotArea.from"
+               :model-end-value="filtersStore.plotArea.to"
+               @update:model-start-value="
+                  (value) =>
+                     filtersStore.updateRangeFilter('plotArea', 'from', value)
+               "
+               @update:model-end-value="
+                  (value) =>
+                     filtersStore.updateRangeFilter('plotArea', 'to', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCounter
                id="rooms"
-               v-model="filters.rooms"
+               v-model="filtersStore.rooms"
+               :model-start-value="filtersStore.rooms.from"
+               :model-end-value="filtersStore.rooms.to"
                label="Rooms"
                placeholder="0"
+               @update:model-start-value="
+                  (value) => filtersStore.updateNumberFilter('rooms', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCounter
-               id="bedrooms   "
-               v-model="filters.bedrooms"
+               id="bedrooms"
+               v-model="filtersStore.bedrooms"
                label="Bedrooms"
                placeholder="0"
+               :model-value="filtersStore.bedrooms"
+               @update:model-value="
+                  (value) => filtersStore.updateNumberFilter('bedrooms', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'outdoorSpace'"
-               v-model="filters.outdoorSpace"
+               id="outdoorSpace"
                label="Outdoor space"
-               :options="filterOptions.outdoorSpaces"
+               :options="filtersStore.filterOptions.outdoorSpaces"
+               :model-value="filtersStore.outdoorSpace"
+               @update:model-value="
+                  (value) =>
+                     filtersStore.updateCheckboxFilter('outdoorSpace', value)
+               "
             />
-
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'gardenOrientation'"
-               v-model="filters.gardenOrientation"
+               id="gardenOrientation"
                label="Garden orientation"
-               :options="filterOptions.gardenOrientations"
+               :options="filtersStore.filterOptions.gardenOrientations"
+               :model-value="filtersStore.gardenOrientation"
+               @update:model-value="
+                  (value) =>
+                     filtersStore.updateCheckboxFilter(
+                        'gardenOrientation',
+                        value,
+                     )
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersRangeInput
                id="gardenArea"
-               v-model="filters.gardenArea"
+               v-model="filtersStore.gardenArea"
                label="Garden area"
                placeholder="0"
+               :model-start-value="filtersStore.gardenArea.from"
+               :model-end-value="filtersStore.gardenArea.to"
+               @update:model-start-value="
+                  (value) =>
+                     filtersStore.updateRangeFilter('gardenArea', 'from', value)
+               "
+               @update:model-end-value="
+                  (value) =>
+                     filtersStore.updateRangeFilter('gardenArea', 'to', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'constructionType'"
-               v-model="filters.constructionType"
+               id="constructionType"
                label="Construction type"
-               :options="filterOptions.constructionType"
+               :options="filtersStore.filterOptions.constructionType"
+               :model-value="filtersStore.constructionType"
+               @update:model-value="
+                  (value) =>
+                     filtersStore.updateCheckboxFilter(
+                        'constructionType',
+                        value,
+                     )
+               "
             />
 
             <hr class="my-8" />
-
             <FiltersCheckboxGroup
-               :key="'purpose'"
-               v-model="filters.purpose"
+               id="purpose"
                label="Purpose"
-               :options="filterOptions.purpose"
+               :options="filtersStore.filterOptions.purpose"
+               :model-value="filtersStore.purpose"
+               @update:model-value="
+                  (value) => filtersStore.updateCheckboxFilter('purpose', value)
+               "
             />
-
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'constructionPeriod'"
-               v-model="filters.constructionPeriod"
+               id="constructionPeriod"
                label="Construction period"
-               :options="filterOptions.constructionPeriod"
+               :options="filtersStore.filterOptions.constructionPeriod"
+               :model-value="filtersStore.constructionPeriod"
+               @update:model-value="
+                  (value) =>
+                     filtersStore.updateCheckboxFilter(
+                        'constructionPeriod',
+                        value,
+                     )
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'locations'"
-               v-model="filters.locations"
+               id="locations"
                label="Locations"
-               :options="filterOptions.locations"
+               :options="filtersStore.filterOptions.locations"
+               :model-value="filtersStore.locations"
+               @update:model-value="
+                  (value) =>
+                     filtersStore.updateCheckboxFilter('locations', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'garages'"
-               v-model="filters.garages"
+               id="garages"
                label="Garages"
-               :options="filterOptions.garages"
+               :options="filtersStore.filterOptions.garages"
+               :model-value="filtersStore.garages"
+               @update:model-value="
+                  (value) => filtersStore.updateCheckboxFilter('garages', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'features'"
-               v-model="filters.features"
+               id="features"
                label="Features"
-               :options="filterOptions.features"
+               :options="filtersStore.filterOptions.features"
+               :model-value="filtersStore.features"
+               @update:model-value="
+                  (value) =>
+                     filtersStore.updateCheckboxFilter('features', value)
+               "
             />
 
             <hr class="my-8" />
 
             <FiltersCheckboxGroup
-               :key="'display'"
-               v-model="filters.display"
+               id="features"
                label="Display"
-               :options="filterOptions.display"
+               :options="filtersStore.filterOptions.display"
+               :model-value="filtersStore.display"
+               @update:model-value="
+                  (value) => filtersStore.updateCheckboxFilter('display', value)
+               "
             />
-            -->
+
             <div class="mb-4 p-4">
                <button class="button-primary w-full" @click="applyFilters">
                   Show {{ filteredResults }} results
@@ -225,7 +312,6 @@ import { PhX } from "@phosphor-icons/vue";
 import { useFiltersStore } from "@/stores/filters";
 
 const filtersStore = useFiltersStore();
-const rentalPeriod = ref(filtersStore.rentalPeriod);
 const emit = defineEmits(["close", "apply-filters"]);
 const filteredResults = ref(0);
 
@@ -238,12 +324,10 @@ defineProps({
 
 const handleReset = () => {
    filtersStore.clearAllFilters();
-   rentalPeriod.value = [];
 };
 
 const applyFilters = () => {
    const filterState = filtersStore.getFilterState();
-   console.log(filterState);
    emit("apply-filters", filterState);
 };
 </script>

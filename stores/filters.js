@@ -4,30 +4,33 @@ export const useFiltersStore = defineStore("filters", {
    state: () => ({
       // Range filters
       price: { from: 0, to: 0 },
-      livingArea: { min: 0, max: 0 },
-      plotArea: { min: 0, max: 0 },
-      gardenArea: { min: 0, max: 0 },
+      livingArea: { from: 0, to: 0 },
+      plotArea: { from: 0, to: 0 },
+      gardenArea: { from: 0, to: 0 },
 
       // Number filters
       rooms: 0,
       bedrooms: 0,
 
       // Single select filters
-      rentalPeriod: [],
-      availability: [],
-      availableSince: [],
-      constructionType: [],
-      purpose: [],
-      sort: [],
+      availableSince: "",
 
       // Multi-select filters
+
+      rentalPeriod: [],
+      availability: [],
+      constructionType: [],
+      purpose: [],
+      constructionPeriod: [],
+      sort: [],
       gardenOrientation: [],
       outdoorSpace: [],
       features: [],
       locations: [],
       garages: [],
+      display: [],
 
-      // Filter options (for dropdowns)
+      // Filter options
       filterOptions: {
          gardenOrientations: ["North", "South", "East", "West"],
          outdoorSpaces: ["Garden", "Balcony", "Terrace"],
@@ -50,6 +53,18 @@ export const useFiltersStore = defineStore("filters", {
          rentalPeriod: ["Short to medium term", "Long term"],
          constructionType: ["Existing construction", "New construction"],
          purpose: ["Vacation home", "Permanent construction"],
+         constructionPeriod: [
+            "Before 1906",
+            "1906-1930",
+            "1931-1944",
+            "1945-1959",
+            "1960-1970",
+            "1971-1980",
+            "1981-1990",
+            "1991-2000",
+            "2001-2010",
+            "2011-2020",
+         ],
          locations: [
             "On the edge of the forest",
             "On a busy road",
@@ -71,6 +86,7 @@ export const useFiltersStore = defineStore("filters", {
             "Garden",
             "Balcony",
          ],
+         display: ["Houses", "Projects"],
       },
    }),
 
@@ -80,28 +96,30 @@ export const useFiltersStore = defineStore("filters", {
 
          // Count range filters
          if (state.price.from > 0 || state.price.to > 0) count++;
-         if (state.livingArea.min > 0 || state.livingArea.max > 0) count++;
-         if (state.plotArea.min > 0 || state.plotArea.max > 0) count++;
-         if (state.gardenArea.min > 0 || state.gardenArea.max > 0) count++;
+         if (state.livingArea.from > 0 || state.livingArea.to > 0) count++;
+         if (state.plotArea.from > 0 || state.plotArea.to > 0) count++;
+         if (state.gardenArea.from > 0 || state.gardenArea.to > 0) count++;
 
          // Count number filters
          if (state.rooms > 0) count++;
          if (state.bedrooms > 0) count++;
 
          // Count single select filters
-         if (state.rentalPeriod) count++;
-         if (state.availability) count++;
          if (state.availableSince) count++;
-         if (state.constructionType) count++;
-         if (state.purpose) count++;
-         if (state.sort) count++;
 
          // Count multi-select filters
          if (state.gardenOrientation.length > 0) count++;
+         if (state.sort.length > 0) count++;
+         if (state.constructionType.length > 0) count++;
+         if (state.constructionPeriod.length > 0) count++;
+         if (state.purpose.length > 0) count++;
          if (state.outdoorSpace.length > 0) count++;
          if (state.features.length > 0) count++;
          if (state.locations.length > 0) count++;
          if (state.garages.length > 0) count++;
+         if (state.display.length > 0) count++;
+         if (state.rentalPeriod.length > 0) count++;
+         if (state.availability.length > 0) count++;
 
          return count;
       },
@@ -124,20 +142,21 @@ export const useFiltersStore = defineStore("filters", {
          this.bedrooms = 0;
 
          // Reset single select filters
-         this.rentalPeriod = [];
-         this.availability = [];
-         this.availableSince = [];
-         this.constructionType = [];
-         this.purpose = [];
-         this.sort = [];
+         this.availableSince = "";
 
          // Reset multi-select filters
+         this.rentalPeriod = [];
+         this.availability = [];
+         this.constructionType = [];
+         this.purpose = [];
+         this.constructionPeriod = [];
+         this.sort = [];
          this.gardenOrientation = [];
          this.outdoorSpace = [];
          this.features = [];
          this.locations = [];
          this.garages = [];
-
+         this.display = [];
          console.log("Filters cleared");
       },
 
@@ -155,7 +174,14 @@ export const useFiltersStore = defineStore("filters", {
       },
 
       updateCheckboxFilter(filterName, value) {
-         this[filterName].push(value);
+         if (this[filterName].includes(value)) {
+            this[filterName] = this[filterName].filter(
+               (item) => item !== value,
+            );
+         } else {
+            this[filterName].push(value);
+         }
+         console.log(this[filterName]);
       },
 
       // Helper action to get current filter state

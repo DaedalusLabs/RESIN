@@ -7,7 +7,8 @@
             type="number"
             class="input-base"
             :placeholder="placeholder"
-            @input="updateStartValue"
+            min="0"
+            @change="updateStartValue"
          />
          <span>To</span>
          <input
@@ -15,7 +16,8 @@
             type="number"
             class="input-base"
             :placeholder="placeholder"
-            @input="updateEndValue"
+            :min="modelStartValue"
+            @change="updateEndValue"
          />
       </div>
    </div>
@@ -24,7 +26,7 @@
 <script setup>
 const emit = defineEmits(["update:modelStartValue", "update:modelEndValue"]);
 
-defineProps({
+const props = defineProps({
    label: {
       type: String,
       required: true,
@@ -50,10 +52,16 @@ defineProps({
 const updateStartValue = (event) => {
    const value = Number(event.target.value);
    emit("update:modelStartValue", value);
+   if (value > props.modelEndValue) {
+      emit("update:modelEndValue", value);
+   }
 };
 
 const updateEndValue = (event) => {
    const value = Number(event.target.value);
    emit("update:modelEndValue", value);
+   if (value < props.modelStartValue) {
+      emit("update:modelStartValue", value);
+   }
 };
 </script>
