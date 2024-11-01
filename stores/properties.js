@@ -11,6 +11,52 @@ export const usePropertiesStore = defineStore("properties", {
          trendingAreas: [],
          hasSeenMapToast: false,
          recoveryPhrase: [],
+         filters: {
+            priceFrom: 0,
+            priceTo: 0,
+            rentalPeriod: {
+               "Short to medium term": false,
+               "Long term": false,
+            },
+            sort: {
+               "House": false,
+               "Apartment": false,
+               "Parking availability": false,
+               "Construction land": false,
+               "Commercial property": false,
+            },
+            availableSince: "No preference",
+            availability: {
+               "Available": false,
+               "Under negotiation": false,
+               "Sold": false,
+            },
+            livingArea: {
+               min: 0,
+               max: 0,
+            },
+            plotArea: {
+               min: 0,
+               max: 0,
+            },
+            rooms: 0,
+            bedrooms: 0,
+            outdoorSpace: {
+               Garden: false,
+               Balcony: false,
+               Terrace: false,
+            },
+            gardenOrientation: {
+               North: false,
+               South: false,
+               East: false,
+               West: false,
+            },
+            gardenArea: {
+               min: 0,
+               max: 0,
+            },
+         },
       };
    },
    getters: {

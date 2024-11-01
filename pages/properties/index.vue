@@ -1,6 +1,6 @@
 <template>
    <div>
-      <FlowbiteFilterDrawer
+      <FiltersDrawer
          :show-drawer="showFilterDrawer"
          @close="showFilterDrawer = false"
       />
