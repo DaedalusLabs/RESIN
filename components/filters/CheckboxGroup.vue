@@ -8,15 +8,14 @@
                   :id="option"
                   :checked="modelValue.includes(option)"
                   type="checkbox"
-                  class="checkbox-base"
+                  class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-resin-500 focus:ring-2 focus:ring-resin-500"
                   :value="option"
                   @change="handleChange"
                />
                <span class="ml-2 text-sm">{{ option }}</span>
             </div>
-            <div class="pt-2">
+            <div v-if="props.options.length > 5" class="pt-2">
                <button
-                  v-if="props.options.length > 4"
                   class="w-full text-start text-sm text-resin-500"
                   @click="toggleShowMore"
                >

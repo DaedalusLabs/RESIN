@@ -4,23 +4,23 @@
       <div class="relative flex items-center">
          <button
             type="button"
-            class="counter-button rounded-s-lg"
+            class="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100"
             @click="decrease"
          >
-            <PhMinus class="h-3 w-3" />
+            <PhMinus class="h-3 w-3" weight="bold" />
          </button>
          <input
             v-model="localValue"
             type="text"
-            class="counter-input"
+            class="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900"
             @input="updateValue"
          />
          <button
             type="button"
-            class="counter-button rounded-e-lg"
+            class="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100"
             @click="increase"
          >
-            <PhPlus class="h-3 w-3" />
+            <PhPlus class="h-3 w-3" weight="bold" />
          </button>
       </div>
    </div>

@@ -6,7 +6,7 @@
          <select
             :id="id + '-start'"
             v-model="localModelStartValue"
-            class="input-base"
+            class="flex-1 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-resin-500 focus:ring-resin-500"
             @change="updateStartValue"
          >
             <option
@@ -19,13 +19,13 @@
             </option>
          </select>
 
-         <span>To</span>
+         <span class="px-2 text-sm font-medium">To</span>
 
          <!-- End Range Dropdown -->
          <select
             :id="id + '-end'"
             v-model="localModelEndValue"
-            class="input-base"
+            class="flex-1 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-resin-500 focus:ring-resin-500"
             @change="updateEndValue"
          >
             <option

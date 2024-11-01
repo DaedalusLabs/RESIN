@@ -8,7 +8,7 @@
                   :id="option"
                   :checked="modelValue.includes(option)"
                   type="radio"
-                  class="radio-base"
+                  class="h-4 w-4 border-gray-300 bg-gray-100 text-resin-500 focus:ring-2 focus:ring-resin-500"
                   :value="option"
                   @change="handleChange"
                />

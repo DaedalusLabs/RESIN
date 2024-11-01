@@ -17,7 +17,9 @@
                class="flex w-full items-center gap-2 justify-self-start text-2xl"
             >
                Filters
-               <span class="count-badge">
+               <span
+                  class="flex h-6 w-6 items-center justify-center rounded-full bg-resin-500 text-sm text-white"
+               >
                   {{ filtersStore.activeFilterCount }}
                </span>
             </h2>
@@ -302,7 +304,10 @@
             />
 
             <div class="mb-4 p-4">
-               <button class="button-primary w-full" @click="applyFilters">
+               <button
+                  class="w-full rounded-lg bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
+                  @click="applyFilters"
+               >
                   Show {{ filteredResults }} results
                </button>
             </div>
@@ -338,33 +343,5 @@ const applyFilters = () => {
 <style lang="postcss">
 .filter-title {
    @apply mb-2 block text-base font-semibold text-gray-900;
-}
-
-.input-base {
-   @apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-resin-500 focus:ring-resin-500;
-}
-
-.checkbox-base {
-   @apply h-4 w-4 rounded border-gray-300 bg-gray-100 text-resin-500 focus:ring-2 focus:ring-resin-500;
-}
-
-.counter-button {
-   @apply h-11 border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100;
-}
-
-.counter-input {
-   @apply block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900;
-}
-
-.count-badge {
-   @apply flex h-6 w-6 items-center justify-center rounded-full bg-resin-500 text-sm text-white;
-}
-
-.button-primary {
-   @apply rounded-lg bg-resin-500 px-4 py-2 text-white hover:bg-resin-600;
-}
-
-.radio-base {
-   @apply h-4 w-4 border-gray-300 bg-gray-100 text-resin-500 focus:ring-2 focus:ring-resin-500;
 }
 </style>
