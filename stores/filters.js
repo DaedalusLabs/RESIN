@@ -95,10 +95,12 @@ export const useFiltersStore = defineStore("filters", {
          let count = 0;
 
          // Count range filters
-         if (state.price.from > 0 || state.price.to > 0) count++;
-         if (state.livingArea.from > 0 || state.livingArea.to > 0) count++;
-         if (state.plotArea.from > 0 || state.plotArea.to > 0) count++;
-         if (state.gardenArea.from > 0 || state.gardenArea.to > 0) count++;
+         if (state.price.from > 0 || state.price.to !== Infinity) count++;
+         if (state.livingArea.from > 0 || state.livingArea.to !== Infinity)
+            count++;
+         if (state.plotArea.from > 0 || state.plotArea.to !== Infinity) count++;
+         if (state.gardenArea.from > 0 || state.gardenArea.to !== Infinity)
+            count++;
 
          // Count number filters
          if (state.rooms > 0) count++;
@@ -124,7 +126,7 @@ export const useFiltersStore = defineStore("filters", {
          return count;
       },
       currentFilters() {
-         const { filterOptions, ...filterState } = this.$state;
+         const { ...filterState } = this.$state;
          return filterState;
       },
    },
@@ -186,7 +188,7 @@ export const useFiltersStore = defineStore("filters", {
 
       // Helper action to get current filter state
       getFilterState() {
-         const { filterOptions, ...filterState } = this.$state;
+         const { ...filterState } = this.$state;
          return filterState;
       },
    },

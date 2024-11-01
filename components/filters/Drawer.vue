@@ -331,8 +331,9 @@ const handleReset = () => {
 };
 
 const applyFilters = () => {
-   const filterState = filtersStore.getFilterState();
-   emit("apply-filters", filterState);
+   // TODO: send to api to get filtered results
+   console.log("apply filters");
+   emit("close");
 };
 </script>
 <style lang="postcss">

@@ -5,16 +5,17 @@
          <!-- Start Range Dropdown -->
          <select
             :id="id + '-start'"
+            v-model="localModelStartValue"
             class="input-base"
-            :value="modelStartValue"
             @change="updateStartValue"
          >
             <option
                v-for="option in rangeOptions"
                :key="option"
                :value="option"
+               :selected="option === localModelStartValue"
             >
-               {{ option }} {{ unit }}
+               {{ option === Infinity ? "No max." : option + " " + unit }}
             </option>
          </select>
 
@@ -23,16 +24,17 @@
          <!-- End Range Dropdown -->
          <select
             :id="id + '-end'"
+            v-model="localModelEndValue"
             class="input-base"
-            :value="modelEndValue"
             @change="updateEndValue"
          >
             <option
                v-for="option in rangeOptions"
                :key="option"
                :value="option"
+               :selected="option === localModelEndValue"
             >
-               {{ option !== Infinity ? option + " " + unit : "No max." }}
+               {{ option === Infinity ? "No max." : option + " " + unit }}
             </option>
          </select>
       </div>
@@ -58,12 +60,10 @@ const props = defineProps({
    modelStartValue: {
       type: Number,
       required: true,
-      default: 0,
    },
    modelEndValue: {
       type: Number,
       required: true,
-      default: Infinity,
    },
    unit: {
       type: String,
@@ -71,22 +71,31 @@ const props = defineProps({
    },
 });
 
+const localModelStartValue = ref(props.modelStartValue);
+const localModelEndValue = ref(props.modelEndValue);
+
 // Define the range options for dropdown
 const rangeOptions = [0, 500, 1000, 5000, 10000, 20000, Infinity];
 
-const updateStartValue = (event) => {
-   const value = Number(event.target.value);
-   emit("update:modelStartValue", value);
-   if (value > props.modelEndValue) {
-      emit("update:modelEndValue", value);
+const updateStartValue = () => {
+   if (localModelStartValue.value > localModelEndValue.value) {
+      localModelEndValue.value = localModelStartValue.value;
    }
+   emit("update:modelStartValue", localModelStartValue.value);
 };
 
-const updateEndValue = (event) => {
-   const value = Number(event.target.value);
-   emit("update:modelEndValue", value);
-   if (value < props.modelStartValue) {
-      emit("update:modelStartValue", value);
+const updateEndValue = () => {
+   if (localModelEndValue.value < localModelStartValue.value) {
+      localModelStartValue.value = localModelEndValue.value;
    }
+   emit("update:modelEndValue", localModelEndValue.value);
 };
+
+watch(props.modelStartValue, (newVal) => {
+   localModelStartValue.value = newVal;
+});
+
+watch(props.modelEndValue, (newVal) => {
+   localModelEndValue.value = newVal;
+});
 </script>
