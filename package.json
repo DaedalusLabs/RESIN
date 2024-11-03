@@ -20,6 +20,7 @@
       "@phosphor-icons/vue": "^2.2.1",
       "@pinia/nuxt": "^0.5.5",
       "@vite-pwa/nuxt": "^0.10.5",
+      "apexcharts": "^4.0.0",
       "flowbite": "^2.5.2",
       "leaflet.markercluster": "^1.5.3",
       "maplibre-gl": "^4.7.1",
