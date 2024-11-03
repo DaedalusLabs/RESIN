@@ -306,6 +306,7 @@ async function getTrendingAreas() {
 propertiesStore.properties = await getProperties();
 propertiesStore.filteredProperties = propertiesStore.properties;
 propertiesStore.trendingAreas = await getTrendingAreas();
+propertiesStore.ownedProperties = propertiesStore.properties.slice(0, 3); // mock 3 owned properties
 </script>
 
 <style>
