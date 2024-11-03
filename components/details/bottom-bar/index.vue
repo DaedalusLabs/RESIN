@@ -3,7 +3,6 @@
       class="z-top fixed bottom-14 left-0 w-full bg-black/30 p-4 backdrop-blur-md"
    >
       <FlowbiteModal
-         ref="tourModal"
          :is-open="isModalOpen"
          @update:is-open="isModalOpen = $event"
       >
@@ -59,7 +58,6 @@
 <script setup>
 import { PhCheck } from "@phosphor-icons/vue";
 const route = useRoute();
-const tourModal = ref(null);
 const isModalOpen = ref(false);
 const referenceNumber = ref(0);
 const isRequestSent = ref(false);
