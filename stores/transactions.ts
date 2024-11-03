@@ -4,6 +4,7 @@ interface Transaction {
    id: string;
    amount: number;
    due: Date;
+   paid: Date;
    status: "pending" | "paid" | "overdue";
 }
 
@@ -18,48 +19,56 @@ export const useTransactionsStore = defineStore("transactions", {
             id: "1",
             amount: 2350,
             due: new Date(),
+            paid: new Date(),
             status: "pending",
          },
          {
             id: "2",
             amount: 4780,
             due: new Date(),
+            paid: new Date(),
             status: "paid",
          },
          {
             id: "3",
             amount: 1890,
             due: new Date(),
+            paid: new Date(),
             status: "paid",
          },
          {
             id: "4",
             amount: 3420,
             due: new Date(),
+            paid: new Date(),
             status: "pending",
          },
          {
             id: "5",
             amount: 5960,
             due: new Date(),
+            paid: new Date(),
             status: "paid",
          },
          {
             id: "6",
             amount: 2890,
             due: new Date(),
+            paid: new Date(),
             status: "pending",
          },
          {
             id: "7",
             amount: 4150,
             due: new Date(),
+            paid: new Date(),
             status: "paid",
          },
          {
             id: "8",
             amount: 3780,
             due: new Date(),
+            paid: new Date(),
             status: "pending",
          },
       ],

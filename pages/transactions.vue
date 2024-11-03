@@ -11,12 +11,15 @@
             <PhExport :size="28" class="text-xl text-pirate-950" />
          </button>
       </div>
-      <div>
+      <div class="flex flex-col gap-8">
          <TransactionsBarChart
             :total-amount="transactionsStore.getTotalAmount"
             :paid-amount="transactionsStore.getPaidOffAmount"
             :remaining-amount="transactionsStore.getToBePaidOffAmount"
             :progress-percentage="transactionsStore.getPayedOffPercentage"
+         />
+         <TransactionsListView
+            :transactions="transactionsStore.getTransactions"
          />
       </div>
    </section>
