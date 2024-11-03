@@ -1,7 +1,61 @@
 import { defineStore } from "pinia";
 
+// Interface definitions
+interface RangeFilter {
+   from: number;
+   to: number;
+}
+
+interface FilterOptions {
+   gardenOrientations: string[];
+   outdoorSpaces: string[];
+   availability: string[];
+   availableSince: string[];
+   sort: string[];
+   rentalPeriod: string[];
+   constructionType: string[];
+   purpose: string[];
+   constructionPeriod: string[];
+   locations: string[];
+   garages: string[];
+   features: string[];
+   display: string[];
+}
+
+interface FiltersState {
+   // Range filters
+   price: RangeFilter;
+   livingArea: RangeFilter;
+   plotArea: RangeFilter;
+   gardenArea: RangeFilter;
+
+   // Number filters
+   rooms: number;
+   bedrooms: number;
+
+   // Single select filters
+   availableSince: string;
+
+   // Multi-select filters
+   rentalPeriod: string[];
+   availability: string[];
+   constructionType: string[];
+   purpose: string[];
+   constructionPeriod: string[];
+   sort: string[];
+   gardenOrientation: string[];
+   outdoorSpace: string[];
+   features: string[];
+   locations: string[];
+   garages: string[];
+   display: string[];
+
+   // Filter options
+   filterOptions: FilterOptions;
+}
+
 export const useFiltersStore = defineStore("filters", {
-   state: () => ({
+   state: (): FiltersState => ({
       // Range filters
       price: { from: 0, to: Infinity },
       livingArea: { from: 0, to: Infinity },
@@ -16,7 +70,6 @@ export const useFiltersStore = defineStore("filters", {
       availableSince: "",
 
       // Multi-select filters
-
       rentalPeriod: [],
       availability: [],
       constructionType: [],
@@ -91,7 +144,7 @@ export const useFiltersStore = defineStore("filters", {
    }),
 
    getters: {
-      activeFilterCount: (state) => {
+      activeFilterCount: (state: FiltersState): number => {
          let count = 0;
 
          // Count range filters
@@ -125,14 +178,14 @@ export const useFiltersStore = defineStore("filters", {
 
          return count;
       },
-      currentFilters() {
-         const { ...filterState } = this.$state;
+      currentFilters(this: FiltersState): Omit<FiltersState, "filterOptions"> {
+         const { filterOptions, ...filterState } = this;
          return filterState;
       },
    },
 
    actions: {
-      clearAllFilters() {
+      clearAllFilters(): void {
          // Reset range filters
          this.price = { from: 0, to: Infinity };
          this.livingArea = { from: 0, to: Infinity };
@@ -162,19 +215,45 @@ export const useFiltersStore = defineStore("filters", {
       },
 
       // Specific filter update actions
-      updateRangeFilter(filterName, field, value) {
+      updateRangeFilter(
+         filterName: keyof Pick<
+            FiltersState,
+            "price" | "livingArea" | "plotArea" | "gardenArea"
+         >,
+         field: keyof RangeFilter,
+         value: number,
+      ): void {
          this[filterName][field] = Number(value);
       },
 
-      updateNumberFilter(filterName, value) {
+      updateNumberFilter(
+         filterName: keyof Pick<FiltersState, "rooms" | "bedrooms">,
+         value: number,
+      ): void {
          this[filterName] = Number(value);
       },
 
-      updateSelectFilter(filterName, value) {
+      updateSelectFilter(
+         filterName: keyof Pick<FiltersState, "availableSince">,
+         value: string,
+      ): void {
          this[filterName] = value;
       },
 
-      updateCheckboxFilter(filterName, value) {
+      updateCheckboxFilter(
+         filterName: keyof Omit<
+            FiltersState,
+            | "price"
+            | "livingArea"
+            | "plotArea"
+            | "gardenArea"
+            | "rooms"
+            | "bedrooms"
+            | "availableSince"
+            | "filterOptions"
+         >,
+         value: string,
+      ): void {
          if (this[filterName].includes(value)) {
             this[filterName] = this[filterName].filter(
                (item) => item !== value,
@@ -185,8 +264,8 @@ export const useFiltersStore = defineStore("filters", {
       },
 
       // Helper action to get current filter state
-      getFilterState() {
-         const { ...filterState } = this.$state;
+      getFilterState(): Omit<FiltersState, "filterOptions"> {
+         const { filterOptions, ...filterState } = this;
          return filterState;
       },
    },
