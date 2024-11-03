@@ -38,7 +38,7 @@
 
       <DetailsNearby :property="property" />
 
-      <DetailsBottomBar />
+      <DetailsBottomBar :property="property" />
    </section>
 </template>
 
