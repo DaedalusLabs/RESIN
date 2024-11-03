@@ -11,7 +11,7 @@ interface Location {
 }
 
 interface Property {
-   id: string | number;
+   id: string;
    name: string;
    location: Location;
 }
@@ -70,9 +70,9 @@ export const usePropertiesStore = defineStore("properties", {
    },
 
    actions: {
-      addViewedProperty(propertyId: string | number): void {
-         if (!this.viewedProperties.includes(propertyId)) {
-            this.viewedProperties.push(propertyId);
+      addViewedProperty(id: string): void {
+         if (!this.viewedProperties.includes(id)) {
+            this.viewedProperties.push(id);
          }
       },
 

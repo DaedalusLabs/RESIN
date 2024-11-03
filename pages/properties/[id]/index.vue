@@ -50,8 +50,8 @@ const propertiesStore = usePropertiesStore();
 const route = useRoute();
 
 const property = propertiesStore.properties.find(
-   (p) => p.id === parseInt(route.params.id),
-   propertiesStore.addViewedProperty(parseInt(route.params.id)),
+   (p) => p.id === route.params.id,
+   propertiesStore.addViewedProperty(route.params.id),
 );
 
 if (typeof property === "string") {
