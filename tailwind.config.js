@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+   safelist: [
+      // Remove or replace the datatable pattern
+   ],
    content: [
       "./components/**/*.{js,vue,ts}",
       "./layouts/**/*.vue",

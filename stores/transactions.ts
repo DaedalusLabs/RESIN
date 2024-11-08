@@ -8,8 +8,16 @@ interface Transaction {
    status: "pending" | "paid" | "overdue";
 }
 
+interface Agreement {
+   id: string;
+   title: string;
+   signed: Date;
+   downloadUrl: string;
+}
+
 interface TransactionsState {
    transactions: Transaction[];
+   agreements: Agreement[];
 }
 
 export const useTransactionsStore = defineStore("transactions", {
@@ -72,6 +80,26 @@ export const useTransactionsStore = defineStore("transactions", {
             status: "pending",
          },
       ],
+      agreements: [
+         {
+            id: "1",
+            title: "Agreement 1",
+            signed: new Date(),
+            downloadUrl: "/agreements/agreement-1.pdf",
+         },
+         {
+            id: "2",
+            title: "Agreement 2",
+            signed: new Date(),
+            downloadUrl: "/agreements/agreement-2.pdf",
+         },
+         {
+            id: "3",
+            title: "Agreement 3",
+            signed: new Date(),
+            downloadUrl: "/agreements/agreement-3.pdf",
+         },
+      ],
    }),
 
    getters: {
@@ -102,6 +130,9 @@ export const useTransactionsStore = defineStore("transactions", {
          return this.transactions
             .filter((transaction) => transaction.status === "pending")
             .reduce((acc, transaction) => acc + transaction.amount, 0);
+      },
+      getAgreements(): Agreement[] {
+         return this.agreements;
       },
    },
 
