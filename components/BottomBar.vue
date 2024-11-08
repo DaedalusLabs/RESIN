@@ -1,5 +1,7 @@
 <template>
-   <div class="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white">
+   <div
+      class="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white shadow-[0_-8px_15px_-3px_rgba(0,0,0,0.05)]"
+   >
       <div class="mx-auto flex max-w-md items-center justify-between px-6 py-2">
          <NuxtLink
             :to="localePath('home')"

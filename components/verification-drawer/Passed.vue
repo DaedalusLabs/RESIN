@@ -12,11 +12,9 @@
             >
                Verification passed succesfully!
             </h3>
-            <FlowbiteButton
-               text="Continue"
-               class="px-5 py-3"
-               @click="handleNext"
-            />
+            <NuxtLink :to="localePath('after-sign-in')">
+               <FlowbiteButton text="Continue" class="px-5 py-3" />
+            </NuxtLink>
          </div>
       </template>
    </FlowbiteDrawer>
@@ -41,9 +39,5 @@ watchEffect(() => {
 
 const handleCloseDrawer = () => {
    emit("close");
-};
-
-const handleNext = () => {
-   emit("next");
 };
 </script>
