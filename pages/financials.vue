@@ -12,7 +12,12 @@
          </button>
       </div>
       <div class="flex flex-col gap-8">
-         <FinancialsEquityChart />
+         <ClientOnly fallback-tag="span">
+            <FinancialsEquityChart
+               :equity="transactionsStore.getPaidOffAmount"
+               :pay-off-amount="transactionsStore.getToBePaidOffAmount"
+            />
+         </ClientOnly>
          <div class="flex flex-col gap-4">
             <FinancialsPropertyOwnershipCard
                v-for="property in propertiesStore.ownedProperties"

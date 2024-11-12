@@ -12,7 +12,7 @@
                Payed off {{ progressPercentage }}%
             </span>
          </div>
-         <dd class="text-4xl font-bold text-pirate-900">
+         <dd class="text-3xl font-bold text-pirate-900">
             {{ formatCurrency(totalAmount) }}
          </dd>
          <div class="mt-2"></div>

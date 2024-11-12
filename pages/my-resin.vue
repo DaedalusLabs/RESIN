@@ -29,7 +29,7 @@
             </div>
          </section>
          <section>
-            <MyResinNavbar title="Transactions" link="my-transactions" />
+            <MyResinNavbar title="Transactions" link="transactions" />
             <TransactionsBarChart
                class="mt-4"
                :total-amount="transactionsStore.getTotalAmount"
@@ -64,8 +64,21 @@
             </div>
          </section>
          <section>
-            <MyResinNavbar title="Financials" link="my-financials" />
-            <!-- TODO: Add finances -->
+            <MyResinNavbar title="Financials" link="financials" />
+            <FinancialsEquityChart
+               class="mt-4"
+               :equity="transactionsStore.getPaidOffAmount"
+               :pay-off-amount="transactionsStore.getToBePaidOffAmount"
+            />
+         </section>
+         <section>
+            <div class="mt-6 space-y-8">
+               <FinancialsFeaturePlaceholder
+                  v-for="(feature, index) in features"
+                  :key="index"
+                  :title="feature"
+               />
+            </div>
          </section>
       </div>
    </section>
@@ -80,7 +93,7 @@ const transactionsStore = useTransactionsStore();
 const propertiesStore = usePropertiesStore();
 const properties = propertiesStore.properties;
 const displayedProperties = computed(() => properties.slice(0, 2));
-
+const features = ["End lease", "Refinance", "Sell a property"];
 definePageMeta({
    layout: "white",
 });
