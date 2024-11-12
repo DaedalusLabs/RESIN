@@ -91,7 +91,7 @@ import { useTransactionsStore } from "~/stores/transactions";
 const transactionsStore = useTransactionsStore();
 
 const propertiesStore = usePropertiesStore();
-const properties = propertiesStore.properties;
+const properties = propertiesStore.ownedProperties;
 const displayedProperties = computed(() => properties.slice(0, 2));
 const features = ["End lease", "Refinance", "Sell a property"];
 definePageMeta({
