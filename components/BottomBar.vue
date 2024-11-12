@@ -22,12 +22,7 @@
             class="flex flex-col items-center text-gray-500 hover:text-gray-900"
             :class="{ 'text-resin-500': isResinView }"
          >
-            <NuxtImg
-               src="/images/logos/Resin_Hexagon_Gray_Fill.svg"
-               width="32"
-               height="32"
-               class="mb-1"
-            />
+            <NuxtImg :src="resinImageSrc" width="32" height="32" class="mb-1" />
          </NuxtLink>
          <NuxtLink
             :to="localePath('favorites')"
@@ -65,8 +60,14 @@ const isProfileView = ref(false);
 watchEffect(() => {
    isListView.value = route.path.includes("properties");
    isHomeView.value = route.path.includes("home");
-   isResinView.value = route.path.includes("resin");
+   isResinView.value = route.path.includes("my-resin");
    isFavoritesView.value = route.path.includes("favorites");
    isProfileView.value = route.path.includes("profile");
+});
+
+const resinImageSrc = computed(() => {
+   return isResinView.value
+      ? "/images/logos/Resin_Hexagon_Orange_Fill.svg"
+      : "/images/logos/Resin_Hexagon_Gray_Fill.svg";
 });
 </script>
