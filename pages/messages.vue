@@ -15,9 +15,8 @@
       <!-- Chat container -->
       <div
          ref="chatContainer"
-         class="mx-auto flex w-10/12 flex-1 flex-col gap-10 overflow-y-scroll p-6 pb-28"
+         class="no-scrollbar mx-auto flex w-10/12 flex-1 flex-col gap-10 overflow-y-scroll p-6 pb-28"
       >
-         <!-- Dynamische berichtenlijst -->
          <FlowbiteChatBubble
             v-for="(msg, index) in messages"
             :key="index"
@@ -30,7 +29,7 @@
          ></FlowbiteChatBubble>
       </div>
 
-      <!-- Input om een nieuw bericht te verzenden -->
+      <!-- Input  -->
       <div
          class="shadow-top absolute bottom-14 flex w-full items-center bg-white px-3 py-5"
       >
@@ -61,7 +60,6 @@ definePageMeta({
    title: "Messages",
 });
 
-// Reactieve gegevens
 const messages = ref([
    {
       text: "Hello there, I have found some real estate properties that might interest you. Please let me know which types of properties you are looking for. Thank you",
@@ -81,10 +79,9 @@ const messages = ref([
    },
 ]);
 
-const newMessage = ref(""); // Nieuwe berichttekst
-const chatContainer = ref(null); // Referentie naar de berichtencontainer
+const newMessage = ref("");
+const chatContainer = ref(null);
 
-// Scroll automatisch naar de onderkant
 function scrollToBottom() {
    nextTick(() => {
       if (chatContainer.value) {
@@ -97,7 +94,6 @@ watch(messages, () => {
    scrollToBottom();
 });
 
-// Scroll naar beneden na het renderen van berichten
 onMounted(() => {
    scrollToBottom();
 });
@@ -106,7 +102,6 @@ watch(messages, () => {
    scrollToBottom();
 });
 
-// Functie om een bericht te verzenden
 function sendMessage() {
    if (!newMessage.value.trim()) return; // Geen lege berichten toestaan
 
@@ -125,7 +120,7 @@ function sendMessage() {
       isSent: true,
    });
 
-   newMessage.value = ""; // Wis het invoerveld na verzenden
+   newMessage.value = "";
 
    // Scroll naar de onderkant na het toevoegen van een bericht
    scrollToBottom();
@@ -141,5 +136,14 @@ section {
    box-shadow:
       0px -4px 6px -1px rgba(0, 0, 0, 0.1),
       0px -2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+   display: none;
+}
+
+.no-scrollbar {
+   -ms-overflow-style: none;
+   scrollbar-width: none;
 }
 </style>
