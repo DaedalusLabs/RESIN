@@ -12,6 +12,12 @@
          >
             <PhImages :size="20" />
          </button>
+
+         <span
+            class="absolute bottom-4 right-4 z-10 rounded-full border-2 border-white bg-resin-500 px-2 py-1 text-xs font-semibold text-white shadow-md hover:border-resin-500 hover:bg-white hover:text-resin-500"
+         >
+            {{ property.isBitcasaHome ? "For Sale" : "Rent to Own" }}
+         </span>
       </div>
       <div class="flex flex-col gap-2 p-4">
          <div class="flex items-center justify-between">
@@ -38,15 +44,15 @@
          <div class="flex items-center gap-4">
             <p class="flex items-center gap-1">
                <PhRuler :size="20" class="inline" />
-               <span class="text-gray-500"
-                  >{{ property.propertyDetails.size.houseSizeM2 }} m²</span
-               >
+               <span class="text-gray-500">
+                  {{ property.propertyDetails.size.houseSizeM2 }} m²
+               </span>
             </p>
             <p class="flex items-center gap-1">
                <PhBed :size="20" class="inline" />
-               <span class="text-gray-500"
-                  >{{ property.propertyDetails.bedrooms }} Beds</span
-               >
+               <span class="text-gray-500">
+                  {{ property.propertyDetails.bedrooms }} Beds
+               </span>
             </p>
          </div>
          <FlowbiteButton :text="$t('details')" @click="openDetails" />

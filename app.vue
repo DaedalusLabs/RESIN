@@ -63,6 +63,7 @@ async function getProperties() {
          "An expansive mansion located by the river, complete with a private dock and a large patio for outdoor entertaining. This luxurious property offers stunning views and the highest standard of modern living.",
       nearbyProperties: [],
       popupHtml: "<h1>Luxury Riverside Mansion</h1>",
+      isBitcasaHome: false,
    };
 
    return [
@@ -161,6 +162,7 @@ async function getProperties() {
             "A modern bungalow built for comfort, located in a quiet neighborhood in Paramaribo. Features a spacious open-concept living area, energy-efficient windows, and a cozy fireplace for a perfect family home.",
          nearbyProperties: [riversideMansion],
          popupHtml: "<h1>Modern Bungalow in Paramaribo</h1>",
+         isBitcasaHome: true,
       },
       {
          id: "3c7d0e4f6f9b5c8d4f7e0e3b6f9c2e5b8a4d7f1a4b7c3e6d9f2a5b8c1e4",
@@ -210,6 +212,7 @@ async function getProperties() {
             "This cozy cottage offers a private garden and a recently renovated kitchen. Located in a quiet area, it’s the perfect getaway for those seeking comfort and tranquility.",
          nearbyProperties: [riversideMansion],
          popupHtml: "<h1>Cozy Cottage in Kwattaweg</h1>",
+         isBitcasaHome: false,
       },
       riversideMansion, // Directly use the Riverside Mansion variable
       {
@@ -261,6 +264,7 @@ async function getProperties() {
             "This suburban family home offers ample space for a growing family, with a large living area, private garden, and a nearby playground. Located in a family-friendly neighborhood in Paramaribo.",
          nearbyProperties: [riversideMansion],
          popupHtml: "<h1>Spacious Suburban Home</h1>",
+         isBitcasaHome: false,
       },
    ];
 }
