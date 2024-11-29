@@ -56,12 +56,36 @@
          @close="handleCloseDrawer"
          @next="handleNext"
       />
+      <VerificationDrawerIntroduction
+         :is-verified="true"
+         :show="currentStep === 11"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
+      <VerificationDrawerInformation
+         :show="currentStep === 12"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
+      <VerificationDrawerContract
+         :show="currentStep === 13"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
+      <VerificationDrawerSign
+         :show="currentStep === 14"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
    </div>
 </template>
 
 <script setup>
+import { usePropertiesStore } from "~/stores/properties";
+
+const propertiesStore = usePropertiesStore();
 const currentStep = ref(-1);
-const MAX_STEPS = 10;
+const MAX_STEPS = 14;
 
 const emit = defineEmits(["close"]);
 
@@ -69,6 +93,10 @@ const props = defineProps({
    show: {
       type: Boolean,
       default: false,
+   },
+   propertyId: {
+      type: Number,
+      required: true,
    },
 });
 
@@ -86,9 +114,17 @@ const handleCloseDrawer = () => {
 const handleNext = () => {
    currentStep.value += 1;
 
-   if (currentStep.value > MAX_STEPS) {
+   if (currentStep.value === MAX_STEPS) {
       currentStep.value = -1;
       emit("close");
+      const localeRoute = useLocaleRoute();
+      const route = localeRoute({
+         name: "after-sign-in",
+      });
+      if (route) {
+         propertiesStore.addOwnedProperty(props.propertyId);
+         return navigateTo(route.fullPath);
+      }
    }
 };
 

@@ -72,6 +72,10 @@ export const usePropertiesStore = defineStore("properties", {
    },
 
    actions: {
+      addOwnedProperty(property: Property): void {
+         this.ownedProperties.push(property);
+      },
+
       addViewedProperty(id: string): void {
          if (!this.viewedProperties.includes(id)) {
             this.viewedProperties.push(id);
