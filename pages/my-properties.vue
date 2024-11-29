@@ -57,8 +57,6 @@ const propertiesStore = usePropertiesStore();
 
 const properties = computed(() => propertiesStore.ownedProperties);
 
-console.log(properties.value);
-
 definePageMeta({
    layout: "white",
 });

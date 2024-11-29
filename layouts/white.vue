@@ -3,6 +3,15 @@
       <main class="h-full flex-1 overflow-scroll pb-14">
          <slot />
       </main>
-      <BottomBar />
+      <MenuBar :show-drawer="showDrawer" @close="showDrawer = false" />
+      <BottomBar @toggle-menu-bar="handleToggleMenuBar" />
    </div>
 </template>
+
+<script setup>
+const showDrawer = ref(false);
+
+const handleToggleMenuBar = () => {
+   showDrawer.value = true;
+};
+</script>
