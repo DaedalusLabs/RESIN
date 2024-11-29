@@ -3,6 +3,49 @@
       class="z-top fixed bottom-14 left-0 w-full bg-black/30 p-4 backdrop-blur-md"
    >
       <FlowbiteModal
+         v-if="property.isBitcasaHome"
+         :is-open="isModalOpen"
+         @update:is-open="isModalOpen = $event"
+      >
+         <template #title>
+            <h3 class="text-lg font-bold text-gray-900">Contact agent</h3>
+         </template>
+         <div class="mt-4">
+            <p class="text-gray-900">Property</p>
+            <p class="font-bold text-gray-900">{{ propertyAddress }}</p>
+            <br />
+            <p>
+               Thank you for your interest in this property. Please leave your
+               preferred contact information and our agent will contact you
+               shortly.
+            </p>
+            <div class="mt-6">
+               <FlowbiteTextInput
+                  label="Phone"
+                  placeholder="Phone"
+                  class="mb-4"
+               />
+            </div>
+            <div class="mt-6 flex items-center justify-center">
+               <div class="flex-grow border-t border-gray-300"></div>
+               <span class="mx-3 text-sm font-medium text-gray-500">Or</span>
+               <div class="flex-grow border-t border-gray-300"></div>
+            </div>
+            <div class="mt-6">
+               <FlowbiteTextInput
+                  label="Email"
+                  placeholder="Email"
+                  class="mb-4"
+               />
+            </div>
+            <div class="mt-6 flex justify-center">
+               <FlowbiteButton :text="`Submit`" @click="handleSendRequest" />
+            </div>
+         </div>
+      </FlowbiteModal>
+
+      <FlowbiteModal
+         v-else
          :is-open="isModalOpen"
          @update:is-open="isModalOpen = $event"
       >
@@ -39,14 +82,26 @@
          </div>
       </FlowbiteModal>
 
-      <div class="mx-auto flex w-11/12 justify-between">
+      <div
+         v-if="!isModalOpen"
+         class="mx-auto flex w-11/12 justify-center"
+         :class="{ 'justify-between': !property.isBitcasaHome }"
+      >
          <FlowbiteButton
+            v-if="property.isBitcasaHome"
+            :text="`Contact Agent`"
+            :show-icon="false"
+            @click="handleShowAgentModal"
+         />
+         <FlowbiteButton
+            v-else
             :text="`Request Tour`"
             :show-icon="false"
             class="secondary"
             @click="handleShowTourModal"
          />
          <NuxtLink
+            v-if="!property.isBitcasaHome"
             :to="localePath(`/properties/${route.params.id}/rent-to-own`)"
          >
             <FlowbiteButton :text="buttonText" @click="handleClick" />
@@ -70,6 +125,10 @@ const props = defineProps({
 });
 
 const handleShowTourModal = () => {
+   isModalOpen.value = true;
+};
+
+const handleShowAgentModal = () => {
    isModalOpen.value = true;
 };
 
