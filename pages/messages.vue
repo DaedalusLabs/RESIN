@@ -1,5 +1,5 @@
 <template>
-   <section class="flex flex-col justify-between">
+   <section class="flex max-h-full flex-col justify-between">
       <!-- Header -->
       <div
          class="mb-5 flex w-full flex-col gap-5 border-b border-gray-200 bg-white px-10 pb-5 pt-10"

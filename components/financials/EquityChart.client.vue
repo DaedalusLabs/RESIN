@@ -1,7 +1,5 @@
 <template>
-   <div
-      class="w-full max-w-sm rounded-lg bg-white p-4 shadow dark:bg-gray-800 md:p-6"
-   >
+   <div class="w-full rounded-lg bg-white p-4 shadow dark:bg-gray-800 md:p-6">
       <div class="mb-4 flex w-full items-start justify-between">
          <div class="flex-col items-center">
             <div class="mb-1 flex items-center text-gray-500 dark:text-white">
