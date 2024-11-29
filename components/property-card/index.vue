@@ -16,7 +16,7 @@
          <span
             class="absolute bottom-4 right-4 z-10 rounded-full border-2 border-white bg-resin-500 px-2 py-1 text-xs font-semibold text-white shadow-md hover:border-resin-500 hover:bg-white hover:text-resin-500"
          >
-            {{ property.isBitcasaHome ? "For Sale" : "Rent to Own" }}
+            {{ property?.isBitcasaHome ? "For Sale" : "Rent to Own" }}
          </span>
       </div>
       <div class="flex flex-col gap-2 p-4">
