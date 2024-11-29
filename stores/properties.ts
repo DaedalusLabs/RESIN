@@ -25,6 +25,7 @@ interface PropertiesState {
    trendingAreas: string[];
    hasSeenMapToast: boolean;
    recoveryPhrase: string[];
+   ownedProperties: Property[];
 }
 
 export const usePropertiesStore = defineStore("properties", {
@@ -37,6 +38,7 @@ export const usePropertiesStore = defineStore("properties", {
       trendingAreas: [],
       hasSeenMapToast: false,
       recoveryPhrase: [],
+      ownedProperties: [],
    }),
 
    getters: {

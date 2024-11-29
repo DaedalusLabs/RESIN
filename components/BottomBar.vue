@@ -18,7 +18,7 @@
             <PhMagnifyingGlass :size="24" weight="regular" class="mb-1" />
          </NuxtLink>
          <NuxtLink
-            :to="localePath('resin')"
+            :to="localePath('my-resin')"
             class="flex flex-col items-center text-gray-500 hover:text-gray-900"
             :class="{ 'text-resin-500': isResinView }"
          >
