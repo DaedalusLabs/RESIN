@@ -4,7 +4,7 @@
       <div
          class="mb-5 flex w-full flex-col gap-5 border-b border-gray-200 bg-white px-10 pb-5 pt-10"
       >
-         <NuxtLink :to="localePath('home')">
+         <NuxtLink @click="goBack">
             <PhCaretLeft :size="24" class="text-pirate-300" />
          </NuxtLink>
          <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
@@ -59,6 +59,16 @@ definePageMeta({
    layout: "white",
    title: "Messages",
 });
+
+const goBack = () => {
+   if (window.history.length > 1) {
+      window.history.back();
+   } else {
+      // Fallback: navigate to home if there is no history
+      const { localePath } = useNuxtApp();
+      window.location.href = localePath("home");
+   }
+};
 
 const messages = ref([
    {

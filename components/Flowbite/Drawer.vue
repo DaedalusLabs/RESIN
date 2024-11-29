@@ -6,12 +6,8 @@
             @click="close"
          />
       </div>
-      <transition name="slide-up">
-         <div
-            v-if="show"
-            v-touch:swipe.down="swipeHandler"
-            class="absolute inset-x-0 bottom-0 z-50 flex max-h-svh w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
-         >
+      <transition :name="transitionName">
+         <div v-if="show" v-touch:swipe="swipeHandler" :class="drawerClasses">
             <div
                class="mx-auto mb-4 mt-3 h-1 w-8 cursor-pointer rounded-full bg-gray-300"
                @click="close"
@@ -42,21 +38,42 @@ const props = defineProps({
       type: Boolean,
       required: true,
    },
+   slideFrom: {
+      type: String,
+      default: "bottom", // "bottom" or "side"
+      validator: (value) => ["bottom", "side"].includes(value),
+   },
 });
 
 const emit = defineEmits(["close"]);
 
 const close = () => {
    emit("close");
+   console.log("close");
 };
 
 watchEffect(() => {
    show.value = props.isOpen;
 });
 
-const swipeHandler = () => {
-   close();
+const swipeHandler = (direction) => {
+   if (
+      (props.slideFrom === "bottom" && direction === "down") ||
+      (props.slideFrom === "side" && direction === "left")
+   ) {
+      close();
+   }
 };
+
+const drawerClasses = computed(() => {
+   return props.slideFrom === "bottom"
+      ? "absolute inset-x-0 bottom-0 z-50 flex max-h-svh w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
+      : "absolute top-0 left-0 z-50 flex h-full w-3/4 flex-col rounded-l bg-white p-7 shadow-lg";
+});
+
+const transitionName = computed(() => {
+   return props.slideFrom === "bottom" ? "slide-up" : "slide-left";
+});
 </script>
 
 <style scoped>
@@ -89,6 +106,24 @@ const swipeHandler = () => {
 .slide-up-enter-to,
 .slide-up-leave-from {
    transform: translateY(0);
+   opacity: 1;
+}
+
+/* Slide left/right for the modal */
+.slide-left-enter-active,
+.slide-left-leave-active {
+   transition:
+      transform 0.2s ease-out,
+      opacity 0.2s ease-out;
+}
+.slide-left-enter-from,
+.slide-left-leave-to {
+   transform: translateX(-100%); /* From outside the screen on the left */
+   opacity: 0;
+}
+.slide-left-enter-to,
+.slide-left-leave-from {
+   transform: translateX(0); /* Fully visible */
    opacity: 1;
 }
 </style>
