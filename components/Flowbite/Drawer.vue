@@ -10,7 +10,7 @@
          <div
             v-show="show"
             v-touch:swipe.down="swipeHandler"
-            class="absolute inset-x-0 bottom-0 z-50 flex max-h-[70vh] w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
+            class="absolute inset-x-0 bottom-0 z-50 flex max-h-svh w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
          >
             <div
                class="mx-auto mb-4 mt-3 h-1 w-8 cursor-pointer rounded-full bg-gray-300"
