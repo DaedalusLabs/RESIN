@@ -168,8 +168,7 @@ const handleCloseDrawer = () => {
 };
 
 const handleNext = () => {
-   if (true) {
-      //isCompleteAndCorrect.value
+   if (isCompleteAndCorrect.value) {
       emit("next");
    }
 };
