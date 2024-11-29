@@ -6,20 +6,20 @@
       @click="openDetails"
    >
       <NuxtImg
-         :src="property.images[0]"
+         :src="property?.images[0]"
          alt="Favorite image"
          class="mr-4 h-16 w-16 rounded-md object-cover object-center"
       />
       <div class="min-w-0 flex-1">
          <h3 class="truncate text-lg font-bold text-resin-500">
-            {{ property.location.address.street }}
+            {{ property?.location.address.street }}
          </h3>
          <p class="text-sm text-pirate-950">
-            {{ property.location.address.city }},
-            {{ property.location.address.country }}
+            {{ property?.location.address.city }},
+            {{ property?.location.address.country }}
          </p>
          <p class="text-sm font-bold text-pirate-950">
-            ${{ property.pricingDetails.rentPerMonth }} per month
+            ${{ property?.pricingDetails.rentPerMonth }} per month
          </p>
       </div>
       <div
@@ -51,6 +51,17 @@ const isRemoving = ref(false);
 
 const emit = defineEmits(["remove"]);
 
+const props = defineProps({
+   property: {
+      type: Object,
+      required: true,
+   },
+   isRemovable: {
+      type: Boolean,
+      default: false,
+   },
+});
+
 const swipeHandler = () => {
    if (!props.isRemovable) {
       return;
@@ -75,15 +86,4 @@ const openDetails = () => {
       return navigateTo(route.fullPath);
    }
 };
-
-const props = defineProps({
-   property: {
-      type: Object,
-      required: true,
-   },
-   isRemovable: {
-      type: Boolean,
-      default: false,
-   },
-});
 </script>

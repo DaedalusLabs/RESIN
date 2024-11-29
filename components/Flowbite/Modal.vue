@@ -1,4 +1,3 @@
-<!-- components/Modal.vue -->
 <template>
    <Teleport to="body">
       <div
@@ -13,9 +12,8 @@
             <div
                class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
                aria-hidden="true"
-               @click="close"
+               @click="handleClose"
             />
-
             <!-- Modal panel -->
             <div
                class="inline-block w-11/12 transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle"
@@ -32,7 +30,7 @@
                               <button
                                  type="button"
                                  class="inline-flex justify-center text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pirate-500"
-                                 @click="close"
+                                 @click="handleClose"
                               >
                                  <svg
                                     class="h-6 w-6"
@@ -64,20 +62,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+defineProps({
+   isOpen: {
+      type: Boolean,
+      required: true,
+   },
+});
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["update:is-open"]);
 
-const isOpen = ref(false);
-
-const open = () => {
-   isOpen.value = true;
+const handleClose = () => {
+   emit("update:is-open", false);
 };
-
-const close = () => {
-   isOpen.value = false;
-   emit("close");
-};
-
-defineExpose({ open, close });
 </script>

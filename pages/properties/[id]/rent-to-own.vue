@@ -5,7 +5,7 @@
          <NuxtImg src="/images/logos/resin-text.png" alt="Resin" class="h-4" />
       </div>
 
-      <FavoritesCard :property="property" can-remove="false" class="mb-10" />
+      <FavoritesCard :property="property" :is-removable="false" class="mb-10" />
 
       <RentToOwnSection
          v-for="section in sections"
@@ -36,7 +36,7 @@ const route = useRoute();
 const showDrawer = ref(false);
 
 const property = propertiesStore.properties.find(
-   (p) => p.id === parseInt(route.params.id),
+   (p) => p.id === route.params.id,
 );
 
 const sections = ref([

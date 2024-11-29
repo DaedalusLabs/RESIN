@@ -15,7 +15,7 @@ const propertiesStore = usePropertiesStore();
 
 async function getProperties() {
    const riversideMansion = {
-      id: 4,
+      id: "7f2c46e7b3d4a8f9c1e5b2d8a4f7c3b6e9d2a5f8c1b4e7a3d6f9c2e5b8a4d7",
       name: "Riverside Mansion",
       location: {
          coordinates: {
@@ -68,7 +68,7 @@ async function getProperties() {
 
    return [
       {
-         id: 1,
+         id: "1a5b8c2e4d7f3a6b9c2e5d8f4a7b3c6e9d2a5f8c1b4e7a3d6f9c2e5b8a4d",
          name: "Luxury Villa",
          location: {
             coordinates: {
@@ -118,7 +118,7 @@ async function getProperties() {
          popupHtml: "<h1>This is Nantes</h1>",
       },
       {
-         id: 2,
+         id: "2b6c9d3f5e8a4b7c3f6e9d2a5f8c1b4e7a3d6f9c2e5b8a4d7f1a4b7c3e6",
          name: "Modern Bungalow",
          location: {
             coordinates: {
@@ -164,7 +164,7 @@ async function getProperties() {
          popupHtml: "<h1>Modern Bungalow in Paramaribo</h1>",
       },
       {
-         id: 3,
+         id: "3c7d0e4f6f9b5c8d4f7e0e3b6f9c2e5b8a4d7f1a4b7c3e6d9f2a5b8c1e4",
          name: "Cozy Cottage",
          location: {
             coordinates: {
@@ -214,7 +214,7 @@ async function getProperties() {
       },
       riversideMansion, // Directly use the Riverside Mansion variable
       {
-         id: 5,
+         id: "5e9f2g6h8i1j7e0f5h8i1j4g7h0i3j6g9h2i5j8h1i4j7g0h3i6j9g2h5i8",
          name: "Suburban Family Home",
          location: {
             coordinates: {
@@ -269,7 +269,7 @@ async function getProperties() {
 async function getTrendingAreas() {
    return [
       {
-         id: 1,
+         id: "1d8e1f5g7h0i3j6k9l2m5n8o1p4q7r0s3t6u9v2w5x8y1z4a7b0c3d6e9",
          name: "Nantes",
          city: "Nantes",
          country: "France",
@@ -277,7 +277,7 @@ async function getTrendingAreas() {
          price: 1200,
       },
       {
-         id: 2,
+         id: "2e9f2g6h8i1j4k7l0m3n6o9p2q5r8s1t4u7v0w3x6y9z2a5b8c1d4e7f0",
          name: "Bordeaux",
          city: "Bordeaux",
          country: "France",
@@ -285,7 +285,7 @@ async function getTrendingAreas() {
          price: 1300,
       },
       {
-         id: 3,
+         id: "3f0g3h7i9j2k5l8m1n4o7p0q3r6s9t2u5v8w1x4y7z0a3b6c9d2e5f8g1",
          name: "Lyon",
          city: "Lyon",
          country: "France",
@@ -293,7 +293,7 @@ async function getTrendingAreas() {
          price: 1100,
       },
       {
-         id: 4,
+         id: "4g1h4i8j0k3l6m9n2o5p8q1r4s7t0u3v6w9x2y5z8a1b4c7d0e3f6g9h2",
          name: "Paris",
          city: "Paris",
          country: "France",
@@ -306,6 +306,7 @@ async function getTrendingAreas() {
 propertiesStore.properties = await getProperties();
 propertiesStore.filteredProperties = propertiesStore.properties;
 propertiesStore.trendingAreas = await getTrendingAreas();
+propertiesStore.ownedProperties = propertiesStore.properties.slice(0, 3); // mock 3 owned properties
 </script>
 
 <style>

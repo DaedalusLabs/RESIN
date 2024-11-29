@@ -1,56 +1,92 @@
 import { defineStore } from "pinia";
 
+interface Address {
+   street: string;
+   city: string;
+   country: string;
+}
+
+interface Location {
+   address: Address;
+}
+
+interface Property {
+   id: string;
+   name: string;
+   location: Location;
+}
+
+interface PropertiesState {
+   properties: Property[];
+   filteredProperties: Property[];
+   favorites: (string | number)[];
+   searches: string[];
+   viewedProperties: (string | number)[];
+   trendingAreas: string[];
+   hasSeenMapToast: boolean;
+   recoveryPhrase: string[];
+   ownedProperties: Property[];
+}
+
 export const usePropertiesStore = defineStore("properties", {
-   state: () => {
-      return {
-         properties: [],
-         filteredProperties: [],
-         favorites: [],
-         searches: [],
-         viewedProperties: [],
-         trendingAreas: [],
-         hasSeenMapToast: false,
-         recoveryPhrase: [],
-      };
-   },
+   state: (): PropertiesState => ({
+      properties: [],
+      filteredProperties: [],
+      favorites: [],
+      searches: [],
+      viewedProperties: [],
+      trendingAreas: [],
+      hasSeenMapToast: false,
+      recoveryPhrase: [],
+      ownedProperties: [],
+   }),
+
    getters: {
-      getLocations() {
+      getLocations(): Property[] {
          return this.properties;
       },
-      getFilteredLocations() {
+
+      getFilteredLocations(): Property[] {
          return this.filteredProperties;
       },
-      areFiltersActive() {
+
+      areFiltersActive(): boolean {
          return this.properties.length !== this.filteredProperties.length;
       },
-      favoriteLocations() {
+
+      favoriteLocations(): Property[] {
          return this.properties.filter((location) =>
             this.favorites.includes(location.id),
          );
       },
-      viewedLocations() {
+
+      viewedLocations(): Property[] {
          return this.properties.filter((location) =>
             this.viewedProperties.includes(location.id),
          );
       },
-      getRecoveredPhrase() {
+
+      getRecoveredPhrase(): string[] {
          return this.recoveryPhrase;
       },
    },
 
    actions: {
-      addViewedProperty(propertyId) {
-         if (!this.viewedProperties.includes(propertyId)) {
-            this.viewedProperties.push(propertyId);
+      addViewedProperty(id: string): void {
+         if (!this.viewedProperties.includes(id)) {
+            this.viewedProperties.push(id);
          }
       },
-      addSearch(searchTerm) {
+
+      addSearch(searchTerm: string): void {
          this.searches.push(searchTerm);
       },
-      setFilteredLocations(filteredProperties) {
+
+      setFilteredLocations(filteredProperties: Property[]): void {
          this.filteredProperties = filteredProperties;
       },
-      filterLocations(searchTerm) {
+
+      filterLocations(searchTerm: string): void {
          this.filteredProperties = this.properties.filter((property) => {
             return (
                property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -66,22 +102,25 @@ export const usePropertiesStore = defineStore("properties", {
             );
          });
       },
-      resetLocations() {
+
+      resetLocations(): void {
          this.filteredProperties = this.properties;
       },
-      toggleFavorite(locationId) {
+
+      toggleFavorite(locationId: string | number): void {
          if (this.favorites.includes(locationId)) {
             this.favorites = this.favorites.filter((id) => id !== locationId);
          } else {
             this.favorites.push(locationId);
          }
       },
-      isFavorite(locationId) {
+
+      isFavorite(locationId: string | number): boolean {
          return this.favorites.includes(locationId);
       },
-      findPropertyBySearchQuery(searchTerm) {
-         const [street, city, country] = searchTerm.split(", ");
 
+      findPropertyBySearchQuery(searchTerm: string): Property | undefined {
+         const [street, city, country] = searchTerm.split(", ");
          return this.properties.find((property) => {
             return (
                property.location.address.street.toLowerCase() ===
