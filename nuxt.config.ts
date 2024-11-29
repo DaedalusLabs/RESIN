@@ -8,7 +8,7 @@ export default defineNuxtConfig({
       "@nuxt/eslint",
       "@nuxtjs/tailwindcss",
       "@nuxtjs/i18n",
-      //   "@vite-pwa/nuxt", Enable this module in Production
+      "@vite-pwa/nuxt",
       "@nuxt/fonts",
       "@pinia/nuxt",
       "@vueuse/nuxt",
@@ -42,11 +42,10 @@ export default defineNuxtConfig({
          ],
       },
       workbox: {
-         navigateFallback: "/",
+         navigateFallback: null,
       },
       devOptions: {
-         enabled: true,
-         type: "module",
+         enabled: false,
       },
    },
 
