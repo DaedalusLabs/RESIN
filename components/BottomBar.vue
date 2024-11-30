@@ -6,40 +6,41 @@
          <NuxtLink
             :to="localePath('home')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
-            :class="{ 'text-resin-500': isHomeView }"
+            :class="{ 'text-resin-500 hover:text-resin-500': isHomeView }"
          >
             <PhHouseSimple :size="24" weight="regular" class="mb-1" />
          </NuxtLink>
          <NuxtLink
             :to="localePath('properties')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
-            :class="{ 'text-resin-500': isListView }"
+            :class="{ 'text-resin-500 hover:text-resin-500': isListView }"
          >
             <PhMagnifyingGlass :size="24" weight="regular" class="mb-1" />
          </NuxtLink>
          <NuxtLink
             :to="localePath('my-resin')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
-            :class="{ 'text-resin-500': isResinView }"
+            :class="{ 'text-resin-500 hover:text-resin-500': isResinView }"
          >
             <NuxtImg
                :src="resinImageSrc"
                width="32"
                height="32"
-               class="mb-1 hover:brightness-50"
+               class="mb-1 hover:brightness-50 active:brightness-100"
+               :class="{ 'hover:brightness-100': isResinView }"
             />
          </NuxtLink>
          <NuxtLink
             :to="localePath('favorites')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
-            :class="{ 'text-resin-500': isFavoritesView }"
+            :class="{ 'text-resin-500 hover:text-resin-500': isFavoritesView }"
          >
             <PhHeartStraight :size="24" weight="regular" class="mb-1" />
          </NuxtLink>
          <NuxtLink
             :to="localePath('profile')"
             class="relative flex cursor-pointer flex-col items-center text-pirate-500 hover:text-pirate-900"
-            :class="{ 'text-resin-500': isProfileView }"
+            :class="{ 'text-resin-500 hover:text-resin-500': isProfileView }"
             @click="handleProfileClick"
          >
             <PhUser :size="24" weight="regular" class="mb-1" />
@@ -56,6 +57,7 @@ import {
    PhUser,
 } from "@phosphor-icons/vue";
 
+const localePath = useLocalePath();
 const emit = defineEmits(["toggleMenuBar"]);
 
 const handleProfileClick = () => {
@@ -69,12 +71,14 @@ const isHomeView = ref(false);
 const isResinView = ref(false);
 const isFavoritesView = ref(false);
 const isProfileView = ref(false);
+
 watchEffect(() => {
-   isListView.value = route.path.includes("properties");
-   isHomeView.value = route.path.includes("home");
-   isResinView.value = route.path.includes("my-resin");
-   isFavoritesView.value = route.path.includes("favorites");
-   isProfileView.value = route.path.includes("profile");
+   const path = route.path;
+   isListView.value = path === localePath("properties");
+   isHomeView.value = path === localePath("home");
+   isResinView.value = path === localePath("my-resin");
+   isFavoritesView.value = path === localePath("favorites");
+   isProfileView.value = path === localePath("profile");
 });
 
 const resinImageSrc = computed(() => {
