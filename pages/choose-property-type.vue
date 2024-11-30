@@ -1,5 +1,5 @@
 <template>
-   <section class="flex flex-col items-center justify-between px-12 pt-20">
+   <section class="mx-auto flex w-10/12 flex-col py-20">
       <h1 class="text-center text-2xl font-extrabold leading-tight text-white">
          {{ $t("propertyType") }}
       </h1>
@@ -28,7 +28,7 @@
          <NuxtLink
             v-if="selectedPropertyTypes.length < 1"
             :to="localePath('map')"
-            class="mt-4 rounded-lg px-5 py-2.5 mb-10 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700"
+            class="mb-10 mt-4 rounded-lg px-5 py-2.5 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700"
          >
             {{ $t("skip") }}
          </NuxtLink>
