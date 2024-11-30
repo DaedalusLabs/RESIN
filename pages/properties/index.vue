@@ -17,6 +17,9 @@
          >
             <FlowbiteSkeleton v-for="i in 4" :key="i" />
          </div>
+         <div v-if="properties.length === 0" class="text-center text-white">
+            No properties to display
+         </div>
          <PropertyCard
             v-for="property in properties"
             v-else
