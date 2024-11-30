@@ -8,7 +8,7 @@
       <template #title>
          <div class="mb-5 flex items-center justify-between text-pirate-300">
             <h2 class="text-base font-semibold">Account</h2>
-            <PhX :size="20" @click="handleCloseDrawer" />
+            <PhX :size="20" class="cursor-pointer" @click="handleCloseDrawer" />
          </div>
       </template>
 
