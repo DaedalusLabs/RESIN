@@ -36,8 +36,15 @@
             {{ property.location.address.city }},
             {{ property.location.address.country }}
          </p>
-         <p class="text-sm font-bold text-gray-800">
-            ${{ property.pricingDetails.rentPerMonth }} per month
+         <p
+            v-if="!property.isBitcasaHome"
+            class="text-sm font-bold text-gray-800"
+         >
+            ${{ property.pricingDetails.rentPerMonth.toLocaleString() }} per
+            month
+         </p>
+         <p v-else class="text-sm font-bold text-gray-800">
+            ${{ property.pricingDetails.propertyPrice.toLocaleString() }}
          </p>
       </div>
       <div class="flex items-center justify-between p-4 pt-0 text-sm">
