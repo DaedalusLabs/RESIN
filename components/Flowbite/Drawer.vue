@@ -10,8 +10,7 @@
          <div
             v-if="show"
             v-touch:swipe="swipeHandler"
-            :class="drawerClasses"
-            class="h-dvh"
+            :class="[drawerClasses, props.slideFrom === 'side' ? 'h-dvh' : '']"
          >
             <div
                v-if="slideFrom === 'bottom'"
