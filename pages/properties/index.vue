@@ -8,7 +8,7 @@
          class="mx-auto flex w-11/12 flex-col items-center justify-center gap-8"
       >
          <TopBar
-            class="mt-10"
+            class="relative mt-10 w-full"
             @toggle-filters="showFilterDrawer = !showFilterDrawer"
          />
          <div
@@ -46,6 +46,11 @@ onMounted(() => {
    setTimeout(() => {
       isLoading.value = false;
    }, 1000);
+});
+
+watchEffect(() => {
+   const propertiesStore = usePropertiesStore();
+   properties.value = propertiesStore.filteredProperties;
 });
 
 const showDrawer = ref(false);
