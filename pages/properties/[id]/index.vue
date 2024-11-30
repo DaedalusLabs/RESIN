@@ -35,7 +35,7 @@
                </div>
                <div class="mt-4">
                   <NuxtLink
-                     to="/properties"
+                     :to="localePath('properties')"
                      class="text-sm font-medium text-red-800 hover:text-red-900"
                   >
                      Go back to properties →
@@ -75,6 +75,9 @@
                   label="Phone"
                   placeholder="Phone"
                   class="mb-4"
+                  :error-messages="formError ? ['Please fill in the form'] : []"
+                  :model-value="phone"
+                  @update:model-value="phone = $event"
                />
             </div>
             <div class="mt-6 flex items-center justify-center">
@@ -87,6 +90,9 @@
                   label="Email"
                   placeholder="Email"
                   class="mb-4"
+                  :error-messages="formError ? ['Please fill in the form'] : []"
+                  :model-value="email"
+                  @update:model-value="email = $event"
                />
             </div>
             <div class="mt-6 flex justify-center">
@@ -185,6 +191,9 @@ const property = ref(null);
 const isRequestSent = ref(false);
 const isModalOpen = ref(false);
 const referenceNumber = ref(0);
+const email = ref("");
+const formError = ref(false);
+const phone = ref("");
 
 const handleShowModal = () => {
    isModalOpen.value = true;
@@ -225,9 +234,17 @@ onMounted(async () => {
 });
 
 const handleSendRequest = () => {
-   isRequestSent.value = true;
    if (property?.value.isBitcasaHome) {
-      isModalOpen.value = false;
+      if (email.value || phone.value) {
+         isModalOpen.value = false;
+         isRequestSent.value = true;
+         formError.value = false;
+      } else {
+         formError.value = true;
+         console.log("Form error");
+      }
+   } else {
+      isRequestSent.value = true;
    }
 };
 
