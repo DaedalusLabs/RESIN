@@ -2,9 +2,13 @@
 import { useFlowbite } from "~/composables/useFlowbite";
 
 const drawer = ref(null);
+const isLoaded = ref(false);
 
 const props = defineProps({
-   showDrawer: Boolean,
+   showDrawer: {
+      type: Boolean,
+      default: false,
+   },
    imageUrls: {
       type: Array,
       required: true,
@@ -33,6 +37,7 @@ onMounted(() => {
 
       if ($targetEl) {
          drawer.value = new Drawer($targetEl, options);
+         isLoaded.value = true;
 
          // Show or hide drawer based on initial prop value
          if (props.showDrawer) {
@@ -60,6 +65,7 @@ watch(
 
 <template>
    <div
+      v-if="isLoaded"
       id="drawer-bottom-example"
       class="fixed bottom-0 left-0 right-0 z-40 h-5/6 w-full transform-none overflow-y-auto bg-white transition-transform dark:bg-gray-800"
       tabindex="-1"
