@@ -3,13 +3,13 @@
       class="z-top fixed bottom-14 left-0 w-full bg-black/30 p-4 backdrop-blur-md"
    >
       <div
-         class="mx-auto flex w-11/12 justify-center"
+         class="mx-auto flex w-11/12 justify-end"
          :class="{ 'justify-between': !property?.isBitcasaHome }"
       >
          <FlowbiteButton
             v-if="property?.isBitcasaHome"
             :text="`Contact Agent`"
-            :show-icon="false"
+            :show-icon="true"
             @click="handleShowAgentModal"
          />
          <FlowbiteButton
