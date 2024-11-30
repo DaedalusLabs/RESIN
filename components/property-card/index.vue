@@ -14,7 +14,7 @@
          </button>
 
          <span
-            class="absolute bottom-4 right-4 z-10 rounded-full border-2 border-white bg-resin-500 px-2 py-1 text-xs font-semibold text-white shadow-md hover:border-resin-500 hover:bg-white hover:text-resin-500"
+            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
             {{ property?.isBitcasaHome ? "For Sale" : "Rent to Own" }}
          </span>
