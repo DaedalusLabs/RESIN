@@ -133,7 +133,6 @@ async function getProperties() {
          },
          images: ["/images/mock/house.png"],
          pricingDetails: {
-            rentPerMonth: 1400, // In USD
             propertyPrice: 350000, // In USD
          },
          propertyDetails: {
