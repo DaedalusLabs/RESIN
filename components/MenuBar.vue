@@ -46,7 +46,7 @@
             <div class="mb-10">
                <a
                   href="#"
-                  class="flex items-center space-x-2 px-4 py-3 text-red-600 hover:bg-gray-100"
+                  class="flex items-center space-x-2 px-4 py-3 text-red-600 hover:text-pirate-500"
                >
                   <PhSignOut :size="16" />
                   <span>Log out</span>
