@@ -5,9 +5,9 @@
       @close="handleCloseDrawer"
    >
       <template #title>
-         <div class="mb-5 flex justify-between text-gray-400">
+         <div class="mb-5 flex items-center justify-between text-gray-400">
             <h2 class="text-base font-semibold">Account</h2>
-            <PhX :size="16" @click="handleCloseDrawer" />
+            <PhX :size="20" @click="handleCloseDrawer" />
          </div>
       </template>
 

@@ -9,6 +9,7 @@
       <transition :name="transitionName">
          <div v-if="show" v-touch:swipe="swipeHandler" :class="drawerClasses">
             <div
+               v-if="slideFrom === 'bottom'"
                class="mx-auto mb-4 mt-3 h-1 w-8 cursor-pointer rounded-full bg-gray-300"
                @click="close"
             />
