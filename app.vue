@@ -59,6 +59,7 @@ async function getProperties() {
             parking: "2-car garage",
          },
       },
+      message: "Brought to you by RESIN",
       summary:
          "An expansive mansion located by the river, complete with a private dock and a large patio for outdoor entertaining. This luxurious property offers stunning views and the highest standard of modern living.",
       nearbyProperties: [],
@@ -112,10 +113,12 @@ async function getProperties() {
                parking: "2-car garage",
             },
          },
+         message: "Brought to you by RESIN",
          summary:
             "This exquisite single-family residence, built in 2021, offers a blend of modern design and urban convenience, making it the perfect choice for contemporary living. Step into luxury with this apartment's open-concept layout, which seamlessly integrates the living, dining, and kitchen areas.",
          nearbyProperties: [riversideMansion],
          popupHtml: "<h1>This is Nantes</h1>",
+         isBitcasaHome: false,
       },
       {
          id: "2b6c9d3f5e8a4b7c3f6e9d2a5f8c1b4e7a3d6f9c2e5b8a4d7f1a4b7c3e6",
@@ -157,6 +160,7 @@ async function getProperties() {
                parking: "1-car garage",
             },
          },
+         message: "Brought to you by Bitcasa Homes",
          summary:
             "A modern bungalow built for comfort, located in a quiet neighborhood in Paramaribo. Features a spacious open-concept living area, energy-efficient windows, and a cozy fireplace for a perfect family home.",
          nearbyProperties: [riversideMansion],
@@ -207,6 +211,7 @@ async function getProperties() {
                parking: "Street parking",
             },
          },
+         message: "Brought to you by RESIN",
          summary:
             "This cozy cottage offers a private garden and a recently renovated kitchen. Located in a quiet area, it’s the perfect getaway for those seeking comfort and tranquility.",
          nearbyProperties: [riversideMansion],
@@ -259,6 +264,7 @@ async function getProperties() {
                parking: "2-car garage",
             },
          },
+         message: "Brought to you by RESIN",
          summary:
             "This suburban family home offers ample space for a growing family, with a large living area, private garden, and a nearby playground. Located in a family-friendly neighborhood in Paramaribo.",
          nearbyProperties: [riversideMansion],

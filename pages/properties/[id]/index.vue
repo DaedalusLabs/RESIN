@@ -181,6 +181,11 @@
          <DetailsSummary :property="property" />
          <DetailsKeyFeatures :property="property" />
          <DetailsAdditional :property="property" />
+         <p
+            class="my-12 rounded-lg bg-pirate-50 py-2 text-center text-sm font-medium text-pirate-300"
+         >
+            {{ property.message }}
+         </p>
       </div>
 
       <ClientOnly fallback-tag="span">
