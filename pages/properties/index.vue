@@ -1,33 +1,34 @@
 <template>
-   <div>
+   <div class="mx-auto w-9/12">
       <FiltersDrawer
          :show-drawer="showFilterDrawer"
          @close="showFilterDrawer = false"
       />
-      <div
-         class="mx-auto flex w-11/12 flex-col items-center justify-center gap-8"
-      >
+      <div class="mx-auto flex flex-col items-center justify-center gap-8">
          <TopBar
             class="relative mt-10 w-full"
             @toggle-filters="showFilterDrawer = !showFilterDrawer"
          />
          <div
-            v-if="isLoading"
-            class="flex w-full flex-col items-center justify-center gap-4"
+            class="grid w-full justify-items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3"
          >
-            <FlowbiteSkeleton v-for="i in 4" :key="i" />
+            <div
+               v-if="isLoading"
+               class="flex w-full flex-col items-center justify-center gap-4"
+            >
+               <FlowbiteSkeleton v-for="i in 4" :key="i" />
+            </div>
+            <div v-if="properties.length === 0" class="text-center text-white">
+               No properties to display
+            </div>
+            <PropertyCard
+               v-for="property in properties"
+               v-else
+               :key="property.id"
+               :property="property"
+               @open-gallery="openGallery(property.images)"
+            />
          </div>
-         <div v-if="properties.length === 0" class="text-center text-white">
-            No properties to display
-         </div>
-         <PropertyCard
-            v-for="property in properties"
-            v-else
-            :key="property.id"
-            :property="property"
-            class="w-full md:w-96"
-            @open-gallery="openGallery(property.images)"
-         />
       </div>
       <FlowbiteImageDrawer
          :show-drawer="showDrawer"

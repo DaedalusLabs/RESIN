@@ -3,7 +3,7 @@
       <div class="relative">
          <FlowbiteCarousel
             :items="property.images"
-            class="z-0 h-48 w-full object-cover md:h-72 lg:h-96"
+            class="z-0 h-48 w-full object-cover md:h-48"
          />
          <button
             v-if="showMediaIcon"

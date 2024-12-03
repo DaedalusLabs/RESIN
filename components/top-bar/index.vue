@@ -1,7 +1,7 @@
 <template>
    <div :class="isMap ? 'lg:bg-black lg:bg-opacity-80 lg:p-7' : 'bg-none'">
       <div
-         class="flex w-full items-center gap-2 lg:mx-auto lg:w-9/12"
+         class="flex w-full items-center gap-2"
          :class="{ 'lg:justify-center': !isMap, 'lg:justify-between': isMap }"
       >
          <!-- RESIN Logo -->

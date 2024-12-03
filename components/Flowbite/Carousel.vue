@@ -1,7 +1,7 @@
 <template>
    <div id="animation-carousel" class="relative w-full" data-carousel="static">
       <!-- Carousel wrapper -->
-      <div class="relative h-full overflow-hidden md:h-72 lg:h-96">
+      <div class="relative h-full overflow-hidden">
          <div
             v-for="(item, index) in items"
             :key="index"
