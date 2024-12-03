@@ -4,7 +4,7 @@
 
       <!-- Button to View Properties -->
       <NuxtLink
-         class="force-top absolute bottom-20"
+         class="force-top absolute bottom-20 lg:hidden"
          :to="localePath('properties')"
       >
          <FlowbiteButton
@@ -48,7 +48,7 @@ const properties = propertiesStore.properties;
 const zoom = ref(6);
 const mapContainer = ref(null);
 const map = ref(null);
-const visibleLocationsAmount = ref(0);
+const visibleLocationsAmount = ref(propertiesStore.filteredProperties.length);
 const userLocation = ref(null);
 const clickedLocation = ref(null);
 const route = useRoute();
@@ -57,7 +57,6 @@ const props = defineProps({
    mapCenter: {
       type: Object,
       required: false,
-      default: () => ({ lat: 8.852036, lng: -57.154996 }),
    },
 });
 
@@ -82,7 +81,6 @@ const calculateVisibleLocations = () => {
          property.location.coordinates.latitude,
       ]),
    );
-   visibleLocationsAmount.value = visibleLocations.length;
    propertiesStore.setFilteredLocations(visibleLocations);
 };
 

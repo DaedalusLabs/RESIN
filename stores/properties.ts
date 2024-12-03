@@ -89,7 +89,6 @@ export const usePropertiesStore = defineStore("properties", {
       setFilteredLocations(filteredProperties: Property[]): void {
          this.filteredProperties = filteredProperties;
       },
-
       filterLocations(searchTerm: string): void {
          const lowerCaseSearchTerm = searchTerm.toLowerCase();
 

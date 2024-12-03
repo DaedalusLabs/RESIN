@@ -2,7 +2,9 @@
    <div
       class="fixed inset-x-0 bottom-0 z-50 border-t border-pirate-200 bg-white shadow-[0_-8px_15px_-3px_rgba(0,0,0,0.05)]"
    >
-      <div class="mx-auto flex max-w-md items-center justify-between px-6 py-2">
+      <div
+         class="mx-auto flex max-w-md items-center justify-between px-6 py-2 md:py-4"
+      >
          <NuxtLink
             :to="localePath('home')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
