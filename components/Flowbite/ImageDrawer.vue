@@ -21,19 +21,19 @@ const emit = defineEmits(["close"]);
          @click.self="emit('close')"
       >
          <transition name="slide-up" appear>
-            <div class="h-5/6 w-full overflow-y-auto bg-white dark:bg-gray-800">
-               <div
-                  class="sticky top-0 z-50 cursor-pointer bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700"
-                  @click="emit('close')"
-               >
+            <div
+               class="w-full overflow-y-auto bg-white dark:bg-gray-800 lg:min-h-[75vh] lg:self-end"
+            >
+               <div class="sticky top-0 z-50">
                   <span
-                     class="absolute left-1/2 top-3 h-1 w-8 -translate-x-1/2 rounded-lg bg-gray-500 dark:bg-gray-600"
+                     class="absolute left-1/2 top-3 h-1 w-10 -translate-x-1/2 cursor-pointer rounded-lg bg-gray-500"
+                     @click="emit('close')"
                   />
                </div>
-               <div class="flex flex-col items-center justify-between">
+               <div class="grid grid-cols-1 lg:grid-cols-2">
                   <div
                      v-if="imageUrls.length === 0"
-                     class="text-center text-gray-500"
+                     class="col-span-full text-center text-gray-500"
                   >
                      No images to display
                   </div>
@@ -41,7 +41,12 @@ const emit = defineEmits(["close"]);
                      v-for="(imageUrl, index) in imageUrls"
                      :key="index"
                      :src="imageUrl"
-                     class="object-cover"
+                     :class="{
+                        'col-span-2':
+                           imageUrls.length % 2 !== 0 &&
+                           index === imageUrls.length - 1,
+                     }"
+                     class="h-64 w-full rounded-md object-cover shadow-lg lg:h-96"
                      loading="lazy"
                   />
                </div>

@@ -2,20 +2,20 @@
    <div :class="isMap ? 'lg:bg-black lg:bg-opacity-80 lg:p-7' : 'bg-none'">
       <div
          class="flex w-full items-center gap-2"
-         :class="{ 'lg:justify-center': !isMap, 'lg:justify-between': isMap }"
+         :class="isMap ? 'lg:justify-between' : 'lg:justify-center'"
       >
          <!-- RESIN Logo -->
          <NuxtImg
             src="/images/logos/resin-text.png"
             alt="Logo"
-            class="hidden h-10 lg:block"
-            :class="{ 'lg:order-first': !isMap }"
+            class="hidden h-10 xl:block"
+            :class="isMap ? '' : 'absolute bottom-2 left-0'"
          />
 
          <!-- Search Bar Parent -->
          <div
-            class="flex flex-grow gap-3 lg:w-1/2 lg:flex-grow-0"
-            :class="{ 'lg:mx-auto': !isMap }"
+            class="relative flex flex-grow gap-3"
+            :class="isMap ? '' : 'justify-center'"
          >
             <NuxtLink
                :to="localePath('map')"
@@ -26,11 +26,21 @@
                   description="view map"
                />
             </NuxtLink>
-            <FlowbiteSearchbar
-               class="flex-grow"
-               :query="query"
-               @update:query="updateQuery"
-            />
+            <!-- Search Bar -->
+            <div class="relative max-w-xl flex-grow">
+               <FlowbiteSearchbar
+                  class="w-full"
+                  :query="query"
+                  @update:query="updateQuery"
+               />
+               <!-- Dropdown -->
+               <TopBarDropdown
+                  :filtered-suggestions="filteredSuggestions"
+                  :query="query"
+                  class="absolute left-0 mt-2 w-full"
+                  @update:query="updateQuery"
+               />
+            </div>
             <FlowbiteIconButton
                icon="filter"
                description="filter properties"
@@ -49,16 +59,6 @@
                class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600 lg:py-4"
             />
          </NuxtLink>
-      </div>
-
-      <!-- Dropdown -->
-      <div class="relative">
-         <TopBarDropdown
-            :filtered-suggestions="filteredSuggestions"
-            :query="query"
-            class="absolute left-0 mt-2 w-full lg:w-auto"
-            @update:query="updateQuery"
-         />
       </div>
    </div>
 </template>

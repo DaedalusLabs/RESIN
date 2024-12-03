@@ -10,31 +10,29 @@
             @toggle-filters="showFilterDrawer = !showFilterDrawer"
          />
          <div
+            v-if="isLoading"
             class="grid w-full justify-items-stretch gap-6 lg:grid-cols-2 xl:grid-cols-3"
          >
-            <div
-               v-if="isLoading"
-               class="flex w-full flex-col items-center justify-center gap-4"
-            >
-               <FlowbiteSkeleton v-for="i in 4" :key="i" />
-            </div>
-            <div v-if="properties.length === 0" class="text-center text-white">
-               No properties to display
-            </div>
+            <FlowbiteSkeleton v-for="i in 12" :key="i" />
+         </div>
+
+         <div
+            v-else
+            class="grid w-full justify-items-stretch gap-6 lg:grid-cols-2 xl:grid-cols-3"
+         >
             <PropertyCard
                v-for="property in properties"
-               v-else
                :key="property.id"
                :property="property"
                @open-gallery="openGallery(property.images)"
             />
          </div>
+         <FlowbiteImageDrawer
+            :show-drawer="showDrawer"
+            :image-urls="currentPropertyImages"
+            @close="showDrawer = false"
+         />
       </div>
-      <FlowbiteImageDrawer
-         :show-drawer="showDrawer"
-         :image-urls="currentPropertyImages"
-         @close="showDrawer = false"
-      />
    </div>
 </template>
 
