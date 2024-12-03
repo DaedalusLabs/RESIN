@@ -1,9 +1,13 @@
 <template>
-   <section class="mx-auto flex w-10/12 flex-col py-20">
+   <section
+      class="mx-auto flex h-full w-10/12 flex-col items-center justify-center"
+   >
       <h1 class="text-center text-2xl font-extrabold leading-tight text-white">
          {{ $t("propertyType") }}
       </h1>
-      <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div
+         class="mt-10 grid grid-cols-1 justify-items-center gap-6 md:grid-rows-3"
+      >
          <PropertyType
             v-for="propertyType in propertyTypes"
             :key="propertyType.id"

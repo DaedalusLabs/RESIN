@@ -23,10 +23,6 @@ export default defineNuxtConfig({
       lazy: false,
    },
 
-   build: {
-      transpile: ["@phosphor-icons/vue"],
-   },
-
    fonts: {
       families: [{ name: "Inter", provider: "fontsource" }],
    },
