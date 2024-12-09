@@ -24,6 +24,7 @@
       <TopBarDropdown
          :filtered-suggestions="filteredSuggestions"
          :query="query"
+         class="absolute left-0 mt-2 w-full"
          @update:query="updateQuery"
       />
    </div>
@@ -38,7 +39,11 @@ const query = ref("");
 const mapCenter = ref(null);
 const suggestions = propertiesStore.properties;
 
-const emits = defineEmits(["update:map-center", "toggle-filters"]);
+const emits = defineEmits([
+   "update:map-center",
+   "toggle-filters",
+   "update:property-list",
+]);
 
 const filteredSuggestions = computed(() => {
    if (!query.value) return [];
@@ -60,5 +65,7 @@ function updateQuery(newQuery, lat, lng) {
       mapCenter.value = { lat, lng };
       emits("update:map-center", lat, lng);
    }
+   // remove ',' from query
+   propertiesStore.filterLocations(query.value.replace(/,/g, ""));
 }
 </script>

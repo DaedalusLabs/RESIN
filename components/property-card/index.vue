@@ -12,6 +12,12 @@
          >
             <PhImages :size="20" />
          </button>
+
+         <span
+            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
+         >
+            {{ property?.isBitcasaHome ? "For Sale" : "Rent to Own" }}
+         </span>
       </div>
       <div class="flex flex-col gap-2 p-4">
          <div class="flex items-center justify-between">
@@ -30,23 +36,30 @@
             {{ property.location.address.city }},
             {{ property.location.address.country }}
          </p>
-         <p class="text-sm font-bold text-gray-800">
-            ${{ property.pricingDetails.rentPerMonth }} per month
+         <p
+            v-if="!property.isBitcasaHome"
+            class="text-sm font-bold text-gray-800"
+         >
+            ${{ property.pricingDetails.rentPerMonth.toLocaleString() }} per
+            month
+         </p>
+         <p v-else class="text-sm font-bold text-gray-800">
+            ${{ property.pricingDetails.propertyPrice.toLocaleString() }}
          </p>
       </div>
       <div class="flex items-center justify-between p-4 pt-0 text-sm">
          <div class="flex items-center gap-4">
             <p class="flex items-center gap-1">
                <PhRuler :size="20" class="inline" />
-               <span class="text-gray-500"
-                  >{{ property.propertyDetails.size.houseSizeM2 }} m²</span
-               >
+               <span class="text-gray-500">
+                  {{ property.propertyDetails.size.houseSizeM2 }} m²
+               </span>
             </p>
             <p class="flex items-center gap-1">
                <PhBed :size="20" class="inline" />
-               <span class="text-gray-500"
-                  >{{ property.propertyDetails.bedrooms }} Beds</span
-               >
+               <span class="text-gray-500">
+                  {{ property.propertyDetails.bedrooms }} Beds
+               </span>
             </p>
          </div>
          <FlowbiteButton :text="$t('details')" @click="openDetails" />

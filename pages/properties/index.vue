@@ -8,7 +8,7 @@
          class="mx-auto flex w-11/12 flex-col items-center justify-center gap-8"
       >
          <TopBar
-            class="mt-10"
+            class="relative mt-10 w-full"
             @toggle-filters="showFilterDrawer = !showFilterDrawer"
          />
          <div
@@ -16,6 +16,9 @@
             class="flex w-full flex-col items-center justify-center gap-4"
          >
             <FlowbiteSkeleton v-for="i in 4" :key="i" />
+         </div>
+         <div v-if="properties.length === 0" class="text-center text-white">
+            No properties to display
          </div>
          <PropertyCard
             v-for="property in properties"
@@ -46,6 +49,11 @@ onMounted(() => {
 //   setTimeout(() => {
       isLoading.value = false;
   // }, 1000);
+});
+
+watchEffect(() => {
+   const propertiesStore = usePropertiesStore();
+   properties.value = propertiesStore.filteredProperties;
 });
 
 const showDrawer = ref(false);

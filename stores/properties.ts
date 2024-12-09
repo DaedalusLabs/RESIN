@@ -91,19 +91,19 @@ export const usePropertiesStore = defineStore("properties", {
       },
 
       filterLocations(searchTerm: string): void {
+         const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
          this.filteredProperties = this.properties.filter((property) => {
-            return (
-               property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-               property.location.address.street
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-               property.location.address.city
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-               property.location.address.country
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-            );
+            const combinedFields = [
+               property.name,
+               property.location.address.street,
+               property.location.address.city,
+               property.location.address.country,
+            ]
+               .join(" ")
+               .toLowerCase();
+
+            return combinedFields.includes(lowerCaseSearchTerm);
          });
       },
 

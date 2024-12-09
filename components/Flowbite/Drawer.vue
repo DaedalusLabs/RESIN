@@ -7,9 +7,14 @@
          />
       </div>
       <transition :name="transitionName">
-         <div v-if="show" v-touch:swipe="swipeHandler" :class="drawerClasses">
+         <div
+            v-if="show"
+            v-touch:swipe="swipeHandler"
+            :class="[drawerClasses, props.slideFrom === 'side' ? 'h-dvh' : '']"
+         >
             <div
-               class="mx-auto mb-4 mt-3 h-1 w-8 cursor-pointer rounded-full bg-gray-300"
+               v-if="slideFrom === 'bottom'"
+               class="mx-auto mb-4 mt-3 h-1 w-8 cursor-pointer rounded-none bg-gray-300"
                @click="close"
             />
 
@@ -68,7 +73,7 @@ const swipeHandler = (direction) => {
 const drawerClasses = computed(() => {
    return props.slideFrom === "bottom"
       ? "absolute inset-x-0 bottom-0 z-50 flex max-h-svh w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
-      : "absolute top-0 left-0 z-50 flex h-full w-3/4 flex-col rounded-l bg-white p-7 shadow-lg";
+      : "absolute top-0 left-0 z-50 flex h-full w-3/4 flex-col  bg-white p-7 shadow-lg";
 });
 
 const transitionName = computed(() => {
