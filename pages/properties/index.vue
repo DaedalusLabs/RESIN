@@ -43,9 +43,9 @@ const showFilterDrawer = ref(false);
 onMounted(() => {
    const propertiesStore = usePropertiesStore();
    properties.value = propertiesStore.filteredProperties;
-   setTimeout(() => {
+//   setTimeout(() => {
       isLoading.value = false;
-   }, 1000);
+  // }, 1000);
 });
 
 const showDrawer = ref(false);

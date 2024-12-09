@@ -44,13 +44,15 @@
 </template>
 
 <script setup>
+const { generateKeyPair, isAuthenticated } = useNostr();
+
 const loading = ref(true);
 
-onMounted(() => {
-   // Simulate API call delay of 3 seconds
-   setTimeout(() => {
-      loading.value = false;
-   }, 3000); // 3000ms = 3 seconds
+onMounted(async() => {
+   await generateKeyPair();
+
+   if (isAuthenticated) 
+      loading.value = false
 });
 </script>
 

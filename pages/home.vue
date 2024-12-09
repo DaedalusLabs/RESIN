@@ -78,6 +78,7 @@ const viewedProperties = ref([propertiesStore.viewedLocations.reverse()]);
 
 definePageMeta({
    layout: "white",
+   middleware: ['auth']
 });
 
 const filteredSuggestions = computed(() => {

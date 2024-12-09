@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-const mapCenter = ref({ lat: 5.852036, lng: -55.154996 });
+const mapCenter = ref({ lat: 21.76, lng: -101.84 });
 
 function updateMapCenter(lat, lng) {
    mapCenter.value = { lat, lng };

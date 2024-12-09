@@ -53,6 +53,7 @@ const propertiesStore = usePropertiesStore();
 
 definePageMeta({
    layout: "white",
+   middleware: ['auth']
 });
 
 onMounted(() => {

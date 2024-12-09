@@ -1,32 +1,20 @@
 <template>
-   <section
-      class="flex h-full flex-col items-center justify-between px-12 py-20"
-   >
+   <section class="flex h-full flex-col items-center justify-between px-12 py-20">
       <!-- Overlays -->
       <IntroductionLoginModal
-         :show="showLoginModal"
-         @close="handleCloseModal"
-         @open-nsec-drawer="openNsecDrawer"
-         @open-phrase-drawer="openPhraseDrawer"
-      />
+:show="showLoginModal" @close="handleCloseModal" @open-nsec-drawer="openNsecDrawer"
+         @open-phrase-drawer="openPhraseDrawer" />
       <FlowbiteNostrModal v-if="showRegisterModal" />
-      <IntroductionNsecDrawer
-         :show-nsec-drawer="showNsecDrawer"
-         @close="handleCloseDrawer"
-      />
-      <IntroductionPhraseDrawer
-         :show-phrase-drawer="showPhraseDrawer"
-         @close="handleCloseDrawer"
-      />
+      <IntroductionNsecDrawer :show-nsec-drawer="showNsecDrawer" @close="handleCloseDrawer" />
+      <IntroductionPhraseDrawer :show-phrase-drawer="showPhraseDrawer" @close="handleCloseDrawer" />
+      <ClientOnly>
 
       <div class="flex h-full flex-col items-center justify-between">
          <!-- Main page layout -->
          <NuxtImg src="/images/logos/resin-text.png" alt="Logo" class="h-10" />
          <div class="flex flex-col items-center justify-center gap-6">
             <div>
-               <h1
-                  class="text-center text-4xl font-bold leading-tight text-white"
-               >
+               <h1 class="text-center text-4xl font-bold leading-tight text-white">
                   {{ $t("rentToOwn") }}
                </h1>
                <h1 class="text-center text-4xl font-bold text-white">
@@ -35,37 +23,41 @@
             </div>
 
             <FlowbiteButton
-               class="px-5 py-3"
-               :text="$t('introductionButton')"
-               :show-icon="false"
-               @click="openRegisterModal"
-            />
-            <NuxtImg
-               src="/icons/arrow.png"
-               alt="Arrow"
-               class="absolute w-16 translate-x-36 translate-y-7"
-            />
+v-if="authenticationStatus" class="px-5 py-3" :text="$t('continueButton')"
+               :show-icon="false" @click="skipRegistration" />
+   
+            <FlowbiteButton
+v-else class="px-5 py-3" :text="$t('introductionButton')"
+               :show-icon="false"  @click="openRegisterModal" />
+
+            <NuxtImg src="/icons/arrow.png" alt="Arrow" class="absolute w-16 translate-x-36 translate-y-7" />
          </div>
 
          <div class="flex flex-col items-center justify-center gap-2">
             <FlowbiteButton
-               :text="$t('signIn')"
-               class="border border-pirate-400 bg-transparent px-3 py-3 font-normal text-pirate-50"
-               :show-icon="false"
-               @click="openLoginModal"
-            />
+v-if="!authenticationStatus" :text="$t('signIn')"
+               class="border border-pirate-400 bg-transparent px-3 py-3 font-normal text-pirate-50" :show-icon="false"
+               @click="openLoginModal" />
             <NuxtLink
-               to="#"
-               class="mb-2 me-2 mt-10 rounded-lg px-5 py-2.5 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700"
-            >
+to="#"
+               class="mb-2 me-2 mt-10 rounded-lg px-5 py-2.5 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700">
                {{ $t("checkCountryAvailability") }}
             </NuxtLink>
          </div>
       </div>
+   </ClientOnly>
+
    </section>
 </template>
 
 <script setup>
+const { checkAuthenticated, isAuthenticated } = useNostr();
+const localePath = useLocalePath()
+
+const authenticationStatus = ref(false)
+
+authenticationStatus.value = await checkAuthenticated();
+
 definePageMeta({
    layout: "intro",
 });
@@ -101,4 +93,10 @@ const handleCloseModal = () => {
    showLoginModal.value = false;
    showRegisterModal.value = false;
 };
+
+const skipRegistration = () => {
+   if (isAuthenticated) {
+      navigateTo(localePath('properties'));
+   }
+}
 </script>

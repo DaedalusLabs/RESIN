@@ -96,5 +96,6 @@ const displayedProperties = computed(() => properties.slice(0, 2));
 const features = ["End lease", "Refinance", "Sell a property"];
 definePageMeta({
    layout: "white",
+   middleware: ['auth']
 });
 </script>

@@ -45,7 +45,7 @@ import { Map } from "maplibre-gl";
 
 const propertiesStore = usePropertiesStore();
 const properties = propertiesStore.properties;
-const zoom = ref(6);
+const zoom = ref(5);
 const mapContainer = ref(null);
 const map = ref(null);
 const visibleLocationsAmount = ref(0);

@@ -3,21 +3,12 @@
       <template #title>Log in with NOSTR</template>
       <p class="my-6 text-sm">Choose an option below to access your account.</p>
       <div class="mt-4 flex w-full flex-col gap-4">
-         <NuxtLink :to="localePath('properties')" class="block">
-            <FlowbiteBorderButton
-               :text="`Use browser extension`"
-               class="w-full"
-            />
-         </NuxtLink>
+         <FlowbiteBorderButton :text="`Use recovery phrase (12 words)`" @click="emit('openPhraseDrawer')" />
 
          <FlowbiteBorderButton
-            :text="`Use private key (NSEC)`"
-            @click="emit('openNsecDrawer')"
-         />
-         <FlowbiteBorderButton
-            :text="`Use recovery phrase (12 words)`"
-            @click="emit('openPhraseDrawer')"
-         />
+:text="hasExtension() ? 'Use browser extension' : 'No extension found - more info'"
+            class="w-full border-gray text-gray" 
+            @click="hasExtension() ? handleExtensionLogin() : openExtensionApps()" />
       </div>
       <p class="mt-4 text-center text-xs">
          Or
@@ -29,10 +20,15 @@
    </FlowbiteModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useNostr } from '~/composables/useNostr';
+
+const { loginWithExtension, isAuthenticated, hasExtension } = useNostr();
+
 const emit = defineEmits(["openNsecDrawer", "openPhraseDrawer", "close"]);
 
 const isModalOpen = ref(false);
+const localePath = useLocalePath()
 
 const props = defineProps({
    show: Boolean,
@@ -50,4 +46,25 @@ const handleModalUpdate = (value) => {
       emit("close");
    }
 };
+
+async function handleExtensionLogin() {
+   try {
+      await loginWithExtension();
+
+      if (isAuthenticated) {
+         navigateTo(localePath('properties'));
+      }
+   } catch (err) {
+      // Error is handled in composable
+      console.error('Login failed:', err);
+   }
+}
+
+function openExtensionApps() {
+   navigateTo('https://nostrapps.com/#signers', {
+      open: {
+         target: '_blank'
+      }
+   });
+}
 </script>
