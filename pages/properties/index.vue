@@ -1,5 +1,5 @@
 <template>
-   <div class="mx-auto w-9/12">
+   <div class="mx-auto mb-[5vh] w-9/12">
       <FiltersDrawer
          :show-drawer="showFilterDrawer"
          @close="showFilterDrawer = false"
@@ -27,6 +27,8 @@
                @open-gallery="openGallery(property.images)"
             />
          </div>
+         <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
+
          <FlowbiteImageDrawer
             :show-drawer="showDrawer"
             :image-urls="currentPropertyImages"
