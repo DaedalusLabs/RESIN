@@ -1,7 +1,7 @@
 <template>
    <div
       v-if="filteredSuggestions.length"
-      class="absolute z-10 mt-1 flex-1 rounded-xl bg-black py-4 shadow-lg"
+      class="z-top absolute mt-1 flex-1 rounded-xl bg-black py-4 shadow-lg"
    >
       <ul>
          <p class="pb-2 pl-4 text-sm font-semibold text-white">Places</p>
