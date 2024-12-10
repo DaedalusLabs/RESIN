@@ -40,7 +40,11 @@ export const usePropertiesStore = defineStore("properties", {
       recoveryPhrase: [],
       ownedProperties: [],
    }),
-
+   persist: {
+      key: 'properties-store',
+      storage: piniaPluginPersistedstate.localStorage(),
+      paths: ['favorites', 'viewedProperties'] 
+  },
    getters: {
       getLocations(): Property[] {
          return this.properties;

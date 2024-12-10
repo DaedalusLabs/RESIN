@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
    compatibilityDate: "2024-04-03",
-   devtools: { enabled: true },
+   devtools: { enabled: false },
 
    modules: [
       "@nuxt/image",
@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       "@nuxt/fonts",
       "@pinia/nuxt",
       "@vueuse/nuxt",
+      'pinia-plugin-persistedstate/nuxt',
    ],
 
    i18n: {

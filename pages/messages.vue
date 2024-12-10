@@ -18,13 +18,13 @@
          class="no-scrollbar mx-auto flex w-10/12 flex-1 flex-col gap-10 overflow-y-scroll p-6 pb-28"
       >
          <FlowbiteChatBubble
-            v-for="(msg, index) in messages"
-            :key="index"
-            :message="msg.text"
-            :name="msg.sender"
+            v-for="(msg, index) in nostrStore.messages"
+            :key="msg.id"
+            :message="msg.content"
+            :name="msg.user?.profile?.name ? msg.user?.profile?.name : ''"
             :status="msg.status"
-            :time="msg.time"
-            :profile-image="msg.profileImage"
+            :time="(new Date(msg.created_at * 1000)).toLocaleString()"
+            :profile-image="msg.user?.profile?.image ? msg.user?.profile?.image : '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
             :is-sent="msg.isSent"
          ></FlowbiteChatBubble>
       </div>
@@ -54,6 +54,8 @@
 
 <script setup>
 import { PhCaretLeft, PhPaperPlaneTilt } from "@phosphor-icons/vue";
+const nostrStore = useNostrStore();
+const appConfig = useAppConfig()
 
 definePageMeta({
    layout: "white",
@@ -71,22 +73,6 @@ const goBack = () => {
 };
 
 const messages = ref([
-   {
-      text: "Hello there, I have found some real estate properties that might interest you. Please let me know which types of properties you are looking for. Thank you",
-      sender: "RESIN",
-      status: "Delivered",
-      time: "11:46",
-      profileImage: "/images/avatar.png",
-      isSent: false,
-   },
-   {
-      text: "Yes, we do have several options available in the downtown area. I will send you the details and some pictures of the properties shortly.",
-      sender: "RESIN",
-      status: "Delivered",
-      time: "11:46",
-      profileImage: "/images/avatar.png",
-      isSent: true,
-   },
 ]);
 
 const newMessage = ref("");
@@ -104,15 +90,24 @@ watch(messages, () => {
    scrollToBottom();
 });
 
-onMounted(() => {
+nostrStore.$subscribe((mutation, state) => {
+      messages.value = state.messages;
+
+      scrollToBottom();
+  // }
+})
+
+onMounted(async() => {
    scrollToBottom();
+   await nostrStore.checkAuthenticated();
+   await nostrStore.fetchDirectMessages();
 });
 
-watch(messages, () => {
-   scrollToBottom();
-});
+// watch(store.messages, () => {
+//    scrollToBottom();
+// });
 
-function sendMessage() {
+async function sendMessage() {
    if (!newMessage.value.trim()) return; // Geen lege berichten toestaan
 
    const now = new Date();
@@ -121,16 +116,19 @@ function sendMessage() {
       minute: "2-digit",
    });
 
-   messages.value.push({
-      text: newMessage.value,
-      sender: "You",
-      status: "Sent",
-      time: time,
-      profileImage: "/images/avatar.png",
-      isSent: true,
-   });
+   // messages.value.push({
+   //    text: newMessage.value,
+   //    sender: "You",
+   //    status: "Sent",
+   //    time: time,
+   //    profileImage: "/images/avatar.png",
+   //    isSent: true,
+   // });
+   
+   await nostrStore.sendDirectMessage(appConfig.MESSAGES_NPUB, newMessage.value);
 
    newMessage.value = "";
+
 
    // Scroll naar de onderkant na het toevoegen van een bericht
    scrollToBottom();

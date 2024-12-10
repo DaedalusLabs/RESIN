@@ -25,12 +25,12 @@ export function useNostr() {
   const hasExtension = () => window.nostr
 
   const generateKeyPair = () => {
-    authType = 'generated'
+ //   authType = 'generated'
     return store.generateKeyPair()
   }
 
   const loginWithMnemonic = (mnemonic: string) => {
-    authType = 'generated'
+//    authType = 'generated'
     return store.generateKeyPair(mnemonic)
   }
 
