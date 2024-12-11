@@ -47,7 +47,6 @@
    </section>
 
    <section v-else class="mb-28">
-      <!-- Property Image and Basic Info -->
       <FlowbiteCheckToast
          :show-toast="isRequestSent && property?.isBitcasaHome"
          :text="`Information submitted`"
@@ -138,7 +137,13 @@
             </button>
          </div>
       </FlowbiteModal>
-      <div class="relative">
+
+      <TopBar
+         class="relative mx-auto mt-10 max-w-[83%]"
+         @toggle-filters="showFilterDrawer = !showFilterDrawer"
+      />
+
+      <div class="relative sm:hidden">
          <NuxtImg
             v-if="property.images?.length"
             :src="property.images[0]"
