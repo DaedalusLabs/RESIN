@@ -139,23 +139,18 @@
       </FlowbiteModal>
 
       <TopBar
-         class="relative mx-auto mt-10 max-w-[83%]"
+         class="relative mx-auto mt-10 hidden max-w-[83%] lg:block"
          @toggle-filters="showFilterDrawer = !showFilterDrawer"
       />
 
-      <div class="relative sm:hidden">
+      <div class="relative lg:hidden">
          <NuxtImg
             v-if="property.images?.length"
             :src="property.images[0]"
             alt="Property Image"
             class="h-64 w-full object-cover"
          />
-         <div
-            v-else
-            class="flex h-64 w-full items-center justify-center bg-gray-200"
-         >
-            <span class="text-gray-400">No image available</span>
-         </div>
+
          <span
             v-if="property.isBitcasaHome"
             class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
@@ -172,32 +167,48 @@
          <DetailsTopBar :property="property" />
       </div>
 
-      <!-- Property Details -->
-      <div class="container mx-auto mt-8 w-10/12">
-         <h1 class="text-2xl font-extrabold leading-tight">
-            {{ property.location?.address?.street || "Address not available" }}
-         </h1>
-         <p class="mt-1 text-sm">
-            {{ property.location?.address?.city }},
-            {{ property.location?.address?.country }}
-         </p>
-         <DetailsSize :property="property" />
-         <DetailsPrices :property="property" />
-         <DetailsSummary :property="property" />
-         <DetailsKeyFeatures :property="property" />
-         <DetailsAdditional :property="property" />
-         <p
-            class="my-12 rounded-lg bg-pirate-50 py-2 text-center text-sm font-medium text-pirate-300"
-         >
-            {{ property.message }}
-         </p>
+      <div class="mx-auto mt-16 flex w-10/12 gap-20">
+         <NuxtImg
+            v-if="property.images?.length"
+            :src="property.images[0]"
+            alt="Property Image"
+            class="hidden h-fit w-2/5 object-cover lg:block"
+         />
+         <!-- Property Details -->
+         <div>
+            <div class="container mx-auto w-10/12">
+               <h1 class="text-2xl font-extrabold leading-tight">
+                  {{
+                     property.location?.address?.street ||
+                     "Address not available"
+                  }}
+               </h1>
+               <p class="mt-1 text-sm">
+                  {{ property.location?.address?.city }},
+                  {{ property.location?.address?.country }}
+               </p>
+               <DetailsSize :property="property" />
+               <DetailsPrices :property="property" />
+               <DetailsSummary :property="property" />
+               <DetailsKeyFeatures :property="property" />
+               <DetailsAdditional :property="property" />
+               <p
+                  class="my-12 rounded-lg bg-pirate-50 py-2 text-center text-sm font-medium text-pirate-300"
+               >
+                  {{ property.message }}
+               </p>
+            </div>
+            <ClientOnly fallback-tag="span">
+               <DetailsMap :property="property" />
+            </ClientOnly>
+            <DetailsNearby :property="property" />
+            <DetailsBottomBar
+               class="block lg:hidden"
+               :property="property"
+               @show-modal="handleShowModal"
+            />
+         </div>
       </div>
-
-      <ClientOnly fallback-tag="span">
-         <DetailsMap :property="property" />
-      </ClientOnly>
-      <DetailsNearby :property="property" />
-      <DetailsBottomBar :property="property" @show-modal="handleShowModal" />
    </section>
 </template>
 
