@@ -1,21 +1,26 @@
 <template>
    <div :class="isMap ? 'lg:bg-black lg:bg-opacity-80 lg:p-7' : 'bg-none'">
       <div
-         class="flex w-full items-center gap-2"
+         class="mx-auto flex w-full max-w-[75%] items-center gap-2"
          :class="isMap ? 'lg:justify-between' : 'lg:justify-center'"
       >
          <!-- RESIN Logo -->
-         <NuxtImg
-            src="/images/logos/resin-text.png"
-            alt="Logo"
-            class="hidden h-10 xl:block"
+         <NuxtLink
+            :to="localePath('properties')"
+            class="z-20 hidden h-10 2xl:block"
             :class="isMap ? '' : 'absolute bottom-2 left-0'"
-         />
+         >
+            <NuxtImg
+               src="/images/logos/resin-text.png"
+               alt="Logo"
+               class="h-full"
+            />
+         </NuxtLink>
 
          <!-- Search Bar Parent -->
          <div
             class="relative flex flex-grow gap-3"
-            :class="isMap ? '' : 'justify-center'"
+            :class="isMap ? 'justify-center' : 'justify-center'"
          >
             <NuxtLink
                :to="localePath('map')"

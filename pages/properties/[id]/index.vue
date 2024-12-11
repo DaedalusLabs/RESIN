@@ -138,12 +138,17 @@
          </div>
       </FlowbiteModal>
 
+      <FiltersDrawer
+         :show-drawer="showFilterDrawer"
+         @close="showFilterDrawer = false"
+      />
+
       <TopBar
-         class="relative mx-auto mt-10 hidden max-w-[83%] lg:block"
+         class="relative mx-auto mt-10 hidden max-w-[75%] xl:block"
          @toggle-filters="showFilterDrawer = !showFilterDrawer"
       />
 
-      <div class="relative lg:hidden">
+      <div class="relative xl:hidden">
          <NuxtImg
             v-if="property.images?.length"
             :src="property.images[0]"
@@ -167,13 +172,67 @@
          <DetailsTopBar :property="property" />
       </div>
 
-      <div class="mx-auto mt-16 flex w-10/12 gap-20">
-         <NuxtImg
-            v-if="property.images?.length"
-            :src="property.images[0]"
-            alt="Property Image"
-            class="hidden h-fit w-2/5 object-cover lg:block"
-         />
+      <div class="mx-auto mt-16 flex w-9/12 gap-20">
+         <div
+            class="max sticky top-16 hidden h-fit w-3/5 flex-col gap-10 xl:flex"
+         >
+            <NuxtImg
+               v-if="property.images?.length"
+               :src="property.images[0]"
+               alt="Property Image"
+               class="object-cover"
+            />
+            <div class="flex h-12 justify-between">
+               <div class="flex gap-5">
+                  <FlowbiteButton
+                     v-if="property?.isBitcasaHome"
+                     :text="`Contact Agent`"
+                     :show-icon="true"
+                     class="h-full"
+                     @click="handleShowAgentModal"
+                  />
+                  <FlowbiteButton
+                     v-else
+                     :text="`Request Tour`"
+                     :show-icon="false"
+                     class="secondary h-full"
+                     @click="handleShowTourModal"
+                  />
+                  <NuxtLink
+                     v-if="!property?.isBitcasaHome"
+                     :to="
+                        localePath(`/properties/${route.params.id}/rent-to-own`)
+                     "
+                  >
+                     <FlowbiteButton
+                        class="h-full"
+                        :text="buttonText"
+                        @click="handleClick"
+                     />
+                  </NuxtLink>
+               </div>
+               <div class="flex gap-5">
+                  <button
+                     :v-if="isSupported"
+                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full bg-white shadow-md"
+                     @click="startShare"
+                  >
+                     <PhExport class="h-6 w-6 text-black" />
+                  </button>
+                  <button
+                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full bg-white shadow-md"
+                     @click="toggleFavorite"
+                  >
+                     <PhHeartStraight
+                        :class="{ 'text-resin-500': isFavorite }"
+                        :weight="isFavorite ? 'fill' : 'regular'"
+                        class="h-6 w-6 text-black"
+                     />
+                  </button>
+               </div>
+            </div>
+         </div>
+
          <!-- Property Details -->
          <div>
             <div class="container mx-auto w-10/12">
@@ -203,7 +262,7 @@
             </ClientOnly>
             <DetailsNearby :property="property" />
             <DetailsBottomBar
-               class="block lg:hidden"
+               class="block xl:hidden"
                :property="property"
                @show-modal="handleShowModal"
             />
@@ -215,7 +274,8 @@
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
 import { fixNestedStrings } from "~/utils/jsonParser";
-import { PhCheck } from "@phosphor-icons/vue";
+import { PhCheck, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
+import { useShare } from "@vueuse/core";
 
 const propertiesStore = usePropertiesStore();
 const route = useRoute();
@@ -228,10 +288,33 @@ const referenceNumber = ref(0);
 const email = ref("");
 const formError = ref(false);
 const phone = ref("");
+const isFavorite = ref(null);
+const showFilterDrawer = ref(false);
 
 const handleShowModal = () => {
    isModalOpen.value = true;
 };
+
+const toggleFavorite = () => {
+   isFavorite.value = !isFavorite.value;
+   propertiesStore.toggleFavorite(property.value.id);
+};
+
+const buttonText = computed(() => {
+   return route.path.includes("rent-to-own")
+      ? "Rent this property"
+      : "Rent-to-own";
+});
+
+const { share, isSupported } = useShare();
+
+function startShare() {
+   share({
+      title: "Resin",
+      text: "Check out these listings on Resin",
+      url: location.href,
+   });
+}
 
 const generateRef = () => {
    return Math.floor(Math.random() * 9000) + 1000;
@@ -253,6 +336,8 @@ onMounted(async () => {
       }
 
       property.value = foundProperty;
+
+      isFavorite.value = propertiesStore.isFavorite(foundProperty.id);
 
       if (typeof property.value === "string") {
          fixNestedStrings(property);
@@ -301,5 +386,9 @@ defineProps({
 <style scoped>
 .z-top {
    z-index: 1000;
+}
+
+.secondary {
+   @apply bg-pirate-700 !important;
 }
 </style>
