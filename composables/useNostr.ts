@@ -24,6 +24,8 @@ export function useNostr() {
 
   const hasExtension = () => window.nostr
 
+  const hasNip44 = () => 'nip44' in window.nostr
+
   const generateKeyPair = () => {
  //   authType = 'generated'
     return store.generateKeyPair()
@@ -46,6 +48,7 @@ export function useNostr() {
     loginWithExtension,
     loginWithMnemonic,
     hasExtension,
+    hasNip44,
     generateKeyPair,
     checkAuthenticated,
     isAuthenticated: computed(() => store.authenticated),

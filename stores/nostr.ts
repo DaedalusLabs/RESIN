@@ -171,10 +171,16 @@ export const useNostrStore = defineStore('nostr', {
         async giftWrapMessage(unsignedMsg, targetUser: NDKUser) {
             const ndk = useNDK();
 
+            if (!ndk?.signer) {
+                console.log('no signer');
+            }
+
+            const signer = await ndk?.signer;
+
             // Create seal (kind 13)
             const seal = new NDKEvent(ndk);
             seal.kind = 13;
-            seal.content = await ndk.signer?.encrypt(targetUser, JSON.stringify(unsignedMsg), 'nip44');
+            seal.content = await signer?.encrypt(targetUser, JSON.stringify(unsignedMsg), 'nip44');
             await seal.sign();
 
             const randomSigner = NDKPrivateKeySigner.generate()
