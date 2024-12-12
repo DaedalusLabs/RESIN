@@ -22,12 +22,12 @@
       </svg>
 
       <!-- MapPinLine -->
-      <NuxtLink v-else-if="icon === 'map'" :to="localePath('map')">
+      <NuxtLinkLocale v-else-if="icon === 'map'" to="map">
          <PhMapPinLine class="h-6 w-6" weight="bold" />
-      </NuxtLink>
-      <NuxtLink v-else :to="localePath('properties')">
+      </NuxtLinkLocale>
+      <NuxtLinkLocale v-else to="properties">
          <PhRows class="h-6 w-6" weight="bold" />
-      </NuxtLink>
+      </NuxtLinkLocale>
       <span class="sr-only">{{ description }}</span>
    </button>
 </template>

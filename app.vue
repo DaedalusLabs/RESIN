@@ -84,8 +84,9 @@ async function getProperties() {
          },
          images: [
             "/images/mock/house.png",
-            "/images/mock/house.png",
-            "/images/mock/house.png",
+            "/images/mock/gallery1.png",
+            "/images/mock/gallery2.png",
+            "/images/mock/gallery3.png",
          ],
          pricingDetails: {
             rentPerMonth: 1950,
@@ -115,7 +116,7 @@ async function getProperties() {
          },
          message: "Brought to you by RESIN",
          summary:
-            "This exquisite single-family residence, built in 2021, offers a blend of modern design and urban convenience, making it the perfect choice for contemporary living. Step into luxury with this apartment's open-concept layout, which seamlessly integrates the living, dining, and kitchen areas.",
+            "This exquisite single-family residence, built in 2021, offers a blend of modern design and urban convenience, making it the perfect choice for contemporary living. Step into luxury with this apartment's open-concept layout, which seamlessly integrates the living, dining, and kitchen areas. This exquisite single-family residence, built in 2021, offers a blend of modern design and urban convenience, making it the perfect choice for contemporary living. Step into luxury with this apartment's open-concept layout, which seamlessly integrates the living, dining, and kitchen areas.",
          nearbyProperties: [riversideMansion],
          popupHtml: "<h1>This is Nantes</h1>",
          isBitcasaHome: false,

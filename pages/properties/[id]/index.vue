@@ -34,12 +34,12 @@
                   </p>
                </div>
                <div class="mt-4">
-                  <NuxtLink
-                     :to="localePath('properties')"
+                  <NuxtLinkLocale
+                     to="properties"
                      class="text-sm font-medium text-red-800 hover:text-red-900"
                   >
                      Go back to properties →
-                  </NuxtLink>
+                  </NuxtLinkLocale>
                </div>
             </div>
          </div>
@@ -148,6 +148,14 @@
          @toggle-filters="showFilterDrawer = !showFilterDrawer"
       />
 
+      <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
+
+      <FlowbiteImageDrawer
+         :show-drawer="showDrawer"
+         :image-urls="property?.images"
+         @close="showDrawer = false"
+      />
+
       <div class="relative xl:hidden">
          <NuxtImg
             v-if="property.images?.length"
@@ -172,18 +180,27 @@
          <DetailsTopBar :property="property" />
       </div>
 
-      <div class="mx-auto mt-16 flex w-9/12 gap-20">
+      <div class="mx-auto mt-16 flex w-9/12 justify-between">
          <div
-            class="max sticky top-16 hidden h-fit w-3/5 flex-col gap-10 xl:flex"
+            class="sticky top-16 hidden w-[40%] flex-shrink flex-col gap-5 xl:flex"
          >
-            <NuxtImg
-               v-if="property.images?.length"
-               :src="property.images[0]"
-               alt="Property Image"
-               class="object-cover"
-            />
-            <div class="flex h-12 justify-between">
-               <div class="flex gap-5">
+            <div>
+               <NuxtImg
+                  v-if="property.images?.length"
+                  :src="property.images[0]"
+                  alt="Property Image"
+                  class="h-96 w-full object-cover"
+               />
+               <button
+                  class="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+                  @click="showDrawer = true"
+               >
+                  <PhImages :size="20" />
+               </button>
+            </div>
+            <div class="flex h-12 justify-between gap-3">
+               <div class="flex justify-between gap-2">
+                  <!--
                   <FlowbiteButton
                      v-if="property?.isBitcasaHome"
                      :text="`Contact Agent`"
@@ -198,29 +215,28 @@
                      class="secondary h-full"
                      @click="handleShowTourModal"
                   />
-                  <NuxtLink
+                  -->
+                  <NuxtLinkLocale
                      v-if="!property?.isBitcasaHome"
-                     :to="
-                        localePath(`/properties/${route.params.id}/rent-to-own`)
-                     "
+                     :to="`/properties/${route.params.id}/rent-to-own`"
                   >
                      <FlowbiteButton
                         class="h-full"
                         :text="buttonText"
                         @click="handleClick"
                      />
-                  </NuxtLink>
+                  </NuxtLinkLocale>
                </div>
-               <div class="flex gap-5">
+               <div class="flex flex-shrink gap-2">
                   <button
                      :v-if="isSupported"
-                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full bg-white shadow-md"
+                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
                      @click="startShare"
                   >
                      <PhExport class="h-6 w-6 text-black" />
                   </button>
                   <button
-                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full bg-white shadow-md"
+                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
                      @click="toggleFavorite"
                   >
                      <PhHeartStraight
@@ -234,8 +250,8 @@
          </div>
 
          <!-- Property Details -->
-         <div>
-            <div class="container mx-auto w-10/12">
+         <div class="flex-1">
+            <div class="container ml-auto mr-0 w-11/12">
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
                      property.location?.address?.street ||
@@ -274,7 +290,12 @@
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
 import { fixNestedStrings } from "~/utils/jsonParser";
-import { PhCheck, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
+import {
+   PhCheck,
+   PhExport,
+   PhHeartStraight,
+   PhImages,
+} from "@phosphor-icons/vue";
 import { useShare } from "@vueuse/core";
 
 const propertiesStore = usePropertiesStore();
@@ -290,10 +311,21 @@ const formError = ref(false);
 const phone = ref("");
 const isFavorite = ref(null);
 const showFilterDrawer = ref(false);
+const showDrawer = ref(false);
 
 const handleShowModal = () => {
    isModalOpen.value = true;
 };
+
+/*
+const handleShowAgentModal = () => {
+   isModalOpen.value = true;
+};
+
+const handleShowTourModal = () => {
+   isModalOpen.value = true;
+};
+*/
 
 const toggleFavorite = () => {
    isFavorite.value = !isFavorite.value;

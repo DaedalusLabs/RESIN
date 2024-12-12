@@ -1,4 +1,6 @@
 <script setup>
+import { PhX } from "@phosphor-icons/vue";
+
 defineProps({
    showDrawer: {
       type: Boolean,
@@ -22,15 +24,24 @@ const emit = defineEmits(["close"]);
       >
          <div
             :class="[
-               'max-h-[80vh] w-full bg-white lg:self-end dark:bg-gray-800',
+               'h-[75vh] w-full bg-white lg:self-end',
                { 'overflow-y-auto': imageUrls.length > 1 },
             ]"
          >
             <div class="sticky top-0 z-50">
+               <!-- Drag Handle -->
                <span
-                  class="absolute left-1/2 top-3 h-1 w-10 -translate-x-1/2 cursor-pointer rounded-lg bg-gray-500"
+                  class="absolute left-1/2 top-3 h-1 w-10 -translate-x-1/2 cursor-pointer rounded-full bg-pirate-950 lg:h-1.5 lg:w-24"
                   @click="emit('close')"
                />
+               <!-- X Close Button  -->
+               <button
+                  v-if="imageUrls.length > 0"
+                  class="text-pirate-850 absolute right-12 top-12 hidden h-14 w-14 items-center justify-center rounded-full border-2 bg-white hover:border-resin-500 lg:flex"
+                  @click="emit('close')"
+               >
+                  <PhX :size="22" weight="bold" />
+               </button>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2">
                <div
@@ -48,7 +59,7 @@ const emit = defineEmits(["close"]);
                         imageUrls.length % 2 !== 0 &&
                         index === imageUrls.length - 1,
                   }"
-                  class="max-h-[50vh] w-full rounded-md object-cover object-center shadow-lg"
+                  class="h-[75vh] w-full rounded-md object-cover object-center shadow-lg"
                   loading="lazy"
                />
             </div>
