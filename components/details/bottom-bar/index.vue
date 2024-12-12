@@ -19,12 +19,12 @@
             class="secondary"
             @click="handleShowTourModal"
          />
-         <NuxtLink
+         <NuxtLinkLocale
             v-if="!property?.isBitcasaHome"
-            :to="localePath(`/properties/${route.params.id}/rent-to-own`)"
+            :to="`/properties/${route.params.id}/rent-to-own`"
          >
             <FlowbiteButton :text="buttonText" @click="handleClick" />
-         </NuxtLink>
+         </NuxtLinkLocale>
       </div>
    </div>
 </template>

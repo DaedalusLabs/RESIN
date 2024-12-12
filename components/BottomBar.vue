@@ -5,22 +5,22 @@
       <div
          class="mx-auto flex max-w-md items-center justify-between px-6 py-2 md:py-4"
       >
-         <NuxtLink
-            :to="localePath('home')"
+         <NuxtLinkLocale
+            to="home"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isHomeView }"
          >
             <PhHouseSimple :size="24" weight="regular" class="mb-1" />
-         </NuxtLink>
-         <NuxtLink
-            :to="localePath('properties')"
+         </NuxtLinkLocale>
+         <NuxtLinkLocale
+            to="properties"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
-            :class="{ 'text-resin-500 hover:text-resin-500': isListView }"
+            :class="{ 'text-resin-500 hover:text-resin-500': isPropertiesView }"
          >
             <PhMagnifyingGlass :size="24" weight="regular" class="mb-1" />
-         </NuxtLink>
-         <NuxtLink
-            :to="localePath('my-resin')"
+         </NuxtLinkLocale>
+         <NuxtLinkLocale
+            to="my-resin"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isResinView }"
          >
@@ -31,22 +31,22 @@
                class="mb-1 hover:brightness-50 active:brightness-100"
                :class="{ 'hover:brightness-100': isResinView }"
             />
-         </NuxtLink>
-         <NuxtLink
-            :to="localePath('favorites')"
+         </NuxtLinkLocale>
+         <NuxtLinkLocale
+            to="favorites"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isFavoritesView }"
          >
             <PhHeartStraight :size="24" weight="regular" class="mb-1" />
-         </NuxtLink>
-         <NuxtLink
-            :to="localePath('profile')"
+         </NuxtLinkLocale>
+         <NuxtLinkLocale
+            to="profile"
             class="relative flex cursor-pointer flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isProfileView }"
             @click="handleProfileClick"
          >
             <PhUser :size="24" weight="regular" class="mb-1" />
-         </NuxtLink>
+         </NuxtLinkLocale>
       </div>
    </div>
 </template>
@@ -68,7 +68,7 @@ const handleProfileClick = () => {
 
 const route = useRoute();
 
-const isListView = ref(false);
+const isPropertiesView = ref(false);
 const isHomeView = ref(false);
 const isResinView = ref(false);
 const isFavoritesView = ref(false);
@@ -76,7 +76,8 @@ const isProfileView = ref(false);
 
 watchEffect(() => {
    const path = route.path;
-   isListView.value = path === localePath("properties");
+   isPropertiesView.value =
+      path === localePath("properties") || path === localePath("map");
    isHomeView.value = path === localePath("home");
    isResinView.value = path === localePath("my-resin");
    isFavoritesView.value = path === localePath("favorites");

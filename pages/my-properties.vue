@@ -2,9 +2,9 @@
    <section class="mx-auto flex w-10/12 flex-col py-20">
       <div class="mb-5 flex items-center justify-between text-pirate-950">
          <div class="flex items-center gap-2">
-            <NuxtLink :to="localePath('my-resin')">
+            <NuxtLinkLocale to="my-resin">
                <PhCaretLeft :size="28" />
-            </NuxtLink>
+            </NuxtLinkLocale>
             <h1 class="text-2xl font-extrabold leading-tight">My properties</h1>
          </div>
          <button :v-if="isSupported" @click="startShare">
@@ -19,13 +19,13 @@
          <p class="mt-20 gap-2 font-semibold text-pirate-950">
             You have no properties yet
          </p>
-         <NuxtLink :to="localePath('properties')">
+         <NuxtLinkLocale to="properties">
             <p
                class="mt-4 inline-block rounded-lg border-2 border-resin-500 bg-resin-500 px-4 py-2 text-white"
             >
                Browse listings
             </p>
-         </NuxtLink>
+         </NuxtLinkLocale>
       </div>
       <div v-else class="space-y-4">
          <FavoritesCard

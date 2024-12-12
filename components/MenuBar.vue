@@ -20,8 +20,8 @@
                   :key="index"
                   class="border-b last:border-none"
                >
-                  <NuxtLink
-                     :to="localePath(item.link)"
+                  <NuxtLinkLocale
+                     :to="item.link"
                      class="flex items-center gap-2 px-4 py-4 hover:bg-gray-100"
                      @click="handleCloseDrawer"
                   >
@@ -39,7 +39,7 @@
                      <span class="text-pirate-500 group-hover:text-resin-500">
                         {{ item.label }}
                      </span>
-                  </NuxtLink>
+                  </NuxtLinkLocale>
                </li>
             </ul>
 

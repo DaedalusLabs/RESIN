@@ -5,8 +5,8 @@
          :class="isMap ? 'lg:justify-between' : 'lg:justify-center'"
       >
          <!-- RESIN Logo -->
-         <NuxtLink
-            :to="localePath('properties')"
+         <NuxtLinkLocale
+            to="properties"
             class="z-20 hidden h-10 2xl:block"
             :class="isMap ? '' : 'absolute bottom-2 left-0'"
          >
@@ -15,22 +15,19 @@
                alt="Logo"
                class="h-full"
             />
-         </NuxtLink>
+         </NuxtLinkLocale>
 
          <!-- Search Bar Parent -->
          <div
             class="relative flex flex-grow gap-3"
             :class="isMap ? 'justify-center' : 'justify-center'"
          >
-            <NuxtLink
-               :to="localePath('map')"
-               @click="propertiesStore.resetLocations()"
-            >
+            <NuxtLinkLocale to="map" @click="propertiesStore.resetLocations()">
                <FlowbiteIconButton
                   :icon="showListIcon ? 'rows' : 'map'"
                   description="view map"
                />
-            </NuxtLink>
+            </NuxtLinkLocale>
             <!-- Search Bar -->
             <div class="relative max-w-xl flex-grow">
                <FlowbiteSearchbar
@@ -54,16 +51,16 @@
          </div>
 
          <!-- View Properties Button (conditionally rendered) -->
-         <NuxtLink
+         <NuxtLinkLocale
             v-if="isMap"
-            class="force-top absolute bottom-20 hidden lg:relative lg:bottom-0 lg:block lg:h-full"
-            :to="localePath('properties')"
+            class="force-top absolute bottom-20 hidden lg:relative lg:bottom-0 lg:block"
+            to="properties"
          >
             <FlowbiteButton
                :text="`View ${visibleLocationsAmount} properties`"
-               class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600 lg:py-4"
+               class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600 lg:h-12"
             />
-         </NuxtLink>
+         </NuxtLinkLocale>
       </div>
    </div>
 </template>

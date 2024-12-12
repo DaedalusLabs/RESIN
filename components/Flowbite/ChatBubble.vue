@@ -53,6 +53,7 @@ defineProps({
    },
    profileImage: {
       type: String,
+      default: null,
       required: false, // Optional for sent messages
    },
    isSent: {

@@ -54,12 +54,12 @@
                :show-icon="false"
                @click="openLoginModal"
             />
-            <NuxtLink
+            <NuxtLinkLocale
                to="#"
                class="mb-2 me-2 mt-10 rounded-lg px-5 py-2.5 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700"
             >
                {{ $t("checkCountryAvailability") }}
-            </NuxtLink>
+            </NuxtLinkLocale>
          </div>
       </div>
    </section>

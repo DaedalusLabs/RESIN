@@ -19,12 +19,12 @@
                   :property="property"
                />
                <div v-if="properties.length > 2" class="text-right">
-                  <NuxtLink
-                     :to="localePath('my-properties')"
+                  <NuxtLinkLocale
+                     to="my-properties"
                      class="text-sm text-pirate-600 hover:text-pirate-700"
                   >
                      View all properties ({{ properties.length }})
-                  </NuxtLink>
+                  </NuxtLinkLocale>
                </div>
             </div>
          </section>
