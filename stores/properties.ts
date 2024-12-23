@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import TypesenseInstantSearchAdapter, { type SearchClient } from 'typesense-instantsearch-adapter';
 
 interface Address {
    street: string;
@@ -26,6 +27,7 @@ interface PropertiesState {
    hasSeenMapToast: boolean;
    recoveryPhrase: string[];
    ownedProperties: Property[];
+   searchClient: SearchClient;
 }
 
 export const usePropertiesStore = defineStore("properties", {
@@ -39,8 +41,13 @@ export const usePropertiesStore = defineStore("properties", {
       hasSeenMapToast: false,
       recoveryPhrase: [],
       ownedProperties: [],
+      searchClient: undefined!
    }),
-
+   persist: {
+      key: 'properties-store',
+      storage: piniaPluginPersistedstate.localStorage(),
+      paths: ['favorites', 'viewedProperties'] 
+   },
    getters: {
       getLocations(): Property[] {
          return this.properties;
@@ -72,6 +79,30 @@ export const usePropertiesStore = defineStore("properties", {
    },
 
    actions: {
+      async get(id: string) {
+         const data = await (await fetch(`https://api.resin.estate/listings/${id}`)).json();
+         return data;
+         //return data;
+      },
+      initializeSearch() {
+         const typesenseAdapter = new TypesenseInstantSearchAdapter({
+            server: {
+               apiKey: 'IAc8hL8tUngzHRFrPP6iorEik8TyaSbV',
+               nodes: [
+                  {
+                     host: "api.resin.estate",
+                     port: 443,
+                     protocol: 'https'
+                  }
+               ]
+            },
+            geoLocationField: 'location.coordinates',
+            additionalSearchParameters: {
+               query_by: 'title,location.street,location.city,location.country'
+            },
+         });
+         this.searchClient = typesenseAdapter.searchClient;
+      },
       addOwnedProperty(property: Property): void {
          this.ownedProperties.push(property);
       },

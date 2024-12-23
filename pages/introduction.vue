@@ -35,6 +35,11 @@
             </div>
 
             <FlowbiteButton
+v-if="authenticationStatus" class="px-5 py-3" :text="$t('continueButton')"
+               :show-icon="false" @click="skipRegistration" />
+
+            <FlowbiteButton
+v-else
                class="px-5 py-3"
                :text="$t('introductionButton')"
                :show-icon="false"
@@ -49,6 +54,7 @@
 
          <div class="flex flex-col items-center justify-center gap-2">
             <FlowbiteButton
+v-if="!authenticationStatus"
                :text="$t('signIn')"
                class="border border-pirate-400 bg-transparent px-3 py-3 font-normal text-pirate-50"
                :show-icon="false"
@@ -66,6 +72,14 @@
 </template>
 
 <script setup>
+const { checkAuthenticated, isAuthenticated } = useNostr();
+const localePath = useLocalePath()
+
+const authenticationStatus = ref(false)
+
+authenticationStatus.value = await checkAuthenticated();
+
+
 definePageMeta({
    layout: "intro",
 });
@@ -101,4 +115,10 @@ const handleCloseModal = () => {
    showLoginModal.value = false;
    showRegisterModal.value = false;
 };
+
+const skipRegistration = () => {
+   if (isAuthenticated) {
+      navigateTo(localePath('properties'));
+   }
+}
 </script>
