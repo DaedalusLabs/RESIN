@@ -11,9 +11,12 @@
 import { usePropertiesStore } from "~/stores/properties";
 
 const propertiesStore = usePropertiesStore();
+propertiesStore.init();
+const appConfig = useAppConfig()
 
 async function getProperties() {
-  
+   const properties = await fetch(`${appConfig.BACKEND_ENDPOINT}/listings`);
+   return (await properties.json()).hits.map(d => d.document);
 }
 
 async function getTrendingAreas() {
@@ -22,7 +25,7 @@ async function getTrendingAreas() {
    ];
 }
 
-// propertiesStore.properties = await getProperties();
+propertiesStore.properties = await getProperties();
 // propertiesStore.filteredProperties = propertiesStore.properties;
 // propertiesStore.trendingAreas = await getTrendingAreas();
 // propertiesStore.ownedProperties = propertiesStore.properties.slice(0, 3); // mock 3 owned properties

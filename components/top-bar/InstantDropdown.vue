@@ -1,13 +1,14 @@
 <template>
    <div
-      v-if="filteredSuggestions.length"
-      class="z-top absolute mt-1 flex-1 rounded-xl bg-black py-4 shadow-lg"
+      v-if="filteredSuggestions[0].hits.length"
+      class="absolute z-10 mt-1 flex-1 rounded-xl bg-black py-4 shadow-lg"
    >
-      <ul>
+
+      <ul v-if="query" v-for="index in filteredSuggestions" :key="index.indexId">
          <p class="pb-2 pl-4 text-sm font-semibold text-white">Places</p>
          <li
-            v-for="(suggestion, index) in filteredSuggestions"
-            :key="index"
+            v-for="(suggestion, index) in index.hits"
+            :key="index.id"
             class="flex cursor-pointer items-center px-4 py-2 text-sm text-gray-400"
             @click="selectSuggestion(suggestion)"
          >
@@ -43,8 +44,8 @@ function selectSuggestion(suggestion) {
    emit(
       "update:query",
       fullAddress,
-      suggestion.location.coordinates.latitude,
-      suggestion.location.coordinates.longitude,
+      suggestion.location.coordinates[1],
+      suggestion.location.coordinates[0],
    );
    propertiesStore.addSearch(fullAddress);
 }

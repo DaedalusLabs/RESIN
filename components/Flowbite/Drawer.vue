@@ -1,6 +1,6 @@
 <template>
    <div>
-      <div v-if="show" class="fixed inset-0 z-40 overflow-hidden">
+      <div v-show="show" class="fixed inset-0 z-40 overflow-hidden">
          <div
             class="absolute inset-0 bg-black bg-opacity-75 transition-opacity"
             @click="close"
@@ -8,7 +8,7 @@
       </div>
       <transition :name="transitionName">
          <div
-            v-if="show"
+            v-show="show"
             v-touch:swipe="swipeHandler"
             :class="[drawerClasses, props.slideFrom === 'side' ? 'h-dvh' : '']"
          >

@@ -1,55 +1,71 @@
 <template>
    <div class="mx-auto mb-[5vh] w-9/12">
-      <FiltersDrawer
-         :show-drawer="showFilterDrawer"
-         @close="showFilterDrawer = false"
-      />
-      <div class="mx-auto flex flex-col items-center justify-center gap-8">
-         <TopBar
-            class="relative mt-10 w-full"
-            @toggle-filters="showFilterDrawer = !showFilterDrawer"
-         />
-         <div
-            v-if="isLoading"
-            class="grid w-full justify-items-stretch gap-6 lg:grid-cols-2 xl:grid-cols-3"
-         >
-            <FlowbiteSkeleton v-for="i in 12" :key="i" />
-         </div>
+      <ais-instant-search
+         index-name="nostr_listing" :search-client="searchClient"
+         :future="{ preserveSharedStateOnUnmount: true }" :initial-ui-state="searchStore.searchState"
+         @state-change="handleStateChange">
 
-         <div
+         <KeepAlive>
+            <FiltersDrawer :show-drawer="showFilterDrawer" @close="showFilterDrawer = false" />
+         </KeepAlive>
+         <div class="mx-auto flex flex-col items-center justify-center gap-8">
+            <TopBar class="relative mt-10 w-full" @toggle-filters="showFilterDrawer = !showFilterDrawer" />
+            <div v-if="isLoading" class="grid w-full justify-items-stretch gap-6 lg:grid-cols-2 xl:grid-cols-3">
+               </div>
+               <div
             v-else
-            class="grid w-full justify-items-stretch gap-6 lg:grid-cols-2 xl:grid-cols-3"
+            class=""
          >
-            <PropertyCard
-               v-for="property in properties"
-               :key="property.id"
-               :property="property"
-               @open-gallery="openGallery(property.images)"
-            />
-         </div>
-         <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
+               <ais-infinite-hits :show-previous="false">
 
-         <FlowbiteImageDrawer
-            :show-drawer="showDrawer"
-            :image-urls="currentPropertyImages"
-            @close="showDrawer = false"
-         />
-      </div>
+               <template
+               #default="{
+               items,
+            }">
+                  <div v-if="items.length === 0" class="text-center text-white">
+                     No properties to display
+                  </div>
+
+                  <PropertyCard
+v-for="property in items" :key="property.id" :property="property"
+                  @open-gallery="openGallery(property.images)" />
+               </template>
+               </ais-infinite-hits>
+            </div>
+
+        
+            <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
+
+            <FlowbiteImageDrawer
+:show-drawer="showDrawer" :image-urls="currentPropertyImages"
+               @close="showDrawer = false" />
+         </div>
+      </ais-instant-search>
+
    </div>
 </template>
 
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
+import { useSearchStore } from '@/stores/search'
+
+const handleStateChange = ({uiState, setUiState}) => {
+  searchStore.updateSearchState(uiState)
+  setUiState(uiState);
+}
+
+
 const isLoading = ref(true);
 const properties = ref([]);
 const showFilterDrawer = ref(false);
+const propertiesStore = usePropertiesStore();
+const searchStore = useSearchStore()
+propertiesStore.initializeSearch();
+const searchClient = propertiesStore.searchClient;
 
 onMounted(() => {
-   const propertiesStore = usePropertiesStore();
-   properties.value = propertiesStore.filteredProperties;
-   setTimeout(() => {
-      isLoading.value = false;
-   }, 1000);
+   isLoading.value = false;
+
 });
 
 watchEffect(() => {
@@ -65,3 +81,9 @@ const openGallery = (propertyImages) => {
    showDrawer.value = true;
 };
 </script>
+
+<style scoped>
+   .ais-InfiniteHits {
+      @apply grid w-full justify-items-stretch gap-6 lg:grid-cols-2 xl:grid-cols-3;
+   }
+</style>

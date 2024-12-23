@@ -45,7 +45,7 @@ import { Map } from "maplibre-gl";
 
 const propertiesStore = usePropertiesStore();
 const properties = propertiesStore.properties;
-const zoom = ref(6);
+const zoom = ref(4);
 const mapContainer = ref(null);
 const map = ref(null);
 const visibleLocationsAmount = ref(propertiesStore.filteredProperties.length);
@@ -56,6 +56,10 @@ const route = useRoute();
 const props = defineProps({
    mapCenter: {
       type: Object,
+      required: true,
+   },
+   results: {
+      type: Array,
       required: true,
    },
 });
@@ -84,6 +88,28 @@ const calculateVisibleLocations = () => {
    propertiesStore.setFilteredLocations(visibleLocations);
 };
 
+let geojson;
+
+
+const refreshProperties = () => {
+   geojson = {
+      type: "FeatureCollection",
+      features: properties.map((location) => ({
+         type: "Feature",
+         geometry: {
+            type: "Point",
+            coordinates: [
+               location.location.coordinates[0],
+               location.location.coordinates[1],
+            ],
+         },
+         properties: location,
+      })),
+   };
+
+   map.value.getSource('properties')?.setData(geojson);
+}
+
 onMounted(() => {
    map.value = new Map({
       container: mapContainer.value,
@@ -93,20 +119,7 @@ onMounted(() => {
    });
 
    map.value.on("load", () => {
-      const geojson = {
-         type: "FeatureCollection",
-         features: properties.map((location) => ({
-            type: "Feature",
-            geometry: {
-               type: "Point",
-               coordinates: [
-                  location.location.coordinates.longitude,
-                  location.location.coordinates.latitude,
-               ],
-            },
-            properties: location,
-         })),
-      };
+      refreshProperties();
 
       map.value.addSource("properties", {
          type: "geojson",

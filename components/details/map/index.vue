@@ -6,9 +6,9 @@
             <div
                class="force-top absolute bottom-0 flex w-full justify-center bg-black/20 p-4 text-sm text-white backdrop-blur-md"
             >
-               <NuxtLinkLocale @click="goToMap">
+               <NuxtLink @click="goToMap">
                   <p>View on map</p>
-               </NuxtLinkLocale>
+               </NuxtLink>
             </div>
          </div>
       </div>
@@ -32,8 +32,8 @@ onMounted(() => {
       container: mapContainer.value,
       style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
       center: [
-         props.property.location.coordinates.longitude,
-         props.property.location.coordinates.latitude,
+         props.property.location.coordinates[0],
+         props.property.location.coordinates[1],
       ],
       zoom: 13,
       dragPan: false,
@@ -52,16 +52,16 @@ onMounted(() => {
 
    new maplibregl.Marker({ element: el })
       .setLngLat([
-         props.property.location.coordinates.longitude,
-         props.property.location.coordinates.latitude,
+         props.property.location.coordinates[0],
+         props.property.location.coordinates[1],
       ])
       .addTo(map.value);
 });
 
 const goToMap = () => {
    const localeRoute = useLocaleRoute();
-   const long = props.property.location.coordinates.longitude;
-   const lat = props.property.location.coordinates.latitude;
+   const long = props.property.location.coordinates[0];
+   const lat = props.property.location.coordinates[1]
    const route = localeRoute({
       name: "map",
       query: { lat, lng: long },

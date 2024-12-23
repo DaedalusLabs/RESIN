@@ -3,18 +3,19 @@
       <span class="filter-title">{{ label }}</span>
       <div class="mt-2">
          <div class="flex flex-col space-y-2">
-            <div v-for="option in visibleOptions" :key="option">
+            <div v-for="option in visibleOptions" :key="option.value" class="flex justify-between items-center">
                <input
-                  :id="option"
-                  :checked="modelValue.includes(option)"
+                  :id="option.value"
+                  :checked="option.isRefined"
                   type="checkbox"
                   class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-resin-500 focus:ring-2 focus:ring-resin-500"
-                  :value="option"
+                  :value="option.value"
                   @change="handleChange"
                />
-               <span class="ml-2 text-sm">{{ option }}</span>
+               <div class="ml-2 text-sm grow">{{ props.valueProperty ? option[valueProperty] : option.label }}</div>
+               <div class="text-sm text-gray-400">{{ option.count }}</div>
             </div>
-            <div v-if="props.options.length > 5" class="pt-2">
+            <div v-show="props.options.length > 5" class="pt-2">
                <button
                   class="w-full text-start text-sm text-resin-500"
                   @click="toggleShowMore"
@@ -32,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, computed } from "vue";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -49,31 +50,20 @@ const props = defineProps({
       type: Array,
       required: true,
    },
-   modelValue: {
-      type: Array,
-      required: true,
-   },
+   valueProperty: {
+      type: String,
+      required: false,
+   }
 });
 
-const localModelValue = ref(props.modelValue);
 const showMore = ref(false);
-
-watch(props.modelValue, (newVal) => {
-   localModelValue.value = newVal;
-});
 
 const visibleOptions = computed(() => {
    return showMore.value ? props.options : props.options.slice(0, 4);
 });
 
 const handleChange = (event) => {
-   const value = event.target.value;
-   if (localModelValue.value.includes(value)) {
-      localModelValue.value = localModelValue.value.filter((v) => v !== value);
-   } else {
-      localModelValue.value.push(value);
-   }
-   emit("update:modelValue", localModelValue.value);
+   emit("update:modelValue", event);
 };
 
 const toggleShowMore = () => {

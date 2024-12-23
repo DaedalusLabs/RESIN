@@ -1,4 +1,8 @@
 <template>
+      <ais-instant-search
+index-name="nostr_listing" :search-client="searchClient"
+      :future="{ preserveSharedStateOnUnmount: true }" :initial-ui-state="searchStore.searchState"
+      @state-change="handleStateChange">
    <section
       class="relative flex h-full flex-col items-center justify-between overflow-hidden"
    >
@@ -17,7 +21,11 @@
          <FlowbiteToast />
 
          <ClientOnly fallback-tag="span">
-            <MapLibre :map-center="mapCenter" />
+            <ais-state-results>
+                  <template #default="{ results }">
+                     <MapLibre :map-center="mapCenter" :results="results.hits" />
+                  </template>
+               </ais-state-results>
             <template #fallback>
                <div
                   class="absolute inset-0 flex h-full w-full items-center justify-center bg-gray-100 dark:bg-gray-800"
@@ -26,10 +34,24 @@
          </ClientOnly>
       </div>
    </section>
+</ais-instant-search>
 </template>
 
 <script setup>
-const mapCenter = ref({ lat: 5.852036, lng: -55.154996 });
+import { usePropertiesStore } from "~/stores/properties";
+import { useSearchStore } from '@/stores/search'
+
+const handleStateChange = ({uiState, setUiState}) => {
+  searchStore.updateSearchState(uiState)
+  setUiState(uiState);
+}
+
+const propertiesStore = usePropertiesStore();
+const searchStore = useSearchStore()
+propertiesStore.initializeSearch();
+const searchClient = propertiesStore.searchClient;
+
+const mapCenter = ref({ lat: 15.76, lng: -81.84 });
 
 function updateMapCenter(lat, lng) {
    mapCenter.value = { lat, lng };
@@ -45,5 +67,9 @@ definePageMeta({
 <style scoped>
 .force-top {
    z-index: 9999; /* High z-index to ensure it appears above other elements */
+}
+
+.ais-InstantSearch, .ais-StateResults {
+   @apply h-full;
 }
 </style>

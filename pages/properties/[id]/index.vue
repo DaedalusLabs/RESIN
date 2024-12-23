@@ -138,15 +138,7 @@
          </div>
       </FlowbiteModal>
 
-      <FiltersDrawer
-         :show-drawer="showFilterDrawer"
-         @close="showFilterDrawer = false"
-      />
-
-      <TopBar
-         class="relative mx-auto mt-10 hidden max-w-[75%] xl:block"
-         @toggle-filters="showFilterDrawer = !showFilterDrawer"
-      />
+   
 
       <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
 
@@ -165,7 +157,7 @@
          />
 
          <span
-            v-if="property.isBitcasaHome"
+            v-if="property && property['resin-type'] === 'Buy Now'"
             class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
             For Sale
@@ -200,24 +192,9 @@
             </div>
             <div class="flex h-12 justify-between gap-3">
                <div class="flex justify-between gap-2">
-                  <!--
-                  <FlowbiteButton
-                     v-if="property?.isBitcasaHome"
-                     :text="`Contact Agent`"
-                     :show-icon="true"
-                     class="h-full"
-                     @click="handleShowAgentModal"
-                  />
-                  <FlowbiteButton
-                     v-else
-                     :text="`Request Tour`"
-                     :show-icon="false"
-                     class="secondary h-full"
-                     @click="handleShowTourModal"
-                  />
-                  -->
+                 
                   <NuxtLinkLocale
-                     v-if="!property?.isBitcasaHome"
+                     v-if="property && property['resin-type'] === 'Rent to Own'"
                      :to="`/properties/${route.params.id}/rent-to-own`"
                   >
                      <FlowbiteButton
@@ -254,13 +231,13 @@
             <div class="container ml-auto mr-0 w-11/12">
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
-                     property.location?.address?.street ||
+                     property.location?.street ||
                      "Address not available"
                   }}
                </h1>
                <p class="mt-1 text-sm">
-                  {{ property.location?.address?.city }},
-                  {{ property.location?.address?.country }}
+                  {{ property.location?.city }},
+                  {{ property.location?.country }}
                </p>
                <DetailsSize :property="property" />
                <DetailsPrices :property="property" />
@@ -268,9 +245,10 @@
                <DetailsKeyFeatures :property="property" />
                <DetailsAdditional :property="property" />
                <p
+                  v-if="property.attribution && property.attribution?.length > 0"
                   class="my-12 rounded-lg bg-pirate-50 py-2 text-center text-sm font-medium text-pirate-300"
                >
-                  {{ property.message }}
+                  {{ property.attribution }}
                </p>
             </div>
             <ClientOnly fallback-tag="span">
@@ -299,6 +277,9 @@ import {
 import { useShare } from "@vueuse/core";
 
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
+const appConfig = useAppConfig();
+
 const route = useRoute();
 const error = ref(false);
 const isLoading = ref(true);
@@ -317,23 +298,12 @@ const handleShowModal = () => {
    isModalOpen.value = true;
 };
 
-/*
-const handleShowAgentModal = () => {
-   isModalOpen.value = true;
-};
-
-const handleShowTourModal = () => {
-   isModalOpen.value = true;
-};
-*/
-
-const toggleFavorite = () => {
-   isFavorite.value = !isFavorite.value;
-   propertiesStore.toggleFavorite(property.value.id);
+const generateRef = () => {
+   return Math.floor(Math.random() * 9000) + 1000;
 };
 
 const buttonText = computed(() => {
-   return route.path.includes("rent-to-own")
+   return property.value && property.value['resin-type'] !== 'Rent to Own'
       ? "Rent this property"
       : "Rent-to-own";
 });
@@ -348,8 +318,10 @@ function startShare() {
    });
 }
 
-const generateRef = () => {
-   return Math.floor(Math.random() * 9000) + 1000;
+const toggleFavorite = () => {
+   console.log('toggleFavorite', property.value.id);
+   isFavorite.value = !isFavorite.value;
+   propertiesStore.toggleFavorite(property.value.id);
 };
 
 onMounted(() => {
@@ -358,8 +330,8 @@ onMounted(() => {
 
 onMounted(async () => {
    try {
-      const foundProperty = propertiesStore.properties.find(
-         (p) => p.id === route.params.id,
+      const foundProperty = await propertiesStore.get(
+         route.params.id,
       );
 
       if (!foundProperty) {
@@ -367,9 +339,9 @@ onMounted(async () => {
          return;
       }
 
-      property.value = foundProperty;
-
       isFavorite.value = propertiesStore.isFavorite(foundProperty.id);
+
+      property.value = foundProperty;
 
       if (typeof property.value === "string") {
          fixNestedStrings(property);
@@ -384,23 +356,28 @@ onMounted(async () => {
    }
 });
 
-const handleSendRequest = () => {
-   if (property?.value.isBitcasaHome) {
+const handleSendRequest = async() => {
+   if (property?.value["resin-type"] === "Buy Now") {
       if (email.value || phone.value) {
          isModalOpen.value = false;
          isRequestSent.value = true;
          formError.value = false;
+
+         await nostrStore.sendDirectMessage(appConfig.MESSAGES_NPUB, `I want contact with an agent about ${property.value.title}, My contact info is ${email.value} / ${phone.value}`);
+
       } else {
          formError.value = true;
          console.log("Form error");
       }
    } else {
+      await fetch(`${appConfig.BACKEND_ENDPOINT}/api/contact_agent`);
+
       isRequestSent.value = true;
    }
 };
 
 const propertyAddress = computed(() => {
-   return `${property.value.location.address.street}, ${property.value.location.address.city}, ${property.value.location.address.country}`;
+   return `${property.value.location.street}, ${property.value.location.city}, ${property.value.location.country}`;
 });
 
 definePageMeta({
@@ -418,9 +395,5 @@ defineProps({
 <style scoped>
 .z-top {
    z-index: 1000;
-}
-
-.secondary {
-   @apply bg-pirate-700 !important;
 }
 </style>

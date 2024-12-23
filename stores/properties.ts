@@ -28,6 +28,11 @@ interface PropertiesState {
    recoveryPhrase: string[];
    ownedProperties: Property[];
    searchClient: SearchClient;
+   imagesBaseUrl: string;
+   apiEndpoint: string;
+   typesenseHost: string;
+   typesensePort: string;
+   typesenseApiKey: string;
 }
 
 export const usePropertiesStore = defineStore("properties", {
@@ -41,7 +46,12 @@ export const usePropertiesStore = defineStore("properties", {
       hasSeenMapToast: false,
       recoveryPhrase: [],
       ownedProperties: [],
-      searchClient: undefined!
+      searchClient: undefined!,
+      imagesBaseUrl: '',
+      apiEndpoint: '',
+      typesenseHost: '',
+      typesensePort: '',
+      typesenseApiKey: '',
    }),
    persist: {
       key: 'properties-store',
@@ -79,20 +89,28 @@ export const usePropertiesStore = defineStore("properties", {
    },
 
    actions: {
+      init() {
+         console.log('init properties store');
+         const config = useRuntimeConfig();
+         this.imagesBaseUrl = config.public.IMAGES_BASE_URL;
+         this.apiEndpoint = config.public.BACKEND_ENDPOINT;
+         this.typesenseHost = config.public.TYPESENSE_HOST;
+         this.typesensePort = config.public.TYPESENSE_PORT;
+         this.typesenseApiKey = config.public.TYPESENSE_API_KEY;
+      },
       async get(id: string) {
-         const data = await (await fetch(`https://api.resin.estate/listings/${id}`)).json();
+         const data = await (await fetch(`${this.apiEndpoint}/listings/${id}`)).json();
          return data;
-         //return data;
       },
       initializeSearch() {
          const typesenseAdapter = new TypesenseInstantSearchAdapter({
             server: {
-               apiKey: 'IAc8hL8tUngzHRFrPP6iorEik8TyaSbV',
+               apiKey: this.typesenseApiKey,
                nodes: [
                   {
-                     host: "api.resin.estate",
-                     port: 443,
-                     protocol: 'https'
+                     host: this.typesenseHost,
+                     port: parseInt(this.typesensePort),
+                     protocol: 'http'
                   }
                ]
             },
@@ -126,9 +144,9 @@ export const usePropertiesStore = defineStore("properties", {
          this.filteredProperties = this.properties.filter((property) => {
             const combinedFields = [
                property.name,
-               property.location.address.street,
-               property.location.address.city,
-               property.location.address.country,
+               property.street,
+               property.city,
+               property.country,
             ]
                .join(" ")
                .toLowerCase();
@@ -142,6 +160,7 @@ export const usePropertiesStore = defineStore("properties", {
       },
 
       toggleFavorite(locationId: string | number): void {
+         console.log('toggleFavorit in store', locationId);
          if (this.favorites.includes(locationId)) {
             this.favorites = this.favorites.filter((id) => id !== locationId);
          } else {
@@ -157,11 +176,11 @@ export const usePropertiesStore = defineStore("properties", {
          const [street, city, country] = searchTerm.split(", ");
          return this.properties.find((property) => {
             return (
-               property.location.address.street.toLowerCase() ===
+               property.location.street.toLowerCase() ===
                   street.toLowerCase() &&
-               property.location.address.city.toLowerCase() ===
+               property.location.city.toLowerCase() ===
                   city.toLowerCase() &&
-               property.location.address.country.toLowerCase() ===
+               property.location.country.toLowerCase() ===
                   country.toLowerCase()
             );
          });

@@ -44,13 +44,13 @@
             </ul>
 
             <div class="mb-10">
-               <a
-                  href="#"
+               <NuxtLinkLocale
                   class="flex items-center space-x-2 px-4 py-3 text-red-600 hover:text-pirate-500"
+                  @click="logout"   
                >
                   <PhSignOut :size="16" />
                   <span>Log out</span>
-               </a>
+               </NuxtLinkLocale>
 
                <div class="mt-4 px-4 text-pirate-500">
                   <a href="#" class="text-sm">Terms & conditions</a>
@@ -62,6 +62,7 @@
 </template>
 
 <script setup>
+
 import {
    PhUser,
    PhChatCircle,
@@ -71,6 +72,8 @@ import {
    PhX,
    PhSignOut,
 } from "@phosphor-icons/vue";
+const nostrStore = useNostrStore();
+
 
 const emit = defineEmits(["close"]);
 defineProps({
@@ -82,33 +85,38 @@ const handleCloseDrawer = () => {
 };
 
 const menuItems = [
-   {
-      label: "Profile",
-      icon: PhUser,
-      link: "#",
-   },
+   // {
+   //    label: "Profile",
+   //    icon: PhUser,
+   //    link: "#",
+   // },
    {
       label: "Messages",
       icon: PhChatCircle,
       link: "/messages",
       hasNotification: true,
    },
-   {
-      label: "NOSTR keys",
-      icon: PhKey,
-      link: "#",
-   },
-   {
-      label: "Settings",
-      icon: PhGear,
-      link: "#",
-   },
-   {
-      label: "Help",
-      icon: PhQuestion,
-      link: "#",
-   },
+   // {
+   //    label: "NOSTR keys",
+   //    icon: PhKey,
+   //    link: "#",
+   // },
+   // {
+   //    label: "Settings",
+   //    icon: PhGear,
+   //    link: "#",
+   // },
+   // {
+   //    label: "Help",
+   //    icon: PhQuestion,
+   //    link: "#",
+   // },
 ];
+
+const logout = () => {
+   nostrStore.logout();
+   navigateTo('/');
+};
 </script>
 
 <style scoped>

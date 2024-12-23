@@ -1,9 +1,9 @@
 <template>
-   <div class="mt-8">
+   <div class="mt-8" v-if="property.propertyDetails?.keyFeatures">
       <h2 class="text-lg font-bold">Key Features</h2>
       <div class="mt-4 flex flex-wrap gap-2">
          <FlowbiteBadge
-            v-for="feature in property.propertyDetails.keyFeatures"
+            v-for="feature in property.propertyDetails?.keyFeatures"
             :key="feature"
             :text="feature"
          />

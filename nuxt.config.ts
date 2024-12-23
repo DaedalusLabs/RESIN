@@ -73,4 +73,14 @@ export default defineNuxtConfig({
       format: ["webp"],
       quality: 80,
    },
+   ssr: false,
+   runtimeConfig: {
+      public: {
+         IMAGES_BASE_URL: process.env.IMAGES_BASE_URL,
+         BACKEND_ENDPOINT: process.env.BACKEND_ENDPOINT,
+         TYPESENSE_HOST: process.env.TYPESENSE_HOST,
+         TYPESENSE_PORT: process.env.TYPESENSE_PORT,
+         TYPESENSE_API_KEY: process.env.TYPESENSE_API_KEY,
+      },
+   },
 });

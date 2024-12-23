@@ -17,7 +17,7 @@ interface NostrState {
     authenticated: boolean;
     mnemonic: string | null;
     messages: NostrMessage[];
-    typeKey: NostrLoginType;
+    typeKey: NostrLoginType | null;
 }
 
 interface NostrMessage {
@@ -47,7 +47,7 @@ export const useNostrStore = defineStore('nostr', {
     persist: {
         key: 'nostr-store',
         storage: piniaPluginPersistedstate.localStorage(),
-        paths: ['mnemonic', 'typeKey'] // only persist mnemonic
+        paths: ['mnemonic', 'typeKey', 'authenticated'] // only persist mnemonic
     },
     actions: {
         async checkAuthenticated() {
@@ -121,6 +121,7 @@ export const useNostrStore = defineStore('nostr', {
         logout() {
             this.user = null;
             this.pubkey = null;
+            this.typeKey = null;
             this.authenticated = false;
         },
         async fetchDirectMessages() {

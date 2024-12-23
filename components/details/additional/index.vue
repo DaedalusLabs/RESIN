@@ -1,10 +1,9 @@
 <template>
-   <div class="mt-12 w-3/4">
+   <div class="mt-12 w-3/4" v-if="property.propertyDetails?.additionalDetails">
       <h2 class="mb-3 text-lg font-bold">Additional Details</h2>
       <ul class="grid grid-cols-2 gap-y-4">
          <template
-            v-for="(value, key) in props.property.propertyDetails
-               .additionalDetails"
+            v-for="(value, key) in props.property.propertyDetails?.additionalDetails"
             :key="key"
          >
             <li class="flex items-center">

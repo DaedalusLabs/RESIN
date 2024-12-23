@@ -30,7 +30,7 @@
             </NuxtLinkLocale>
             <!-- Search Bar -->
             <div class="relative max-w-xl flex-grow">
-               <FlowbiteSearchbar
+               <FlowbiteInstantSearchbar
                   class="w-full"
                   :query="query"
                   @update:query="updateQuery"
@@ -56,10 +56,14 @@
             class="force-top absolute bottom-20 hidden lg:relative lg:bottom-0 lg:block"
             to="properties"
          >
-            <FlowbiteButton
-               :text="`View ${visibleLocationsAmount} properties`"
-               class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600 lg:h-12"
-            />
+            <ais-hits>
+               <template #default="{ items }">
+                  <FlowbiteButton
+                     :text="`View ${items.length} properties`"
+                     class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600 lg:h-12"
+                  />
+               </template>
+            </ais-hits>
          </NuxtLinkLocale>
       </div>
    </div>
@@ -85,11 +89,11 @@ const filteredSuggestions = computed(() => {
    if (!query.value) return [];
    return suggestions.filter(
       (suggestion) =>
-         suggestion.location.address.city.toLowerCase().includes(query.value) ||
-         suggestion.location.address.street
+         suggestion.location.city.toLowerCase().includes(query.value) ||
+         suggestion.location.street
             .toLowerCase()
             .includes(query.value) ||
-         suggestion.location.address.country
+         suggestion.location.country
             .toLowerCase()
             .includes(query.value),
    );
