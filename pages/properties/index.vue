@@ -14,7 +14,7 @@
                </div>
                <div
             v-else
-            class=""
+            class="w-full"
          >
                <ais-infinite-hits :show-previous="false">
 

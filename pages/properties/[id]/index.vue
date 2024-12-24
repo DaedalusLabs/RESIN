@@ -48,12 +48,12 @@
 
    <section v-else class="mb-28">
       <FlowbiteCheckToast
-         :show-toast="isRequestSent && property?.isBitcasaHome"
+         :show-toast="isRequestSent && isBuyNow"
          :text="`Information submitted`"
          @close-toast="isRequestSent = false"
       />
       <FlowbiteModal
-         v-if="property?.isBitcasaHome"
+         v-if="isBuyNow"
          :is-open="isModalOpen"
          @update:is-open="isModalOpen = $event"
       >
@@ -201,6 +201,16 @@
                         class="h-full"
                         :text="buttonText"
                         @click="handleClick"
+                     />
+                  </NuxtLinkLocale>
+                  <NuxtLinkLocale
+                     v-else
+                   
+                  >
+                     <FlowbiteButton
+                        class="h-full"
+                        :text="'Contact agent'"
+                        @click="handleShowModal"
                      />
                   </NuxtLinkLocale>
                </div>
@@ -377,6 +387,10 @@ const handleSendRequest = async() => {
 
 const propertyAddress = computed(() => {
    return `${property.value.location.street}, ${property.value.location.city}, ${property.value.location.country}`;
+});
+
+const isBuyNow = computed(() => {
+   return property.value && property.value['resin-type'] === 'Buy Now';
 });
 
 definePageMeta({
