@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { NDKFilter, NDKUser } from '@nostr-dev-kit/ndk';
+import type { NDKFilter, NDKUser, NDKUserProfile } from '@nostr-dev-kit/ndk';
 import * as bip39 from '@scure/bip39';
 import { HDKey } from '@scure/bip32'
 
@@ -59,6 +59,12 @@ export const useNostrStore = defineStore('nostr', {
         },
         getTypeKey(): NostrLoginType | null {
             return this.typeKey;
+        },
+        async userProfile(): Promise<NDKUserProfile | null> {
+            const ndk = useNDK();
+            const profile = await (await ndk?.signer?.user())?.fetchProfile();
+            console.log('profile', profile);
+            return profile;
         }
     },
     actions: {

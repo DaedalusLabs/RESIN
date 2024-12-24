@@ -87,6 +87,11 @@ const hasUnreadMessages = computed(() => {
 
 const menuItems = [
    {
+      label: "Profile",
+      icon: PhUser,
+      link: "/profile",
+   },
+   {
       label: computed(() => {
          const count = nostrStore.unreadMessagesCount;
          return count > 0 ? `Messages (${count})` : 'Messages';

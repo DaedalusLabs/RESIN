@@ -13,9 +13,23 @@
     <!-- Keys Content -->
     <div class="flex-1 px-10">
       <div class="flex flex-col gap-6">
+        <!-- Npub -->
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-pirate-950">npub</label>
+          <div class="flex items-center gap-2 rounded-lg border border-gray-300 p-2.5">
+            <span class="flex-1 font-mono text-sm text-pirate-950 text-ellipsis overflow-hidden">{{ npub }}</span>
+            <button 
+              @click="copyToClipboard(npub)"
+              class="text-resin-500 hover:text-resin-600"
+            >
+              <PhCopy :size="20" />
+            </button>
+          </div>
+        </div>
+
         <!-- Public Key -->
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-pirate-950">Public Key</label>
+          <label class="text-sm font-medium text-pirate-950">Public Key (Hex)</label>
           <div class="flex items-center gap-2 rounded-lg border border-gray-300 p-2.5">
             <span class="flex-1 font-mono text-sm text-pirate-950 text-ellipsis overflow-hidden">{{ nostrStore.pubkey }}</span>
             <button 
@@ -82,6 +96,7 @@
 <script setup>
 import { useNostrStore } from '~/stores/nostr';
 import { PhCaretLeft, PhCopy } from "@phosphor-icons/vue";
+import { nip19 } from 'nostr-tools';
 
 const nostrStore = useNostrStore();
 const showPhrase = ref(false);
@@ -89,6 +104,10 @@ const showCopiedAlert = ref(false);
 
 const mnemonic = computed(() => {
   return nostrStore.mnemonic ? nostrStore.mnemonic.split(' ') : [];
+});
+
+const npub = computed(() => {
+  return nostrStore.pubkey ? nip19.npubEncode(nostrStore.pubkey) : '';
 });
 
 const copyToClipboard = async (text) => {
