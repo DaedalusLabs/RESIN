@@ -19,7 +19,7 @@
             {{ property?.location.country }}
          </p>
          <p
-            v-if="property['resin-type'] !== 'Buy Now'"
+            v-if="property['resin-type'] === 'Buy Now'"
             class="text-sm font-bold text-pirate-950"
          >
             $ {{ property?.price }} 
