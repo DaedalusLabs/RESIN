@@ -180,9 +180,9 @@
          <DetailsTopBar :property="property" />
       </div>
 
-      <div class="mx-auto mt-16 flex w-9/12 justify-between">
+      <div class="mx-auto mt-16 flex w-10/12 justify-between lg:w-9/12">
          <div
-            class="sticky top-16 hidden w-[40%] flex-shrink flex-col gap-5 xl:flex"
+            class="sticky top-16 hidden flex-shrink flex-col gap-5 lg:w-[40%] xl:flex"
          >
             <div>
                <NuxtImg
@@ -251,7 +251,7 @@
 
          <!-- Property Details -->
          <div class="flex-1">
-            <div class="container ml-auto mr-0 w-11/12">
+            <div class="container w-11/12 xl:ml-auto xl:mr-0">
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
                      property.location?.address?.street ||

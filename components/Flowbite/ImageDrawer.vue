@@ -59,7 +59,7 @@ const emit = defineEmits(["close"]);
                         imageUrls.length % 2 !== 0 &&
                         index === imageUrls.length - 1,
                   }"
-                  class="h-[75vh] w-full rounded-md object-cover object-center shadow-lg"
+                  class="h-72 w-full rounded-md object-cover object-center shadow-lg lg:h-[75vh]"
                   loading="lazy"
                />
             </div>
