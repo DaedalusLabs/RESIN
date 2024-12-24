@@ -54,7 +54,7 @@ export const useNostrStore = defineStore('nostr', {
     getters: {
         unreadMessagesCount(): number {
             return this.messages.filter((m) => {
-                return m.created_at > this.lastMessagesRead;
+                return m.created_at > this.lastMessagesRead && !m.isSent;
             }).length;
         },
         getTypeKey(): NostrLoginType | null {
