@@ -30,37 +30,52 @@
         <!-- Recovery Phrase -->
         <div class="flex flex-col gap-2">
           <div class="flex items-center justify-between">
-            <label class="text-sm font-medium text-pirate-950">Recovery Phrase</label>
+            <label class="text-sm font-medium text-pirate-950" v-if="nostrStore.getTypeKey === 'mnemonic'">Recovery Phrase</label>
+            <label class="text-sm font-medium text-pirate-950" v-else>Private Key</label>
+
             <button 
+              v-if="nostrStore.getTypeKey === 'mnemonic'"
               @click="showPhrase = !showPhrase"
               class="text-sm text-resin-500 hover:text-resin-600"
             >
               {{ showPhrase ? 'Hide' : 'Show' }}
             </button>
           </div>
-          <div v-if="showPhrase" class="grid grid-cols-2 gap-2 rounded-lg border border-gray-300 p-4">
-            <div 
-              v-for="(word, index) in mnemonic" 
-              :key="index"
-              class="flex items-center gap-2"
-            >
-              <span class="text-xs text-pirate-300">{{ index + 1 }}</span>
-              <span class="font-mono text-sm text-pirate-950">{{ word }}</span>
+          
+          <template v-if="nostrStore.getTypeKey === 'mnemonic'">
+            <div v-if="showPhrase" class="grid grid-cols-2 gap-2 rounded-lg border border-gray-300 p-4">
+              <div 
+                v-for="(word, index) in mnemonic" 
+                :key="index"
+                class="flex items-center gap-2"
+              >
+                <span class="text-xs text-pirate-300">{{ index + 1 }}</span>
+                <span class="font-mono text-sm text-pirate-950">{{ word }}</span>
+              </div>
             </div>
-          </div>
-          <div v-else class="grid grid-cols-2 gap-2 rounded-lg border border-gray-300 p-4">
-            <div 
-              v-for="index in 12" 
-              :key="index"
-              class="flex items-center gap-2"
-            >
-              <span class="text-xs text-pirate-300">{{ index }}</span>
-              <span class="font-mono text-sm text-pirate-300">●●●●●●</span>
+            <div v-else class="grid grid-cols-2 gap-2 rounded-lg border border-gray-300 p-4">
+              <div 
+                v-for="index in 12" 
+                :key="index"
+                class="flex items-center gap-2"
+              >
+                <span class="text-xs text-pirate-300">{{ index }}</span>
+                <span class="font-mono text-sm text-pirate-300">●●●●●●</span>
+              </div>
             </div>
+          </template>
+          
+          <div v-else class="rounded-lg border border-gray-300 p-4">
+            <p class="text-sm text-pirate-600">
+                Your private key can not be shown by RESIN, because it is managed by an extension.
+            </p>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Alert -->
+    <ResinAlert :show="showCopiedAlert" text="Copied" />
   </section>
 </template>
 
@@ -70,6 +85,7 @@ import { PhCaretLeft, PhCopy } from "@phosphor-icons/vue";
 
 const nostrStore = useNostrStore();
 const showPhrase = ref(false);
+const showCopiedAlert = ref(false);
 
 const mnemonic = computed(() => {
   return nostrStore.mnemonic ? nostrStore.mnemonic.split(' ') : [];
@@ -78,6 +94,10 @@ const mnemonic = computed(() => {
 const copyToClipboard = async (text) => {
   try {
     await navigator.clipboard.writeText(text);
+    showCopiedAlert.value = true;
+    setTimeout(() => {
+      showCopiedAlert.value = false;
+    }, 2000);
   } catch (err) {
     console.error('Failed to copy text: ', err);
   }

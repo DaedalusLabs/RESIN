@@ -57,6 +57,9 @@ export const useNostrStore = defineStore('nostr', {
                 return m.created_at > this.lastMessagesRead;
             }).length;
         },
+        getTypeKey(): NostrLoginType | null {
+            return this.typeKey;
+        }
     },
     actions: {
         async checkAuthenticated() {
