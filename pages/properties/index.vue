@@ -1,5 +1,5 @@
 <template>
-   <div class="mx-auto mb-[5vh] w-9/12">
+   <div class="mx-auto mb-[5vh] w-11/12">
       <FiltersDrawer
          :show-drawer="showFilterDrawer"
          @close="showFilterDrawer = false"
