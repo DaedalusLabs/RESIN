@@ -15,7 +15,7 @@
       <!-- Chat container -->
       <div
          ref="chatContainer"
-         class="no-scrollbar mx-auto flex w-10/12 flex-1 flex-col gap-10 overflow-y-scroll p-6 pb-28"
+         class="no-scrollbar mx-auto flex w-10/12 flex-1 flex-col gap-10 overflow-y-scroll pb-28"
       >
       <FlowbiteChatBubble
             v-for="(msg, index) in nostrStore.messages"
