@@ -27,6 +27,8 @@ export default defineNuxtConfig({
       families: [{ name: "Inter", provider: "fontsource" }],
    },
 
+   ssr: false,
+   spaLoadingTemplate: true,
    pwa: {
       manifest: {
          name: "Resin",
