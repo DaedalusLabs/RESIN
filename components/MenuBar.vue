@@ -97,6 +97,16 @@ const menuItems = [
          return hasUnreadMessages.value;
       },
    },
+   {
+      label: "Nostr Keys",
+      icon: PhKey,
+      link: "/settings/nostr-keys",
+   },
+   {
+      label: "Settings",
+      icon: PhGear,
+      link: "/settings",
+   },
 ];
 
 const handleCloseDrawer = () => {
