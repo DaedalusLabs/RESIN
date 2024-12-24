@@ -3,7 +3,7 @@
       <input
          id="default-input"
          :placeholder="placeholder"
-         type="text"
+         :type="type"
          class="block w-full rounded-lg border p-2.5 text-sm text-gray-900 focus:ring-transparent"
          :class="{
             'border-gray-300 bg-gray-50 focus:border-gray-300': !showError,
@@ -30,6 +30,10 @@ const props = defineProps({
    modelValue: {
       type: String,
       default: "",
+   },
+   type: {
+      type: String,
+      default: "text",
    },
 });
 

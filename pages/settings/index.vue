@@ -58,8 +58,7 @@ const goBack = () => {
 };
 
 const switchLanguage = async (newLocale) => {
-    console.log("newLocale", newLocale);
-  await router.push(switchLocalePath(newLocale))
+    await router.push(switchLocalePath(newLocale))
 }
 
 definePageMeta({

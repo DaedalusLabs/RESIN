@@ -47,29 +47,38 @@
    </section>
 
    <section v-else class="mb-28">
-      <FlowbiteCheckToast
-         :show-toast="isRequestSent && isBuyNow"
-         :text="`Information submitted`"
-         @close-toast="isRequestSent = false"
-      />
-      <ModalContactAgent
-         v-if="isBuyNow"
-         :is-open="isModalOpen"
-         :property-address="propertyAddress"
-         @update:is-open="isModalOpen = $event"
-         @send-request="handleSendRequest"
-      />
-      <ModalRequestTour
-         v-else
-         :is-open="isModalOpen"
-         :is-request-sent="isRequestSent"
-         :property-address="propertyAddress"
-         :reference-number="referenceNumber"
-         @update:is-open="isModalOpen = $event"
-         @send-request="handleSendRequest"
+      <ClientOnly fallback-tag="span">
+        
+         <ModalContactAgent
+            v-if="isBuyNow"
+            :is-open="isModalOpen"
+            :property-address="propertyAddress"
+            @update:is-open="isModalOpen = $event"
+            @send-request="handleSendRequest"
+         />
+         <ModalRequestTour
+            v-else
+            :is-open="isModalOpen"
+            :is-request-sent="isRequestSent"
+            :property-address="propertyAddress"
+            :reference-number="referenceNumber"
+            @update:is-open="isModalOpen = $event"
+            @send-request="handleSendRequest"
+         />
+      </ClientOnly>
+      
+
+   
+
+      <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
+
+      <FlowbiteImageDrawer
+         :show-drawer="showDrawer"
+         :image-urls="property?.images"
+         @close="showDrawer = false"
       />
 
-      <div class="relative">
+      <div class="relative xl:hidden">
          <NuxtImg
             v-if="property.images?.length"
             :src="property.images[0]"
@@ -93,6 +102,8 @@
          <DetailsTopBar :property="property" />
       </div>
 
+      
+    
       <div class="mx-auto mt-16 flex w-10/12 justify-between lg:w-9/12">
          <div
             class="sticky top-16 hidden flex-shrink flex-col gap-5 lg:w-[40%] xl:flex"
@@ -170,6 +181,10 @@
                   {{ property.location?.city }},
                   {{ property.location?.country }}
                </p>
+               <ResinAlert
+                  :show="showSuccessAlert"
+                  text="Your information has been submitted successfully."
+               />
                <DetailsSize :property="property" />
                <DetailsPrices :property="property" />
                <DetailsSummary :property="property" />
@@ -206,8 +221,7 @@ import {
    PhImages,
 } from "@phosphor-icons/vue";
 import { useShare } from "@vueuse/core";
-import ModalContactAgent from "~/components/Modal/contact-agent.vue";
-import ModalRequestTour from "~/components/Modal/request-tour.vue";
+import { ref, computed, onMounted } from "vue";
 
 const propertiesStore = usePropertiesStore();
 const nostrStore = useNostrStore();
@@ -226,6 +240,7 @@ const phone = ref("");
 const isFavorite = ref(null);
 const showFilterDrawer = ref(false);
 const showDrawer = ref(false);
+const showSuccessAlert = ref(false);
 
 const handleShowModal = () => {
    isModalOpen.value = true;
@@ -289,23 +304,12 @@ onMounted(async () => {
 });
 
 const handleSendRequest = async() => {
-   if (property?.value["resin-type"] === "Buy Now") {
-      if (email.value || phone.value) {
-         isModalOpen.value = false;
-         isRequestSent.value = true;
-         formError.value = false;
-
-         await nostrStore.sendDirectMessage(appConfig.MESSAGES_NPUB, `I want contact with an agent about ${property.value.title}, My contact info is ${email.value} / ${phone.value}`);
-
-      } else {
-         formError.value = true;
-         console.log("Form error");
-      }
-   } else {
-      await fetch(`${appConfig.BACKEND_ENDPOINT}/api/contact_agent`);
-
-      isRequestSent.value = true;
-   }
+   isModalOpen.value = false;
+   
+   showSuccessAlert.value = true;
+   setTimeout(() => {
+      showSuccessAlert.value = false;
+   }, 5000);  
 };
 
 const propertyAddress = computed(() => {
