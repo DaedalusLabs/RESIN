@@ -16,7 +16,16 @@ export default defineNuxtConfig({
    ],
 
    i18n: {
-      locales: ["en-US", "nl-NL"],
+      locales: [
+         {
+            code: "en-US",
+            name: "English"
+         },
+         {
+            code: "nl-NL",
+            name: "Nederlands"
+         }
+      ],
       strategy: "prefix",
       defaultLocale: "en-US",
       detectBrowserLanguage: false,
