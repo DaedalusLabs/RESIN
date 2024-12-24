@@ -1,7 +1,7 @@
 <template>
    <div :class="isMap ? 'lg:bg-black lg:bg-opacity-80 lg:p-7' : 'bg-none'">
       <div
-         class="mx-auto flex w-full max-w-[75%] items-center gap-2"
+         class="mx-auto flex w-full items-center gap-2 lg:max-w-[75%]"
          :class="isMap ? 'lg:justify-between' : 'lg:justify-center'"
       >
          <!-- RESIN Logo -->

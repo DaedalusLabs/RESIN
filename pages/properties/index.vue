@@ -1,10 +1,10 @@
 <template>
-   <div class="mx-auto mb-[5vh] w-9/12">
+   <div class="mx-auto mb-[5vh] w-11/12">
       <ais-instant-search
          index-name="nostr_listing" :search-client="searchClient"
          :future="{ preserveSharedStateOnUnmount: true }" :initial-ui-state="searchStore.searchState"
          @state-change="handleStateChange">
-
+     
          <KeepAlive>
             <FiltersDrawer :show-drawer="showFilterDrawer" @close="showFilterDrawer = false" />
          </KeepAlive>
