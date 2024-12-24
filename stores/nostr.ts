@@ -18,6 +18,7 @@ interface NostrState {
     mnemonic: string | null;
     messages: NostrMessage[];
     typeKey: NostrLoginType | null;
+    lastMessagesRead: string | null;
 }
 
 interface NostrMessage {
@@ -26,7 +27,7 @@ interface NostrMessage {
     content: string;
     created_at: number;
     tags: string[][];
-    user: NDKUser;
+    user: NDKUser | undefined;
     isSent: boolean;
 }
 
@@ -42,12 +43,20 @@ export const useNostrStore = defineStore('nostr', {
         authenticated: false,
         mnemonic:  null,
         messages: [],
-        typeKey: null
+        typeKey: null,
+        lastMessagesRead: null,
     }),
     persist: {
         key: 'nostr-store',
         storage: piniaPluginPersistedstate.localStorage(),
-        paths: ['mnemonic', 'typeKey', 'authenticated'] // only persist mnemonic
+        paths: ['mnemonic', 'typeKey', 'authenticated', 'lastMessagesRead'] 
+    },
+    getters: {
+        unreadMessagesCount(): number {
+            return this.messages.filter((m) => {
+                return m.created_at > this.lastMessagesRead;
+            }).length;
+        },
     },
     actions: {
         async checkAuthenticated() {
@@ -71,6 +80,8 @@ export const useNostrStore = defineStore('nostr', {
             if (ndk) {
                 this.pubkey = (await ndk?.signer?.user()).pubkey;
                 await ndk.connect();
+
+                this.user = await ndk.signer?.user();
             }
 
             return this.authenticated
@@ -127,10 +138,15 @@ export const useNostrStore = defineStore('nostr', {
         async fetchDirectMessages() {
             const ndk = useNDK();
 
+            if (!ndk) {
+                console.log('No NDK instance');
+                return;
+            }
+
             const filter: NDKFilter = {
                 kinds: [1059], // Gift wrap kind
                 '#p': [this.pubkey!],
-                since: Math.floor(Date.now() / 1000) - (60 * 60 * 24 * 7) // Last 7 days
+                // since: Math.floor(Date.now() / 1000) - (60 * 60 * 24 * 30) // Last 7 days
             };
 
             const messages = await ndk.subscribe(filter, { closeOnEose: false });
@@ -201,7 +217,9 @@ export const useNostrStore = defineStore('nostr', {
             // Send to recipient's preferred relays
             return giftWrap;
         },
-
+        async updateLastMessagesRead() {
+            this.lastMessagesRead = Math.floor(new Date().getTime() / 1000); // Using getTime() which returns UTC milliseconds since epoch
+        },
         async unwrapMessage(event: NDKEvent): Promise<NostrMessage> {
             const ndk = useNDK();
 

@@ -319,7 +319,6 @@ function startShare() {
 }
 
 const toggleFavorite = () => {
-   console.log('toggleFavorite', property.value.id);
    isFavorite.value = !isFavorite.value;
    propertiesStore.toggleFavorite(property.value.id);
 };

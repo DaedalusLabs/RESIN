@@ -32,7 +32,7 @@
                            class="text-pirate-500 group-hover:text-resin-500"
                         />
                         <span
-                           v-if="item.hasNotification"
+                           v-show="item.hasNotification"
                            class="absolute right-0 top-0 h-2 w-2 rounded-full bg-resin-500 text-sm font-medium"
                         ></span>
                      </div>
@@ -80,38 +80,31 @@ defineProps({
    showDrawer: Boolean,
 });
 
+const hasUnreadMessages = computed(() => {
+   const count = nostrStore.unreadMessagesCount;
+   return count > 0;
+});
+
+const menuItems = [
+   {
+      label: computed(() => {
+         const count = nostrStore.unreadMessagesCount;
+         return count > 0 ? `Messages (${count})` : 'Messages';
+      }),
+      icon: PhChatCircle,
+      link: "/messages",
+      get hasNotification() {
+         return hasUnreadMessages.value;
+      },
+   },
+];
+
 const handleCloseDrawer = () => {
    emit("close");
 };
 
-const menuItems = [
-   // {
-   //    label: "Profile",
-   //    icon: PhUser,
-   //    link: "#",
-   // },
-   {
-      label: "Messages",
-      icon: PhChatCircle,
-      link: "/messages",
-      hasNotification: true,
-   },
-   // {
-   //    label: "NOSTR keys",
-   //    icon: PhKey,
-   //    link: "#",
-   // },
-   // {
-   //    label: "Settings",
-   //    icon: PhGear,
-   //    link: "#",
-   // },
-   // {
-   //    label: "Help",
-   //    icon: PhQuestion,
-   //    link: "#",
-   // },
-];
+
+
 
 const logout = () => {
    nostrStore.logout();

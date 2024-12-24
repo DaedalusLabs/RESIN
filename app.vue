@@ -13,6 +13,10 @@ import { usePropertiesStore } from "~/stores/properties";
 const propertiesStore = usePropertiesStore();
 propertiesStore.init();
 const appConfig = useAppConfig()
+const nostrStore = useNostrStore();
+nostrStore.checkAuthenticated().then(() => {
+   nostrStore.fetchDirectMessages();
+});
 
 async function getProperties() {
    const properties = await fetch(`${appConfig.BACKEND_ENDPOINT}/listings`);

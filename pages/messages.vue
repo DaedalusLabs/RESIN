@@ -26,6 +26,7 @@
             :time="(new Date(msg.created_at * 1000)).toLocaleString()"
             :profile-image="msg.user?.profile?.image ? msg.user?.profile?.image : '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
             :is-sent="msg.isSent"
+            :profile="msg.user"
          ></FlowbiteChatBubble>
       </div>
 
@@ -96,6 +97,8 @@ onMounted(async() => {
    scrollToBottom();
    await nostrStore.checkAuthenticated();
    await nostrStore.fetchDirectMessages();
+
+   nostrStore.updateLastMessagesRead();
 });
 
 watch(messages, () => {
@@ -105,12 +108,6 @@ watch(messages, () => {
 
 async function sendMessage() {
    if (!newMessage.value.trim()) return; // Geen lege berichten toestaan
-
-   const now = new Date();
-   const time = now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-   });
 
    await nostrStore.sendDirectMessage(appConfig.MESSAGES_NPUB, newMessage.value);
 

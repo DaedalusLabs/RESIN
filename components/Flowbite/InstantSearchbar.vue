@@ -68,7 +68,6 @@ function clearQuery(event) {
 }
 
 function updateQuery(newQuery, latitude, longitude) {
-    console.log('updateQuery', newQuery, latitude, longitude);
     emit("update:query", newQuery, latitude, longitude);
 }
 </script>

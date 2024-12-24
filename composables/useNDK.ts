@@ -17,9 +17,10 @@ export function useNDK() {
         ndkInstance = new NDK({
             autoConnectUserRelays: true,
             explicitRelayUrls: [
-                // 'wss://relay.damus.io',
-                // 'wss://relay.nostr.band',
-                // 'wss://relay.primal.net',
+                'wss://relay.damus.io',
+                'wss://relay.nostr.band',
+                'wss://relay.primal.net',
+                "wss://nos.lol",
                 "wss://nostr.dbtc.link",
                 "wss://nostr1.daedaluslabs.io",
                 "wss://nostr2.daedaluslabs.io",

@@ -90,7 +90,6 @@ export const usePropertiesStore = defineStore("properties", {
 
    actions: {
       init() {
-         console.log('init properties store');
          const config = useRuntimeConfig();
          this.imagesBaseUrl = config.public.IMAGES_BASE_URL;
          this.apiEndpoint = config.public.BACKEND_ENDPOINT;
@@ -160,7 +159,6 @@ export const usePropertiesStore = defineStore("properties", {
       },
 
       toggleFavorite(locationId: string | number): void {
-         console.log('toggleFavorit in store', locationId);
          if (this.favorites.includes(locationId)) {
             this.favorites = this.favorites.filter((id) => id !== locationId);
          } else {

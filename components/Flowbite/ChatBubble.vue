@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
    name: {
       type: String,
       required: true,
@@ -60,5 +60,11 @@ defineProps({
       type: Boolean,
       required: true,
    },
+   profile: {
+      type: Object,
+      required: false,
+      default: null,
+   }
 });
+
 </script>
