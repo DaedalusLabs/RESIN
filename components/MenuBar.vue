@@ -53,7 +53,9 @@
                </NuxtLinkLocale>
 
                <div class="mt-4 px-4 text-pirate-500">
-                  <a href="#" class="text-sm">Terms & conditions</a>
+                  <NuxtLinkLocale to="/terms-and-conditions" @click="handleCloseDrawer">   
+                     Terms & conditions
+                  </NuxtLinkLocale>
                </div>
             </div>
          </div>
@@ -89,7 +91,7 @@ const menuItems = [
    {
       label: "Profile",
       icon: PhUser,
-      link: "/profile",
+      link: "/settings/profile",
    },
    {
       label: computed(() => {
@@ -111,6 +113,11 @@ const menuItems = [
       label: "Settings",
       icon: PhGear,
       link: "/settings",
+   },
+   {
+      label: "Help",
+      icon: PhQuestion,
+      link: "/help",
    },
 ];
 
