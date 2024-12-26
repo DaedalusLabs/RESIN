@@ -21,7 +21,7 @@ import { tsDocToResult } from '~/utils/tsDocToResult';
 
 // const appConfig = useAppConfig()
 const nearbyProperties = ref([]);
-const appConfig = useAppConfig()
+const runtimeConfig = useRuntimeConfig();
 
 let props = defineProps({
    property: {
@@ -33,7 +33,7 @@ let props = defineProps({
 onMounted(async() => {
    let data = [];
    try {
-      data = await(await fetch(`${appConfig.BACKEND_ENDPOINT}/listings/get_nearby/${props.property.id}`)).json();   
+      data = await(await fetch(`${runtimeConfig.public.BACKEND_ENDPOINT}/listings/get_nearby/${props.property.id}`)).json();   
       nearbyProperties.value = data.hits.map((h)=> h.document);
    }
    catch  {}

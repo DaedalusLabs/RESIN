@@ -10,7 +10,7 @@
       </p>
       <p class="flex items-center gap-1">
          <PhBed :size="20" class="inline" />
-         {{ property.property?.bedrooms }} beds
+         {{ property.property?.bedrooms }} {{ property.property?.bedrooms === 1 ? 'bed' : 'beds' }}
       </p>
    </div>
 </template>
