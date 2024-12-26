@@ -9,17 +9,17 @@
 
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
+const runtimeConfig = useRuntimeConfig();
 
 const propertiesStore = usePropertiesStore();
 propertiesStore.init();
-const appConfig = useAppConfig()
 const nostrStore = useNostrStore();
 nostrStore.checkAuthenticated().then(() => {
    nostrStore.fetchDirectMessages();
 });
 
 async function getProperties() {
-   const properties = await fetch(`${appConfig.BACKEND_ENDPOINT}/listings`);
+   const properties = await fetch(`${runtimeConfig.public.BACKEND_ENDPOINT}/listings`);
    return (await properties.json()).hits.map(d => d.document);
 }
 

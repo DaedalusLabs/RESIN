@@ -109,7 +109,7 @@ export const usePropertiesStore = defineStore("properties", {
                   {
                      host: this.typesenseHost,
                      port: parseInt(this.typesensePort),
-                     protocol: 'http'
+                     protocol: this.typesenseHost.includes('localhost') ? 'http' : 'https'
                   }
                ]
             },
