@@ -1,5 +1,5 @@
 <template>
-   <ais-instant-search index-name="nostr_listing" :search-client="searchClient">
+   <ais-instant-search index-name="nostr_listing" :search-client="searchClient" :future="{ preserveSharedStateOnUnmount: true }">
       <section class="mx-auto flex w-10/12 flex-col py-20">
          <NuxtImg src="/images/logos/resin-text.png" alt="image" class="mb-10 w-24" />
          <FlowbiteInstantSearchbar class="flex-grow" :query="query" @update:query="updateQuery" />          

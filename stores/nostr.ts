@@ -161,13 +161,16 @@ export const useNostrStore = defineStore('nostr', {
             const messages = await ndk.subscribe(filter, { closeOnEose: false });
 
             messages.on('event', async (e) => {
-                const u = await this.unwrapMessage(e);
-
-                if (this.messages.find((m) => m.id == u.id) == undefined) {
-                    this.messages.push(u);
-                    this.messages = this.messages.sort((a, b) => a.created_at - b.created_at);
+                try {
+                    const u = await this.unwrapMessage(e);
+                    if (this.messages.find((m) => m.id == u.id) == undefined) {
+                        this.messages.push(u);
+                        this.messages = this.messages.sort((a, b) => a.created_at - b.created_at);
+                    }
+                } catch (error) {
+                    console.error('Ignoring malformed message:', error.message);
                 }
-            })
+            });
         },
         async sendDirectMessage(recipientPubkey: string, content: string) {
             const ndk = useNDK();
