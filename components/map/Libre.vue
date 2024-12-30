@@ -44,7 +44,7 @@ import { fixNestedStrings } from "~/utils/jsonParser";
 import { Map } from "maplibre-gl";
 
 const propertiesStore = usePropertiesStore();
-const properties = propertiesStore.properties;
+let properties = propertiesStore.properties;
 const zoom = ref(4);
 const mapContainer = ref(null);
 const map = ref(null);
@@ -81,11 +81,14 @@ const calculateVisibleLocations = () => {
    const bounds = map.value.getBounds();
    const visibleLocations = properties.filter((property) =>
       bounds.contains([
-         property.location.coordinates.longitude,
-         property.location.coordinates.latitude,
+         property.location.coordinates[0],
+         property.location.coordinates[1],
       ]),
    );
+
+   visibleLocationsAmount.value = visibleLocations.length;
    propertiesStore.setFilteredLocations(visibleLocations);
+   refreshProperties();
 };
 
 let geojson;
@@ -232,6 +235,20 @@ watch(
    },
    { immediate: true },
 );
+
+watch(
+   () => props.results,
+   (newResults) => {
+      // Handle the search results change
+      propertiesStore.properties = newResults;
+      properties = propertiesStore.properties;
+      if (properties.length && map.value) {
+         calculateVisibleLocations();
+      }
+   },
+   { deep: true, immediate: true }
+);
+
 
 // Click Outside Handling
 const clickedOutside = (event) => {
