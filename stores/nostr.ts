@@ -155,7 +155,7 @@ export const useNostrStore = defineStore('nostr', {
             const filter: NDKFilter = {
                 kinds: [1059], // Gift wrap kind
                 '#p': [this.pubkey!],
-                // since: Math.floor(Date.now() / 1000) - (60 * 60 * 24 * 30) // Last 7 days
+                since: Math.floor(Date.now() / 1000) - (60 * 60 * 24 * 30) // Last 30 days?
             };
 
             const messages = await ndk.subscribe(filter, { closeOnEose: false });

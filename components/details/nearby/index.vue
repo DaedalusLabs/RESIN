@@ -16,9 +16,6 @@
 </template>
 
 <script setup>
-import { nostrEventToResult } from '~/utils/nostrEventToResult';
-import { tsDocToResult } from '~/utils/tsDocToResult';
-
 // const appConfig = useAppConfig()
 const nearbyProperties = ref([]);
 const runtimeConfig = useRuntimeConfig();
