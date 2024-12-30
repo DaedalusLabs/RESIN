@@ -12,7 +12,7 @@
       />
       <div class="min-w-0 flex-1">
          <h3 class="truncate text-lg font-bold text-resin-500">
-            {{ property?.location.street }}
+            {{ property?.title }}
          </h3>
          <p class="text-sm text-pirate-950">
             {{ property?.location.city }},

@@ -98,8 +98,21 @@ export const usePropertiesStore = defineStore("properties", {
          this.typesenseApiKey = config.public.TYPESENSE_API_KEY;
       },
       async get(id: string) {
-         const data = await (await fetch(`${this.apiEndpoint}/listings/${id}`)).json();
-         return data;
+         try {
+            const response = await fetch(`${this.apiEndpoint}/listings/${id}`);
+            if (!response.ok) {
+               if (response.status === 404) {
+                  throw new Error('Property not found');
+               } else if (response.status >= 500) {
+                  throw new Error('Server error');
+               }
+            }
+            const data = await response.json();
+            return data;
+         } catch (error) {
+            console.error(error);
+            throw error;
+         }
       },
       initializeSearch() {
          const typesenseAdapter = new TypesenseInstantSearchAdapter({
