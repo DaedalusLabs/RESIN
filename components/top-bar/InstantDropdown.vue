@@ -2,6 +2,7 @@
    <div
       v-if="filteredSuggestions[0].hits.length"
       class="absolute z-10 mt-1 flex-1 rounded-xl bg-black py-4 shadow-lg"
+      ref="dropdownContainer"
    >
 
       <ul v-if="query" v-for="index in filteredSuggestions" :key="index.indexId">
@@ -24,7 +25,11 @@
 <script setup>
 import { PhMagnifyingGlass } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
+import { ref, watch } from 'vue';
+import { onClickOutside } from '@vueuse/core';
+
 const propertiesStore = usePropertiesStore();
+const dropdownContainer = ref(null);
 
 const props = defineProps({
    filteredSuggestions: {
@@ -37,7 +42,7 @@ const props = defineProps({
    },
 });
 
-const emit = defineEmits(["update:query"]);
+const emit = defineEmits(["update:query", 'close']);
 
 function selectSuggestion(suggestion) {
    const fullAddress = `${suggestion.location.street}, ${suggestion.location.city}, ${suggestion.location.country}`;
@@ -47,7 +52,7 @@ function selectSuggestion(suggestion) {
       suggestion.location.coordinates[1],
       suggestion.location.coordinates[0],
    );
-   propertiesStore.addSearch(fullAddress);
+   propertiesStore.addSearch(props.query);
 }
 
 function highlightQuery(suggestion) {
@@ -55,4 +60,12 @@ function highlightQuery(suggestion) {
    const regex = new RegExp(`(${props.query})`, "gi");
    return fullAddress.replace(regex, '<span class="text-resin-500">$1</span>');
 }
+
+onClickOutside(dropdownContainer, (event) => {
+   // Check if the click was on the search input or its container
+   const searchContainer = document.querySelector('#default-search')?.closest('.relative');
+   if (!searchContainer?.contains(event.target)) {
+      emit('close');
+   }
+});
 </script>

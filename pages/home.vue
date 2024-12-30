@@ -11,8 +11,8 @@
             <p v-if="!searches.length" class="text-pirate-950">
                No recent searches
             </p>
-            <HomeRecentSearch v-for="search in searches" :key="search" class="w-1/2 flex-shrink-0 cursor-pointer"
-               :search="search" @click="searchProperties(search)" />
+            <HomeRecentSearch v-for="search in searches" :key="search" class="w-auto flex-shrink-0 cursor-pointer"
+               :search="search" @click="searchPropertiesOnMap(search)" />
          </div>
          <h2 class="text-pirate-950leading-tight mb-3 mt-10 text-xl font-bold">
             Recently viewed
@@ -90,6 +90,18 @@ watchEffect(() => {
    searches.value = propertiesStore.searches.reverse();
    viewedProperties.value = propertiesStore.viewedLocations.reverse();
 });
+
+function searchPropertiesOnMap(search) {
+   const localeRoute = useLocaleRoute();
+   const route = localeRoute({
+      name: "map",
+      query: { q: search },
+   });
+   if (route) {
+      return navigateTo(route.fullPath);
+   }
+}
+
 
 function searchProperties(search) {
    query.value = search;

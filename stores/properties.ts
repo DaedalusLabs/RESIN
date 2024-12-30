@@ -118,6 +118,8 @@ export const usePropertiesStore = defineStore("properties", {
                query_by: 'title,location.street,location.city,location.country'
             },
          });
+
+
          this.searchClient = typesenseAdapter.searchClient;
       },
       addOwnedProperty(property: Property): void {
@@ -131,7 +133,13 @@ export const usePropertiesStore = defineStore("properties", {
       },
 
       addSearch(searchTerm: string): void {
-         this.searches.push(searchTerm);
+         if (!this.searches.includes(searchTerm)) {
+            this.searches.push(searchTerm);
+         }
+         if (this.searches.length > 10) {
+            this.searches = this.searches.slice(1);
+         }
+
       },
 
       setFilteredLocations(filteredProperties: Property[]): void {

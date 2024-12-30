@@ -1,7 +1,7 @@
 <template>
       <ais-instant-search
-index-name="nostr_listing" :search-client="searchClient"
-      :future="{ preserveSharedStateOnUnmount: true }" :initial-ui-state="searchStore.searchState"
+      index-name="nostr_listing" :search-client="searchClient"
+      :future="{ preserveSharedStateOnUnmount: true }" :initial-ui-state="hasQuery()"
       @state-change="handleStateChange">
    <section
       class="relative flex h-full flex-col items-center justify-between overflow-hidden"
@@ -37,19 +37,20 @@ index-name="nostr_listing" :search-client="searchClient"
 </ais-instant-search>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { usePropertiesStore } from "~/stores/properties";
-import { useSearchStore } from '@/stores/search'
+import { useSearchStore } from "~/stores/search";
+import { useRoute } from "#imports";
+import type { SearchClient } from "typesense-instantsearch-adapter";
 
-const handleStateChange = ({uiState, setUiState}) => {
-  searchStore.updateSearchState(uiState)
-  setUiState(uiState);
-}
-
+const route = useRoute();
 const propertiesStore = usePropertiesStore();
+
 const searchStore = useSearchStore()
 propertiesStore.initializeSearch();
-const searchClient = propertiesStore.searchClient;
+const searchClient:SearchClient = propertiesStore.searchClient;
+
 
 const mapCenter = ref({ lat: 15.76, lng: -81.84 });
 
@@ -58,6 +59,31 @@ function updateMapCenter(lat, lng) {
 }
 
 const showFilterDrawer = ref(false);
+
+function hasQuery() {
+   const searchQuery = route.query.q;
+   if (searchQuery && typeof searchQuery === 'string') {
+      searchStore.updateSearchState({ nostr_listing: { query: searchQuery } });
+   }
+
+   return searchStore.searchState;
+}
+
+onMounted(() => {
+   // Check for query parameter and update search state
+
+      
+   //    searchClient.search({
+   //       q: searchQuery,
+   // });
+   
+});
+
+const handleStateChange = ({uiState, setUiState}) => {
+   console.log('handleStateChange', uiState)
+  searchStore.updateSearchState(uiState)
+  setUiState(uiState);
+}
 
 definePageMeta({
    layout: "map",

@@ -1,7 +1,7 @@
 <template>
     <ais-autocomplete>
         <template v-slot="{ currentRefinement, indices, refine }">
-            <div class="relative">
+            <div class="relative" ref="searchContainer">
             <div class="flex items-center justify-between gap-2">
 
                 <form @submit.prevent class="flex-grow">
@@ -20,7 +20,7 @@
                             class="focus:outline-border-pirate-700 block w-full rounded-2xl border border-pirate-700 border-transparent bg-black p-4 pr-7 ps-10 text-sm text-gray-900 text-pirate-50 outline-none focus:border-pirate-700 focus:ring-0"
                             placeholder="City, region, country..." required
                             autocomplete="off"
-                            @input="refine($event.currentTarget.value)" />
+                            @input="(e) => { refine(e.currentTarget.value); isDropdownOpen = true; }" />
                         <button v-if="query" type="button" class="absolute inset-y-0 end-0 flex items-center pe-3"
                             @click="refine('')">
                             <PhXCircle class="text-pirate-400" :size="18" weight="fill" />
@@ -29,8 +29,14 @@
 
                 </form>
             </div>
-            <TopBarInstantDropdown class="absolute z-10" :filtered-suggestions="indices" :query="currentRefinement"
-                @update:query="updateQuery" />
+            <TopBarInstantDropdown
+                v-if="isDropdownOpen"
+                class="absolute z-10"
+                :filtered-suggestions="indices"
+                :query="currentRefinement"
+                @update:query="updateQuery"
+                @close="isDropdownOpen = false"
+            />
             </div>
         </template>
 
@@ -39,20 +45,26 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
 import { PhXCircle } from "@phosphor-icons/vue";
+import { useSearchStore } from '~/stores/search';
+
+const searchStore = useSearchStore();
+const isDropdownOpen = ref(true);
 
 const props = defineProps({
     query: {
         type: String,
-        default: "",
-    },
+        default: ''
+    }
 });
 
-const localQuery = ref(props.query);
-
-watchEffect(() => {
-    localQuery.value = props.query;
-});
+// Watch for changes in the searchStore's refinements
+watch(() => searchStore.refinements.query, (newQuery) => {
+    if (newQuery !== undefined) {
+        searchStore.updateRefinements({ query: newQuery });
+    }
+}, { immediate: true });
 
 const emit = defineEmits(["update:query"]);
 
@@ -62,12 +74,10 @@ function onInput(event) {
 }
 
 function clearQuery(event) {
-//    localQuery.value = ""
     refine('');
-    //emit("update:query", event);
 }
 
 function updateQuery(newQuery, latitude, longitude) {
-    emit("update:query", newQuery, latitude, longitude);
+    emit('update:query', newQuery, latitude, longitude);
 }
 </script>

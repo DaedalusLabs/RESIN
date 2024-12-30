@@ -46,26 +46,34 @@ v-for="property in items" :key="property.id" :property="property"
 </template>
 
 <script setup>
+import { ref, onMounted, watchEffect } from "vue";
 import { usePropertiesStore } from "~/stores/properties";
-import { useSearchStore } from '@/stores/search'
+import { useSearchStore } from "~/stores/search";
+import { useRoute } from "#imports";
+
+const route = useRoute();
+const propertiesStore = usePropertiesStore();
+const searchStore = useSearchStore();
 
 const handleStateChange = ({uiState, setUiState}) => {
   searchStore.updateSearchState(uiState)
   setUiState(uiState);
 }
 
-
 const isLoading = ref(true);
 const properties = ref([]);
 const showFilterDrawer = ref(false);
-const propertiesStore = usePropertiesStore();
-const searchStore = useSearchStore()
 propertiesStore.initializeSearch();
 const searchClient = propertiesStore.searchClient;
 
 onMounted(() => {
    isLoading.value = false;
-
+   // Check for query parameter and update search state
+   const searchQuery = route.query.q;
+   if (searchQuery && typeof searchQuery === 'string') {
+      console.log(route.query.q);
+      searchStore.updateRefinements({ query: searchQuery });
+   }
 });
 
 watchEffect(() => {
