@@ -173,11 +173,12 @@
             <div class="container w-11/12 xl:ml-auto xl:mr-0">
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
-                     property.location?.street ||
+                     property.title ||
                      "Address not available"
                   }}
                </h1>
                <p class="mt-1 text-sm">
+                  {{ property.location?.street }},
                   {{ property.location?.city }},
                   {{ property.location?.country }}
                </p>
