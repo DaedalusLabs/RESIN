@@ -58,7 +58,7 @@
 import { ref, computed } from 'vue';
 
 const nostrStore = useNostrStore();
-const appConfig = useAppConfig();
+const runtimeConfig = useRuntimeConfig();
 
 const props = defineProps({
    isOpen: {
@@ -113,7 +113,7 @@ const handleSendRequest = async () => {
          contactMessage += ` You can reach me by phone at ${phone.value}.`;
       }
 
-      await nostrStore.sendDirectMessage(appConfig.MESSAGES_NPUB, contactMessage);
+      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, contactMessage);
 
       emit('sendRequest', {
          email: email.value,

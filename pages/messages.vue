@@ -56,7 +56,7 @@
 <script setup>
 import { PhCaretLeft, PhPaperPlaneTilt } from "@phosphor-icons/vue";
 const nostrStore = useNostrStore();
-const appConfig = useAppConfig()
+const runtimeConfig = useRuntimeConfig();
 
 definePageMeta({
    layout: "white",
@@ -97,6 +97,7 @@ onMounted(async() => {
    scrollToBottom();
    await nostrStore.checkAuthenticated();
    await nostrStore.fetchDirectMessages();
+   console.log(runtimeConfig.public.MESSAGES_NPUB);
 
    nostrStore.updateLastMessagesRead();
 });
@@ -109,7 +110,7 @@ watch(messages, () => {
 async function sendMessage() {
    if (!newMessage.value.trim()) return; // Geen lege berichten toestaan
 
-   await nostrStore.sendDirectMessage(appConfig.MESSAGES_NPUB, newMessage.value);
+   await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, newMessage.value);
 
    newMessage.value = "";
 
