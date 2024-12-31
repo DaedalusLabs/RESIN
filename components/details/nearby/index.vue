@@ -1,5 +1,5 @@
 <template>
-   <div class="container mx-auto mt-8 w-10/12">
+   <div class="container mx-auto mt-8">
       <h2 class="text-xl font-bold">Nearby Properties</h2>
       <div class="mt-4 grid grid-cols-1 gap-8">
          <div v-if="!nearbyProperties.length">

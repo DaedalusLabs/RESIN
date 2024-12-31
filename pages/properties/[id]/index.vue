@@ -170,7 +170,7 @@
 
          <!-- Property Details -->
          <div class="flex-1">
-            <div class="container w-11/12 xl:ml-auto xl:mr-0">
+            <div class="container w-full xl:w-11/12 xl:ml-auto xl:mr-0">
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
                      property.title ||
@@ -197,16 +197,17 @@
                >
                   {{ property.attribution }}
                </p>
+               <ClientOnly fallback-tag="span">
+                  <DetailsMap :property="property" />
+               </ClientOnly>
+               <DetailsNearby :property="property" />
+               <DetailsBottomBar
+                  class="block xl:hidden"
+                  :property="property"
+                  @show-modal="handleShowModal"
+               />
             </div>
-            <ClientOnly fallback-tag="span">
-               <DetailsMap :property="property" />
-            </ClientOnly>
-            <DetailsNearby :property="property" />
-            <DetailsBottomBar
-               class="block xl:hidden"
-               :property="property"
-               @show-modal="handleShowModal"
-            />
+            
          </div>
       </div>
    </section>

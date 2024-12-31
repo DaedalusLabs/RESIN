@@ -1,5 +1,5 @@
 <template>
-   <div class="container mx-auto mt-8 w-10/12">
+   <div class="container mx-auto mt-8 ">
       <h2 class="text-base font-bold">Location</h2>
       <div class="mt-4 overflow-hidden rounded-2xl">
          <div ref="mapContainer" class="h-64">
