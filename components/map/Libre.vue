@@ -122,9 +122,14 @@ onMounted(() => {
 
    map.value = new Map({     
       container: mapContainer.value,
-      style: "/map.json",
+      style: "/map-liberty.json",
       center: [props.mapCenter.lng, props.mapCenter.lat],
       zoom: zoom.value,
+   });
+
+   map.value.on("styleimagemissing", (e) => {   
+      const emptyImage = new Uint8Array(4).fill(0);
+      map.value.addImage(e.id, { width: 1, height: 1, data: emptyImage });
    });
 
    map.value.on("load", () => {
