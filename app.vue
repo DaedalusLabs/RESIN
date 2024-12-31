@@ -51,6 +51,11 @@ html {
    scroll-behavior: smooth;
 }
 
+body {
+   touch-action: pan-y; 
+   overflow: hidden;
+}
+
 /* font Inter for all text */
 * {
    font-family: "Inter", sans-serif;

@@ -2,7 +2,13 @@
 export default defineNuxtConfig({
    compatibilityDate: "2024-04-03",
    devtools: { enabled: true },
-
+   vite: {
+      server: {
+         hmr: {
+            overlay: true,
+         },
+      },
+   },
    modules: [
       "@nuxt/image",
       "@nuxt/eslint",
@@ -40,6 +46,7 @@ export default defineNuxtConfig({
    ssr: false,
    spaLoadingTemplate: true,
    pwa: {
+      registerType: "autoUpdate",
       manifest: {
          name: "Resin",
          short_name: "Resin",
@@ -48,13 +55,19 @@ export default defineNuxtConfig({
          icons: [
             {
                src: "android-chrome-256x256.png",
-               sizes: "150x150",
+               sizes: "256x256",
+               type: "image/png",
+            },
+            {
+               src: "android-chrome-192x192.png",
+               sizes: "192x192",
                type: "image/png",
             },
          ],
       },
       workbox: {
-         navigateFallback: null,
+         navigateFallback: '/',
+         navigateFallbackAllowlist: [/^\/$/],
       },
       devOptions: {
          enabled: false,
@@ -63,7 +76,7 @@ export default defineNuxtConfig({
 
    app: {
       head: {
-         title: "Resin - Buy a home without a bank",
+         title: "Resin",
          meta: [
             { charset: "utf-8" },
             {
@@ -73,8 +86,10 @@ export default defineNuxtConfig({
             {
                hid: "description",
                name: "description",
-               content: "Nuxt Image module example",
+               content: "Resin - Buy a home without a bank",
             },
+            { name: 'apple-mobile-web-app-capable', content: 'yes' },
+            { name: 'apple-mobile-web-app-status-bar-style', content: 'default' }
          ],
       },
    },
