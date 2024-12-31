@@ -4,7 +4,7 @@
 
       <!-- Button to View Properties -->
       <NuxtLinkLocale
-         class="force-top absolute bottom-20 lg:hidden"
+         class="force-top absolute bottom-40 lg:hidden"
          to="properties"
       >
          <FlowbiteButton
