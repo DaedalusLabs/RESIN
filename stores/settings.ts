@@ -21,6 +21,7 @@ interface SettingsState {
     };
     showLabels: boolean;
   };
+  propertyTypes: string[];
 }
 
 export const useSettingsStore = defineStore("settings", {
@@ -42,6 +43,7 @@ export const useSettingsStore = defineStore("settings", {
       },
       showLabels: true,
     },
+    propertyTypes: [],
   }),
 
   persist: {
@@ -61,6 +63,10 @@ export const useSettingsStore = defineStore("settings", {
   actions: {
     setTheme(theme: 'light' | 'dark' | 'system'): void {
       this.theme = theme;
+    },
+
+    setPropertyTypes(types: string[]): void {
+      this.propertyTypes = types;
     },
 
     setNotifications(enabled: boolean): void {
