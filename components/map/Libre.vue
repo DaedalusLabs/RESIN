@@ -42,7 +42,10 @@
 import { usePropertiesStore } from "~/stores/properties";
 import { PhGps } from "@phosphor-icons/vue";
 import { fixNestedStrings } from "~/utils/jsonParser";
-import { Map } from "maplibre-gl";
+import maplibregl, { Map } from "maplibre-gl";
+import { Protocol } from "pmtiles";
+
+const protocol = new Protocol();
 
 const propertiesStore = usePropertiesStore();
 let properties = propertiesStore.properties;
@@ -115,9 +118,11 @@ const refreshProperties = () => {
 }
 
 onMounted(() => {
-   map.value = new Map({
+   maplibregl.addProtocol("pmtiles",protocol.tile);
+
+   map.value = new Map({     
       container: mapContainer.value,
-      style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
+      style: "/map.json",
       center: [props.mapCenter.lng, props.mapCenter.lat],
       zoom: zoom.value,
    });
@@ -224,6 +229,10 @@ onMounted(() => {
          essential: true,
       });
    }
+});
+
+onUnmounted(() => {
+  map.value?.remove();
 });
 
 watch(
