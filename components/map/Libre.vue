@@ -3,23 +3,24 @@
       <div ref="mapContainer" class="h-full w-full" />
 
       <!-- Button to View Properties -->
-      <NuxtLinkLocale
-         class="force-top absolute bottom-40 lg:hidden"
-         to="properties"
-      >
-         <FlowbiteButton
-            :text="`View ${visibleLocationsAmount} properties`"
-            class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
-         />
-      </NuxtLinkLocale>
 
-      <!-- GPS Location Button -->
-      <button
-         class="force-top absolute bottom-20 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-white p-2 shadow-md"
-         @click="getUserLocation"
-      >
-         <PhGps :size="32" />
-      </button>
+         <NuxtLinkLocale
+            class="fixed bottom-20 lg:hidden"
+            to="properties"
+         >
+            <FlowbiteButton
+               :text="`View ${visibleLocationsAmount} properties`"
+               class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
+            />
+         </NuxtLinkLocale>
+
+         <!-- GPS Location Button -->
+         <button
+            class="fixed bottom-20 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-white p-2 shadow-md"
+            @click="getUserLocation"
+         >
+            <PhGps :size="32" />
+         </button>
 
       <!-- Property Card Transition -->
       <transition
