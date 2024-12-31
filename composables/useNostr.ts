@@ -22,9 +22,9 @@ export function useNostr() {
     }
   };
 
-  const hasExtension = () => window.nostr
+  const hasExtension = () => 'nostr' in window
 
-  const hasNip44 = () => 'nip44' in window.nostr
+  const hasNip44 = () => 'nostr' in window && 'nip44' in window.nostr
 
   const generateKeyPair = () => {
  //   authType = 'generated'
