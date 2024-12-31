@@ -17,7 +17,7 @@
         <div class="flex flex-col items-center gap-4">
           <div class="relative h-24 w-24">
             <img 
-              :src="profilePicture || '/images/default-avatar.png'" 
+              :src="profilePicture || '/images/logos/Resin_Hexagon_Orange_Fill.svg'" 
               class="h-full w-full rounded-full object-cover"
               alt="Profile picture"
             />
@@ -100,11 +100,15 @@ const profile = ref<NDKUserProfile>({
 
 const enableProfileUpload = ref(false);
 
-const profilePicture = computed(() => profile.value.image);
+const profilePicture = computed(() => profile.value && profile.value.image);
 
 onMounted(async () => {
   if (nostrStore.user) {
-   profile.value = await nostrStore.userProfile;
+   let metadata = await nostrStore.userProfile;
+
+   if (metadata) {  
+      profile.value = metadata;
+   }
 
     // const serializedProfile = serializeProfile(metadata);
     
