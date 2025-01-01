@@ -143,6 +143,9 @@ export const usePropertiesStore = defineStore("properties", {
          if (!this.viewedProperties.includes(id)) {
             this.viewedProperties.push(id);
          }
+         if (this.viewedProperties.length > 10) {
+            this.viewedProperties = this.viewedProperties.slice(1);
+         }
       },
 
       addSearch(searchTerm: string): void {

@@ -141,7 +141,7 @@ onMounted(() => {
          data: geojson,
          cluster: true,
          // clusterMaxZoom: 14,
-         clusterRadius: 150,
+         clusterRadius: 50,
       });
 
       // Add cluster circles
@@ -233,7 +233,24 @@ onMounted(() => {
          zoom: 15,
          essential: true,
       });
+   } else {
+      const bounds = map.value.getBounds();
+      propertiesStore.properties.forEach((location) => {
+         bounds.extend([
+            location.location.coordinates[0],
+            location.location.coordinates[1],
+         ]);
+      });
+
+      map.value.fitBounds(bounds, {
+         // padding: 100,
+         linear: false,
+         duration: 500,
+      });
    }
+
+
+  
 });
 
 onUnmounted(() => {
