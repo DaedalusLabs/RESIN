@@ -11,7 +11,7 @@
             :class="isMap ? '' : 'absolute bottom-2 left-0'"
          >
             <NuxtImg
-               src="/images/logos/resin-text.png"
+               src="/images/logos/resin-orange.svg"
                alt="Logo"
                class="h-full"
             />
