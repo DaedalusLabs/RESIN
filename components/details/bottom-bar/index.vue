@@ -4,7 +4,7 @@
    >
       <div
          class="mx-auto flex w-11/12 justify-end"
-         :class="{ 'justify-between': property && property['resin-type'] !== 'Rent' }"
+         :class="{ 'justify-between': property && property['resin-type'] !== 'Rent to own' }"
       >
          <FlowbiteButton
             v-if="property &&property['resin-type'] === 'Buy Now'"
@@ -20,7 +20,7 @@
             @click="handleShowTourModal"
          />
          <NuxtLinkLocale
-            v-if="property && property['resin-type'] === 'Rent'"
+            v-if="property && property['resin-type'] !== 'Buy now'"
             :to="`/properties/${route.params.id}/rent-to-own`"
          >
             <FlowbiteButton :text="buttonText" @click="handleClick" />

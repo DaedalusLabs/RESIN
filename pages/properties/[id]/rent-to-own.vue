@@ -1,5 +1,5 @@
 <template>
-   <div class="mx-auto mt-10 max-w-screen-md p-6">
+   <div class="mx-auto mt-10 max-w-screen-md p-6" v-if="property && property.id">
       <div class="mb-6 flex w-full items-center justify-between text-center">
          <h1 class="text-2xl font-extrabold">Rent-to-own</h1>
          <NuxtImg src="/images/logos/resin-text.png" alt="Resin" class="h-4" />
@@ -13,13 +13,18 @@
          :title="section.title"
          :text="section.text"
       />
+
       <DetailsBottomBar
          v-if="!showDrawer"
          class="z-top"
+         :property="property"
          @show-drawer="handleShowDrawer"
       />
       <VerificationDrawer
+         v-if="property.id !== null"
+         v-show="showDrawer"
          :show="showDrawer"
+
          :property-id="property.id"
          class="fixed bottom-0 left-0 w-full p-4"
          :class="{ 'z-top': showDrawer }"
@@ -31,14 +36,20 @@
 <script setup>
 import { ref } from "vue";
 import { usePropertiesStore } from "~/stores/properties";
-
 const propertiesStore = usePropertiesStore();
 const route = useRoute();
 const showDrawer = ref(false);
 
-const property = propertiesStore.properties.find(
-   (p) => p.id === route.params.id,
-);
+const property = ref({
+});
+
+onMounted(async () => {
+   const foundProperty = await propertiesStore.get(route.params.id);
+   if (!foundProperty) {
+      return;
+   }
+   property.value = foundProperty;
+});
 
 const sections = ref([
    {
@@ -54,7 +65,7 @@ const sections = ref([
       text: " Build equity over time by owning part of the property as you    continue paying rent.",
    },
    {
-      title: " Rent payment options",
+      title: "Rent payment options",
       text: "Flexible rent payment plans are available to suit your financial    situation and help you transition into homeownership with ease.",
    },
 ]);

@@ -22,7 +22,7 @@
          @next="handleNext"
          @back="handleBack"
       />
-      <VerificationDrawerIdentity
+      <VerificationDrawerIdentityRedirect
          :show="currentStep === 5"
          @close="handleCloseDrawer"
          @next="handleNext"
@@ -95,7 +95,7 @@ const props = defineProps({
       default: false,
    },
    propertyId: {
-      type: Number,
+      type: String,
       required: true,
    },
 });
