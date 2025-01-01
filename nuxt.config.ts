@@ -88,6 +88,7 @@ export default defineNuxtConfig({
                name: "description",
                content: "Resin - Buy a home without a bank",
             },
+            { name: 'mobile-web-app-capable', content: 'yes' },
             { name: 'apple-mobile-web-app-capable', content: 'yes' },
             { name: 'apple-mobile-web-app-status-bar-style', content: 'default' }
          ],
