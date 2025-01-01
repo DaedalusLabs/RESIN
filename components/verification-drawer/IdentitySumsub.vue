@@ -1,14 +1,14 @@
 <template>
    <FlowbiteDrawer :is-open="showDrawer" class="p-4" @close="handleCloseDrawer">
       <template #title>
-         <h3 class="text-xl font-semibold text-pirate-950" v-show="!verificationStarted">
+         <h3 v-show="!verificationStarted" class="text-xl font-semibold text-pirate-950">
             Let's verify your identity
          </h3>
       </template>
       <template #content>
         <div id="sumsub-websdk-container"></div>
 
-        <section class="text-center" v-show="!verificationStarted">
+        <section v-show="!verificationStarted" class="text-center">
         <p>You will be redirected to our identity provider to verify your identity.</p>
         <FlowbiteButton
                text="Continue"
@@ -21,8 +21,7 @@
    </FlowbiteDrawer>
 </template>
 
-<script setup>
-import { PhIdentificationCard, PhCamera, PhArrowRight } from "@phosphor-icons/vue";
+<script setup lang="ts">
 import snsWebSdk from '@sumsub/websdk';
 
 const showDrawer = ref(true);
@@ -53,13 +52,16 @@ const handleNext = () => {
 };
 
 const getAccessToken = async() => {
+   const message = "verify-id";
+   const signedMessage = await nostrStore.signMessage(message);
+
    const response = await fetch(`${runtimeConfig.public.BACKEND_ENDPOINT}/verification/token`, {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
       },
       body: JSON.stringify({
-         userId: nostrStore.pubkey,
+         signedMessage: signedMessage
       }),
    });
 
