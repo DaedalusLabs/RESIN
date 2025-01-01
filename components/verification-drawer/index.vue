@@ -2,6 +2,7 @@
    <div>
       <VerificationDrawerIntroduction
          :show="currentStep === 1"
+         :skip-key-backup="skipKeyBackup"
          @close="handleCloseDrawer"
          @next="handleNext"
       />
@@ -108,6 +109,10 @@ const props = defineProps({
       type: String,
       required: true,
    },
+   skipKeyBackup: {
+      type: Boolean,
+      default: false,
+   }
 });
 
 watchEffect(() => {
@@ -127,7 +132,17 @@ const handleFinish = () => {
 
 };
 
+console.log("skipKeyBackup", props.skipKeyBackup);
+
 const handleNext = () => {
+   if (props.skipKeyBackup && currentStep.value < 5) {
+      currentStep.value = 5;
+      return;
+   }
+   if (props.skipKeyBackup && currentStep.value === 1) {
+      currentStep.value = 5;
+      return;
+   }
    currentStep.value += 1;
 
    if (currentStep.value === MAX_STEPS) {

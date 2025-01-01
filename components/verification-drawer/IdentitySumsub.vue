@@ -1,5 +1,5 @@
 <template>
-   <FlowbiteDrawer :is-open="showDrawer" class="p-4" @close="handleCloseDrawer">
+   <FlowbiteDrawer :is-open="showDrawer" class="p-4" @close="handleCloseDrawer" :hide-title="verificationStarted" :close-on-backdrop-click="false">
       <template #title>
          <h3 v-show="!verificationStarted" class="text-xl font-semibold text-pirate-950">
             Let's verify your identity
@@ -28,6 +28,8 @@ const showDrawer = ref(true);
 const verificationStarted = ref(false);
 const runtimeConfig = useRuntimeConfig();
 const nostrStore = useNostrStore();
+const { locale } = useI18n()
+const shortLocale = locale.value.split('-')[0]
 
 const emit = defineEmits(["close", "next"]);
 
@@ -83,7 +85,7 @@ const launchIdentityProvider = () => {
         accessToken,
         () => getAccessToken(),
     ).withConf({
-        lang: 'en'
+        lang: shortLocale
     })
     .on("idCheck.onApplicantStatusChanged", (payload) => {
       if (payload.reviewStatus === 'completed') {

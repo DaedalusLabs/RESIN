@@ -1,5 +1,5 @@
 <template>
-   <div class="mx-auto mt-10 max-w-screen-md p-6" v-if="property && property.id">
+   <div v-if="property && property.id" class="mx-auto mt-10 max-w-screen-md p-6">
       <div class="mb-6 flex w-full items-center justify-between text-center">
          <h1 class="text-2xl font-extrabold">Rent-to-own</h1>
          <NuxtImg src="/images/logos/resin-text.png" alt="Resin" class="h-4" />
@@ -26,7 +26,7 @@
       />
 
       <DetailsBottomBar
-         v-if="!showDrawer"
+         v-show="!showDrawer"
          class="z-1"
          :property="property"
          @show-drawer="handleShowDrawer"
@@ -36,11 +36,11 @@
          v-if="property.id !== null"
          v-show="showDrawer"
          :show="showDrawer"
-
+         :skip-key-backup="skipKeyBackup"
          :property-id="property.id"
          class="fixed bottom-0 left-0 w-full p-4"
          :class="{ 'z-top': showDrawer }"
-         @close="showDrawer = false"
+         @close="onCloseDrawer"
       />
       <ResinAlert
                   :show="showSuccessAlert"
@@ -49,10 +49,12 @@
    </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { usePropertiesStore } from "~/stores/properties";
+
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
 const route = useRoute();
 const showDrawer = ref(false);
 
@@ -63,6 +65,7 @@ const isModalOpen = ref(false);
 const isRequestSent = ref(false);
 const referenceNumber = ref(0);
 const showSuccessAlert = ref(false);
+const skipKeyBackup = ref(false);
 
 onMounted(async () => {
    const foundProperty = await propertiesStore.get(route.params.id);
@@ -70,6 +73,11 @@ onMounted(async () => {
       return;
    }
    property.value = foundProperty;
+
+   if (nostrStore.typeKey == NostrLoginType.Extension) {
+      skipKeyBackup.value = true;
+      console.log("skipKeyBackup", skipKeyBackup.value);
+   }
 });
 
 const sections = ref([
@@ -90,6 +98,11 @@ const sections = ref([
       text: "Flexible rent payment plans are available to suit your financial    situation and help you transition into homeownership with ease.",
    },
 ]);
+
+const onCloseDrawer = () => {
+   console.log("onCloseDrawer");
+   showDrawer.value = false;
+};
 
 const handleShowModal = () => {
    isModalOpen.value = true;
@@ -114,5 +127,7 @@ const handleSendRequest = async() => {
 
 definePageMeta({
    layout: "white",
+   middleware: ['auth']
+
 });
 </script>

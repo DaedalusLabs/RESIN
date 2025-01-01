@@ -31,7 +31,7 @@ interface NostrMessage {
     isSent: boolean;
 }
 
-enum NostrLoginType {
+export enum NostrLoginType {
     Extension = "ext",
     Mnemonic = "mnemonic"
 }
@@ -142,7 +142,10 @@ export const useNostrStore = defineStore('nostr', {
             this.user = null;
             this.pubkey = null;
             this.typeKey = null;
+            this.mnemonic = null;
+            this.messages = [];
             this.authenticated = false;
+            this.lastMessagesRead = null;
         },
         async fetchDirectMessages() {
             const ndk = useNDK();

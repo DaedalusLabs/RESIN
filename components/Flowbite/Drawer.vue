@@ -3,7 +3,7 @@
       <div v-show="show" class="fixed inset-0 z-40 overflow-hidden">
          <div
             class="absolute inset-0 bg-black bg-opacity-75 transition-opacity"
-            @click="close"
+            @click="backdropClickHandler"
          />
       </div>
       <transition :name="transitionName">
@@ -18,7 +18,7 @@
                @click="close"
             />
 
-            <div class="mb-4 flex items-center px-4">
+            <div class="mb-4 flex items-center px-4" v-if="!props.hideTitle">
                <h3
                   id="drawer-title"
                   class="w-full text-center text-xl font-bold text-gray-900"
@@ -48,6 +48,14 @@ const props = defineProps({
       default: "bottom", // "bottom" or "side"
       validator: (value) => ["bottom", "side"].includes(value),
    },
+   hideTitle: {
+      type: Boolean,
+      default: false,
+   },
+   closeOnBackdropClick: {
+      type: Boolean,
+      default: true,
+   },
 });
 
 const emit = defineEmits(["close"]);
@@ -66,6 +74,12 @@ const swipeHandler = (direction) => {
       (props.slideFrom === "bottom" && direction === "down") ||
       (props.slideFrom === "side" && direction === "left")
    ) {
+      close();
+   }
+};
+
+const backdropClickHandler = () => {
+   if (props.closeOnBackdropClick) {
       close();
    }
 };
