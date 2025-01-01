@@ -21,13 +21,19 @@
          @close="handleCloseDrawer"
          @next="handleNext"
          @back="handleBack"
-      />
-      <VerificationDrawerIdentityRedirect
+      /> 
+      <VerificationDrawerIdentitySumsub
          :show="currentStep === 5"
          @close="handleCloseDrawer"
          @next="handleNext"
       />
-      <VerificationDrawerCountrySelect
+      <VerificationDrawerPassed
+         :show="currentStep === 6"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
+      <!-- skip with subsub -->
+      <!-- <VerificationDrawerCountrySelect
          :show="currentStep === 6"
          @close="handleCloseDrawer"
          @next="handleNext"
@@ -61,21 +67,22 @@
          :show="currentStep === 11"
          @close="handleCloseDrawer"
          @next="handleNext"
-      />
-      <VerificationDrawerInformation
-         :show="currentStep === 12"
+      /> -->
+      <!-- end skip with subsub -->
+      <!-- <VerificationDrawerInformation
+         :show="currentStep === 2"
          @close="handleCloseDrawer"
          @next="handleNext"
-      />
+      /> -->
       <VerificationDrawerContract
-         :show="currentStep === 13"
+         :show="currentStep === 7"
          @close="handleCloseDrawer"
          @next="handleNext"
       />
       <VerificationDrawerSign
-         :show="currentStep === 14"
+         :show="currentStep === 8"
          @close="handleCloseDrawer"
-         @next="handleNext"
+         @next="handleFinish"
       />
    </div>
 </template>
@@ -83,9 +90,12 @@
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
 
+const router = useRouter();
+const localePath = useLocalePath();
 const propertiesStore = usePropertiesStore();
 const currentStep = ref(-1);
 const MAX_STEPS = 14;
+
 
 const emit = defineEmits(["close"]);
 
@@ -109,6 +119,12 @@ watchEffect(() => {
 const handleCloseDrawer = () => {
    emit("close");
    currentStep.value = -1;
+};
+
+const handleFinish = () => {
+   console.log('handleFinish', { path: localePath(`/rent-to-own/${props.propertyId}/under-review`) });
+   router.push({ path: localePath(`/rent-to-own/${props.propertyId}/under-review`) });
+
 };
 
 const handleNext = () => {

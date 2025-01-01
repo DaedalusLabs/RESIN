@@ -21,6 +21,7 @@
       "@nuxtjs/i18n": "9.0.0-rc.2",
       "@phosphor-icons/vue": "^2.2.1",
       "@pinia/nuxt": "^0.9.0",
+      "@sumsub/websdk": "^2.3.11",
       "@vite-pwa/nuxt": "^0.10.6",
       "apexcharts": "^4.3.0",
       "flowbite": "^2.5.2",

@@ -4,7 +4,18 @@
          <h1 class="text-2xl font-extrabold">Rent-to-own</h1>
          <NuxtImg src="/images/logos/resin-text.png" alt="Resin" class="h-4" />
       </div>
+      <ClientOnly fallback-tag="span">
 
+        <ModalRequestTour
+           :is-open="isModalOpen"
+           :is-request-sent="isRequestSent"
+           :property-address="propertyAddress"
+           :reference-number="referenceNumber"
+           @update:is-open="isModalOpen = $event"
+           @send-request="handleSendRequest"
+        />
+     </ClientOnly>
+     
       <FavoritesCard :property="property" :is-removable="false" class="mb-10" />
 
       <RentToOwnSection
@@ -16,9 +27,10 @@
 
       <DetailsBottomBar
          v-if="!showDrawer"
-         class="z-top"
+         class="z-1"
          :property="property"
          @show-drawer="handleShowDrawer"
+         @show-modal="handleShowModal"
       />
       <VerificationDrawer
          v-if="property.id !== null"
@@ -30,6 +42,10 @@
          :class="{ 'z-top': showDrawer }"
          @close="showDrawer = false"
       />
+      <ResinAlert
+                  :show="showSuccessAlert"
+                  text="Your information has been submitted successfully."
+               />
    </div>
 </template>
 
@@ -42,6 +58,11 @@ const showDrawer = ref(false);
 
 const property = ref({
 });
+
+const isModalOpen = ref(false);
+const isRequestSent = ref(false);
+const referenceNumber = ref(0);
+const showSuccessAlert = ref(false);
 
 onMounted(async () => {
    const foundProperty = await propertiesStore.get(route.params.id);
@@ -70,9 +91,26 @@ const sections = ref([
    },
 ]);
 
+const handleShowModal = () => {
+   isModalOpen.value = true;
+};
+
 function handleShowDrawer() {
    showDrawer.value = !showDrawer.value;
 }
+
+const propertyAddress = computed(() => {
+   return `${property.value.location.street}, ${property.value.location.city}, ${property.value.location.country}`;
+});
+
+const handleSendRequest = async() => {
+   isModalOpen.value = false;
+   
+   showSuccessAlert.value = true;
+   setTimeout(() => {
+      showSuccessAlert.value = false;
+   }, 5000);  
+};
 
 definePageMeta({
    layout: "white",
