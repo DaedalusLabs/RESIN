@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { NDKFilter, NDKUser, NDKUserProfile } from '@nostr-dev-kit/ndk';
+import type { NDKFilter, NDKUser, NDKUserProfile, NostrEvent } from '@nostr-dev-kit/ndk';
 import * as bip39 from '@scure/bip39';
 import { HDKey } from '@scure/bip32'
 
@@ -200,7 +200,20 @@ export const useNostrStore = defineStore('nostr', {
                 await this.user.fetchProfile();
 
         },
+        async signMessage(message: string) {
+            const ndk = useNDK();
 
+            if (!ndk?.signer) {
+                console.log('no signer');
+            }
+
+            const ndkEvent = new NDKEvent(ndk);
+            ndkEvent.kind = 20000;
+            ndkEvent.content = message;
+
+            await ndkEvent?.sign();
+            return ndkEvent.rawEvent();
+        },
         async giftWrapMessage(unsignedMsg, targetUser: NDKUser) {
             const ndk = useNDK();
 
