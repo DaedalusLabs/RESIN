@@ -123,6 +123,7 @@ onMounted(() => {
    map.value = new Map({     
       container: mapContainer.value,
       style: "/map-liberty.json",
+   //   style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
       center: [props.mapCenter.lng, props.mapCenter.lat],
       zoom: zoom.value,
    });
@@ -139,7 +140,7 @@ onMounted(() => {
          type: "geojson",
          data: geojson,
          cluster: true,
-         clusterMaxZoom: 14,
+         // clusterMaxZoom: 14,
          clusterRadius: 150,
       });
 
@@ -172,7 +173,7 @@ onMounted(() => {
                20,
             ],
          },
-      });
+    } );
 
       map.value.addLayer({
          id: "cluster-count",
@@ -182,7 +183,7 @@ onMounted(() => {
          layout: {
             "text-field": "{point_count_abbreviated}",
             "text-size": 15,
-            "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"], // Use Inter if it's available
+            "text-font": ["Noto Sans Bold"], // Use Inter if it's available
          },
          paint: {
             "text-color": "#ffffff",
@@ -194,7 +195,6 @@ onMounted(() => {
          type: "circle",
          source: "properties",
          filter: ["!", ["has", "point_count"]],
-
          paint: {
             "circle-color": "#F07E19",
             "circle-radius": 8,

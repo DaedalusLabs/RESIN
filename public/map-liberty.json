@@ -9,19 +9,22 @@
     "sources": {
       "openmaptiles": {
         "type": "vector",
-        "url": "pmtiles://https://osm.dbtc.link/pmtiles/planet.pmtiles"
+        "tiles": [
+            "https://map.resin.estate/planet/{z}/{x}/{y}"
+        ],
+        "maxzoom": 14
       },
       "natural_earth_shaded_relief": {
         "maxzoom": 6,
         "tileSize": 256,
         "tiles": [
-          "https://klokantech.github.io/naturalearthtiles/tiles/natural_earth_2_shaded_relief.raster/{z}/{x}/{y}.png"
+          "https://map.resin.estate/natural_earth_2_shaded_relief/{z}/{x}/{y}"
         ],
         "type": "raster"
       }
     },
-    "sprite": "https://maputnik.github.io/osm-liberty/sprites/osm-liberty",
-    "glyphs": "https://orangemug.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf",
+    "sprite": "https://map.resin.estate/sprite/osm_liberty",
+    "glyphs": "https://map.resin.estate/font/{fontstack}/{range}",
     "layers": [
       {
         "id": "background",
