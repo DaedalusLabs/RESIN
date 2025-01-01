@@ -22,12 +22,12 @@
             class="relative flex flex-grow gap-3"
             :class="isMap ? 'justify-center' : 'justify-center'"
          >
-            <NuxtLinkLocale to="map" @click="propertiesStore.resetLocations()">
-               <FlowbiteIconButton
-                  :icon="showListIcon ? 'rows' : 'map'"
-                  description="view map"
-               />
-            </NuxtLinkLocale>
+            <FlowbiteIconButton
+               :icon="showListIcon ? 'rows' : 'map'"
+               description="view map"
+               @click="() => { showListIcon ? router.push($localePath('properties')) : router.push($localePath('map')) }"
+            />
+
             <!-- Search Bar -->
             <div class="relative max-w-xl flex-grow">
                <FlowbiteInstantSearchbar
@@ -73,6 +73,7 @@
 const propertiesStore = usePropertiesStore();
 const route = useRoute();
 const showListIcon = ref(route.fullPath.includes("map"));
+const router = useRouter()
 
 const query = ref("");
 const mapCenter = ref(null);
