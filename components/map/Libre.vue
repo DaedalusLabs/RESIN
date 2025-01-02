@@ -4,7 +4,7 @@
 
       <!-- Button to View Properties -->
       <NuxtLinkLocale
-         class="force-top absolute bottom-40 lg:hidden"
+         class="force-top absolute bottom-12 lg:hidden"
          to="properties"
       >
          <FlowbiteButton
@@ -15,7 +15,7 @@
 
       <!-- GPS Location Button -->
       <button
-         class="force-top absolute bottom-20 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-white p-2 shadow-md"
+         class="force-top absolute bottom-12 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white p-2 shadow-md lg:hidden"
          @click="getUserLocation"
       >
          <PhGps :size="32" />
