@@ -2,9 +2,9 @@
    <section class="mx-auto flex w-10/12 flex-col py-20">
       <div class="mb-5 flex items-center justify-between text-pirate-950">
          <div class="flex items-center gap-2">
-            <NuxtLink :to="localePath('my-resin')">
+            <NuxtLinkLocale to="my-resin">
                <PhCaretLeft :size="24" />
-            </NuxtLink>
+            </NuxtLinkLocale>
             <h1 class="text-2xl font-extrabold leading-tight">Financials</h1>
          </div>
          <button :v-if="isSupported" @click="startShare">

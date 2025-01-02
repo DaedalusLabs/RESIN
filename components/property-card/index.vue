@@ -3,7 +3,7 @@
       <div class="relative">
          <FlowbiteCarousel
             :items="property.images"
-            class="z-0 h-48 w-full object-cover md:h-72 lg:h-96"
+            class="z-0 h-48 w-full object-cover md:h-48"
          />
          <button
             v-if="showMediaIcon"
@@ -14,7 +14,7 @@
          </button>
 
          <span
-            class="absolute bottom-4 right-4 z-10 rounded-full border-2 border-white bg-resin-500 px-2 py-1 text-xs font-semibold text-white shadow-md hover:border-resin-500 hover:bg-white hover:text-resin-500"
+            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
             {{ property?.isBitcasaHome ? "For Sale" : "Rent to Own" }}
          </span>
@@ -36,8 +36,15 @@
             {{ property.location.address.city }},
             {{ property.location.address.country }}
          </p>
-         <p class="text-sm font-bold text-gray-800">
-            ${{ property.pricingDetails.rentPerMonth }} per month
+         <p
+            v-if="!property.isBitcasaHome"
+            class="text-sm font-bold text-gray-800"
+         >
+            ${{ property.pricingDetails.rentPerMonth.toLocaleString() }} per
+            month
+         </p>
+         <p v-else class="text-sm font-bold text-gray-800">
+            ${{ property.pricingDetails.propertyPrice.toLocaleString() }}
          </p>
       </div>
       <div class="flex items-center justify-between p-4 pt-0 text-sm">

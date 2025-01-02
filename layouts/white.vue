@@ -1,10 +1,10 @@
 <template>
-   <div class="flex h-screen flex-col bg-hex-white bg-cover bg-center">
+   <div class="flex h-dvh flex-col bg-hex-white bg-cover bg-center">
       <main class="h-full flex-1 overflow-scroll pb-14">
          <slot />
       </main>
       <MenuBar :show-drawer="showDrawer" @close="showDrawer = false" />
-      <BottomBar @toggle-menu-bar="handleToggleMenuBar" />
+      <BottomBar v-if="!showDrawer" @toggle-menu-bar="handleToggleMenuBar" />
    </div>
 </template>
 

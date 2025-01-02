@@ -1,9 +1,11 @@
 <template>
-   <section class="flex flex-col items-center justify-between px-12 pt-20">
+   <section
+      class="mx-auto flex h-full w-10/12 flex-col items-center justify-center gap-10"
+   >
       <h1 class="text-center text-2xl font-extrabold leading-tight text-white">
          {{ $t("propertyType") }}
       </h1>
-      <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="grid grid-cols-1 justify-items-center gap-6 md:grid-rows-3">
          <PropertyType
             v-for="propertyType in propertyTypes"
             :key="propertyType.id"
@@ -14,31 +16,24 @@
          />
       </div>
       <div class="flex flex-col items-center justify-center gap-2">
-         <NuxtLink
-            v-if="selectedPropertyTypes.length > 0"
-            :to="localePath('map')"
-         >
-            <FlowbiteButton class="my-10" :text="$t('chooseLocation')" />
-         </NuxtLink>
-         <FlowbiteDisabledButton
-            v-else
-            class="my-10"
-            :text="$t('chooseLocation')"
-         />
-         <NuxtLink
-            v-if="selectedPropertyTypes.length < 1"
-            :to="localePath('map')"
-            class="mt-4 rounded-lg px-5 py-2.5 mb-10 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700"
+         <NuxtLinkLocale v-if="selectedPropertyTypes.length > 0" to="map">
+            <FlowbiteButton :text="$t('chooseLocation')" />
+         </NuxtLinkLocale>
+         <FlowbiteDisabledButton v-else :text="$t('chooseLocation')" />
+         <NuxtLinkLocale
+            :class="[
+               'rounded-lg px-5 py-2.5 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700',
+               { invisible: selectedPropertyTypes.length >= 1 },
+            ]"
+            to="map"
          >
             {{ $t("skip") }}
-         </NuxtLink>
+         </NuxtLinkLocale>
       </div>
    </section>
 </template>
 
 <script setup>
-import { ref } from "vue";
-
 const selectedPropertyTypes = ref([]);
 const propertyTypes = ref([
    {

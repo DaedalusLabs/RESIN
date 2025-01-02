@@ -1,10 +1,11 @@
 <script setup>
-import { useFlowbite } from "~/composables/useFlowbite";
+import { PhX } from "@phosphor-icons/vue";
 
-const drawer = ref(null);
-
-const props = defineProps({
-   showDrawer: Boolean,
+defineProps({
+   showDrawer: {
+      type: Boolean,
+      default: false,
+   },
    imageUrls: {
       type: Array,
       required: true,
@@ -12,73 +13,72 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
-
-onMounted(() => {
-   useFlowbite(() => {
-      const $targetEl = document.getElementById("drawer-bottom-example");
-
-      const options = {
-         placement: "bottom",
-         backdrop: true,
-         bodyScrolling: false,
-         edge: false,
-         edgeOffset: "",
-         onHide() {
-            emit("close");
-         },
-
-         backdropClasses:
-            "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30",
-      };
-
-      if ($targetEl) {
-         drawer.value = new Drawer($targetEl, options);
-
-         // Show or hide drawer based on initial prop value
-         if (props.showDrawer) {
-            drawer.value.show();
-         } else {
-            drawer.value.hide();
-         }
-      }
-   });
-});
-
-watch(
-   () => props.showDrawer,
-   (value) => {
-      if (drawer.value) {
-         if (value) {
-            drawer.value.show();
-         } else {
-            drawer.value.hide();
-         }
-      }
-   },
-);
 </script>
 
 <template>
-   <div
-      id="drawer-bottom-example"
-      class="fixed bottom-0 left-0 right-0 z-40 h-5/6 w-full transform-none overflow-y-auto bg-white transition-transform dark:bg-gray-800"
-      tabindex="-1"
-   >
+   <transition name="fade-slide" appear>
       <div
-         class="sticky top-0 z-50 cursor-pointer bg-white p-4 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700"
-         @click="emit('close')"
+         v-if="showDrawer"
+         class="z-top fixed inset-0 flex h-full w-full items-end"
+         @click.self="emit('close')"
       >
-         <span
-            class="absolute left-1/2 top-3 h-1 w-8 -translate-x-1/2 rounded-lg bg-gray-300 dark:bg-gray-600"
-         />
+         <div
+            :class="[
+               'h-[75vh] w-full bg-white lg:self-end',
+               { 'overflow-y-auto': imageUrls.length > 1 },
+            ]"
+         >
+            <div class="sticky top-0 z-50">
+               <!-- Drag Handle -->
+               <span
+                  class="absolute left-1/2 top-3 h-1 w-10 -translate-x-1/2 cursor-pointer rounded-full bg-pirate-950 lg:h-1.5 lg:w-24"
+                  @click="emit('close')"
+               />
+               <!-- X Close Button  -->
+               <button
+                  v-if="imageUrls.length > 0"
+                  class="text-pirate-850 absolute right-12 top-12 hidden h-14 w-14 items-center justify-center rounded-full border-2 bg-white hover:border-resin-500 lg:flex"
+                  @click="emit('close')"
+               >
+                  <PhX :size="22" weight="bold" />
+               </button>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+               <div
+                  v-if="imageUrls.length === 0"
+                  class="col-span-full text-center text-gray-500"
+               >
+                  No images to display
+               </div>
+               <NuxtImg
+                  v-for="(imageUrl, index) in imageUrls"
+                  :key="index"
+                  :src="imageUrl"
+                  :class="{
+                     'col-span-2':
+                        imageUrls.length % 2 !== 0 &&
+                        index === imageUrls.length - 1,
+                  }"
+                  class="h-72 w-full rounded-md object-cover object-center shadow-lg lg:h-[75vh]"
+                  loading="lazy"
+               />
+            </div>
+         </div>
       </div>
-      <div class="flex flex-col items-center justify-between">
-         <NuxtImg
-            v-for="imageUrl in imageUrls"
-            :key="imageUrl"
-            :src="imageUrl"
-            class="h-48 w-full object-cover"
-         />
-      </div>
-   </div>
+   </transition>
 </template>
+
+<style>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+   transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+   opacity: 0;
+   transform: translateY(100%);
+}
+</style>

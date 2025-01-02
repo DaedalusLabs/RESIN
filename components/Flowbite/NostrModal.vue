@@ -30,13 +30,13 @@
                </p>
 
                <!-- Button for success state, only visible after loading -->
-               <NuxtLink :to="localePath('choose-property-type')">
+               <NuxtLinkLocale to="choose-property-type">
                   <FlowbiteButton
                      :show-icon="false"
                      text="Continue with RESIN"
                      class="mt-4 text-center"
                   />
-               </NuxtLink>
+               </NuxtLinkLocale>
             </div>
          </transition>
       </div>

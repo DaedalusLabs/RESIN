@@ -3,8 +3,9 @@
       <label
          for="default-search"
          class="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white"
-         >Search</label
       >
+         Search
+      </label>
       <div class="relative">
          <div
             class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3"
@@ -52,7 +53,7 @@ import { PhXCircle } from "@phosphor-icons/vue";
 const props = defineProps({
    query: {
       type: String,
-      required: true,
+      default: "",
    },
 });
 

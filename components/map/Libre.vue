@@ -3,15 +3,15 @@
       <div ref="mapContainer" class="h-full w-full" />
 
       <!-- Button to View Properties -->
-      <NuxtLink
-         class="force-top absolute bottom-20"
-         :to="localePath('properties')"
+      <NuxtLinkLocale
+         class="force-top absolute bottom-20 lg:hidden"
+         to="properties"
       >
          <FlowbiteButton
             :text="`View ${visibleLocationsAmount} properties`"
             class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
          />
-      </NuxtLink>
+      </NuxtLinkLocale>
 
       <!-- GPS Location Button -->
       <button
@@ -48,7 +48,7 @@ const properties = propertiesStore.properties;
 const zoom = ref(6);
 const mapContainer = ref(null);
 const map = ref(null);
-const visibleLocationsAmount = ref(0);
+const visibleLocationsAmount = ref(propertiesStore.filteredProperties.length);
 const userLocation = ref(null);
 const clickedLocation = ref(null);
 const route = useRoute();
@@ -56,8 +56,7 @@ const route = useRoute();
 const props = defineProps({
    mapCenter: {
       type: Object,
-      required: false,
-      default: () => ({ lat: 8.852036, lng: -57.154996 }),
+      required: true,
    },
 });
 
@@ -82,7 +81,6 @@ const calculateVisibleLocations = () => {
          property.location.coordinates.latitude,
       ]),
    );
-   visibleLocationsAmount.value = visibleLocations.length;
    propertiesStore.setFilteredLocations(visibleLocations);
 };
 

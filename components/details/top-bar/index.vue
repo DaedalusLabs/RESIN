@@ -1,11 +1,11 @@
 <template>
    <div class="absolute right-4 top-4 flex w-11/12 justify-between space-x-4">
-      <NuxtLink
+      <NuxtLinkLocale
          class="cursor-pointer rounded-full bg-white/10 p-3 shadow backdrop-blur"
          @click="goBack"
       >
          <PhCaretLeft weight="bold" :size="28" class="text-xl text-white" />
-      </NuxtLink>
+      </NuxtLinkLocale>
       <div class="flex space-x-4">
          <button
             class="rounded-full bg-white p-3 shadow"

@@ -3,6 +3,7 @@ export default {
    safelist: [
       // Remove or replace the datatable pattern
    ],
+   darkMode: "class",
    content: [
       "./components/**/*.{js,vue,ts}",
       "./layouts/**/*.vue",
@@ -65,9 +66,4 @@ export default {
          },
       },
    },
-   plugins: [
-      require("flowbite/plugin")({
-         charts: true,
-      }),
-   ],
 };

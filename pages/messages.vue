@@ -4,9 +4,9 @@
       <div
          class="mb-5 flex w-full flex-col gap-5 border-b border-gray-200 bg-white px-10 pb-5 pt-10"
       >
-         <NuxtLink @click="goBack">
+         <NuxtLinkLocale @click="goBack">
             <PhCaretLeft :size="24" class="text-pirate-300" />
-         </NuxtLink>
+         </NuxtLinkLocale>
          <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
             Messages
          </h1>

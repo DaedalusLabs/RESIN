@@ -10,6 +10,7 @@
       <div v-show="!showFilterDrawer" class="h-full w-full">
          <TopBar
             class="force-top absolute left-0 right-0 top-0 px-5 pt-10"
+            :is-map="true"
             @update:map-center="updateMapCenter"
             @toggle-filters="showFilterDrawer = !showFilterDrawer"
          />
@@ -37,7 +38,7 @@ function updateMapCenter(lat, lng) {
 const showFilterDrawer = ref(false);
 
 definePageMeta({
-   layout: "intro",
+   layout: "map",
 });
 </script>
 

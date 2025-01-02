@@ -34,12 +34,12 @@
                   </p>
                </div>
                <div class="mt-4">
-                  <NuxtLink
-                     to="/properties"
+                  <NuxtLinkLocale
+                     to="properties"
                      class="text-sm font-medium text-red-800 hover:text-red-900"
                   >
                      Go back to properties →
-                  </NuxtLink>
+                  </NuxtLinkLocale>
                </div>
             </div>
          </div>
@@ -47,7 +47,6 @@
    </section>
 
    <section v-else class="mb-28">
-      <!-- Property Image and Basic Info -->
       <FlowbiteCheckToast
          :show-toast="isRequestSent && property?.isBitcasaHome"
          :text="`Information submitted`"
@@ -77,40 +76,133 @@
             alt="Property Image"
             class="h-64 w-full object-cover"
          />
-         <div
-            v-else
-            class="flex h-64 w-full items-center justify-center bg-gray-200"
+
+         <span
+            v-if="property.isBitcasaHome"
+            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
-            <span class="text-gray-400">No image available</span>
-         </div>
+            For Sale
+         </span>
+         <span
+            v-else
+            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
+         >
+            Rent to Own
+         </span>
+
          <DetailsTopBar :property="property" />
       </div>
 
-      <!-- Property Details -->
-      <div class="container mx-auto mt-8 w-10/12">
-         <h1 class="text-2xl font-extrabold leading-tight">
-            {{ property.location?.address?.street || "Address not available" }}
-         </h1>
-         <p class="mt-1 text-sm">
-            {{ property.location?.address?.city }},
-            {{ property.location?.address?.country }}
-         </p>
-         <DetailsSize :property="property" />
-         <DetailsPrices :property="property" />
-         <DetailsSummary :property="property" />
-         <DetailsKeyFeatures :property="property" />
-         <DetailsAdditional :property="property" />
-      </div>
+      <div class="mx-auto mt-16 flex w-10/12 justify-between lg:w-9/12">
+         <div
+            class="sticky top-16 hidden flex-shrink flex-col gap-5 lg:w-[40%] xl:flex"
+         >
+            <div>
+               <NuxtImg
+                  v-if="property.images?.length"
+                  :src="property.images[0]"
+                  alt="Property Image"
+                  class="h-96 w-full object-cover"
+               />
+               <button
+                  class="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+                  @click="showDrawer = true"
+               >
+                  <PhImages :size="20" />
+               </button>
+            </div>
+            <div class="flex h-12 justify-between gap-3">
+               <div class="flex justify-between gap-2">
+                  <!--
+                  <FlowbiteButton
+                     v-if="property?.isBitcasaHome"
+                     :text="`Contact Agent`"
+                     :show-icon="true"
+                     class="h-full"
+                     @click="handleShowAgentModal"
+                  />
+                  <FlowbiteButton
+                     v-else
+                     :text="`Request Tour`"
+                     :show-icon="false"
+                     class="secondary h-full"
+                     @click="handleShowTourModal"
+                  />
+                  -->
+                  <NuxtLinkLocale
+                     v-if="!property?.isBitcasaHome"
+                     :to="`/properties/${route.params.id}/rent-to-own`"
+                  >
+                     <FlowbiteButton
+                        class="h-full"
+                        :text="buttonText"
+                        @click="handleClick"
+                     />
+                  </NuxtLinkLocale>
+               </div>
+               <div class="flex flex-shrink gap-2">
+                  <button
+                     :v-if="isSupported"
+                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+                     @click="startShare"
+                  >
+                     <PhExport class="h-6 w-6 text-black" />
+                  </button>
+                  <button
+                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+                     @click="toggleFavorite"
+                  >
+                     <PhHeartStraight
+                        :class="{ 'text-resin-500': isFavorite }"
+                        :weight="isFavorite ? 'fill' : 'regular'"
+                        class="h-6 w-6 text-black"
+                     />
+                  </button>
+               </div>
+            </div>
+         </div>
 
-      <ClientOnly fallback-tag="span">
-         <DetailsMap :property="property" />
-      </ClientOnly>
-      <DetailsNearby :property="property" />
-      <DetailsBottomBar :property="property" @show-modal="handleShowModal" />
+         <!-- Property Details -->
+         <div class="flex-1">
+            <div class="container w-11/12 xl:ml-auto xl:mr-0">
+               <h1 class="text-2xl font-extrabold leading-tight">
+                  {{
+                     property.location?.address?.street ||
+                     "Address not available"
+                  }}
+               </h1>
+               <p class="mt-1 text-sm">
+                  {{ property.location?.address?.city }},
+                  {{ property.location?.address?.country }}
+               </p>
+               <DetailsSize :property="property" />
+               <DetailsPrices :property="property" />
+               <DetailsSummary :property="property" />
+               <DetailsKeyFeatures :property="property" />
+               <DetailsAdditional :property="property" />
+               <p
+                  class="my-12 rounded-lg bg-pirate-50 py-2 text-center text-sm font-medium text-pirate-300"
+               >
+                  {{ property.message }}
+               </p>
+            </div>
+            <ClientOnly fallback-tag="span">
+               <DetailsMap :property="property" />
+            </ClientOnly>
+            <DetailsNearby :property="property" />
+            <DetailsBottomBar
+               class="block xl:hidden"
+               :property="property"
+               @show-modal="handleShowModal"
+            />
+         </div>
+      </div>
    </section>
 </template>
 
 <script setup>
+import { ref, onMounted, computed, defineProps } from "vue";
+import { PhImages, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
 import { fixNestedStrings } from "~/utils/jsonParser";
 import ModalContactAgent from "~/components/Modal/contact-agent.vue";
@@ -124,10 +216,36 @@ const property = ref(null);
 const isRequestSent = ref(false);
 const isModalOpen = ref(false);
 const referenceNumber = ref(0);
+const email = ref("");
+const formError = ref(false);
+const phone = ref("");
+const isFavorite = ref(null);
+const showDrawer = ref(false);
 
 const handleShowModal = () => {
    isModalOpen.value = true;
 };
+
+const toggleFavorite = () => {
+   isFavorite.value = !isFavorite.value;
+   propertiesStore.toggleFavorite(property.value.id);
+};
+
+const buttonText = computed(() => {
+   return route.path.includes("rent-to-own")
+      ? "Rent this property"
+      : "Rent-to-own";
+});
+
+const { share, isSupported } = useShare();
+
+function startShare() {
+   share({
+      title: "Resin",
+      text: "Check out these listings on Resin",
+      url: location.href,
+   });
+}
 
 const generateRef = () => {
    return Math.floor(Math.random() * 9000) + 1000;
@@ -150,6 +268,8 @@ onMounted(async () => {
 
       property.value = foundProperty;
 
+      isFavorite.value = propertiesStore.isFavorite(foundProperty.id);
+
       if (typeof property.value === "string") {
          fixNestedStrings(property);
       }
@@ -164,9 +284,17 @@ onMounted(async () => {
 });
 
 const handleSendRequest = () => {
-   isRequestSent.value = true;
    if (property?.value.isBitcasaHome) {
-      isModalOpen.value = false;
+      if (email.value || phone.value) {
+         isModalOpen.value = false;
+         isRequestSent.value = true;
+         formError.value = false;
+      } else {
+         formError.value = true;
+         console.log("Form error");
+      }
+   } else {
+      isRequestSent.value = true;
    }
 };
 
@@ -189,5 +317,9 @@ defineProps({
 <style scoped>
 .z-top {
    z-index: 1000;
+}
+
+.secondary {
+   @apply bg-pirate-700 !important;
 }
 </style>

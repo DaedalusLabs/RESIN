@@ -18,7 +18,13 @@
             {{ property?.location.address.city }},
             {{ property?.location.address.country }}
          </p>
-         <p class="text-sm font-bold text-pirate-950">
+         <p
+            v-if="property?.isBitcasaHome"
+            class="text-sm font-bold text-pirate-950"
+         >
+            ${{ property?.pricingDetails.propertyPrice }}
+         </p>
+         <p v-else class="text-sm font-bold text-pirate-950">
             ${{ property?.pricingDetails.rentPerMonth }} per month
          </p>
       </div>

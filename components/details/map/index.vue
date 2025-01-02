@@ -6,9 +6,9 @@
             <div
                class="force-top absolute bottom-0 flex w-full justify-center bg-black/20 p-4 text-sm text-white backdrop-blur-md"
             >
-               <NuxtLink @click="goToMap">
+               <NuxtLinkLocale @click="goToMap">
                   <p>View on map</p>
-               </NuxtLink>
+               </NuxtLinkLocale>
             </div>
          </div>
       </div>

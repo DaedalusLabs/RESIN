@@ -9,6 +9,6 @@
 
 <script setup>
 definePageMeta({
-   layout: "intro",
+   layout: "startup",
 });
 </script>

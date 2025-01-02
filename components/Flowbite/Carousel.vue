@@ -1,7 +1,7 @@
 <template>
    <div id="animation-carousel" class="relative w-full" data-carousel="static">
       <!-- Carousel wrapper -->
-      <div class="relative h-full overflow-hidden md:h-72 lg:h-96">
+      <div class="relative h-full w-full overflow-hidden">
          <div
             v-for="(item, index) in items"
             :key="index"
@@ -10,7 +10,7 @@
          >
             <NuxtImg
                :src="item"
-               class="absolute left-1/2 top-1/2 block h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
+               class="absolute inset-0 h-full w-full object-cover"
                alt="..."
             />
          </div>
