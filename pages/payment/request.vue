@@ -1,5 +1,10 @@
 <template>
     <div class="max-w-2xl mx-auto p-4 py-20">
+        <ResinAlert
+            :show="showError"
+            type="danger"
+            :text="errorMessage"
+        />
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Payment Summary</h1>
@@ -70,6 +75,9 @@ const payment = reactive({
     amount: 1
 });
 
+const showError = ref(false);
+const errorMessage = ref('');
+
 const selectPaymentMethod = (method: 'bitcoin' | 'usdt' | 'bank') => {
     if (method === 'bank') {
         router.push({
@@ -95,7 +103,6 @@ const selectPaymentMethod = (method: 'bitcoin' | 'usdt' | 'bank') => {
         })
             .then(response => {
                 if (!response.ok) {
-                    // Handle HTTP errors (including 500)
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
@@ -111,6 +118,11 @@ const selectPaymentMethod = (method: 'bitcoin' | 'usdt' | 'bank') => {
             })
             .catch(error => {
                 console.error('Error creating payment:', error);
+                errorMessage.value = 'Failed to create payment. Please try again.';
+                showError.value = true;
+                setTimeout(() => {
+                    showError.value = false;
+                }, 5000);
             });
     }
 };
