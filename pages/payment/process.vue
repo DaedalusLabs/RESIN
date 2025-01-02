@@ -47,10 +47,10 @@
                             :height="256" />
                     </a>
 
-                    <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4">
-                        <code class="text-sm break-all">{{ getPaymentAddress }}</code>
+                    <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4" ref="btcAddressContainer">
+                        <code class="text-sm font-mono">{{ truncateIfNeeded(getPaymentAddress || '', btcAddressContainer) }}</code>
                         <button @click="copyToClipboard(getPaymentAddress || '')"
-                            class="text-resin-500 hover:text-resin-600">
+                            class="text-resin-500 hover:text-resin-600 ml-3 flex-shrink-0">
                             <PhCopy :size="20" />
                         </button>
                     </div>
@@ -66,10 +66,10 @@
                     <QRCode :data="getQRData" :image="getQRImage" class="w-full h-full" :width="256" :height="256" />
                 </a>
 
-                <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4">
-                    <code class="text-sm break-all">{{ usdtAddress?.destination }}</code>
+                <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4" ref="usdtAddressContainer">
+                    <code class="text-sm font-mono">{{ truncateIfNeeded(usdtAddress?.destination || '', usdtAddressContainer) }}</code>
                     <button @click="copyToClipboard(usdtAddress?.destination || '')"
-                        class="text-resin-500 hover:text-resin-600">
+                        class="text-resin-500 hover:text-resin-600 ml-3 flex-shrink-0">
                         <PhCopy :size="20" />
                     </button>
                 </div>
@@ -306,6 +306,40 @@ const copyToClipboard = async (text: string) => {
         console.error('Failed to copy text: ', err);
     }
 };
+
+// Replace truncate function with dynamic version
+const truncateIfNeeded = (str: string, containerRef: HTMLElement | null) => {
+    if (!str || !containerRef) return str;
+
+    // Create temporary span to measure text width
+    const tempSpan = document.createElement('span');
+    tempSpan.style.visibility = 'hidden';
+    tempSpan.style.position = 'absolute';
+    tempSpan.style.whiteSpace = 'nowrap';
+    tempSpan.style.fontFamily = 'monospace'; // Match the font of our code element
+    tempSpan.style.fontSize = '0.875rem'; // Match text-sm
+    tempSpan.innerText = str;
+    document.body.appendChild(tempSpan);
+
+    const textWidth = tempSpan.offsetWidth;
+    const containerWidth = containerRef.offsetWidth - 48; // Subtract padding and copy button width
+    document.body.removeChild(tempSpan);
+
+    if (textWidth <= containerWidth) {
+        return str;
+    }
+
+    // If text doesn't fit, calculate how many characters we can show
+    const charWidth = textWidth / str.length;
+    const availableChars = Math.floor(containerWidth / charWidth);
+    const charsPerSide = Math.floor((availableChars - 3) / 2); // -3 for the ...
+
+    return `${str.slice(0, charsPerSide)}...${str.slice(-charsPerSide)}`;
+};
+
+// Add refs for containers
+const btcAddressContainer = ref<HTMLElement | null>(null);
+const usdtAddressContainer = ref<HTMLElement | null>(null);
 
 definePageMeta({
     layout: "white",
