@@ -2,7 +2,7 @@
    <Teleport to="body">
       <div
          v-if="isOpen"
-         class="fixed inset-0 z-20 overflow-y-auto"
+         class="z-top fixed inset-0 overflow-y-auto"
          aria-labelledby="modal-title"
          role="dialog"
          aria-modal="true"
