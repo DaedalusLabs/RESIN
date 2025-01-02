@@ -201,12 +201,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, defineProps } from "vue";
 import { PhImages, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
 import { fixNestedStrings } from "~/utils/jsonParser";
-import ModalContactAgent from "~/components/Modal/contact-agent.vue";
-import ModalRequestTour from "~/components/Modal/request-tour.vue";
 
 const propertiesStore = usePropertiesStore();
 const route = useRoute();
