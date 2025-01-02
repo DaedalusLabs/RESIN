@@ -116,6 +116,7 @@ export default defineNuxtConfig({
          SHOW_TRANSACTIONS: process.env.SHOW_TRANSACTIONS,
          SHOW_AGREEMENTS: process.env.SHOW_AGREEMENTS,
          SHOW_FINANCIALS: process.env.SHOW_FINANCIALS,
+         BTCPAY_BASE_URL: process.env.BTCPAY_BASE_URL,
       },
    },
 });
