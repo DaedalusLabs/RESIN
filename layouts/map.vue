@@ -7,7 +7,11 @@
       </main>
       <MenuBar :show-drawer="showDrawer" @close="showDrawer = false" />
 
-      <BottomBar v-if="!showDrawer" @toggle-menu-bar="handleToggleMenuBar" />
+      <BottomBar
+         v-if="!showDrawer"
+         class="hidden lg:block"
+         @toggle-menu-bar="handleToggleMenuBar"
+      />
    </div>
 </template>
 
