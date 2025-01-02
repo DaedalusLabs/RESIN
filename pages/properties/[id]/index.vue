@@ -218,22 +218,11 @@ const email = ref("");
 const formError = ref(false);
 const phone = ref("");
 const isFavorite = ref(null);
-const showFilterDrawer = ref(false);
 const showDrawer = ref(false);
 
 const handleShowModal = () => {
    isModalOpen.value = true;
 };
-
-/*
-const handleShowAgentModal = () => {
-   isModalOpen.value = true;
-};
-
-const handleShowTourModal = () => {
-   isModalOpen.value = true;
-};
-*/
 
 const toggleFavorite = () => {
    isFavorite.value = !isFavorite.value;
