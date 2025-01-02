@@ -101,7 +101,6 @@ const selectPaymentMethod = (method: 'bitcoin' | 'usdt' | 'bank') => {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 router.push({
                     path: `/payment/process`,
                     query: {

@@ -20,7 +20,8 @@
                 <div class="text-xl font-mono text-green-700">{{ formattedTimeRemaining }}</div>
             </div>
             <div class="mt-2 bg-green-100 rounded-full h-2">
-                <div class="bg-green-500 h-2 rounded-full transition-all duration-1000"
+                <div
+class="bg-green-500 h-2 rounded-full transition-all duration-1000"
                     :style="{ width: `${timePercentage}%` }"></div>
             </div>
         </div>
@@ -29,28 +30,32 @@
         <template v-if="method === 'bitcoin'">
             <div class="mb-6">
                 <div class="flex justify-center space-x-2 mb-6">
-                    <button v-for="network in ['on-chain', 'lightning', 'liquid']" :key="network"
-                        @click="selectedNetwork = network" :class="[
+                    <button
+v-for="network in ['on-chain', 'lightning', 'liquid']" :key="network"
+                        :class="[
                             'px-4 py-2 rounded-lg font-medium',
                             selectedNetwork === network
                                 ? 'bg-[#F7931A] text-white'
                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        ]">
+                        ]" @click="selectedNetwork = network">
                         {{ network.charAt(0).toUpperCase() + network.slice(1) }}
                     </button>
                 </div>
 
                 <div class="text-center">
-                    <a :href="getQRData" target="_blank" rel="noopener noreferrer"
+                    <a
+:href="getQRData" target="_blank" rel="noopener noreferrer"
                         class="inline-block bg-white p-4 rounded-lg shadow-md mb-4 w-auto h-auto hover:shadow-lg transition-shadow">
-                        <QRCode :data="getQRData" :image="getQRImage" class="w-full h-full" :width="256"
+                        <QRCode
+:data="getQRData" :image="getQRImage" class="w-full h-full" :width="256"
                             :height="256" />
                     </a>
 
-                    <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4" ref="btcAddressContainer">
+                    <div ref="btcAddressContainer" class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4">
                         <code class="text-sm font-mono">{{ truncateIfNeeded(getPaymentAddress || '', btcAddressContainer) }}</code>
-                        <button @click="copyToClipboard(getPaymentAddress || '')"
-                            class="text-resin-500 hover:text-resin-600 ml-3 flex-shrink-0">
+                        <button
+class="text-resin-500 hover:text-resin-600 ml-3 flex-shrink-0"
+                            @click="copyToClipboard(getPaymentAddress || '')">
                             <PhCopy :size="20" />
                         </button>
                     </div>
@@ -61,15 +66,17 @@
         <!-- USDT Payment Section -->
         <template v-if="method === 'usdt'">
             <div class="text-center mb-6">
-                <a :href="getQRData" target="_blank" rel="noopener noreferrer"
-                    class="inline-block bg-white p-4 rounded-lg shadow-md mb-4 w-[256px] h-[256px] hover:shadow-lg transition-shadow">
+                <a
+:href="getQRData" target="_blank" rel="noopener noreferrer"
+                    class="inline-block bg-white p-4 rounded-lg shadow-md mb-4 w-auto h-auto hover:shadow-lg transition-shadow">
                     <QRCode :data="getQRData" :image="getQRImage" class="w-full h-full" :width="256" :height="256" />
                 </a>
 
-                <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4" ref="usdtAddressContainer">
+                <div ref="usdtAddressContainer" class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4">
                     <code class="text-sm font-mono">{{ truncateIfNeeded(usdtAddress?.destination || '', usdtAddressContainer) }}</code>
-                    <button @click="copyToClipboard(usdtAddress?.destination || '')"
-                        class="text-resin-500 hover:text-resin-600 ml-3 flex-shrink-0">
+                    <button
+class="text-resin-500 hover:text-resin-600 ml-3 flex-shrink-0"
+                        @click="copyToClipboard(usdtAddress?.destination || '')">
                         <PhCopy :size="20" />
                     </button>
                 </div>
@@ -84,24 +91,24 @@
                         <div v-for="field in bankDetails" :key="field.label" class="flex flex-col">
                             <div class="flex justify-between items-center mb-1">
                                 <span class="text-gray-600">{{ field.label }}</span>
-                                <button @click="copyToClipboard(field.value)"
-                                    class="text-resin-500 hover:text-resin-600">
+                                
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4">
+                                <code class="text-sm">{{ field.value }}</code>
+                                <button
+class="text-resin-500 hover:text-resin-600 ml-3 flex-shrink-0"
+                                    @click="copyToClipboard(field.value)">
                                     <PhCopy :size="20" />
                                 </button>
-                            </div>
-                            <div class="bg-gray-100 p-3 rounded-lg">
-                                <code class="text-sm">{{ field.value }}</code>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-center">
-                    <a :href="getQRData" target="_blank" rel="noopener noreferrer"
-                        class="inline-block bg-white p-4 rounded-lg shadow-md mb-4 w-64 h-64 hover:shadow-lg transition-shadow">
-                        <QRCode :data="getQRData" :image="getQRImage" class="w-full h-full" :width="256"
-                            :height="256" />
-                    </a>
+                <div v-if="bankDetailsData.currency === 'EUR'" class="text-center">
+                    <div class="inline-block bg-white p-4 rounded-lg shadow-md mb-4 w-auto h-auto">
+                        <QRCode :data="getQRData" :image="getQRImage" class="w-full h-full" :width="256" :height="256" />
+                    </div>
                 </div>
             </div>
         </template>
@@ -115,6 +122,7 @@
 import { PhCopy, PhTimer } from "@phosphor-icons/vue";
 import { onMounted, ref } from "vue";
 import type { PaymentDetails } from "~/types/PaymentDetails";
+import type { BankDetails } from '~/types/BankDetails';
 
 const runtimeConfig = useRuntimeConfig();
 const route = useRoute();
@@ -133,13 +141,22 @@ const liquidAddress = ref<PaymentDetails>();
 const usdtAddress = ref<PaymentDetails>();
 const expirationTime = ref(0);
 
+const bankDetailsData: BankDetails = {
+    amount: amount.value,
+    beneficiary: 'Resin Estate Ltd.',
+    iban: 'NL91 ABNA 0417 1643 00',
+    bicSwift: 'ABNANL2A',
+    bankName: 'ABN AMRO Bank N.V.',
+    description: `Payment for property ${route.query.id}`
+};
+
 const bankDetails = [
-    { label: 'Amount', value: `$${amount.value.toFixed(2)}` },
-    { label: 'Beneficiary', value: 'Resin Estate Ltd.' },
-    { label: 'IBAN', value: 'NL91 ABNA 0417 1643 00' },
-    { label: 'BIC/SWIFT', value: 'ABNANL2A' },
-    { label: 'Bank Name', value: 'ABN AMRO Bank N.V.' },
-    { label: 'Description', value: `Payment for property ${route.query.id}` }
+    { label: 'Amount', value: `$${bankDetailsData.amount.toFixed(2)}` },
+    { label: 'Beneficiary', value: bankDetailsData.beneficiary },
+    { label: 'IBAN', value: bankDetailsData.iban },
+    { label: 'BIC/SWIFT', value: bankDetailsData.bicSwift },
+    { label: 'Bank Name', value: bankDetailsData.bankName },
+    { label: 'Description', value: bankDetailsData.description }
 ];
 
 // Replace mock BTC price calculation with network-specific amount
@@ -273,16 +290,62 @@ const getQRData = computed(() => {
     } else if (method.value === 'usdt' && usdtAddress.value) {
         return usdtAddress.value.paymentLink;
     } else if (method.value === 'bank') {
-        const sepaData = {
-            name: bankDetails[1].value,
-            iban: bankDetails[2].value,
-            amount: amount.value,
-            reference: bankDetails[5].value
-        };
-        return JSON.stringify(sepaData);
+        
+        return generateSepaQRString(convertToSepaQRData(bankDetailsData));
     }
     return '';
 });
+
+const convertToSepaQRData = (bankDetails: BankDetails) => {
+    // Helper function to clean IBAN by removing spaces
+    const cleanIBAN = (iban: string) => iban.replace(/\s/g, '');
+
+    const sepaData = {
+        serviceTag: 'BCD',                // Service Tag for SEPA Credit Transfer
+        version: '002',                   // Version 2
+        characterSet: '1',                // UTF-8
+        identification: 'SCT',            // SEPA Credit Transfer
+        bic: bankDetails.bicSwift,
+        name: bankDetails.beneficiary,
+        iban: cleanIBAN(bankDetails.iban),
+        currency: 'EUR',                  // Euro is required for SEPA
+        amount: bankDetails.amount.toFixed(2),
+        purpose: '',                      // Can be left empty
+        reference: '',                    // Can be left empty
+        information: bankDetails.description
+    };
+
+    return sepaData;
+}
+
+const generateSepaQRString = (sepaData: {
+    serviceTag: string;
+    version: string;
+    characterSet: string;
+    identification: string;
+    bic: string;
+    name: string;
+    iban: string;
+    currency: string;
+    amount: string;
+    purpose: string;
+    reference: string;
+    information: string;
+}): string => {
+    return [
+        sepaData.serviceTag,
+        sepaData.version,
+        sepaData.characterSet,
+        sepaData.identification,
+        sepaData.bic,
+        sepaData.name,
+        sepaData.iban,
+        `${sepaData.currency.toUpperCase()}${sepaData.amount}`,
+        sepaData.purpose,
+        sepaData.reference,
+        sepaData.information
+    ].join('\n');
+}
 
 const getQRImage = computed(() => {
     switch (method.value) {
