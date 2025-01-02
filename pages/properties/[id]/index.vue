@@ -214,16 +214,12 @@
 </template>
 
 <script setup>
+import { ref, onMounted, computed, defineProps } from "vue";
+import { PhImages, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
 import { fixNestedStrings } from "~/utils/jsonParser";
-import {
-   PhCheck,
-   PhExport,
-   PhHeartStraight,
-   PhImages,
-} from "@phosphor-icons/vue";
-import { useShare } from "@vueuse/core";
-import { ref, computed, onMounted } from "vue";
+import ModalContactAgent from "~/components/Modal/contact-agent.vue";
+import ModalRequestTour from "~/components/Modal/request-tour.vue";
 
 const propertiesStore = usePropertiesStore();
 const nostrStore = useNostrStore();
@@ -240,16 +236,11 @@ const email = ref("");
 const formError = ref(false);
 const phone = ref("");
 const isFavorite = ref(null);
-const showFilterDrawer = ref(false);
 const showDrawer = ref(false);
 const showSuccessAlert = ref(false);
 
 const handleShowModal = () => {
    isModalOpen.value = true;
-};
-
-const generateRef = () => {
-   return Math.floor(Math.random() * 9000) + 1000;
 };
 
 const buttonText = computed(() => {
@@ -274,7 +265,7 @@ const toggleFavorite = () => {
 };
 
 onMounted(() => {
-   referenceNumber.value = generateRef();
+   referenceNumber.value = 0;
 });
 
 onMounted(async () => {
