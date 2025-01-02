@@ -57,11 +57,11 @@ const props = defineProps({
       type: String,
       required: true,
    },
-   modelStartValue: {
+   valueMin: {
       type: Number,
       required: true,
    },
-   modelEndValue: {
+   valueMax: {
       type: Number,
       required: true,
    },

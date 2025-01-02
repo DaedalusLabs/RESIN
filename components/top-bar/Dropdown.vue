@@ -39,7 +39,7 @@ const props = defineProps({
 const emit = defineEmits(["update:query"]);
 
 function selectSuggestion(suggestion) {
-   const fullAddress = `${suggestion.location.address.street}, ${suggestion.location.address.city}, ${suggestion.location.address.country}`;
+   const fullAddress = `${suggestion.location.street}, ${suggestion.location.city}, ${suggestion.location.country}`;
    emit(
       "update:query",
       fullAddress,
@@ -50,7 +50,7 @@ function selectSuggestion(suggestion) {
 }
 
 function highlightQuery(suggestion) {
-   const fullAddress = `${suggestion.location.address.street}, ${suggestion.location.address.city}, ${suggestion.location.address.country}`;
+   const fullAddress = `${suggestion.location.street}, ${suggestion.location.city}, ${suggestion.location.country}`;
    const regex = new RegExp(`(${props.query})`, "gi");
    return fullAddress.replace(regex, '<span class="text-resin-500">$1</span>');
 }

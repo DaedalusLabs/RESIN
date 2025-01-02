@@ -30,14 +30,14 @@
          <div
             class="leading-1.5 flex flex-col rounded-e-xl rounded-es-xl border-gray-200 bg-gray-100 p-4 text-gray-900 dark:bg-gray-700"
          >
-            <p class="text-sm font-normal">{{ message }}</p>
+            <p class="text-sm font-normal break-words">{{ message }}</p>
          </div>
       </div>
    </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
    name: {
       type: String,
       required: true,
@@ -60,5 +60,11 @@ defineProps({
       type: Boolean,
       required: true,
    },
+   profile: {
+      type: Object,
+      required: false,
+      default: null,
+   }
 });
+
 </script>

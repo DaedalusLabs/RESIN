@@ -10,7 +10,7 @@
             class="mx-auto flex flex-col gap-5 rounded-md border border-gray-200 p-6 px-10 shadow-md"
          >
             <!-- Backup Recovery Phrase Step -->
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-3" v-if="!skipKeyBackup">
                <div class="flex-shrink-0">
                   <PhArrowRight
                      v-if="!isVerified"
@@ -92,7 +92,13 @@ const props = defineProps({
       type: Boolean,
       default: false,
    },
+   skipKeyBackup: {
+      type: Boolean,
+      default: false,
+   },
 });
+
+console.log("skipKeyBackup", props.skipKeyBackup);
 
 watchEffect(() => {
    showDrawer.value = props.show;

@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import TypesenseInstantSearchAdapter, { type SearchClient } from 'typesense-instantsearch-adapter';
 
 interface Address {
    street: string;
@@ -26,6 +27,12 @@ interface PropertiesState {
    hasSeenMapToast: boolean;
    recoveryPhrase: string[];
    ownedProperties: Property[];
+   searchClient: SearchClient;
+   imagesBaseUrl: string;
+   apiEndpoint: string;
+   typesenseHost: string;
+   typesensePort: string;
+   typesenseApiKey: string;
 }
 
 export const usePropertiesStore = defineStore("properties", {
@@ -39,8 +46,18 @@ export const usePropertiesStore = defineStore("properties", {
       hasSeenMapToast: false,
       recoveryPhrase: [],
       ownedProperties: [],
+      searchClient: undefined!,
+      imagesBaseUrl: '',
+      apiEndpoint: '',
+      typesenseHost: '',
+      typesensePort: '',
+      typesenseApiKey: '',
    }),
-
+   persist: {
+      key: 'properties-store',
+      storage: piniaPluginPersistedstate.localStorage(),
+      paths: ['favorites', 'viewedProperties'] 
+   },
    getters: {
       getLocations(): Property[] {
          return this.properties;
@@ -72,6 +89,52 @@ export const usePropertiesStore = defineStore("properties", {
    },
 
    actions: {
+      init() {
+         const config = useRuntimeConfig();
+         this.imagesBaseUrl = config.public.IMAGES_BASE_URL;
+         this.apiEndpoint = config.public.BACKEND_ENDPOINT;
+         this.typesenseHost = config.public.TYPESENSE_HOST;
+         this.typesensePort = config.public.TYPESENSE_PORT;
+         this.typesenseApiKey = config.public.TYPESENSE_API_KEY;
+      },
+      async get(id: string) {
+         try {
+            const response = await fetch(`${this.apiEndpoint}/listings/${id}`);
+            if (!response.ok) {
+               if (response.status === 404) {
+                  throw new Error('Property not found');
+               } else if (response.status >= 500) {
+                  throw new Error('Server error');
+               }
+            }
+            const data = await response.json();
+            return data;
+         } catch (error) {
+            console.error(error);
+            throw error;
+         }
+      },
+      initializeSearch() {
+         const typesenseAdapter = new TypesenseInstantSearchAdapter({
+            server: {
+               apiKey: this.typesenseApiKey,
+               nodes: [
+                  {
+                     host: this.typesenseHost,
+                     port: parseInt(this.typesensePort),
+                     protocol: this.typesenseHost.includes('localhost') ? 'http' : 'https'
+                  }
+               ]
+            },
+            geoLocationField: 'location.coordinates',
+            additionalSearchParameters: {
+               query_by: 'title,location.street,location.city,location.country'
+            },
+         });
+
+
+         this.searchClient = typesenseAdapter.searchClient;
+      },
       addOwnedProperty(property: Property): void {
          this.ownedProperties.push(property);
       },
@@ -80,10 +143,19 @@ export const usePropertiesStore = defineStore("properties", {
          if (!this.viewedProperties.includes(id)) {
             this.viewedProperties.push(id);
          }
+         if (this.viewedProperties.length > 10) {
+            this.viewedProperties = this.viewedProperties.slice(1);
+         }
       },
 
       addSearch(searchTerm: string): void {
-         this.searches.push(searchTerm);
+         if (!this.searches.includes(searchTerm)) {
+            this.searches.push(searchTerm);
+         }
+         if (this.searches.length > 10) {
+            this.searches = this.searches.slice(1);
+         }
+
       },
 
       setFilteredLocations(filteredProperties: Property[]): void {
@@ -95,9 +167,9 @@ export const usePropertiesStore = defineStore("properties", {
          this.filteredProperties = this.properties.filter((property) => {
             const combinedFields = [
                property.name,
-               property.location.address.street,
-               property.location.address.city,
-               property.location.address.country,
+               property.street,
+               property.city,
+               property.country,
             ]
                .join(" ")
                .toLowerCase();
@@ -126,11 +198,11 @@ export const usePropertiesStore = defineStore("properties", {
          const [street, city, country] = searchTerm.split(", ");
          return this.properties.find((property) => {
             return (
-               property.location.address.street.toLowerCase() ===
+               property.location.street.toLowerCase() ===
                   street.toLowerCase() &&
-               property.location.address.city.toLowerCase() ===
+               property.location.city.toLowerCase() ===
                   city.toLowerCase() &&
-               property.location.address.country.toLowerCase() ===
+               property.location.country.toLowerCase() ===
                   country.toLowerCase()
             );
          });

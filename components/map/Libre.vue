@@ -3,23 +3,24 @@
       <div ref="mapContainer" class="h-full w-full" />
 
       <!-- Button to View Properties -->
-      <NuxtLinkLocale
-         class="force-top absolute bottom-20 lg:hidden"
-         to="properties"
-      >
-         <FlowbiteButton
-            :text="`View ${visibleLocationsAmount} properties`"
-            class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
-         />
-      </NuxtLinkLocale>
 
-      <!-- GPS Location Button -->
-      <button
-         class="force-top absolute bottom-20 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-white p-2 shadow-md"
-         @click="getUserLocation"
-      >
-         <PhGps :size="32" />
-      </button>
+         <NuxtLinkLocale
+            class="fixed bottom-20 lg:hidden"
+            to="properties"
+         >
+            <FlowbiteButton
+               :text="`View ${visibleLocationsAmount} properties`"
+               class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
+            />
+         </NuxtLinkLocale>
+
+         <!-- GPS Location Button -->
+         <button
+            class="fixed bottom-20 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-white p-2 shadow-md"
+            @click="getUserLocation"
+         >
+            <PhGps :size="32" />
+         </button>
 
       <!-- Property Card Transition -->
       <transition
@@ -41,11 +42,14 @@
 import { usePropertiesStore } from "~/stores/properties";
 import { PhGps } from "@phosphor-icons/vue";
 import { fixNestedStrings } from "~/utils/jsonParser";
-import { Map } from "maplibre-gl";
+import maplibregl, { Map } from "maplibre-gl";
+import { Protocol } from "pmtiles";
+
+const protocol = new Protocol();
 
 const propertiesStore = usePropertiesStore();
-const properties = propertiesStore.properties;
-const zoom = ref(6);
+let properties = propertiesStore.properties;
+const zoom = ref(4);
 const mapContainer = ref(null);
 const map = ref(null);
 const visibleLocationsAmount = ref(propertiesStore.filteredProperties.length);
@@ -56,6 +60,10 @@ const route = useRoute();
 const props = defineProps({
    mapCenter: {
       type: Object,
+      required: true,
+   },
+   results: {
+      type: Array,
       required: true,
    },
 });
@@ -77,43 +85,63 @@ const calculateVisibleLocations = () => {
    const bounds = map.value.getBounds();
    const visibleLocations = properties.filter((property) =>
       bounds.contains([
-         property.location.coordinates.longitude,
-         property.location.coordinates.latitude,
+         property.location.coordinates[0],
+         property.location.coordinates[1],
       ]),
    );
+
+   visibleLocationsAmount.value = visibleLocations.length;
    propertiesStore.setFilteredLocations(visibleLocations);
+   refreshProperties();
 };
 
+let geojson;
+
+
+const refreshProperties = () => {
+   geojson = {
+      type: "FeatureCollection",
+      features: properties.map((location) => ({
+         type: "Feature",
+         geometry: {
+            type: "Point",
+            coordinates: [
+               location.location.coordinates[0],
+               location.location.coordinates[1],
+            ],
+         },
+         properties: location,
+      })),
+   };
+
+   map.value.getSource('properties')?.setData(geojson);
+}
+
 onMounted(() => {
-   map.value = new Map({
+   maplibregl.addProtocol("pmtiles",protocol.tile);
+
+   map.value = new Map({     
       container: mapContainer.value,
-      style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
+      style: "/map-liberty.json",
+   //   style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
       center: [props.mapCenter.lng, props.mapCenter.lat],
       zoom: zoom.value,
    });
 
+   map.value.on("styleimagemissing", (e) => {   
+      const emptyImage = new Uint8Array(4).fill(0);
+      map.value.addImage(e.id, { width: 1, height: 1, data: emptyImage });
+   });
+
    map.value.on("load", () => {
-      const geojson = {
-         type: "FeatureCollection",
-         features: properties.map((location) => ({
-            type: "Feature",
-            geometry: {
-               type: "Point",
-               coordinates: [
-                  location.location.coordinates.longitude,
-                  location.location.coordinates.latitude,
-               ],
-            },
-            properties: location,
-         })),
-      };
+      refreshProperties();
 
       map.value.addSource("properties", {
          type: "geojson",
          data: geojson,
          cluster: true,
-         clusterMaxZoom: 14,
-         clusterRadius: 150,
+         // clusterMaxZoom: 14,
+         clusterRadius: 50,
       });
 
       // Add cluster circles
@@ -145,7 +173,7 @@ onMounted(() => {
                20,
             ],
          },
-      });
+    } );
 
       map.value.addLayer({
          id: "cluster-count",
@@ -155,7 +183,7 @@ onMounted(() => {
          layout: {
             "text-field": "{point_count_abbreviated}",
             "text-size": 15,
-            "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"], // Use Inter if it's available
+            "text-font": ["Noto Sans Bold"], // Use Inter if it's available
          },
          paint: {
             "text-color": "#ffffff",
@@ -167,7 +195,6 @@ onMounted(() => {
          type: "circle",
          source: "properties",
          filter: ["!", ["has", "point_count"]],
-
          paint: {
             "circle-color": "#F07E19",
             "circle-radius": 8,
@@ -206,7 +233,28 @@ onMounted(() => {
          zoom: 15,
          essential: true,
       });
+   } else {
+      const bounds = map.value.getBounds();
+      propertiesStore.properties.forEach((location) => {
+         bounds.extend([
+            location.location.coordinates[0],
+            location.location.coordinates[1],
+         ]);
+      });
+
+      map.value.fitBounds(bounds, {
+         // padding: 100,
+         linear: false,
+         duration: 500,
+      });
    }
+
+
+  
+});
+
+onUnmounted(() => {
+  map.value?.remove();
 });
 
 watch(
@@ -219,6 +267,20 @@ watch(
    },
    { immediate: true },
 );
+
+watch(
+   () => props.results,
+   (newResults) => {
+      // Handle the search results change
+      propertiesStore.properties = newResults;
+      properties = propertiesStore.properties;
+      if (properties.length && map.value) {
+         calculateVisibleLocations();
+      }
+   },
+   { deep: true, immediate: true }
+);
+
 
 // Click Outside Handling
 const clickedOutside = (event) => {

@@ -22,11 +22,10 @@
       >
          <p class="mr-3 text-sm text-pirate-950">
             I want to request a tour to see {{ propertyAddress }}.
-            <span class="text-gray-500">REF {{ referenceNumber }}</span>
          </p>
          <button
             class="rounded-lg bg-resin-500 px-6 py-3 text-sm font-semibold text-white"
-            @click="$emit('sendRequest')"
+            @click="handleSendRequest"
          >
             Send
          </button>
@@ -37,7 +36,9 @@
 <script setup>
 import { PhCheck } from "@phosphor-icons/vue";
 
-defineProps({
+const nostrStore = useNostrStore();
+const runtimeConfig = useRuntimeConfig();
+const props = defineProps({
    isOpen: {
       type: Boolean,
       required: true
@@ -52,9 +53,21 @@ defineProps({
    },
    referenceNumber: {
       type: Number,
-      required: true
+      required: false
    }
 });
 
-defineEmits(['update:isOpen', 'sendRequest']);
+const emit = defineEmits(['update:isOpen', 'sendRequest']);
+
+const handleSendRequest = async () => {
+
+      const contactMessage = `I want to request a tour to see ${props.propertyAddress}.`;
+      
+      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, contactMessage);
+
+      emit('sendRequest', {
+ 
+      });
+
+};
 </script> 

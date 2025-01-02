@@ -1,13 +1,13 @@
 <template>
    <div
-      class="z-top fixed bottom-14 left-0 w-full bg-black/30 p-4 backdrop-blur-md"
+      class="z-1 fixed bottom-14 left-0 w-full bg-black/30 p-4 backdrop-blur-md"
    >
       <div
          class="mx-auto flex w-11/12 justify-end"
-         :class="{ 'justify-between': !property?.isBitcasaHome }"
+         :class="{ 'justify-between': property && property['resin-type'] !== 'Rent to own' }"
       >
          <FlowbiteButton
-            v-if="property?.isBitcasaHome"
+            v-if="property &&property['resin-type'] === 'Buy Now'"
             :text="`Contact Agent`"
             :show-icon="true"
             @click="handleShowAgentModal"
@@ -20,7 +20,7 @@
             @click="handleShowTourModal"
          />
          <NuxtLinkLocale
-            v-if="!property?.isBitcasaHome"
+            v-if="property && property['resin-type'] !== 'Buy now'"
             :to="`/properties/${route.params.id}/rent-to-own`"
          >
             <FlowbiteButton :text="buttonText" @click="handleClick" />

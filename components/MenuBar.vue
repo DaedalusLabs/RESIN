@@ -32,7 +32,7 @@
                            class="text-pirate-500 group-hover:text-resin-500"
                         />
                         <span
-                           v-if="item.hasNotification"
+                           v-show="item.hasNotification"
                            class="absolute right-0 top-0 h-2 w-2 rounded-full bg-resin-500 text-sm font-medium"
                         ></span>
                      </div>
@@ -44,16 +44,18 @@
             </ul>
 
             <div class="mb-10">
-               <a
-                  href="#"
+               <NuxtLinkLocale
                   class="flex items-center space-x-2 px-4 py-3 text-red-600 hover:text-pirate-500"
+                  @click="logout"   
                >
                   <PhSignOut :size="16" />
                   <span>Log out</span>
-               </a>
+               </NuxtLinkLocale>
 
                <div class="mt-4 px-4 text-pirate-500">
-                  <a href="#" class="text-sm">Terms & conditions</a>
+                  <NuxtLinkLocale to="/terms-and-conditions" @click="handleCloseDrawer">   
+                     Terms & conditions
+                  </NuxtLinkLocale>
                </div>
             </div>
          </div>
@@ -62,6 +64,7 @@
 </template>
 
 <script setup>
+
 import {
    PhUser,
    PhChatCircle,
@@ -71,44 +74,64 @@ import {
    PhX,
    PhSignOut,
 } from "@phosphor-icons/vue";
+const nostrStore = useNostrStore();
+
 
 const emit = defineEmits(["close"]);
 defineProps({
    showDrawer: Boolean,
 });
 
-const handleCloseDrawer = () => {
-   emit("close");
-};
+const hasUnreadMessages = computed(() => {
+   const count = nostrStore.unreadMessagesCount;
+   return count > 0;
+});
 
 const menuItems = [
    {
       label: "Profile",
       icon: PhUser,
-      link: "#",
+      link: "/settings/profile",
    },
    {
-      label: "Messages",
+      label: computed(() => {
+         const count = nostrStore.unreadMessagesCount;
+         return count > 0 ? `Messages (${count})` : 'Messages';
+      }),
       icon: PhChatCircle,
       link: "/messages",
-      hasNotification: true,
+      get hasNotification() {
+         return hasUnreadMessages.value;
+      },
    },
    {
-      label: "NOSTR keys",
+      label: "Nostr Keys",
       icon: PhKey,
-      link: "#",
+      link: "/settings/nostr-keys",
    },
    {
       label: "Settings",
       icon: PhGear,
-      link: "#",
+      link: "/settings",
    },
    {
       label: "Help",
       icon: PhQuestion,
-      link: "#",
+      link: "/help",
    },
 ];
+
+const handleCloseDrawer = () => {
+   emit("close");
+};
+
+
+
+
+const logout = () => {
+   nostrStore.logout();
+   navigateTo('/');
+};
 </script>
 
 <style scoped>

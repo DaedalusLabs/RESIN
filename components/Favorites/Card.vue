@@ -12,20 +12,20 @@
       />
       <div class="min-w-0 flex-1">
          <h3 class="truncate text-lg font-bold text-resin-500">
-            {{ property?.location.address.street }}
+            {{ property?.title }}
          </h3>
          <p class="text-sm text-pirate-950">
-            {{ property?.location.address.city }},
-            {{ property?.location.address.country }}
+            {{ property?.location.city }},
+            {{ property?.location.country }}
          </p>
          <p
-            v-if="property?.isBitcasaHome"
+            v-if="property['resin-type'] === 'Buy Now'"
             class="text-sm font-bold text-pirate-950"
          >
-            ${{ property?.pricingDetails.propertyPrice }}
+            $ {{ property?.price.toLocaleString() }} 
          </p>
          <p v-else class="text-sm font-bold text-pirate-950">
-            ${{ property?.pricingDetails.rentPerMonth }} per month
+            $ {{ property?.price.toLocaleString() }} per month
          </p>
       </div>
       <div

@@ -2,7 +2,13 @@
 export default defineNuxtConfig({
    compatibilityDate: "2024-04-03",
    devtools: { enabled: true },
-
+   vite: {
+      server: {
+         hmr: {
+            overlay: true,
+         },
+      },
+   },
    modules: [
       "@nuxt/image",
       "@nuxt/eslint",
@@ -12,11 +18,21 @@ export default defineNuxtConfig({
       "@nuxt/fonts",
       "@pinia/nuxt",
       "@vueuse/nuxt",
+      'pinia-plugin-persistedstate/nuxt'
    ],
 
    i18n: {
-      locales: ["en-US", "nl-NL"],
-      strategy: "prefix",
+      locales: [
+         {
+            code: "en-US",
+            name: "English"
+         },
+         {
+            code: "nl-NL",
+            name: "Nederlands"
+         }
+      ],
+      strategy: "prefix_except_default",
       defaultLocale: "en-US",
       detectBrowserLanguage: false,
       vueI18n: "./i18n.config.ts",
@@ -27,7 +43,10 @@ export default defineNuxtConfig({
       families: [{ name: "Inter", provider: "fontsource" }],
    },
 
+   ssr: false,
+   spaLoadingTemplate: true,
    pwa: {
+      registerType: "autoUpdate",
       manifest: {
          name: "Resin",
          short_name: "Resin",
@@ -36,13 +55,19 @@ export default defineNuxtConfig({
          icons: [
             {
                src: "android-chrome-256x256.png",
-               sizes: "150x150",
+               sizes: "256x256",
+               type: "image/png",
+            },
+            {
+               src: "android-chrome-192x192.png",
+               sizes: "192x192",
                type: "image/png",
             },
          ],
       },
       workbox: {
-         navigateFallback: null,
+         navigateFallback: '/',
+         navigateFallbackAllowlist: [/^\/$/],
       },
       devOptions: {
          enabled: false,
@@ -51,7 +76,7 @@ export default defineNuxtConfig({
 
    app: {
       head: {
-         title: "Resin - Buy a home without a bank",
+         title: "Resin",
          meta: [
             { charset: "utf-8" },
             {
@@ -61,8 +86,11 @@ export default defineNuxtConfig({
             {
                hid: "description",
                name: "description",
-               content: "Nuxt Image module example",
+               content: "Resin - Buy a home without a bank",
             },
+            { name: 'mobile-web-app-capable', content: 'yes' },
+            { name: 'apple-mobile-web-app-capable', content: 'yes' },
+            { name: 'apple-mobile-web-app-status-bar-style', content: 'default' }
          ],
       },
    },
@@ -71,5 +99,24 @@ export default defineNuxtConfig({
    image: {
       format: ["webp"],
       quality: 80,
+      provider: "none"
+   },
+
+   runtimeConfig: {
+      public: {
+         IMAGES_BASE_URL: process.env.IMAGES_BASE_URL,
+         BACKEND_ENDPOINT: process.env.BACKEND_ENDPOINT,
+         TYPESENSE_ENDPOINT: process.env.TYPESENSE_ENDPOINT,
+         TYPESENSE_HOST: process.env.TYPESENSE_HOST,
+         TYPESENSE_PORT: process.env.TYPESENSE_PORT,
+         TYPESENSE_API_KEY: process.env.TYPESENSE_API_KEY,
+         MESSAGES_NPUB: process.env.MESSAGES_NPUB,
+         FILES_BASE_URL: process.env.FILES_BASE_URL,
+         SHOW_TRENDING_AREAS: process.env.SHOW_TRENDING_AREAS,
+         SHOW_TRANSACTIONS: process.env.SHOW_TRANSACTIONS,
+         SHOW_AGREEMENTS: process.env.SHOW_AGREEMENTS,
+         SHOW_FINANCIALS: process.env.SHOW_FINANCIALS,
+         BTCPAY_BASE_URL: process.env.BTCPAY_BASE_URL,
+      },
    },
 });

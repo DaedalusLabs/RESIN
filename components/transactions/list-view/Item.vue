@@ -61,6 +61,7 @@
 <script setup lang="ts">
 import { PhCheckCircle, PhClock, PhCaretRight } from "@phosphor-icons/vue";
 const { formatCurrency } = useFormatNumber();
+const { locale } = useI18n();
 
 defineProps({
    transaction: {
@@ -70,7 +71,7 @@ defineProps({
 });
 
 function getMonth(date: Date) {
-   return date.toLocaleDateString("en-US", { month: "short" });
+   return date.toLocaleDateString(locale.value, { month: "short" });
 }
 
 function getYear(date: Date) {

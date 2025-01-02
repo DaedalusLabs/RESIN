@@ -11,7 +11,7 @@
             :class="isMap ? '' : 'absolute bottom-2 left-0'"
          >
             <NuxtImg
-               src="/images/logos/resin-text.png"
+               src="/images/logos/resin-orange.svg"
                alt="Logo"
                class="h-full"
             />
@@ -22,15 +22,15 @@
             class="relative flex flex-grow gap-3"
             :class="isMap ? 'justify-center' : 'justify-center'"
          >
-            <NuxtLinkLocale to="map" @click="propertiesStore.resetLocations()">
-               <FlowbiteIconButton
-                  :icon="showListIcon ? 'rows' : 'map'"
-                  description="view map"
-               />
-            </NuxtLinkLocale>
+            <FlowbiteIconButton
+               :icon="showListIcon ? 'rows' : 'map'"
+               description="view map"
+               @click="() => { showListIcon ? router.push($localePath('properties')) : router.push($localePath('map')) }"
+            />
+
             <!-- Search Bar -->
             <div class="relative max-w-xl flex-grow">
-               <FlowbiteSearchbar
+               <FlowbiteInstantSearchbar
                   class="w-full"
                   :query="query"
                   @update:query="updateQuery"
@@ -56,10 +56,14 @@
             class="force-top absolute bottom-20 hidden lg:relative lg:bottom-0 lg:block"
             to="properties"
          >
-            <FlowbiteButton
-               :text="`View ${visibleLocationsAmount} properties`"
-               class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600 lg:h-12"
-            />
+            <ais-hits>
+               <template #default="{ items }">
+                  <FlowbiteButton
+                     :text="`View ${items.length} properties`"
+                     class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600 lg:h-12"
+                  />
+               </template>
+            </ais-hits>
          </NuxtLinkLocale>
       </div>
    </div>
@@ -69,6 +73,7 @@
 const propertiesStore = usePropertiesStore();
 const route = useRoute();
 const showListIcon = ref(route.fullPath.includes("map"));
+const router = useRouter()
 
 const query = ref("");
 const mapCenter = ref(null);
@@ -85,11 +90,11 @@ const filteredSuggestions = computed(() => {
    if (!query.value) return [];
    return suggestions.filter(
       (suggestion) =>
-         suggestion.location.address.city.toLowerCase().includes(query.value) ||
-         suggestion.location.address.street
+         suggestion.location.city.toLowerCase().includes(query.value) ||
+         suggestion.location.street
             .toLowerCase()
             .includes(query.value) ||
-         suggestion.location.address.country
+         suggestion.location.country
             .toLowerCase()
             .includes(query.value),
    );

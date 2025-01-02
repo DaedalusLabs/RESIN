@@ -47,29 +47,38 @@
    </section>
 
    <section v-else class="mb-28">
-      <FlowbiteCheckToast
-         :show-toast="isRequestSent && property?.isBitcasaHome"
-         :text="`Information submitted`"
-         @close-toast="isRequestSent = false"
-      />
-      <ModalContactAgent
-         v-if="property?.isBitcasaHome"
-         :is-open="isModalOpen"
-         :property-address="propertyAddress"
-         @update:is-open="isModalOpen = $event"
-         @send-request="handleSendRequest"
-      />
-      <ModalRequestTour
-         v-else
-         :is-open="isModalOpen"
-         :is-request-sent="isRequestSent"
-         :property-address="propertyAddress"
-         :reference-number="referenceNumber"
-         @update:is-open="isModalOpen = $event"
-         @send-request="handleSendRequest"
+      <ClientOnly fallback-tag="span">
+        
+         <ModalContactAgent
+            v-if="isBuyNow"
+            :is-open="isModalOpen"
+            :property-address="propertyAddress"
+            @update:is-open="isModalOpen = $event"
+            @send-request="handleSendRequest"
+         />
+         <ModalRequestTour
+            v-else
+            :is-open="isModalOpen"
+            :is-request-sent="isRequestSent"
+            :property-address="propertyAddress"
+            :reference-number="referenceNumber"
+            @update:is-open="isModalOpen = $event"
+            @send-request="handleSendRequest"
+         />
+      </ClientOnly>
+      
+
+   
+
+      <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
+
+      <FlowbiteImageDrawer
+         :show-drawer="showDrawer"
+         :image-urls="property?.images"
+         @close="showDrawer = false"
       />
 
-      <div class="relative">
+      <div class="relative xl:hidden">
          <NuxtImg
             v-if="property.images?.length"
             :src="property.images[0]"
@@ -78,7 +87,7 @@
          />
 
          <span
-            v-if="property.isBitcasaHome"
+            v-if="property && property['resin-type'] === 'Buy Now'"
             class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
             For Sale
@@ -93,6 +102,8 @@
          <DetailsTopBar :property="property" />
       </div>
 
+      
+    
       <div class="mx-auto mt-16 flex w-10/12 justify-between lg:w-9/12">
          <div
             class="sticky top-16 hidden flex-shrink flex-col gap-5 lg:w-[40%] xl:flex"
@@ -113,30 +124,25 @@
             </div>
             <div class="flex h-12 justify-between gap-3">
                <div class="flex justify-between gap-2">
-                  <!--
-                  <FlowbiteButton
-                     v-if="property?.isBitcasaHome"
-                     :text="`Contact Agent`"
-                     :show-icon="true"
-                     class="h-full"
-                     @click="handleShowAgentModal"
-                  />
-                  <FlowbiteButton
-                     v-else
-                     :text="`Request Tour`"
-                     :show-icon="false"
-                     class="secondary h-full"
-                     @click="handleShowTourModal"
-                  />
-                  -->
+                 
                   <NuxtLinkLocale
-                     v-if="!property?.isBitcasaHome"
+                     v-if="property && property['resin-type'] === 'Rent to Own'"
                      :to="`/properties/${route.params.id}/rent-to-own`"
                   >
                      <FlowbiteButton
                         class="h-full"
                         :text="buttonText"
                         @click="handleClick"
+                     />
+                  </NuxtLinkLocale>
+                  <NuxtLinkLocale
+                     v-else
+                   
+                  >
+                     <FlowbiteButton
+                        class="h-full"
+                        :text="'Contact agent'"
+                        @click="handleShowModal"
                      />
                   </NuxtLinkLocale>
                </div>
@@ -164,37 +170,44 @@
 
          <!-- Property Details -->
          <div class="flex-1">
-            <div class="container w-11/12 xl:ml-auto xl:mr-0">
+            <div class="container w-full xl:w-11/12 xl:ml-auto xl:mr-0">
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
-                     property.location?.address?.street ||
+                     property.title ||
                      "Address not available"
                   }}
                </h1>
                <p class="mt-1 text-sm">
-                  {{ property.location?.address?.city }},
-                  {{ property.location?.address?.country }}
+                  {{ property.location?.street }},
+                  {{ property.location?.city }},
+                  {{ property.location?.country }}
                </p>
+               <ResinAlert
+                  :show="showSuccessAlert"
+                  text="Your information has been submitted successfully."
+               />
                <DetailsSize :property="property" />
                <DetailsPrices :property="property" />
                <DetailsSummary :property="property" />
                <DetailsKeyFeatures :property="property" />
                <DetailsAdditional :property="property" />
                <p
+                  v-if="property.attribution && property.attribution?.length > 0"
                   class="my-12 rounded-lg bg-pirate-50 py-2 text-center text-sm font-medium text-pirate-300"
                >
-                  {{ property.message }}
+                  {{ property.attribution }}
                </p>
+               <ClientOnly fallback-tag="span">
+                  <DetailsMap :property="property" />
+               </ClientOnly>
+               <DetailsNearby :property="property" />
+               <DetailsBottomBar
+                  class="block xl:hidden"
+                  :property="property"
+                  @show-modal="handleShowModal"
+               />
             </div>
-            <ClientOnly fallback-tag="span">
-               <DetailsMap :property="property" />
-            </ClientOnly>
-            <DetailsNearby :property="property" />
-            <DetailsBottomBar
-               class="block xl:hidden"
-               :property="property"
-               @show-modal="handleShowModal"
-            />
+            
          </div>
       </div>
    </section>
@@ -209,6 +222,9 @@ import ModalContactAgent from "~/components/Modal/contact-agent.vue";
 import ModalRequestTour from "~/components/Modal/request-tour.vue";
 
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
+const appConfig = useAppConfig();
+
 const route = useRoute();
 const error = ref(false);
 const isLoading = ref(true);
@@ -221,18 +237,14 @@ const formError = ref(false);
 const phone = ref("");
 const isFavorite = ref(null);
 const showDrawer = ref(false);
+const showSuccessAlert = ref(false);
 
 const handleShowModal = () => {
    isModalOpen.value = true;
 };
 
-const toggleFavorite = () => {
-   isFavorite.value = !isFavorite.value;
-   propertiesStore.toggleFavorite(property.value.id);
-};
-
 const buttonText = computed(() => {
-   return route.path.includes("rent-to-own")
+   return property.value && property.value['resin-type'] !== 'Rent to Own'
       ? "Rent this property"
       : "Rent-to-own";
 });
@@ -247,18 +259,19 @@ function startShare() {
    });
 }
 
-const generateRef = () => {
-   return Math.floor(Math.random() * 9000) + 1000;
+const toggleFavorite = () => {
+   isFavorite.value = !isFavorite.value;
+   propertiesStore.toggleFavorite(property.value.id);
 };
 
 onMounted(() => {
-   referenceNumber.value = generateRef();
+   referenceNumber.value = 0;
 });
 
 onMounted(async () => {
    try {
-      const foundProperty = propertiesStore.properties.find(
-         (p) => p.id === route.params.id,
+      const foundProperty = await propertiesStore.get(
+         route.params.id,
       );
 
       if (!foundProperty) {
@@ -266,9 +279,9 @@ onMounted(async () => {
          return;
       }
 
-      property.value = foundProperty;
-
       isFavorite.value = propertiesStore.isFavorite(foundProperty.id);
+
+      property.value = foundProperty;
 
       if (typeof property.value === "string") {
          fixNestedStrings(property);
@@ -283,23 +296,21 @@ onMounted(async () => {
    }
 });
 
-const handleSendRequest = () => {
-   if (property?.value.isBitcasaHome) {
-      if (email.value || phone.value) {
-         isModalOpen.value = false;
-         isRequestSent.value = true;
-         formError.value = false;
-      } else {
-         formError.value = true;
-         console.log("Form error");
-      }
-   } else {
-      isRequestSent.value = true;
-   }
+const handleSendRequest = async() => {
+   isModalOpen.value = false;
+   
+   showSuccessAlert.value = true;
+   setTimeout(() => {
+      showSuccessAlert.value = false;
+   }, 5000);  
 };
 
 const propertyAddress = computed(() => {
-   return `${property.value.location.address.street}, ${property.value.location.address.city}, ${property.value.location.address.country}`;
+   return `${property.value.location.street}, ${property.value.location.city}, ${property.value.location.country}`;
+});
+
+const isBuyNow = computed(() => {
+   return property.value && property.value['resin-type'] === 'Buy Now';
 });
 
 definePageMeta({
@@ -317,9 +328,5 @@ defineProps({
 <style scoped>
 .z-top {
    z-index: 1000;
-}
-
-.secondary {
-   @apply bg-pirate-700 !important;
 }
 </style>

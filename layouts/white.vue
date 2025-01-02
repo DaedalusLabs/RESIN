@@ -4,7 +4,7 @@
          <slot />
       </main>
       <MenuBar :show-drawer="showDrawer" @close="showDrawer = false" />
-      <BottomBar v-if="!showDrawer" @toggle-menu-bar="handleToggleMenuBar" />
+      <BottomBar v-if="!showDrawer && !$route.meta.hideBottomBar" @toggle-menu-bar="handleToggleMenuBar" />
    </div>
 </template>
 

@@ -16,13 +16,13 @@
          <span
             class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
-            {{ property?.isBitcasaHome ? "For Sale" : "Rent to Own" }}
+            {{ property['resin-type']  }}
          </span>
       </div>
       <div class="flex flex-col gap-2 p-4">
          <div class="flex items-center justify-between">
             <h3 class="text-lg font-bold text-resin-500">
-               {{ property.location.address.street }}
+               {{ property.title }}
             </h3>
             <PhHeartStraight
                :size="21"
@@ -33,18 +33,18 @@
             />
          </div>
          <p class="text-gray-600">
-            {{ property.location.address.city }},
-            {{ property.location.address.country }}
+            {{ property.location.city }},
+            {{ property.location.country }}
          </p>
          <p
-            v-if="!property.isBitcasaHome"
+            v-if="property['resin-type'] !== 'Buy Now'"
             class="text-sm font-bold text-gray-800"
          >
-            ${{ property.pricingDetails.rentPerMonth.toLocaleString() }} per
-            month
+            ${{ property.price.toLocaleString() }} per
+            month 
          </p>
          <p v-else class="text-sm font-bold text-gray-800">
-            ${{ property.pricingDetails.propertyPrice.toLocaleString() }}
+            ${{ property.price?.toLocaleString() }}
          </p>
       </div>
       <div class="flex items-center justify-between p-4 pt-0 text-sm">
@@ -52,13 +52,13 @@
             <p class="flex items-center gap-1">
                <PhRuler :size="20" class="inline" />
                <span class="text-gray-500">
-                  {{ property.propertyDetails.size.houseSizeM2 }} m²
+                  {{ property.property.size }} m²
                </span>
             </p>
             <p class="flex items-center gap-1">
                <PhBed :size="20" class="inline" />
                <span class="text-gray-500">
-                  {{ property.propertyDetails.bedrooms }} Beds
+                  {{ property.property.bedrooms }} Beds
                </span>
             </p>
          </div>

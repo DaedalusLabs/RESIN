@@ -31,6 +31,7 @@ export default defineI18nConfig(() => ({
          skip: "Skip",
          fetching: "Fetching Nostr...",
          details: "Details",
+         continueButton: "Continue",
       },
       "nl-NL": {
          introductionTitle: "Koop een huis zonder de bank",
