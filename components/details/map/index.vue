@@ -3,13 +3,14 @@
       <h2 class="text-base font-bold">Location</h2>
       <div class="mt-4 overflow-hidden rounded-2xl">
          <div ref="mapContainer" class="h-64">
-            <div
-               class="force-top absolute bottom-0 flex w-full justify-center bg-black/20 p-4 text-sm text-white backdrop-blur-md cursor-pointer"
-            >
-               <NuxtLink @click="goToMap">
+            <NuxtLink @click="goToMap">
+
+               <div
+                  class="force-top absolute bottom-0 flex w-full justify-center bg-black/20 p-4 text-sm text-white backdrop-blur-md cursor-pointer">
                   <p>View on map</p>
-               </NuxtLink>
-            </div>
+               </div>
+            </NuxtLink>
+
          </div>
       </div>
    </div>
