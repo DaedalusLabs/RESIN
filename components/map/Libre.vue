@@ -349,4 +349,13 @@ watchEffect(() => {
 .slide-up-leave {
    animation: slideDown 0.2s ease-in forwards;
 }
+
+/* Add these new styles */
+:deep(.maplibregl-canvas-container) {
+  cursor: grab;
+}
+
+:deep(.maplibregl-canvas-container.maplibregl-interactive:active) {
+  cursor: grabbing;
+}
 </style>
