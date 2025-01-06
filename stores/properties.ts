@@ -204,9 +204,9 @@ export const usePropertiesStore = defineStore("properties", {
          this.filteredProperties = this.properties.filter((property) => {
             const combinedFields = [
                property.name,
-               property.location.address.street,
-               property.location.address.city,
-               property.location.address.country,
+               property.location.street,
+               property.location.city,
+               property.location.country,
             ]
                .join(" ")
                .toLowerCase();
