@@ -12,9 +12,9 @@ import { usePropertiesStore } from "~/stores/properties";
 const runtimeConfig = useRuntimeConfig();
 
 const propertiesStore = usePropertiesStore();
+propertiesStore.init();
 
 onMounted(async () => {
-  await propertiesStore.init();
   propertiesStore.watchNostrAuth();
 });
 

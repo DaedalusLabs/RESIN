@@ -57,7 +57,11 @@ export const usePropertiesStore = defineStore("properties", {
       typesenseApiKey: '',
       isInitialized: false,
    }),
-   persist: true,
+   persist: {
+      key: 'properties',
+      storage: piniaPluginPersistedstate.localStorage(),
+      pick: ['hasSeenMapToast'] 
+   },
    getters: {
       getLocations(): Property[] {
          return this.properties;
@@ -89,7 +93,7 @@ export const usePropertiesStore = defineStore("properties", {
    },
 
    actions: {
-      async init() {
+      init() {
          if (this.isInitialized) return;
 
          const config = useRuntimeConfig();
@@ -98,6 +102,8 @@ export const usePropertiesStore = defineStore("properties", {
          this.typesenseHost = config.public.TYPESENSE_HOST;
          this.typesensePort = config.public.TYPESENSE_PORT;
          this.typesenseApiKey = config.public.TYPESENSE_API_KEY;
+
+         this.initializeSearch();
 
          this.isInitialized = true;
       },
