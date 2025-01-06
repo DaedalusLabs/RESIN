@@ -48,19 +48,19 @@ function startShare() {
    });
 }
 
-const favorites = ref([]);
 const propertiesStore = usePropertiesStore();
+const favorites = computed(() => propertiesStore.favoriteLocations);
 
 definePageMeta({
    layout: "white",
+   middleware: ['auth'],
 });
 
-onMounted(() => {
-   favorites.value = propertiesStore.favoriteLocations;
+onMounted(async () => {
+   // await propertiesStore.init();
 });
 
 const removeFavorite = (id) => {
    propertiesStore.toggleFavorite(id);
-   favorites.value = propertiesStore.favoriteLocations;
 };
 </script>

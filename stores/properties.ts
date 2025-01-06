@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import TypesenseInstantSearchAdapter, { type SearchClient } from 'typesense-instantsearch-adapter';
+import { useNostrStore } from './nostr';
 
 interface Address {
    street: string;
@@ -20,9 +21,9 @@ interface Property {
 interface PropertiesState {
    properties: Property[];
    filteredProperties: Property[];
-   favorites: (string | number)[];
+   favorites: string[];
    searches: string[];
-   viewedProperties: (string | number)[];
+   viewedProperties: string[];
    trendingAreas: string[];
    hasSeenMapToast: boolean;
    recoveryPhrase: string[];
@@ -53,11 +54,7 @@ export const usePropertiesStore = defineStore("properties", {
       typesensePort: '',
       typesenseApiKey: '',
    }),
-   persist: {
-      key: 'properties-store',
-      storage: piniaPluginPersistedstate.localStorage(),
-      paths: ['favorites', 'viewedProperties'] 
-   },
+   persist: true,
    getters: {
       getLocations(): Property[] {
          return this.properties;
@@ -89,13 +86,27 @@ export const usePropertiesStore = defineStore("properties", {
    },
 
    actions: {
-      init() {
+      async init() {
          const config = useRuntimeConfig();
          this.imagesBaseUrl = config.public.IMAGES_BASE_URL;
          this.apiEndpoint = config.public.BACKEND_ENDPOINT;
          this.typesenseHost = config.public.TYPESENSE_HOST;
          this.typesensePort = config.public.TYPESENSE_PORT;
          this.typesenseApiKey = config.public.TYPESENSE_API_KEY;
+
+         // Load favorites from Nostr if authenticated
+         const nostrStore = useNostrStore();
+         if (nostrStore.authenticated) {
+            try {
+               const event = await nostrStore.loadPreferences('favorites');
+               if (event) {
+                  console.log(event);
+                  this.favorites = event;
+               }
+            } catch (error) {
+               console.error('Failed to load favorites from Nostr:', error);
+            }
+         }
       },
       async get(id: string) {
          try {
@@ -167,9 +178,9 @@ export const usePropertiesStore = defineStore("properties", {
          this.filteredProperties = this.properties.filter((property) => {
             const combinedFields = [
                property.name,
-               property.street,
-               property.city,
-               property.country,
+               property.location.address.street,
+               property.location.address.city,
+               property.location.address.country,
             ]
                .join(" ")
                .toLowerCase();
@@ -182,30 +193,30 @@ export const usePropertiesStore = defineStore("properties", {
          this.filteredProperties = this.properties;
       },
 
-      toggleFavorite(locationId: string | number): void {
+      async toggleFavorite(locationId: string): Promise<void> {
          if (this.favorites.includes(locationId)) {
             this.favorites = this.favorites.filter((id) => id !== locationId);
          } else {
             this.favorites.push(locationId);
          }
+
+         // Save to Nostr if authenticated
+         const nostrStore = useNostrStore();
+         if (nostrStore.authenticated) {
+            try {
+               await nostrStore.savePreferences('favorites', this.favorites);
+            } catch (error) {
+               console.error('Failed to save favorites to Nostr:', error);
+            }
+         }
       },
 
-      isFavorite(locationId: string | number): boolean {
+      isFavorite(locationId: string): boolean {
          return this.favorites.includes(locationId);
       },
 
-      findPropertyBySearchQuery(searchTerm: string): Property | undefined {
-         const [street, city, country] = searchTerm.split(", ");
-         return this.properties.find((property) => {
-            return (
-               property.location.street.toLowerCase() ===
-                  street.toLowerCase() &&
-               property.location.city.toLowerCase() ===
-                  city.toLowerCase() &&
-               property.location.country.toLowerCase() ===
-                  country.toLowerCase()
-            );
-         });
+      findPropertyById(id: string): Property | undefined {
+         return this.properties.find((property) => property.id === id);
       },
    },
 });

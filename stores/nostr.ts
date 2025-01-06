@@ -18,7 +18,7 @@ interface NostrState {
     mnemonic: string | null;
     messages: NostrMessage[];
     typeKey: NostrLoginType | null;
-    lastMessagesRead: string | null;
+    lastMessagesRead: number | null;
 }
 
 interface NostrMessage {
@@ -36,12 +36,18 @@ export enum NostrLoginType {
     Mnemonic = "mnemonic"
 }
 
+export interface NostrStore {
+    authenticated: boolean;
+    savePreferences: (key: string, value: string[]) => Promise<void>;
+    loadPreferences: (key: string) => Promise<string[] | null>;
+}
+
 export const useNostrStore = defineStore('nostr', {
     state: (): NostrState => ({
         user: null,
         pubkey: null,
         authenticated: false,
-        mnemonic:  null,
+        mnemonic: null,
         messages: [],
         typeKey: null,
         lastMessagesRead: null,
@@ -282,6 +288,59 @@ export const useNostrStore = defineStore('nostr', {
                 user: messageSender,
                 isSent: messageSender.pubkey == this.pubkey ? true : false,
             };
+        },
+        async savePreferences(key: string, value: string[]): Promise<void> {
+            const ndk = useNDK();
+            if (!ndk) return;
+
+            const config = useRuntimeConfig();
+            const prefix = config.public.NOSTR_SETTINGS_PREFIX || 'resin';
+            const prefixedKey = `${prefix}:${key}`;
+
+            const event = new NDKEvent(ndk);
+            event.kind = 30078;
+            
+            // Encrypt the content for ourselves
+            const user = await ndk.signer?.user();
+            if (!user) return;
+            
+            event.content = await ndk.signer?.encrypt(user, JSON.stringify(value), 'nip44') || '';
+            event.tags = [['d', prefixedKey]];
+            
+            await event.publish();
+        },
+        async loadPreferences(key: string): Promise<string[] | null> {
+            const ndk = useNDK();
+            if (!ndk) return null;
+
+            const config = useRuntimeConfig();
+            const prefix = config.public.NOSTR_SETTINGS_PREFIX || 'resin';
+            const prefixedKey = `${prefix}:${key}`;
+
+            const filter: NDKFilter = {
+                kinds: [30078],
+                authors: [this.pubkey!],
+                '#d': [prefixedKey],
+                limit: 1
+            };
+
+            const events = await ndk.fetchEvents(filter);
+            const event = Array.from(events)[0];
+            
+            if (!event) return null;
+
+            try {
+                const user = await ndk.signer?.user();
+                if (!user) return null;
+
+                const decryptedContent = await ndk.signer?.decrypt(user, event.content, 'nip44');
+                if (!decryptedContent) return null;
+
+                return JSON.parse(decryptedContent);
+            } catch (e) {
+                console.error('Failed to parse preferences:', e);
+                return null;
+            }
         }
     }
 });    
