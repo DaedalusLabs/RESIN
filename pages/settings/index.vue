@@ -16,7 +16,7 @@
                 <!-- Currency Selection -->
                 <div class="flex flex-col gap-2">
                     <label class="text-sm font-medium text-pirate-950">Currency</label>
-                    <select v-model="settingsStore.display.currency"
+                    <select v-model="settingsStore.display.currency" disabled
                         class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500">
                         <option value="USD">USD - US Dollar</option>
                         <option value="SRD">SRD - Surinamese Dollar</option>
@@ -26,7 +26,7 @@
                 <!-- Language Selection -->
                 <div class="flex flex-col gap-2">
                     <label class="text-sm font-medium text-pirate-950">Language</label>
-                    <select :value="locale" @change="switchLanguage($event.target.value)"
+                    <select :value="locale" @change="switchLanguage($event.target.value)" disabled
                         class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500">
                         <option v-for="locale in locales" :key="locale.code" :value="locale.code">
                             {{ locale.name }}
