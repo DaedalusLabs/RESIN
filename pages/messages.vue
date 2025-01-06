@@ -35,16 +35,20 @@
          class="shadow-top absolute bottom-14 flex w-full items-center bg-white px-3 py-5"
       >
          <div class="flex w-full items-center rounded-lg border bg-white">
-            <input
+            <textarea
                v-model="newMessage"
-               type="text"
+               rows="1"
                placeholder="Type a message..."
-               class="flex-grow rounded-l-lg border-none bg-transparent px-4 py-2 focus:outline-none"
-               @keyup.enter="sendMessage"
+               class="flex-grow rounded-l-lg border-none bg-transparent px-4 py-2 focus:outline-none resize-none overflow-y-auto max-h-[250px]"
+               @keyup.enter.exact="sendMessage"
+               @keydown.shift.enter.prevent="addNewline"
+               @input="autoGrow"
+               :disabled="isSending"
             />
             <button
-               class="rounded-r-lg border-none bg-transparent p-2 focus:outline-none"
+               class="rounded-r-lg border-none bg-transparent p-2 focus:outline-none disabled:opacity-50"
                @click="sendMessage"
+               :disabled="isSending"
             >
                <PhPaperPlaneTilt :size="16" />
             </button>
@@ -80,6 +84,7 @@ const messages = ref([
 
 const newMessage = ref("");
 const chatContainer = ref(null);
+const isSending = ref(false);
 
 function scrollToBottom() {
    nextTick(() => {
@@ -108,14 +113,33 @@ watch(messages, () => {
 });
 
 async function sendMessage() {
-   if (!newMessage.value.trim()) return; // Geen lege berichten toestaan
+   if (!newMessage.value.trim() || isSending.value) return;
 
-   await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, newMessage.value);
+   try {
+      isSending.value = true;
+      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, newMessage.value);
+      newMessage.value = "";
+      // Reset textarea height
+      const textarea = document.querySelector('textarea');
+      if (textarea) {
+         textarea.style.height = 'auto';
+      }
+      scrollToBottom();
+   } finally {
+      isSending.value = false;
+   }
+}
 
-   newMessage.value = "";
+function autoGrow(e) {
+   const textarea = e.target;
+   textarea.style.height = 'auto';
+   const newHeight = Math.min(textarea.scrollHeight, 250); // 250px is approximately 10 rows
+   textarea.style.height = newHeight + 'px';
+}
 
-   // Scroll naar de onderkant na het toevoegen van een bericht
-   scrollToBottom();
+function addNewline(e) {
+   newMessage.value += '\n';
+   nextTick(() => autoGrow(e));
 }
 </script>
 
