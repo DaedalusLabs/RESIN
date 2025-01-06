@@ -173,7 +173,10 @@ onMounted(() => {
                20,
             ],
          },
-    } );
+         // layout: {
+         //    'cursor': 'pointer'
+         // }
+      });
 
       map.value.addLayer({
          id: "cluster-count",
@@ -201,6 +204,9 @@ onMounted(() => {
             "circle-stroke-width": 2,
             "circle-stroke-color": "#fff",
          },
+         // layout: {
+         //    'cursor': 'pointer'
+         // }
       });
 
       map.value.on("click", "unclustered-point", (e) => {
@@ -222,6 +228,22 @@ onMounted(() => {
          });
       });
       calculateVisibleLocations();
+
+      map.value.on("mouseenter", "clusters", () => {
+         map.value.getCanvas().style.cursor = 'pointer';
+      });
+
+      map.value.on("mouseleave", "clusters", () => {
+         map.value.getCanvas().style.cursor = 'grab';
+      });
+
+      map.value.on("mouseenter", "unclustered-point", () => {
+         map.value.getCanvas().style.cursor = 'pointer';
+      });
+
+      map.value.on("mouseleave", "unclustered-point", () => {
+         map.value.getCanvas().style.cursor = 'grab';
+      });
 
       map.value.on("moveend", calculateVisibleLocations);
       map.value.on("zoomend", calculateVisibleLocations);
@@ -350,12 +372,17 @@ watchEffect(() => {
    animation: slideDown 0.2s ease-in forwards;
 }
 
-/* Add these new styles */
 :deep(.maplibregl-canvas-container) {
   cursor: grab;
 }
 
 :deep(.maplibregl-canvas-container.maplibregl-interactive:active) {
   cursor: grabbing;
-}
+} 
+
+/* Cluster and point interaction cursors
+:deep(.maplibregl-canvas-container.maplibregl-interactive[class*="clusters"]:hover),
+:deep(.maplibregl-canvas-container.maplibregl-interactive[class*="unclustered-point"]:hover) {
+  cursor: pointer !important;
+} */
 </style>
