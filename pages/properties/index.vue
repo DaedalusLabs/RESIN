@@ -66,7 +66,7 @@ const showFilterDrawer = ref(false);
 propertiesStore.initializeSearch();
 const searchClient = propertiesStore.searchClient;
 
-onMounted(() => {
+onMounted(async () => {
    isLoading.value = false;
    // Check for query parameter and update search state
    const searchQuery = route.query.q;
@@ -77,7 +77,6 @@ onMounted(() => {
 });
 
 watchEffect(() => {
-   const propertiesStore = usePropertiesStore();
    properties.value = propertiesStore.filteredProperties;
 });
 

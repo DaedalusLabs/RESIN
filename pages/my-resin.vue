@@ -24,16 +24,14 @@
 import { usePropertiesStore } from "~/stores/properties";
 
 const propertiesStore = usePropertiesStore();
-const favorites = ref([]);
+const favorites = computed(() => propertiesStore.favoriteLocations);
 
 
 onMounted(() => {
-   favorites.value = propertiesStore.favoriteLocations;
 });
 
 const removeFavorite = (id) => {
    propertiesStore.toggleFavorite(id);
-   favorites.value = propertiesStore.favoriteLocations;
 };
 
 definePageMeta({

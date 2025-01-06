@@ -56,10 +56,6 @@ definePageMeta({
    middleware: ['auth'],
 });
 
-onMounted(async () => {
-   // await propertiesStore.init();
-});
-
 const removeFavorite = (id) => {
    propertiesStore.toggleFavorite(id);
 };

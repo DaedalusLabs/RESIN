@@ -73,7 +73,6 @@ import { usePropertiesStore } from "~/stores/properties";
 const propertiesStore = usePropertiesStore();
 
 const toggleFavorite = () => {
-   isFavorite.value = !isFavorite.value;
    propertiesStore.toggleFavorite(props.property.id);
 };
 
@@ -88,7 +87,7 @@ const props = defineProps({
    },
 });
 
-const isFavorite = ref(propertiesStore.isFavorite(props.property.id));
+const isFavorite = computed(() => propertiesStore.isFavorite(props.property.id));
 
 const emit = defineEmits(["open-gallery"]);
 

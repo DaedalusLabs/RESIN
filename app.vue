@@ -12,7 +12,11 @@ import { usePropertiesStore } from "~/stores/properties";
 const runtimeConfig = useRuntimeConfig();
 
 const propertiesStore = usePropertiesStore();
-propertiesStore.init();
+
+onMounted(async () => {
+  await propertiesStore.init();
+});
+
 const nostrStore = useNostrStore();
 nostrStore.checkAuthenticated().then(() => {
    nostrStore.fetchDirectMessages();
