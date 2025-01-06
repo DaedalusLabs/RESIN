@@ -15,15 +15,7 @@ v-if="hasNip44()"
             <button v-else-if="!hasNip44()" class="inline-flex items-center justify-center rounded-lg border border-pirate-500 bg-transparent px-4 py-2 text-center text-sm font-medium text-pirate-500" disabled>Your Nostr Extension does not support NIP-44</button>
  
       </div>
-      <p class="mt-4 text-center text-xs">
-         Or
-         <span class="text-resin-500">create a new account</span>
-         if you don't have one yet. Have questions?
-         <NuxtLinkLocale class="text-resin-500" to="#">
-            Contact us
-         </NuxtLinkLocale>
-         for assistance.
-      </p>
+     
    </FlowbiteModal>
 </template>
 
