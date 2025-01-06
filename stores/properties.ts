@@ -34,6 +34,7 @@ interface PropertiesState {
    typesenseHost: string;
    typesensePort: string;
    typesenseApiKey: string;
+   isInitialized: boolean;
 }
 
 export const usePropertiesStore = defineStore("properties", {
@@ -53,6 +54,7 @@ export const usePropertiesStore = defineStore("properties", {
       typesenseHost: '',
       typesensePort: '',
       typesenseApiKey: '',
+      isInitialized: false,
    }),
    persist: true,
    getters: {
@@ -87,6 +89,8 @@ export const usePropertiesStore = defineStore("properties", {
 
    actions: {
       async init() {
+         if (this.isInitialized) return;
+
          const config = useRuntimeConfig();
          this.imagesBaseUrl = config.public.IMAGES_BASE_URL;
          this.apiEndpoint = config.public.BACKEND_ENDPOINT;
@@ -100,13 +104,16 @@ export const usePropertiesStore = defineStore("properties", {
             try {
                const event = await nostrStore.loadPreferences('favorites');
                if (event) {
-                  console.log(event);
                   this.favorites = event;
                }
             } catch (error) {
                console.error('Failed to load favorites from Nostr:', error);
             }
          }
+
+         this.isInitialized = true;
+
+         this.initializeSearch();
       },
       async get(id: string) {
          try {
