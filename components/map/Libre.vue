@@ -204,17 +204,17 @@ onMounted(() => {
             "circle-stroke-width": 2,
             "circle-stroke-color": "#fff",
          },
-         // layout: {
-         //    'cursor': 'pointer'
-         // }
       });
 
       map.value.on("click", "unclustered-point", (e) => {
+         e.originalEvent.stopPropagation();
+         console.log(e.features[0].properties);
          clickedLocation.value = fixNestedStrings(e.features[0].properties);
       });
 
       // click on a cluster
       map.value.on("click", "clusters", async (e) => {
+         e.originalEvent.stopPropagation();
          const features = map.value.queryRenderedFeatures(e.point, {
             layers: ["clusters"],
          });
@@ -327,7 +327,7 @@ const removeClickOutsideListener = () => {
 
 // Watch for click events outside of the property card
 watchEffect(() => {
-   if (clickedLocation.value) {
+   if (clickedLocation.value) {     
       addClickOutsideListener();
    } else {
       removeClickOutsideListener();

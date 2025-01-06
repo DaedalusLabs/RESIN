@@ -27,7 +27,8 @@ export const fixNestedStrings = <T extends Record<string, unknown>>(
                obj[key] = parsedValue as T[typeof key];
             } catch (e) {
                // If parsing fails, keep the original string value
-               console.error(e);
+               //console.error(e, value);
+               obj[key] = value;
                continue;
             }
          }
