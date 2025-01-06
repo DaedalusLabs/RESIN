@@ -37,7 +37,7 @@
 
 <script setup>
 import { wordlist } from '@scure/bip39/wordlists/english';
-const { loginWithMnemonic, isAuthenticated } = useNostr();
+const { loginWithMnemonic, isAuthenticated, checkAuthenticated } = useNostr();
 
 const recoveryPhrase = ref(Array(12).fill(""));
 const wordErrors = ref(Array(12).fill([]));
@@ -50,6 +50,7 @@ const validatePhrase = async() => {
       errorMessages.value.push("Please fill in your recovery phrase");
    } else {
       await loginWithMnemonic(recoveryPhrase.value.join(' '));
+      await checkAuthenticated();
 
       if (isAuthenticated) {
          const localeRoute = useLocaleRoute();

@@ -134,5 +134,6 @@ const goBack = () => {
 
 definePageMeta({
   layout: "white",
+  middleware: ['auth'],
 });
 </script> 
