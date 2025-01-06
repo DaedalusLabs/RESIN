@@ -3,10 +3,11 @@ import type { NDKFilter, NDKUser, NDKUserProfile, NostrEvent } from '@nostr-dev-
 import * as bip39 from '@scure/bip39';
 import { HDKey } from '@scure/bip32'
 
-import { NDKEvent, NDKNip07Signer, NDKPrivateKeySigner } from '@nostr-dev-kit/ndk';
+import { NDKEvent, NDKNip07Signer, NDKPrivateKeySigner, NDKRelaySet } from '@nostr-dev-kit/ndk';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import { bytesToHex } from '@noble/hashes/utils'
 import { setSigner, useNDK } from '~/composables/useNDK';
+import { getPublicKey } from 'nostr-tools';
 
 const DERIVATION_PATH = `m/44'/1237'`
 const NOSTR_TYPE_KEY = 'nostr'
@@ -76,36 +77,44 @@ export const useNostrStore = defineStore('nostr', {
     actions: {
         async checkAuthenticated() {
             if (import.meta.client && this.typeKey) {
+                console.log('check authenticated');
                 switch (this.typeKey) {
                     case NostrLoginType.Extension:
                         await this.login();
+                        
                         setSigner(new NDKNip07Signer());
+                        this.pubkey = await window.nostr.getPublicKey();
                         break;
                     case NostrLoginType.Mnemonic:
-                        const { privateKey } = await this.generateKeyPair(this.mnemonic);
-                        console.log('set signer');
+                        const { privateKey, _, pubkey } = await this.generateKeyPair(this.mnemonic);
+                        
                         setSigner(new NDKPrivateKeySigner(privateKey));
+                        this.pubkey = pubkey;
                         break;
                     default:
                         console.log('No nostr signer');
+                        return false;
                 }
-            }
-            const ndk = useNDK();
+
+                const ndk = useNDK();
 
             if (ndk) {
-                this.pubkey = (await ndk?.signer?.user()).pubkey;
+                // this.pubkey = (await ndk?.signer?.user()).pubkey;
                 await ndk.connect();
 
                 this.user = await ndk.signer?.user();
             }
 
             return this.authenticated
+            }
+            
         },
         async login() {
             try {
                 // Check if extension exists
                 if (!window?.nostr) {
                     throw new Error('No Nostr extension found');
+                    return;
                 }
 
                 const pubkey = await window.nostr.getPublicKey();
@@ -138,13 +147,21 @@ export const useNostrStore = defineStore('nostr', {
             this.mnemonic = mnemonic;
             this.authenticated = true;
             this.typeKey = NostrLoginType.Mnemonic;
+            this.pubkey = getPublicKey(privateKey);
 
             return {
                 privateKey: bytesToHex(privateKey),
-                mnemonic
+                mnemonic,
+                pubkey: this.pubkey
             };
         },
         logout() {
+            const ndk = useNDK();
+
+            if (ndk) {
+                ndk.signer = undefined;
+            }
+
             this.user = null;
             this.pubkey = null;
             this.typeKey = null;
@@ -152,6 +169,7 @@ export const useNostrStore = defineStore('nostr', {
             this.messages = [];
             this.authenticated = false;
             this.lastMessagesRead = null;
+            
         },
         async fetchDirectMessages() {
             const ndk = useNDK();
@@ -311,7 +329,36 @@ export const useNostrStore = defineStore('nostr', {
         },
         async loadPreferences(key: string): Promise<string[] | null> {
             const ndk = useNDK();
-            if (!ndk) return null;
+            if (!ndk) {
+                console.log('no ndk');
+                return null;
+            }
+
+            await ndk.connect();
+
+            // // Wait for at least one relay to connect (with 5 second timeout)
+            // try {
+            //     await new Promise<void>((resolve, reject) => {
+            //         const timeout = setTimeout(() => {
+            //             reject(new Error('Timeout waiting for relay connection'));
+            //         }, 5000);
+
+            //         const checkConnection = () => {
+            //             const connectedRelays = Array.from(ndk.pool.relays.values()).filter(relay => relay.connected);
+            //             console.log('connectedRelays', connectedRelays);
+            //             if (connectedRelays.length > 3) {
+            //                 clearTimeout(timeout);
+            //                 resolve();
+            //             } else {
+            //                 setTimeout(checkConnection, 100);
+            //             }
+            //         };
+            //         checkConnection();
+            //     });
+            // } catch (e) {
+            //     console.error('Failed to connect to any relay:', e);
+            //     return null;
+            // }
 
             const config = useRuntimeConfig();
             const prefix = config.public.NOSTR_SETTINGS_PREFIX || 'resin';
@@ -323,9 +370,19 @@ export const useNostrStore = defineStore('nostr', {
                 '#d': [prefixedKey],
                 limit: 1
             };
-
-            const events = await ndk.fetchEvents(filter);
-            const event = Array.from(events)[0];
+            
+            // Create a promise that will resolve when we get our first event or timeout
+            const event = await new Promise<NDKEvent | null>((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    resolve(null);
+                }, 5000); // 5 second timeout
+        
+                ndk.fetchEvents(filter).then(events => {
+                    clearTimeout(timeout);
+                    const firstEvent = Array.from(events)[0];
+                    resolve(firstEvent || null);
+                });
+            });
             
             if (!event) return null;
 

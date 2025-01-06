@@ -15,11 +15,15 @@ const propertiesStore = usePropertiesStore();
 
 onMounted(async () => {
   await propertiesStore.init();
+  propertiesStore.watchNostrAuth();
 });
 
 const nostrStore = useNostrStore();
-nostrStore.checkAuthenticated().then(() => {
+nostrStore.checkAuthenticated().then(async () => {
    nostrStore.fetchDirectMessages();
+   if (nostrStore.authenticated) {
+      await propertiesStore.loadNostrPreferences();
+   }
 });
 
 async function getProperties() {

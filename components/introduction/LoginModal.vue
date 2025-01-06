@@ -21,7 +21,7 @@ v-if="hasNip44()"
 
 <script setup>
 import { useNostr } from '~/composables/useNostr';
-const { loginWithExtension, isAuthenticated, hasExtension, hasNip44 } = useNostr();
+const { loginWithExtension, isAuthenticated, hasExtension, hasNip44, checkAuthenticated } = useNostr();
 
 const emit = defineEmits(["openNsecDrawer", "openPhraseDrawer", "close"]);
 const localePath = useLocalePath()
@@ -48,7 +48,9 @@ const handleModalUpdate = (value) => {
 async function handleExtensionLogin() {
    try {
       await loginWithExtension();
-
+      await checkAuthenticated();
+      await usePropertiesStore().init();
+      
       if (isAuthenticated) {
          navigateTo(localePath('properties'));
       }

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import TypesenseInstantSearchAdapter, { type SearchClient } from 'typesense-instantsearch-adapter';
 import { useNostrStore } from './nostr';
+import { watch } from 'vue';
 
 interface Address {
    street: string;
@@ -98,23 +99,35 @@ export const usePropertiesStore = defineStore("properties", {
          this.typesensePort = config.public.TYPESENSE_PORT;
          this.typesenseApiKey = config.public.TYPESENSE_API_KEY;
 
-         // Load favorites from Nostr if authenticated
+         this.isInitialized = true;
+      },
+
+      async loadNostrPreferences() {
          const nostrStore = useNostrStore();
          if (nostrStore.authenticated) {
             try {
                const event = await nostrStore.loadPreferences('favorites');
                if (event) {
                   this.favorites = event;
-               }
+               } 
             } catch (error) {
                console.error('Failed to load favorites from Nostr:', error);
             }
          }
-
-         this.isInitialized = true;
-
-         this.initializeSearch();
       },
+
+      watchNostrAuth() {
+         const nostrStore = useNostrStore();
+         watch(() => nostrStore.authenticated, async (isAuthenticated) => {
+            if (isAuthenticated) {
+               await new Promise(resolve => setTimeout(resolve, 3000));
+               await this.loadNostrPreferences();
+            } else {
+               this.favorites = [];
+            }
+         });
+      },
+
       async get(id: string) {
          try {
             const response = await fetch(`${this.apiEndpoint}/listings/${id}`);
