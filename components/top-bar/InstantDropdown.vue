@@ -1,20 +1,20 @@
 <template>
    <div
-      v-if="filteredSuggestions[0].hits.length"
-      class="absolute z-10 mt-1 flex-1 rounded-xl bg-black py-4 shadow-lg"
+      v-if="filteredSuggestions[0].hits.length && query"
+      class="absolute z-10 mt-1 w-full max-w-full rounded-xl bg-black py-4 shadow-lg"
       ref="dropdownContainer"
    >
 
-      <ul v-if="query" v-for="index in filteredSuggestions" :key="index.indexId">
+      <ul v-for="index in filteredSuggestions" :key="index.indexId">
          <p class="pb-2 pl-4 text-sm font-semibold text-white">Places</p>
          <li
             v-for="(suggestion, index) in index.hits"
             :key="index.id"
-            class="flex cursor-pointer items-center px-4 py-2 text-sm text-gray-400"
+            class="flex cursor-pointer items-center px-4 py-2 text-sm text-gray-400 overflow-hidden"
             @click="selectSuggestion(suggestion)"
          >
             <PhMagnifyingGlass :size="12" class="mr-2 flex-shrink-0" />
-            <span class="truncate font-semibold hover:text-resin-500">
+            <span class="w-full truncate font-semibold hover:text-resin-500">
                <span v-html="highlightQuery(suggestion)" />
             </span>
          </li>
@@ -25,7 +25,7 @@
 <script setup>
 import { PhMagnifyingGlass } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 
 const propertiesStore = usePropertiesStore();

@@ -1,10 +1,10 @@
 <template>
     <ais-autocomplete>
         <template #default="{ currentRefinement, indices, refine }">
-            <div ref="searchContainer" class="relative">
+            <div ref="searchContainer" class="relative w-full max-w-full">
                 <div class="flex items-center justify-between gap-2">
 
-                    <form class="flex-grow" @submit.prevent>
+                    <form class="w-full max-w-full flex-grow" @submit.prevent>
                         <label for="default-search"
                             class="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Search
@@ -29,7 +29,7 @@
 
                     </form>
                 </div>
-                <TopBarInstantDropdown v-if="isDropdownOpen" class="absolute z-10" :filtered-suggestions="indices"
+                <TopBarInstantDropdown v-if="isDropdownOpen" class="absolute z-10 w-full" :filtered-suggestions="indices"
                     :query="currentRefinement" @update:query="updateQuery" @close="isDropdownOpen = false" />
             </div>
         </template>
