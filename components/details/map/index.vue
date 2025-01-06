@@ -4,7 +4,7 @@
       <div class="mt-4 overflow-hidden rounded-2xl">
          <div ref="mapContainer" class="h-64">
             <div
-               class="force-top absolute bottom-0 flex w-full justify-center bg-black/20 p-4 text-sm text-white backdrop-blur-md"
+               class="force-top absolute bottom-0 flex w-full justify-center bg-black/20 p-4 text-sm text-white backdrop-blur-md cursor-pointer"
             >
                <NuxtLink @click="goToMap">
                   <p>View on map</p>
