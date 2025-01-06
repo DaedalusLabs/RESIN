@@ -45,7 +45,7 @@
 
             <div class="mb-10">
                <NuxtLinkLocale
-                  class="flex items-center space-x-2 px-4 py-3 text-red-600 hover:text-pirate-500"
+                  class="flex items-center space-x-2 px-4 py-3 text-red-600 cursor-pointer hover:underline"
                   @click="logout"   
                >
                   <PhSignOut :size="16" />
