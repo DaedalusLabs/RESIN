@@ -5,7 +5,10 @@
       <div class="mt-4 flex w-full flex-col gap-4">    
          <FlowbiteBorderButton
             :text="`Use recovery phrase (12 words)`"
-            @click="emit('openPhraseDrawer')"
+            @click="() => {
+               emit('openPhraseDrawer');
+               handleModalUpdate(false);
+            }"
          />
 
          <FlowbiteBorderButton
