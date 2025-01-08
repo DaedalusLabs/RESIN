@@ -306,7 +306,7 @@ const handleSendRequest = async() => {
 };
 
 const propertyAddress = computed(() => {
-   return `${property.value.location.street}, ${property.value.location.city}, ${property.value.location.country}`;
+   return `${property.value.title} ${property.value.location.street}, ${property.value.location.city}, ${property.value.location.country}`;
 });
 
 const isBuyNow = computed(() => {
