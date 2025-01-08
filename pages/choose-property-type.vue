@@ -1,6 +1,6 @@
 <template>
    <section
-      class="mx-auto flex h-full w-10/12 flex-col items-center justify-center gap-10"
+      class="mx-auto flex w-10/12 flex-col items-center justify-start gap-10 py-10"
    >
       <h1 class="text-center text-2xl font-extrabold leading-tight text-white">
          {{ $t("propertyType") }}

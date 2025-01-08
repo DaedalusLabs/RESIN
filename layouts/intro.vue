@@ -8,9 +8,9 @@ onMounted(() => {
 
 <template>
    <div
-      class="flex h-screen flex-col bg-pirate-950 bg-hex-dark bg-cover bg-center"
+      class="fixed inset-0 bg-pirate-950 bg-hex-dark bg-cover bg-center"
    >
-      <main class="flex h-full flex-1">
+      <main class="relative h-screen flex">
          <div class="hidden h-full w-3/5 lg:block">
             <NuxtImg
                v-if="isDesktop"
@@ -23,7 +23,7 @@ onMounted(() => {
                height="100vw"
             />
          </div>
-         <div class="h-full flex-1">
+         <div class="h-full flex-1 overflow-y-auto">
             <slot />
          </div>
       </main>

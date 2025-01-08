@@ -61,7 +61,7 @@ html {
 
 body {
    touch-action: pan-y; 
-   overflow: hidden;
+    overflow: hidden; 
 }
 
 /* font Inter for all text */
