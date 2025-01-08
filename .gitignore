@@ -28,3 +28,8 @@ sw.*
 
 # Editor files
 .vscode
+
+# Playwright
+screenshots
+test-results
+playwright-report

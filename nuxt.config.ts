@@ -18,7 +18,8 @@ export default defineNuxtConfig({
       "@nuxt/fonts",
       "@pinia/nuxt",
       "@vueuse/nuxt",
-      'pinia-plugin-persistedstate/nuxt'
+      'pinia-plugin-persistedstate/nuxt',
+      '@nuxt/test-utils'
    ],
 
    i18n: {
