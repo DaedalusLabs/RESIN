@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { authenticatedStoreState } from './fixtures/store-state'
 
-test('basic click through the navigation', async ({ page }) => {
+test('basic new user flow - create nostr account', async ({ page }, testInfo) => {
     // Go to the home page
     await page.goto('/')
     await page.waitForLoadState('networkidle')
@@ -42,7 +42,10 @@ test('basic click through the navigation', async ({ page }) => {
                window.getComputedStyle(map).opacity === '1';
     }, { timeout: 30000 });
     await page.waitForTimeout(1000);
-    await page.screenshot({ path: `./screenshots/map-${test.info().project.name}.png` })
+
+    // Take and attach map screenshot
+    const mapScreenshot = await page.screenshot();
+    await testInfo.attach('map-view', { body: mapScreenshot, contentType: 'image/png' });
 
     // Click View Properties button (with dynamic number)
     const viewPropertiesButton = page.getByRole('button', { name: /View \d+ properties/ })
@@ -67,11 +70,12 @@ test('basic click through the navigation', async ({ page }) => {
         return images.every(img => img.complete);
     });
 
-    // Take screenshot of the final state
-    await page.screenshot({ path: `./screenshots/screenshot-${test.info().project.name}.png` })
+    // Take and attach final screenshot
+    const finalScreenshot = await page.screenshot();
+    await testInfo.attach('property-details-view', { body: finalScreenshot, contentType: 'image/png' });
 }) 
 
-test('menu navigation through bottom bar', async ({ page }) => {
+test('navigate through settings menu', async ({ page }, testInfo) => {
     // Set up the initial localStorage state
     await page.goto('/');
     await page.evaluate((state) => {
@@ -113,9 +117,9 @@ test('menu navigation through bottom bar', async ({ page }) => {
         
         await page.waitForTimeout(500) // Wait for transitions to complete
 
-        // Take screenshot of each page
-        await page.waitForLoadState('networkidle')
-        await page.screenshot({ path: `./screenshots/menu-${name.toLowerCase()}-${test.info().project.name}.png` })
+        // Take and attach screenshot of each menu page
+        const screenshot = await page.screenshot();
+        await testInfo.attach(`menu-${name.toLowerCase()}-view`, { body: screenshot, contentType: 'image/png' });
 
         await page.goto('/home')
         await page.waitForLoadState('networkidle')
@@ -136,3 +140,4 @@ test('menu navigation through bottom bar', async ({ page }) => {
     await page.locator('a').filter({ hasText: 'Log out' }).click()
     await expect(page).toHaveURL('/')
 }) 
+
