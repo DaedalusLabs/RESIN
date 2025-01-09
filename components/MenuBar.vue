@@ -7,7 +7,7 @@
    >
       <template #title>
          <div class="mb-5 flex items-center justify-between text-pirate-300">
-            <h2 class="text-base font-semibold">Account</h2>
+            <h2 class="text-base font-semibold">{{ $t('menu.account') }}</h2>
             <PhX :size="20" class="cursor-pointer" @click="handleCloseDrawer" />
          </div>
       </template>
@@ -49,12 +49,12 @@
                   @click="logout"   
                >
                   <PhSignOut :size="16" />
-                  <span>Log out</span>
+                  <span>{{ $t('menu.logout') }}</span>
                </NuxtLinkLocale>
 
                <div class="mt-4 px-4 text-pirate-500">
                   <NuxtLinkLocale to="/terms-and-conditions" @click="handleCloseDrawer">   
-                     Terms & conditions
+                     {{ $t('menu.termsAndConditions') }}
                   </NuxtLinkLocale>
                </div>
             </div>
@@ -64,7 +64,6 @@
 </template>
 
 <script setup>
-
 import {
    PhUser,
    PhChatCircle,
@@ -75,7 +74,7 @@ import {
    PhSignOut,
 } from "@phosphor-icons/vue";
 const nostrStore = useNostrStore();
-
+const { t } = useI18n();
 
 const emit = defineEmits(["close"]);
 defineProps({
@@ -89,14 +88,14 @@ const hasUnreadMessages = computed(() => {
 
 const menuItems = [
    {
-      label: "Profile",
+      label: t('menu.profile'),
       icon: PhUser,
       link: "/settings/profile",
    },
    {
       label: computed(() => {
          const count = nostrStore.unreadMessagesCount;
-         return count > 0 ? `Messages (${count})` : 'Messages';
+         return count > 0 ? t('menu.messagesWithCount', { count }) : t('menu.messages');
       }),
       icon: PhChatCircle,
       link: "/messages",
@@ -105,17 +104,17 @@ const menuItems = [
       },
    },
    {
-      label: "Nostr Keys",
+      label: t('menu.nostrKeys'),
       icon: PhKey,
       link: "/settings/nostr-keys",
    },
    {
-      label: "Settings",
+      label: t('menu.settings'),
       icon: PhGear,
       link: "/settings",
    },
    {
-      label: "Help",
+      label: t('menu.help'),
       icon: PhQuestion,
       link: "/help",
    },
@@ -124,9 +123,6 @@ const menuItems = [
 const handleCloseDrawer = () => {
    emit("close");
 };
-
-
-
 
 const logout = () => {
    nostrStore.logout();

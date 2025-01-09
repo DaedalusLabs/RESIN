@@ -6,7 +6,7 @@
                 <PhCaretLeft :size="24" class="text-pirate-300" />
             </NuxtLinkLocale>
             <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
-                Settings
+                {{ $t('settings.title') }}
             </h1>
         </div>
 
@@ -15,21 +15,21 @@
             <div class="flex flex-col gap-6">
                 <!-- Currency Selection -->
                 <div class="flex flex-col gap-2">
-                    <label class="text-sm font-medium text-pirate-950">Currency</label>
+                    <label class="text-sm font-medium text-pirate-950">{{ $t('settings.currency.label') }}</label>
                     <select v-model="settingsStore.display.currency" disabled
                         class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500">
-                        <option value="USD">USD - US Dollar</option>
-                        <option value="SRD">SRD - Surinamese Dollar</option>
+                        <option value="USD">{{ $t('settings.currency.usd') }}</option>
+                        <option value="SRD">{{ $t('settings.currency.srd') }}</option>
                     </select>
                 </div>
 
                 <!-- Language Selection -->
                 <div class="flex flex-col gap-2">
-                    <label class="text-sm font-medium text-pirate-950">Language</label>
+                    <label class="text-sm font-medium text-pirate-950">{{ $t('settings.language.label') }}</label>
                     <select :value="locale" @change="switchLanguage($event.target.value)" disabled
                         class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500">
                         <option v-for="locale in locales" :key="locale.code" :value="locale.code">
-                            {{ locale.name }}
+                            {{ $t(`settings.language.${locale.code}`) }}
                         </option>
                     </select>
                 </div>
@@ -41,11 +41,11 @@
 <script setup>
 import { useSettingsStore } from '~/stores/settings';
 import { PhCaretLeft } from "@phosphor-icons/vue";
-const { locale, locales, setLocale } = useI18n()
+const { locale, locales } = useI18n();
 
 const settingsStore = useSettingsStore();
-const switchLocalePath = useSwitchLocalePath()
-const router = useRouter()
+const switchLocalePath = useSwitchLocalePath();
+const router = useRouter();
 
 const goBack = () => {
    if (window.history.length > 1) {

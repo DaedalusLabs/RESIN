@@ -25,12 +25,11 @@
             </div>
             <div class="ml-3">
                <h3 class="text-sm font-medium text-red-800">
-                  Property Not Found
+                  {{ $t('property.notFound.title') }}
                </h3>
                <div class="mt-2 text-sm text-red-700">
                   <p>
-                     The property you're looking for could not be found. Please
-                     check the URL or go back to the properties list.
+                     {{ $t('property.notFound.message') }}
                   </p>
                </div>
                <div class="mt-4">
@@ -38,7 +37,7 @@
                      to="properties"
                      class="text-sm font-medium text-red-800 hover:text-red-900"
                   >
-                     Go back to properties →
+                     {{ $t('property.notFound.backToProperties') }}
                   </NuxtLinkLocale>
                </div>
             </div>
@@ -90,13 +89,13 @@
             v-if="property && property['resin-type'] === 'Buy Now'"
             class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
-            Buy Now
+            {{ $t('property.types.buyNow') }}
          </span>
          <span
             v-else
             class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
-            Rent to Own
+            {{ $t('property.types.rentToOwn') }}
          </span>
 
          <DetailsTopBar :property="property" />
@@ -137,11 +136,10 @@
                   </NuxtLinkLocale>
                   <NuxtLinkLocale
                      v-else
-                   
                   >
                      <FlowbiteButton
                         class="h-full"
-                        :text="'Contact agent'"
+                        :text="$t('property.actions.contactAgent')"
                         @click="handleShowModal"
                      />
                   </NuxtLinkLocale>
@@ -151,12 +149,14 @@
                      :v-if="isSupported"
                      class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
                      @click="startShare"
+                     :title="$t('property.actions.share')"
                   >
                      <PhExport class="h-6 w-6 text-black" />
                   </button>
                   <button
                      class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
                      @click="toggleFavorite"
+                     :title="$t('property.actions.favorite')"
                   >
                      <PhHeartStraight
                         :class="{ 'text-resin-500': isFavorite }"
@@ -174,7 +174,7 @@
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
                      property.title ||
-                     "Address not available"
+                     $t('property.details.addressNotAvailable')
                   }}
                </h1>
                <p class="mt-1 text-sm">
@@ -184,7 +184,7 @@
                </p>
                <ResinAlert
                   :show="showSuccessAlert"
-                  text="Your information has been submitted successfully."
+                  :text="$t('property.details.requestSuccess')"
                />
                <DetailsSize :property="property" />
                <DetailsPrices :property="property" />
@@ -214,7 +214,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, defineProps } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { PhImages, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
 import { fixNestedStrings } from "~/utils/jsonParser";
@@ -222,8 +222,7 @@ import ModalContactAgent from "~/components/Modal/contact-agent.vue";
 import ModalRequestTour from "~/components/Modal/request-tour.vue";
 
 const propertiesStore = usePropertiesStore();
-const nostrStore = useNostrStore();
-const appConfig = useAppConfig();
+const { t } = useI18n();
 
 const route = useRoute();
 const error = ref(false);
@@ -232,9 +231,6 @@ const property = ref(null);
 const isRequestSent = ref(false);
 const isModalOpen = ref(false);
 const referenceNumber = ref(0);
-const email = ref("");
-const formError = ref(false);
-const phone = ref("");
 const isFavorite = ref(null);
 const showDrawer = ref(false);
 const showSuccessAlert = ref(false);
@@ -245,8 +241,8 @@ const handleShowModal = () => {
 
 const buttonText = computed(() => {
    return property.value && property.value['resin-type'] !== 'Rent to Own'
-      ? "Rent this property"
-      : "Rent-to-own";
+      ? t('property.actions.rentProperty')
+      : t('property.actions.rentToOwn');
 });
 
 const { share, isSupported } = useShare();

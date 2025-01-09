@@ -8,7 +8,7 @@
             <PhCaretLeft :size="24" class="text-pirate-300" />
          </NuxtLinkLocale>
          <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
-            Messages
+            {{ $t('messages.title') }}
          </h1>
       </div>
 
@@ -18,7 +18,7 @@
          class="no-scrollbar mx-auto flex w-10/12 flex-1 flex-col gap-10 overflow-y-scroll pb-28"
       >
       <FlowbiteChatBubble
-            v-for="(msg, index) in nostrStore.messages"
+            v-for="msg in nostrStore.messages"
             :key="msg.id"
             :message="msg.content"
             :name="msg.user?.profile?.name ? msg.user?.profile?.name : ''"
@@ -38,7 +38,7 @@
             <textarea
                v-model="newMessage"
                rows="1"
-               placeholder="Type a message..."
+               :placeholder="$t('messages.typeMessage')"
                class="flex-grow rounded-l-lg border-none bg-transparent px-4 py-2 focus:outline-none resize-none overflow-y-auto max-h-[250px]"
                @keyup.enter.exact="sendMessage"
                @keydown.shift.enter.prevent="addNewline"
@@ -49,6 +49,7 @@
                class="rounded-r-lg border-none bg-transparent p-2 focus:outline-none disabled:opacity-50"
                @click="sendMessage"
                :disabled="isSending"
+               :title="$t('messages.send')"
             >
                <PhPaperPlaneTilt :size="16" />
             </button>
@@ -66,7 +67,6 @@ definePageMeta({
    layout: "white",
    title: "Messages",
    middleware: ['auth']
-
 });
 
 const goBack = () => {

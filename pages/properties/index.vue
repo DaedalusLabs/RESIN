@@ -23,12 +23,15 @@
                items,
             }">
                   <div v-if="items.length === 0" class="text-center text-white">
-                     No properties to display
+                     {{ $t('property.overview.noProperties') }}
                   </div>
 
                   <PropertyCard
-v-for="property in items" :key="property.id" :property="property"
-                  @open-gallery="openGallery(property.images)" />
+                     v-for="property in items" 
+                     :key="property.id" 
+                     :property="property"
+                     @open-gallery="openGallery(property.images)" 
+                  />
                </template>
                </ais-infinite-hits>
             </div>

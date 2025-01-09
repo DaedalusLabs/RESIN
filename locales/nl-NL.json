@@ -21,5 +21,49 @@
   "chooseLocation": "Kies locatie",
   "skip": "Overslaan",
   "fetching": "Nostr ophalen...",
-  "details": "Details"
-} 
+  "details": "Details",
+  "continueButton": "Volgende",
+  "navigation": {
+    "home": "Home",
+    "properties": "Objecten",
+    "myResin": "Mijn Resin",
+    "favorites": "Favorieten",
+    "profile": "Profiel",
+    "map": "Kaart",
+    "messages": "Berichten",
+    "settings": "Instellingen"
+  },
+  "menu": {
+    "account": "Account",
+    "profile": "Profiel",
+    "messages": "Berichten",
+    "messagesWithCount": "Berichten ({count})",
+    "nostrKeys": "Nostr Keys",
+    "settings": "Instellingen",
+    "help": "Help",
+    "logout": "Uitloggen",
+    "termsAndConditions": "Algemene voorwaarden"
+  },
+  "property": {
+    "notFound": {
+      "title": "Object niet gevonden",
+      "message": "Het object dat u zoekt kon niet worden gevonden. Controleer de URL of ga terug naar de lijst met objecten.",
+      "backToProperties": "Terug naar objecten →"
+    },
+    "types": {
+      "buyNow": "Koop nu",
+      "rentToOwn": "Huur tot aankoop"
+    },
+    "actions": {
+      "contactAgent": "Contact agent",
+      "rentProperty": "Huur dit object",
+      "rentToOwn": "Huur tot aankoop",
+      "share": "Deel object",
+      "favorite": "Toevoegen aan favorieten"
+    },
+    "details": {
+      "addressNotAvailable": "Adres niet beschikbaar",
+      "requestSuccess": "Uw informatie is succesvol verzonden."
+    }
+  }
+}

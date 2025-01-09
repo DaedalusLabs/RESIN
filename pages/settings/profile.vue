@@ -6,7 +6,7 @@
         <PhCaretLeft :size="24" class="text-pirate-300" />
       </NuxtLinkLocale>
       <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
-        Profile
+        {{ $t('settings.profile.title') }}
       </h1>
     </div>
 
@@ -19,12 +19,13 @@
             <img 
               :src="profilePicture || '/images/logos/Resin_Hexagon_Orange_Fill.svg'" 
               class="h-full w-full rounded-full object-cover"
-              alt="Profile picture"
+              :alt="$t('settings.profile.picture.alt')"
             />
             <template v-if="enableProfileUpload">
             <button 
               @click="triggerFileInput"
               class="absolute bottom-0 right-0 rounded-full bg-resin-500 p-2 text-white hover:bg-resin-600"
+              :title="$t('settings.profile.picture.upload')"
             >
               <PhCamera :size="20" />
             </button>
@@ -41,27 +42,27 @@
 
         <!-- Personal Information -->
         <div class="flex flex-col gap-6">
-          <h2 class="text-lg font-semibold text-pirate-950">Personal Information</h2>
+          <h2 class="text-lg font-semibold text-pirate-950">{{ $t('settings.profile.personalInfo') }}</h2>
           
           <!-- Name -->
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-pirate-950">Display Name</label>
+            <label class="text-sm font-medium text-pirate-950">{{ $t('settings.profile.displayName.label') }}</label>
             <input 
               v-model="profile.name"
               type="text"
               class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500"
-              placeholder="Enter your name"
+              :placeholder="$t('settings.profile.displayName.placeholder')"
             />
           </div>
 
           <!-- Description -->
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-pirate-950">About</label>
+            <label class="text-sm font-medium text-pirate-950">{{ $t('settings.profile.about.label') }}</label>
             <textarea 
               v-model="profile.about"
               rows="2"
               class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500"
-              placeholder="Tell us about yourself"
+              :placeholder="$t('settings.profile.about.placeholder')"
             ></textarea>
           </div>
 
@@ -70,14 +71,14 @@
             @click="saveProfile"
             class="mt-4 w-full rounded-lg bg-resin-500 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-resin-600"
           >
-            Save Changes
+            {{ $t('settings.profile.saveChanges') }}
           </button>
         </div>
       </div>
     </div>
 
     <!-- Alert -->
-    <ResinAlert :show="showSavedAlert" text="Profile saved" />
+    <ResinAlert :show="showSavedAlert" :text="$t('settings.profile.saved')" />
   </section>
 </template>
 
@@ -85,57 +86,50 @@
 import { useNostrStore } from '~/stores/nostr';
 import { PhCaretLeft, PhCamera } from "@phosphor-icons/vue";
 import { useNDK } from '~/composables/useNDK';
-import { serializeProfile, type NDKUserProfile } from '@nostr-dev-kit/ndk';
+import type { NDKUserProfile } from '@nostr-dev-kit/ndk';
 
 const nostrStore = useNostrStore();
 const ndk = useNDK();
 const showSavedAlert = ref(false);
-const fileInput = ref(null);
+const fileInput = ref<HTMLInputElement | null>(null);
 
 const profile = ref<NDKUserProfile>({
   name: '',
   about: '',
-  picture: ''
+  picture: undefined
 });
 
 const enableProfileUpload = ref(false);
 
-const profilePicture = computed(() => profile.value && profile.value.image);
+const profilePicture = computed(() => profile.value?.picture);
 
 onMounted(async () => {
   if (nostrStore.user) {
-   let metadata = await nostrStore.userProfile;
-
-   if (metadata) {  
+    const metadata = await nostrStore.user.profile;
+    if (metadata) {  
       profile.value = metadata;
-   }
-
-    // const serializedProfile = serializeProfile(metadata);
-    
-    // console.log("serializedProfile", JSON.parse(serializedProfile));
-    // if (metadata) {
-    //   profile.value = {
-    //     name: metadata.name || '',
-    //     about: metadata.about || '',
-    //     picture: metadata.image || ''
-    //   };
-      
-    // }
+    }
   }
 });
 
 const triggerFileInput = () => {
-  fileInput.value.click();
+  if (fileInput.value) {
+    fileInput.value.click();
+  }
 };
 
-const handleFileChange = async (event) => {
-  const file = event.target.files[0];
+const handleFileChange = async (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
   if (file) {
     try {
       // Convert to base64
       const reader = new FileReader();
       reader.onload = (e) => {
-        profile.value.picture = e.target.result;
+        const result = e.target?.result;
+        if (typeof result === 'string') {
+          profile.value.picture = result;
+        }
       };
       reader.readAsDataURL(file);
     } catch (err) {
@@ -158,8 +152,6 @@ const saveProfile = async () => {
 
     nostrStore.user.profile = profile.value;
 
-
-
     await nostrStore.user.publish(event);
     showSavedAlert.value = true;
     setTimeout(() => {
@@ -175,7 +167,12 @@ const goBack = () => {
     window.history.back();
   } else {
     const { localePath } = useNuxtApp();
-    window.location.href = localePath("home");
+    if (typeof localePath === 'function') {
+      const path = localePath('home');
+      if (typeof path === 'string') {
+        window.location.href = path;
+      }
+    }
   }
 };
 

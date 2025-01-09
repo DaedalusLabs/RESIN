@@ -1,14 +1,14 @@
 <template>
    <section class="mx-auto flex w-10/12 flex-col py-20">
-      <h1 class="mb-10 text-2xl font-extrabold leading-tight">My Resin</h1>
+      <h1 class="mb-10 text-2xl font-extrabold leading-tight">{{ $t('myResin.title') }}</h1>
 
       <div class="space-y-10">
          <section class="flex flex-col gap-4">
-            <MyResinNavbar title="Favorites" link="favorites" />
+            <MyResinNavbar :title="$t('myResin.favorites.title')" link="favorites" />
 
             <div v-if="favorites.length === 0">
                <p class="mt-20 gap-2 font-semibold text-pirate-950">
-                  You have no properties yet
+                  {{ $t('myResin.favorites.noProperties') }}
                </p>
             </div>
             <div class="space-y-4">

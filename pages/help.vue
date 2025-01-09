@@ -6,7 +6,7 @@
         <PhCaretLeft :size="24" class="text-pirate-300" />
       </NuxtLinkLocale>
       <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
-        Help
+        {{ $t('help.title') }}
       </h1>
     </div>
 
@@ -19,7 +19,7 @@
           <input
             v-model="searchQuery"
             type="search"
-            placeholder="Search"
+            :placeholder="$t('help.search')"
             class="w-full rounded-lg border border-gray-200 py-2.5 pl-10 pr-4 text-pirate-950 focus:border-resin-500 focus:ring-resin-500"
           />
         </div>
@@ -29,12 +29,12 @@
       <div class="mb-6 flex flex-wrap gap-2">
         <button
           v-for="category in categories"
-          :key="category"
-          @click="selectedCategory = category"
+          :key="category.key"
+          @click="selectedCategory = category.key"
           class="rounded-full px-4 py-1.5 text-sm font-medium transition-colors"
-          :class="selectedCategory === category ? 'bg-resin-500 text-white' : 'bg-gray-100 text-pirate-600 hover:bg-gray-200'"
+          :class="selectedCategory === category.key ? 'bg-resin-500 text-white' : 'bg-gray-100 text-pirate-600 hover:bg-gray-200'"
         >
-          {{ category }}
+          {{ category.label }}
         </button>
       </div>
 
@@ -69,8 +69,8 @@
       <!-- Contact Support -->
       <div class="mt-8 rounded-lg border border-gray-200 bg-gray-50 p-4 text-center">
         <p class="text-sm text-pirate-600">
-          Can't find what you're looking for?
-          <a href="mailto:support@resin.estate" class="text-resin-500 hover:text-resin-600">Contact Support</a>
+          {{ $t('help.cantFind') }}
+          <a href="mailto:support@resin.estate" class="text-resin-500 hover:text-resin-600">{{ $t('help.contactSupport') }}</a>
         </p>
       </div>
     </div>
@@ -84,48 +84,54 @@ const openSections = ref([]);
 const searchQuery = ref('');
 const selectedCategory = ref('All');
 
-const categories = ['All', 'Account', 'Properties', 'Payments', 'Technical'];
+const categories = [
+  { key: 'all', label: $t('help.categories.all') },
+  { key: 'account', label: $t('help.categories.account') },
+  { key: 'properties', label: $t('help.categories.properties') },
+  { key: 'payments', label: $t('help.categories.payments') },
+  { key: 'technical', label: $t('help.categories.technical') }
+];
 
 const faqs = [
   {
-    category: 'Account',
-    question: "What is NOSTR and why do I need it?",
-    answer: "NOSTR is a decentralized protocol that allows you to own your identity and data. RESIN uses NOSTR to ensure your account and transactions are secure and private."
+    category: 'account',
+    question: $t('help.faq.whatIsNostr.question'),
+    answer: $t('help.faq.whatIsNostr.answer')
   },
   {
-    category: 'Account',
-    question: "How do I recover my account?",
-    answer: "You can recover your account using your 12-word recovery phrase or your NOSTR private key. Keep these safe as they are the only way to regain access to your account."
+    category: 'account',
+    question: $t('help.faq.accountRecovery.question'),
+    answer: $t('help.faq.accountRecovery.answer')
   },
   {
-    category: 'Properties',
-    question: "How does rent-to-own work?",
-    answer: "Rent-to-own allows you to rent a property while building equity towards ownership. Part of your monthly payment goes towards your future ownership of the property."
+    category: 'properties',
+    question: $t('help.faq.rentToOwn.question'),
+    answer: $t('help.faq.rentToOwn.answer')
   },
   {
-    category: 'Properties',
-    question: "Can I list my property on RESIN?",
-    answer: "Yes, property owners can list their properties on RESIN. Contact our support team to learn more about the listing process and requirements."
+    category: 'properties',
+    question: $t('help.faq.listProperty.question'),
+    answer: $t('help.faq.listProperty.answer')
   },
   {
-    category: 'Payments',
-    question: "What payment methods are accepted?",
-    answer: "RESIN currently accepts various payment methods including bank transfers and cryptocurrency. The available options may vary by region."
+    category: 'payments',
+    question: $t('help.faq.paymentMethods.question'),
+    answer: $t('help.faq.paymentMethods.answer')
   },
   {
-    category: 'Payments',
-    question: "How is my equity calculated?",
-    answer: "Your equity is calculated based on the portion of your monthly payments that goes towards ownership, as specified in your rent-to-own agreement."
+    category: 'payments',
+    question: $t('help.faq.equityCalculation.question'),
+    answer: $t('help.faq.equityCalculation.answer')
   },
   {
-    category: 'Technical',
-    question: "What browsers are supported?",
-    answer: "RESIN works best on modern browsers like Chrome, Firefox, Safari, and Edge. Make sure to keep your browser updated for the best experience."
+    category: 'technical',
+    question: $t('help.faq.browsers.question'),
+    answer: $t('help.faq.browsers.answer')
   },
   {
-    category: 'Technical',
-    question: "Is my data secure?",
-    answer: "Yes, RESIN uses NOSTR protocol and industry-standard encryption to protect your data. Your private keys and sensitive information never leave your device."
+    category: 'technical',
+    question: $t('help.faq.dataSecurity.question'),
+    answer: $t('help.faq.dataSecurity.answer')
   }
 ];
 

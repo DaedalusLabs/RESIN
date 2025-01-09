@@ -8,14 +8,14 @@
       >
          <FlowbiteButton
             v-if="property &&property['resin-type'] === 'Buy Now'"
-            :text="`Contact Agent`"
+            :text="$t('property.details.actions.contactAgent')"
             :show-icon="true"
             @click="handleShowAgentModal"
          />
          <section v-else>
             <FlowbiteButton
                
-               :text="`Request Tour`"
+               :text="$t('property.details.actions.requestTour')"
                :show-icon="false"
                class="secondary"
                @click="handleShowTourModal"
@@ -53,12 +53,12 @@ const handleShowAgentModal = () => {
 
 const buttonText = computed(() => {
    return route.path.includes("rent-to-own")
-      ? "Rent this property"
-      : "Rent-to-own";
+      ? $t('property.details.actions.rentProperty')
+      : $t('property.details.actions.rentToOwn');
 });
 
 const handleClick = () => {
-   if (buttonText.value === "Rent this property") {
+   if (buttonText.value === $t('property.details.actions.rentProperty')) {
       emit("show-drawer");
    }
 };
