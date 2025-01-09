@@ -8,6 +8,7 @@
       <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
         Terms & Conditions
       </h1>
+      <p class="text-sm text-pirate-600">Last Updated: Jan 7, 2025</p>
     </div>
 
     <!-- Content -->
@@ -42,40 +43,60 @@
 <script setup>
 import { PhCaretLeft, PhCaretDown } from "@phosphor-icons/vue";
 
-const openSections = ref(new Array(8).fill(true)); // Initialize all sections as open
+const openSections = ref(new Array(13).fill(true)); // Updated to match new number of sections
 
 const sections = [
   {
-    title: "1. Acceptance of Terms",
-    content: "By accessing and using RESIN, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services."
+    title: "Acceptance of Terms",
+    content: "By accessing or using RESIN, you agree to be bound by these Terms and Conditions (\"Terms\"). If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any services."
   },
   {
-    title: "2. User Registration",
-    content: "To use certain features of RESIN, you must register for an account. You agree to provide accurate and complete information during registration and to keep your account information updated."
+    title: "Description of Service",
+    content: "RESIN provides an online platform for real estate transactions including the listing, marketing, and sale or long-term rental of residential properties. Our services include but are not limited to property listings, facilitating communication between buyers/renters and sellers/landlords, and providing tools for transaction management."
   },
   {
-    title: "3. Privacy Policy",
-    content: "Your use of RESIN is also governed by our Privacy Policy. By using RESIN, you consent to the collection and use of your information as described in the Privacy Policy."
+    title: "User Eligibility",
+    content: "You must be at least 18 years old to use this service. By accessing or using RESIN, you represent and warrant that you have the right, authority, and capacity to enter into this agreement and to abide by all of the terms and conditions of this agreement."
   },
   {
-    title: "4. Property Listings",
-    content: "Property listings on RESIN are provided for informational purposes only. We do not guarantee the accuracy or completeness of any listing information."
+    title: "User Accounts",
+    content: "Account Creation: You may need to create an account to use certain features of the service. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.<br><br>Account Security: You are responsible for safeguarding the private key that you use to access the Service and for any activities or actions under your private key. RESIN cannot and will not be liable for any loss or damage from your failure to comply with this security obligation."
   },
   {
-    title: "5. User Conduct",
-    content: "You agree not to use RESIN for any unlawful purpose or in any way that could damage, disable, overburden, or impair our services."
+    title: "User Conduct",
+    content: "You agree not to use RESIN to:<br>• Violate any local, state, national, or international law or regulation.<br>• Infringe upon or violate our intellectual property rights or the intellectual property rights of others.<br>• Transmit any viruses, worms, defects, Trojan horses, or any items of a destructive nature.<br>• Engage in any behavior that is abusive, harassing, threatening, or defamatory."
   },
   {
-    title: "6. Intellectual Property",
-    content: "All content on RESIN, including text, graphics, logos, and software, is the property of RESIN or its licensors and is protected by intellectual property laws."
+    title: "Content",
+    content: "User Content: You are solely responsible for the content you post on RESIN. You retain all rights in, and are solely responsible for, the User Content you post to the Service."
   },
   {
-    title: "7. Limitation of Liability",
-    content: "RESIN is provided 'as is' without any warranties. We shall not be liable for any damages arising from your use of our services."
+    title: "Payment and Fees",
+    content: "All fees associated with listing properties, transaction services, or any additional features are due immediately and are non-refundable unless otherwise stated. RESIN may use third-party payment processors to handle payment transactions."
   },
   {
-    title: "8. Changes to Terms",
-    content: "We reserve the right to modify these Terms and Conditions at any time. Continued use of RESIN after changes constitutes acceptance of the modified terms."
+    title: "Transactions",
+    content: "All real estate transactions facilitated through RESIN are subject to the terms agreed upon by the parties involved. RESIN does not act as a real estate agent, broker, or intermediary in these transactions but merely provides a platform for these activities to occur."
+  },
+  {
+    title: "Disclaimers and Limitation of Liability",
+    content: "RESIN is provided \"as is\" and \"as available\" without warranty of any kind. We disclaim all warranties to the fullest extent permitted by law.<br><br>In no event will RESIN, its officers, directors, employees, or agents be liable to you for any indirect, incidental, special, consequential or punitive damages."
+  },
+  {
+    title: "Termination",
+    content: "We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms."
+  },
+  {
+    title: "Governing Law",
+    content: "These Terms shall be governed and construed in accordance with the laws of the State of Delaware, without regard to its conflict of law provisions."
+  },
+  {
+    title: "Changes to Terms",
+    content: "RESIN reserves the right, at its sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect."
+  },
+  {
+    title: "Contact Information",
+    content: "For any questions about these Terms, please contact us at hello@daedaluslabs.io"
   }
 ];
 
