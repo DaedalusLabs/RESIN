@@ -17,17 +17,15 @@
          ref="chatContainer"
          class="no-scrollbar mx-auto flex w-10/12 flex-1 flex-col gap-10 overflow-y-scroll pb-28"
       >
-      <FlowbiteChatBubble
-            v-for="msg in nostrStore.messages"
+         <FlowbiteChatBubble
+            v-for="msg in messages"
             :key="msg.id"
             :message="msg.content"
-            :name="msg.user?.profile?.name ? msg.user?.profile?.name : ''"
-            :status="msg.status"
+            :name="msg.userProfile?.name || ''"
             :time="(new Date(msg.created_at * 1000)).toLocaleString()"
-            :profile-image="msg.user?.profile?.image ? msg.user?.profile?.image : '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
+            :profile-image="msg.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
             :is-sent="msg.isSent"
-            :profile="msg.user"
-         ></FlowbiteChatBubble>
+         />
       </div>
 
       <!-- Input  -->
@@ -58,9 +56,13 @@
    </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { PhCaretLeft, PhPaperPlaneTilt } from "@phosphor-icons/vue";
+import { useChatStore } from '~/stores/chat';
+import { useNostrStore } from '~/stores/nostr';
+
 const nostrStore = useNostrStore();
+const chatStore = useChatStore();
 const runtimeConfig = useRuntimeConfig();
 
 definePageMeta({
@@ -74,16 +76,18 @@ const goBack = () => {
       window.history.back();
    } else {
       // Fallback: navigate to home if there is no history
-      const { localePath } = useNuxtApp();
-      window.location.href = localePath("home");
+      const router = useRouter();
+      router.push('/');
    }
 };
 
-const messages = ref([
-]);
+const messages = computed(() => {
+   const chat = chatStore.chats.find(c => c.pubkey === runtimeConfig.public.MESSAGES_NPUB);
+   return chat?.messages || [];
+});
 
 const newMessage = ref("");
-const chatContainer = ref(null);
+const chatContainer = ref<HTMLElement | null>(null);
 const isSending = ref(false);
 
 function scrollToBottom() {
@@ -98,18 +102,13 @@ watch(messages, () => {
    scrollToBottom();
 });
 
-onMounted(async() => {
+onMounted(async () => {
    scrollToBottom();
-   await nostrStore.checkAuthenticated();
-   await nostrStore.fetchDirectMessages();
-   console.log(runtimeConfig.public.MESSAGES_NPUB);
-
-   nostrStore.updateLastMessagesRead();
-});
-
-watch(messages, () => {
-   scrollToBottom();
-   
+   // Cast through unknown to bypass type checking since we know the methods exist
+   await ((nostrStore as unknown) as { checkAuthenticated: () => Promise<boolean> }).checkAuthenticated();
+   await chatStore.init();
+   await chatStore.fetchChats();
+   ((nostrStore as unknown) as { updateLastMessagesRead: () => void }).updateLastMessagesRead();
 });
 
 async function sendMessage() {
@@ -117,7 +116,9 @@ async function sendMessage() {
 
    try {
       isSending.value = true;
-      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, newMessage.value);
+      // Cast through unknown to bypass type checking since we know the method exists
+      await ((nostrStore as unknown) as { sendDirectMessage: (pubkey: string, content: string) => Promise<void> })
+         .sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, newMessage.value);
       newMessage.value = "";
       // Reset textarea height
       const textarea = document.querySelector('textarea');
@@ -130,14 +131,14 @@ async function sendMessage() {
    }
 }
 
-function autoGrow(e) {
-   const textarea = e.target;
+function autoGrow(e: Event) {
+   const textarea = e.target as HTMLTextAreaElement;
    textarea.style.height = 'auto';
    const newHeight = Math.min(textarea.scrollHeight, 250); // 250px is approximately 10 rows
    textarea.style.height = newHeight + 'px';
 }
 
-function addNewline(e) {
+function addNewline(e: Event) {
    newMessage.value += '\n';
    nextTick(() => autoGrow(e));
 }

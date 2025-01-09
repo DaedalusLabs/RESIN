@@ -1,36 +1,23 @@
 import { defineStore } from 'pinia';
-import type { NDKFilter, NDKUser, NDKUserProfile, NostrEvent } from '@nostr-dev-kit/ndk';
+import type { NDKFilter, NDKUser, NDKUserProfile } from '@nostr-dev-kit/ndk';
 import * as bip39 from '@scure/bip39';
 import { HDKey } from '@scure/bip32'
-
-import { NDKEvent, NDKNip07Signer, NDKPrivateKeySigner, NDKRelaySet } from '@nostr-dev-kit/ndk';
+import { NDKEvent, NDKNip07Signer, NDKPrivateKeySigner } from '@nostr-dev-kit/ndk';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import { bytesToHex } from '@noble/hashes/utils'
 import { setSigner, useNDK } from '~/composables/useNDK';
 import { getPublicKey } from 'nostr-tools';
+import { useChatStore } from './chat';
 
 const DERIVATION_PATH = `m/44'/1237'`
-const NOSTR_TYPE_KEY = 'nostr'
 
 interface NostrState {
     user: NDKUser | null;
     pubkey: string | null;
     authenticated: boolean;
     mnemonic: string | null;
-    messages: NostrMessage[];
     typeKey: NostrLoginType | null;
     lastMessagesRead: number | null;
-}
-
-interface NostrMessage {
-    id: string;
-    pubkey: string;
-    content: string;
-    created_at: number;
-    tags: string[][];
-    user: NDKUser | undefined;
-    isSent: boolean;
-    recipientPubkey: string;
 }
 
 export enum NostrLoginType {
@@ -50,20 +37,18 @@ export const useNostrStore = defineStore('nostr', {
         pubkey: null,
         authenticated: false,
         mnemonic: null,
-        messages: [],
         typeKey: null,
         lastMessagesRead: null,
     }),
     persist: {
         key: 'nostr-store',
-        storage: piniaPluginPersistedstate.localStorage(),
+        storage: localStorage,
         paths: ['mnemonic', 'typeKey', 'authenticated', 'lastMessagesRead'] 
     },
     getters: {
         unreadMessagesCount(): number {
-            return this.messages.filter((m) => {
-                return m.created_at > this.lastMessagesRead && !m.isSent;
-            }).length;
+            const chatStore = useChatStore();
+            return chatStore.chats.reduce((count, chat) => count + chat.unreadCount, 0);
         },
         getTypeKey(): NostrLoginType | null {
             return this.typeKey;
@@ -71,8 +56,7 @@ export const useNostrStore = defineStore('nostr', {
         async userProfile(): Promise<NDKUserProfile | null> {
             const ndk = useNDK();
             const profile = await (await ndk?.signer?.user())?.fetchProfile();
-            console.log('profile', profile);
-            return profile;
+            return profile || null;
         }
     },
     actions: {
@@ -167,38 +151,13 @@ export const useNostrStore = defineStore('nostr', {
             this.pubkey = null;
             this.typeKey = null;
             this.mnemonic = null;
-            this.messages = [];
-            this.authenticated = false;
             this.lastMessagesRead = null;
             
         },
         async fetchDirectMessages() {
-            const ndk = useNDK();
-
-            if (!ndk) {
-                console.log('No NDK instance');
-                return;
-            }
-
-            const filter: NDKFilter = {
-                kinds: [1059], // Gift wrap kind
-                '#p': [this.pubkey!],
-                since: Math.floor(Date.now() / 1000) - (60 * 60 * 24 * 30) // Last 30 days?
-            };
-
-            const messages = await ndk.subscribe(filter, { closeOnEose: false });
-
-            messages.on('event', async (e) => {
-                try {
-                    const u = await this.unwrapMessage(e);
-                    if (this.messages.find((m) => m.id == u.id) == undefined) {
-                        this.messages.push(u);
-                        this.messages = this.messages.sort((a, b) => a.created_at - b.created_at);
-                    }
-                } catch (error) {
-                    console.error('Ignoring malformed message:', error.message);
-                }
-            });
+            const chatStore = useChatStore();
+            await chatStore.init();
+            await chatStore.fetchChats();
         },
         async sendDirectMessage(recipientPubkey: string, content: string) {
             const ndk = useNDK();
@@ -226,7 +185,6 @@ export const useNostrStore = defineStore('nostr', {
 
             if (this.user)
                 await this.user.fetchProfile();
-
         },
         async signMessage(message: string) {
             const ndk = useNDK();
@@ -270,10 +228,10 @@ export const useNostrStore = defineStore('nostr', {
             // Send to recipient's preferred relays
             return giftWrap;
         },
-        async updateLastMessagesRead() {
-            this.lastMessagesRead = Math.floor(new Date().getTime() / 1000); // Using getTime() which returns UTC milliseconds since epoch
+        updateLastMessagesRead() {
+            this.lastMessagesRead = Math.floor(Date.now() / 1000);
         },
-        async unwrapMessage(event: NDKEvent): Promise<NostrMessage> {
+        async unwrapMessage(event: NDKEvent): Promise<UnwrappedMessage> {
             const ndk = useNDK();
 
             let sealSender = ndk.getUser({

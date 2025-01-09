@@ -109,11 +109,16 @@ export const useChatStore = defineStore('chat', {
                 await this.processMessages(cachedMessages, true); // Skip profile fetching initially
 
                 // Set up subscription for new messages
-                const filter = {
+                const filter: { kinds: number[]; '#p': string[]; since?: number } = {
                     kinds: [1059], // Gift wrap kind
                     '#p': nostrStore.pubkey ? [nostrStore.pubkey] : [],
-                    ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp } : {})
+                    ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp - 1000 } : {})
                 };
+
+                // If we don't have any cached messages, fetch the last week
+                if (cachedMessages.length === 0) {
+                    filter.since = Math.floor(Date.now() / 1000) - (60 * 60 * 24 * 7); // Last week
+                }
 
                 console.log('Filter:', filter);
 
@@ -127,6 +132,7 @@ export const useChatStore = defineStore('chat', {
                         // Cast through unknown to bypass type checking since we know the method exists
                         const unwrappedMessage = await ((nostrStore as unknown) as { unwrapMessage: (event: NDKEvent) => Promise<UnwrappedMessage> }).unwrapMessage(event);
                         
+                       
                         // Update last message timestamp
                         if (!this.lastMessageTimestamp || unwrappedMessage.created_at > this.lastMessageTimestamp) {
                             this.lastMessageTimestamp = unwrappedMessage.created_at;

@@ -1,5 +1,5 @@
 <template>
-   <section class="h-dvh flex flex-col overflow-hidden">
+   <section class="h-full flex flex-col overflow-hidden">
       <!-- Header -->
       <div class="flex w-full items-center justify-between border-b border-gray-200 bg-white px-10 py-5">
          <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
@@ -170,7 +170,7 @@ import { nip19 } from 'nostr-tools';
 definePageMeta({
    layout: "white",
    middleware: ['auth'],
-   hideBottomBar: true
+   hideBottomBar: false
 });
 
 const chatStore = useChatStore();
