@@ -1,14 +1,14 @@
 <template>
    <div class="mt-12 flex space-x-8">
       <div v-if="property['resin-type'] !== 'Buy Now'">
-         <h3 class="mb-2 text-xs">Rent Price</h3>
+         <h3 class="mb-2 text-xs">{{ $t('property.details.prices.rentPrice') }}</h3>
          <p class="text-lg font-semibold">
             $ {{ property.price.toLocaleString() }}
-            per month
+            {{ $t('property.details.prices.perMonth') }}
          </p>
       </div>
       <div v-else>
-         <h3 class="mb-2 text-xs">Property Price</h3>
+         <h3 class="mb-2 text-xs">{{ $t('property.details.prices.propertyPrice') }}</h3>
          <p class="text-lg font-semibold">
             $ {{ property.price.toLocaleString() }}
          </p>

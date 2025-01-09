@@ -1,13 +1,13 @@
 <template>
    <div class="container mx-auto mt-8 ">
-      <h2 class="text-base font-bold">Location</h2>
+      <h2 class="text-base font-bold">{{ $t('property.details.map.title') }}</h2>
       <div class="mt-4 overflow-hidden rounded-2xl">
          <div ref="mapContainer" class="h-64">
             <NuxtLink @click="goToMap">
 
                <div
                   class="force-top absolute bottom-0 flex w-full justify-center bg-black/20 p-4 text-sm text-white backdrop-blur-md cursor-pointer">
-                  <p>View on map</p>
+                  <p>{{ $t('property.details.map.viewOnMap') }}</p>
                </div>
             </NuxtLink>
 

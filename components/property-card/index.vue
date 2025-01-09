@@ -16,7 +16,7 @@
          <span
             class="absolute bottom-4 right-4 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
-            {{ property['resin-type']  }}
+            {{ $t(`property.types.${property['resin-type'].split(' ').map((word, index) => index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('')}`) }}
          </span>
       </div>
       <div class="flex flex-col gap-2 p-4">
@@ -40,8 +40,7 @@
             v-if="property['resin-type'] !== 'Buy Now'"
             class="text-sm font-bold text-gray-800"
          >
-            ${{ property.price.toLocaleString() }} per
-            month 
+            ${{ property.price.toLocaleString() }} {{ $t('property.card.perMonth') }}
          </p>
          <p v-else class="text-sm font-bold text-gray-800">
             ${{ property.price?.toLocaleString() }}
@@ -52,13 +51,13 @@
             <p class="flex items-center gap-1">
                <PhRuler :size="20" class="inline" />
                <span class="text-gray-500">
-                  {{ property.property.size }} m²
+                  {{ property.property.size }} {{ $t('property.card.size.squareMeters') }}
                </span>
             </p>
             <p class="flex items-center gap-1">
                <PhBed :size="20" class="inline" />
                <span class="text-gray-500">
-                  {{ property.property.bedrooms }} Beds
+                  {{ property.property.bedrooms }} {{ $t('property.card.beds') }}
                </span>
             </p>
          </div>

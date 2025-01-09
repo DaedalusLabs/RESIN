@@ -1,6 +1,6 @@
 <template>
    <div class="mt-8" v-if="property.key_features && property.key_features.length > 0">
-      <h2 class="text-lg font-bold">Key Features</h2>
+      <h2 class="text-lg font-bold">{{ $t('property.details.keyFeatures.title') }}</h2>
       <div class="mt-4 flex flex-wrap gap-2">
          <FlowbiteBadge
             v-for="feature in property.key_features"

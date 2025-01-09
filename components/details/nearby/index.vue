@@ -1,9 +1,9 @@
 <template>
    <div class="container mx-auto mt-8">
-      <h2 class="text-xl font-bold">Nearby Properties</h2>
+      <h2 class="text-xl font-bold">{{ $t('property.details.nearby.title') }}</h2>
       <div class="mt-4 grid grid-cols-1 gap-8">
          <div v-if="!nearbyProperties.length">
-            <p>No nearby properties found</p>
+            <p>{{ $t('property.details.nearby.noProperties') }}</p>
          </div>
          <div
             v-for="nearbyProperty in nearbyProperties"
@@ -16,11 +16,10 @@
 </template>
 
 <script setup>
-// const appConfig = useAppConfig()
 const nearbyProperties = ref([]);
 const runtimeConfig = useRuntimeConfig();
 
-let props = defineProps({
+const props = defineProps({
    property: {
       type: Object,
       required: true,
@@ -33,6 +32,8 @@ onMounted(async() => {
       data = await(await fetch(`${runtimeConfig.public.BACKEND_ENDPOINT}/listings/get_nearby/${props.property.id}`)).json();   
       nearbyProperties.value = data.hits.map((h)=> h.document);
    }
-   catch  {}
+   catch (error) {
+      console.error('Failed to fetch nearby properties:', error);
+   }
 });
 </script>

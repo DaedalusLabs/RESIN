@@ -123,6 +123,32 @@
         "requestTour": "Request Tour",
         "rentProperty": "Rent this property",
         "rentToOwn": "Rent-to-own"
+      },
+      "map": {
+        "title": "Location",
+        "viewOnMap": "View on map"
+      },
+      "nearby": {
+        "title": "Nearby Properties",
+        "noProperties": "No nearby properties found"
+      },
+      "prices": {
+        "rentPrice": "Rent Price",
+        "propertyPrice": "Property Price",
+        "perMonth": "per month"
+      },
+      "size": {
+        "bed": "bed",
+        "beds": "beds",
+        "squareMeters": "m²"
+      },
+      "additional": {
+        "title": "Additional Details",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "keyFeatures": {
+        "title": "Key Features"
       }
     },
     "overview": {
@@ -165,6 +191,13 @@
         "priceDesc": "Price (high to low)",
         "sizeAsc": "Size (small to large)",
         "sizeDesc": "Size (large to small)"
+      }
+    },
+    "card": {
+      "perMonth": "per month",
+      "beds": "Beds",
+      "size": {
+        "squareMeters": "m²"
       }
     }
   },
@@ -278,6 +311,29 @@
         "title": "Contact Information",
         "content": "For any questions about these Terms, please contact us at hello@daedaluslabs.io"
       }
+    }
+  },
+  "home": {
+    "recentSearches": {
+      "title": "Recent searches",
+      "noSearches": "No recent searches"
+    },
+    "recentlyViewed": {
+      "title": "Recently viewed",
+      "noProperties": "No recently viewed properties"
+    },
+    "trendingAreas": {
+      "title": "Trending areas",
+      "noAreas": "No trending areas"
+    }
+  },
+  "favorites": {
+    "title": "Favorites",
+    "noFavorites": "You have no favorites yet",
+    "browseListings": "Browse listings",
+    "share": {
+      "title": "Resin",
+      "text": "Check out these listings on Resin"
     }
   }
 } 

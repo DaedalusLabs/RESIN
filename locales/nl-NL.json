@@ -1,4 +1,6 @@
 {
+  "rentToOwn": "Huur tot aankoop",
+  "withoutALoan": "zonder een lening",
   "introductionTitle": "Koop een huis zonder de bank",
   "introductionButton": "Aan de slag",
   "signIn": "Inloggen",
@@ -63,7 +65,113 @@
     },
     "details": {
       "addressNotAvailable": "Adres niet beschikbaar",
-      "requestSuccess": "Uw informatie is succesvol verzonden."
+      "requestSuccess": "Your information has been submitted successfully.",
+      "summary": {
+        "title": "Samenvatting",
+        "readMore": "Lees volledige beschrijving",
+        "collapse": "Samenvatting sluiten"
+      },
+      "actions": {
+        "contactAgent": "Contact Agent",
+        "requestTour": "Request Tour",
+        "rentProperty": "Huur dit object",
+        "rentToOwn": "Huur tot aankoop"
+      },
+      "map": {
+        "title": "Locatie",
+        "viewOnMap": "Bekijk op kaart"
+      },
+      "nearby": {
+        "title": "Nabijgelegen objecten",
+        "noProperties": "Geen nabijgelegen objecten gevonden"
+      },
+      "prices": {
+        "rentPrice": "Huurprijs",
+        "propertyPrice": "Objectprijs",
+        "perMonth": "per maand"
+      },
+      "size": {
+        "bed": "slaapkamer",
+        "beds": "slaapkamers",
+        "squareMeters": "m²"
+      },
+      "additional": {
+        "title": "Extra Details",
+        "yes": "Ja",
+        "no": "Nee"
+      }
+    },
+    "overview": {
+      "noProperties": "No properties to display",
+      "filters": {
+        "toggle": "Filter weergeven",
+        "apply": "Filter toepassen",
+        "clear": "Filter wissen",
+        "price": {
+          "label": "Prijs",
+          "min": "Min prijs",
+          "max": "Max prijs"
+        },
+        "size": {
+          "label": "Grootte",
+          "min": "Min grootte",
+          "max": "Max grootte"
+        },
+        "bedrooms": {
+          "label": "Slaapkamers",
+          "min": "Min slaapkamers",
+          "max": "Max slaapkamers"
+        },
+        "bathrooms": {
+          "label": "Badkamers",
+          "min": "Min badkamers",
+          "max": "Max badkamers"
+        },
+        "propertyType": {
+          "label": "Type woning",
+          "house": "Woonhuis",
+          "apartment": "Appartement",
+          "commercial": "Commercieel vastgoed"
+        }
+      },
+      "sort": {
+        "label": "Sorteer op",
+        "newest": "Nieuwste eerst",
+        "priceAsc": "Prijs (laag naar hoog)",
+        "priceDesc": "Prijs (hoog naar laag)",
+        "sizeAsc": "Grootte (klein naar groot)",
+        "sizeDesc": "Grootte (groot naar klein)"
+      }
+    }
+  },
+  "myResin": {
+    "title": "Mijn Resin",
+    "favorites": {
+      "title": "Favorieten",
+      "noProperties": "U heeft nog geen objecten in uw favorietenlijst."
+    }
+  },
+  "home": {
+    "recentSearches": {
+      "title": "Recent zoekopdrachten",
+      "noSearches": "Geen recente zoekopdrachten"
+    },
+    "recentlyViewed": {
+      "title": "Recent bekeken",
+      "noProperties": "Geen recent bekeken objecten"
+    },
+    "trendingAreas": {
+      "title": "Trending gebieden",
+      "noAreas": "Geen trending gebieden"
+    }
+  },
+  "favorites": {
+    "title": "Favorieten",
+    "noFavorites": "U heeft nog geen favorieten",
+    "browseListings": "Bekijk objecten",
+    "share": {
+      "title": "Resin",
+      "text": "Bekijk deze objecten op Resin"
     }
   }
 }
