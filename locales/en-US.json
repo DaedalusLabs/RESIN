@@ -366,5 +366,12 @@
     "created": "NOSTR account created!",
     "addDetails": "You can add your personal details later if you like.",
     "continue": "Continue with RESIN"
+  },
+  "map": {
+    "viewProperties": "View {count} properties",
+    "search": {
+      "placeholder": "City, region, country...",
+      "clear": "Clear search"
+    }
   }
 } 

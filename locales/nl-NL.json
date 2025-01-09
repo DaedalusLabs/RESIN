@@ -366,5 +366,12 @@
         "content": "Voor vragen over deze Voorwaarden kunt u contact met ons opnemen via hello@daedaluslabs.io"
       }
     }
+  },
+  "map": {
+    "viewProperties": "Bekijk {count} objecten",
+    "search": {
+      "placeholder": "Stad, regio, land...",
+      "clear": "Zoekopdracht wissen"
+    }
   }
 }

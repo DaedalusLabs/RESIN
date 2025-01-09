@@ -9,7 +9,7 @@
             to="properties"
          >
             <FlowbiteButton
-               :text="`View ${visibleLocationsAmount} properties`"
+               :text="$t('map.viewProperties', { count: visibleLocationsAmount })"
                class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
             />
          </NuxtLinkLocale>

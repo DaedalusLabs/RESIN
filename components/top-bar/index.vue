@@ -59,7 +59,7 @@
             <ais-hits>
                <template #default="{ items }">
                   <FlowbiteButton
-                     :text="`View ${items.length} properties`"
+                     :text="t('map.viewProperties', { count: items.length })"
                      class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600 lg:h-12"
                   />
                </template>
@@ -74,6 +74,8 @@ const propertiesStore = usePropertiesStore();
 const route = useRoute();
 const showListIcon = ref(route.fullPath.includes("map"));
 const router = useRouter()
+
+const { t } = useI18n();
 
 const query = ref("");
 const mapCenter = ref(null);
