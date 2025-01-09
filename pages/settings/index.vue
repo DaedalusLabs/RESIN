@@ -26,7 +26,7 @@
                 <!-- Language Selection -->
                 <div class="flex flex-col gap-2">
                     <label class="text-sm font-medium text-pirate-950">{{ $t('settings.language.label') }}</label>
-                    <select :value="locale" @change="switchLanguage($event.target.value)" disabled
+                    <select :value="locale" @change="switchLanguage($event.target.value)" 
                         class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500">
                         <option v-for="locale in locales" :key="locale.code" :value="locale.code">
                             {{ $t(`settings.language.${locale.code}`) }}
@@ -58,6 +58,7 @@ const goBack = () => {
 };
 
 const switchLanguage = async (newLocale) => {
+    settingsStore.display.language = newLocale;
     await router.push(switchLocalePath(newLocale))
 }
 

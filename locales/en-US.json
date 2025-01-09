@@ -44,9 +44,9 @@
     },
     "language": {
       "label": "Language",
-      "en": "English",
+      "en-US": "English",
       "nl": "Dutch",
-      "nl-NL": "Dutch (Netherlands)"
+      "nl-NL": "Dutch"
     },
     "profile": {
       "title": "Profile",

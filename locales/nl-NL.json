@@ -56,8 +56,9 @@
     "language": {
       "label": "Taal",
       "en": "Engels",
+      "en-US": "Engels",
       "nl": "Nederlands",
-      "nl-NL": "Nederlands (Nederland)"
+      "nl-NL": "Nederlands"
     },
     "profile": {
       "title": "Profiel",
