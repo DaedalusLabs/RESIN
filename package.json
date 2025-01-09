@@ -20,6 +20,7 @@
    "dependencies": {
       "@emanuele-em/nuxt-swipe": "^1.0.2",
       "@nostr-dev-kit/ndk": "^2.11.0",
+      "@nostr-dev-kit/ndk-cache-dexie": "^2.5.9",
       "@nuxt/fonts": "^0.7.2",
       "@nuxtjs/algolia": "^1.10.2",
       "@nuxtjs/i18n": "9.0.0-rc.2",

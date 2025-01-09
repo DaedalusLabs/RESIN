@@ -14,6 +14,9 @@ importers:
       '@nostr-dev-kit/ndk':
         specifier: ^2.11.0
         version: 2.11.0(typescript@5.7.3)
+      '@nostr-dev-kit/ndk-cache-dexie':
+        specifier: ^2.5.9
+        version: 2.5.9(typescript@5.7.3)
       '@nuxt/fonts':
         specifier: ^0.7.2
         version: 0.7.2(ioredis@5.4.1)(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))
@@ -1514,6 +1517,9 @@ packages:
   '@nodelib/fs.walk@2.0.0':
     resolution: {integrity: sha512-54voNDBobGdMl3BUXSu7UaDh1P85PGHWlJ5e0XhPugo1JulOyCtp2I+5ri4wplGDJ8QGwPEQW7/x3yTLU7yF1A==}
     engines: {node: '>=16.14.0'}
+
+  '@nostr-dev-kit/ndk-cache-dexie@2.5.9':
+    resolution: {integrity: sha512-SZ5FjON0QPekiC7oW9Hy3JQxG0Oxxtud9LBa1q/A49JV/Qppv1x37nFHxi0XLxEbDgFTNYbaN27Zjfp2NPem2g==}
 
   '@nostr-dev-kit/ndk@2.11.0':
     resolution: {integrity: sha512-FKIMtcVsVcquzrC+yir9lOXHCIHmQ3IKEVCMohqEB7N96HjP2qrI9s5utbjI3lkavFNF5tXg1Gp9ODEo7XCfLA==}
@@ -3116,6 +3122,9 @@ packages:
 
   devalue@5.1.1:
     resolution: {integrity: sha512-maua5KUiapvEwiEAe+XnlZ3Rh0GD+qI1J/nb9vrJc3muPXvcF/8gXYTWF76+5DAqHyDUtOIImEuo0YKE9mshVw==}
+
+  dexie@4.0.10:
+    resolution: {integrity: sha512-eM2RzuR3i+M046r2Q0Optl3pS31qTWf8aFuA7H9wnsHTwl8EPvroVLwvQene/6paAs39Tbk6fWZcn2aZaHkc/w==}
 
   dfa@1.2.0:
     resolution: {integrity: sha512-ED3jP8saaweFTjeGX8HQPjeC1YYyZs98jGNZx6IiBvxW7JG5v492kamAQB3m2wop07CvU/RQmzcKr6bgcC5D/Q==}
@@ -8127,6 +8136,17 @@ snapshots:
       '@nodelib/fs.scandir': 3.0.0
       fastq: 1.17.1
 
+  '@nostr-dev-kit/ndk-cache-dexie@2.5.9(typescript@5.7.3)':
+    dependencies:
+      '@nostr-dev-kit/ndk': 2.11.0(typescript@5.7.3)
+      debug: 4.4.0(supports-color@9.4.0)
+      dexie: 4.0.10
+      nostr-tools: 2.10.4(typescript@5.7.3)
+      typescript-lru-cache: 2.0.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
   '@nostr-dev-kit/ndk@2.11.0(typescript@5.7.3)':
     dependencies:
       '@noble/curves': 1.7.0
@@ -10285,6 +10305,8 @@ snapshots:
   detect-libc@2.0.3: {}
 
   devalue@5.1.1: {}
+
+  dexie@4.0.10: {}
 
   dfa@1.2.0: {}
 

@@ -30,6 +30,7 @@ interface NostrMessage {
     tags: string[][];
     user: NDKUser | undefined;
     isSent: boolean;
+    recipientPubkey: string;
 }
 
 export enum NostrLoginType {
@@ -297,14 +298,21 @@ export const useNostrStore = defineStore('nostr', {
 
             await messageSender.fetchProfile();
 
+            if (!message.profile) {
+                message.profile = await messageSender.fetchProfile();
+            }
+
+            const pTag = message.tags.find((t) => t[0] == 'p');
+
             return {
                 id: event.id,
-                pubkey: message.pubkey,
+                pubkey: message.pubkey || messageSender.pubkey,
                 content: message.content,
                 created_at: message.created_at,
                 tags: message.tags,
                 user: messageSender,
                 isSent: messageSender.pubkey == this.pubkey ? true : false,
+                recipientPubkey: pTag ? pTag[1] : message.pubkey,
             };
         },
         async savePreferences(key: string, value: string[]): Promise<void> {

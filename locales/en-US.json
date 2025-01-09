@@ -373,5 +373,14 @@
       "placeholder": "City, region, country...",
       "clear": "Clear search"
     }
+  },
+  "chat": {
+    "title": "Messages",
+    "search": "Search conversations",
+    "typeMessage": "Type a message...",
+    "send": "Send message",
+    "selectConversation": "Select a conversation to start messaging",
+    "loading": "Loading messages...",
+    "retry": "Try again"
   }
 } 

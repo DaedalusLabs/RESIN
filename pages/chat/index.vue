@@ -1,0 +1,322 @@
+<template>
+   <section class="h-dvh flex flex-col overflow-hidden">
+      <!-- Header -->
+      <div class="flex w-full items-center justify-between border-b border-gray-200 bg-white px-10 py-5">
+         <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
+            {{ $t('chat.title') }}
+         </h1>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="isLoading" class="flex flex-1 items-center justify-center">
+         <div class="text-center">
+            <div class="mb-4">
+               <img src="/images/logos/Resin_Hexagon_Orange_Fill.svg" class="mx-auto h-12 w-12 animate-pulse" alt="Loading" />
+            </div>
+            <p class="text-gray-500">{{ $t('chat.loading') }}</p>
+         </div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="flex flex-1 items-center justify-center">
+         <div class="text-center">
+            <div class="mb-4 text-red-500">
+               <PhWarning :size="48" class="mx-auto" />
+            </div>
+            <p class="text-gray-500">{{ error }}</p>
+            <button
+               class="mt-4 rounded-lg bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
+               @click="retryInitialization"
+            >
+               {{ $t('chat.retry') }}
+            </button>
+         </div>
+      </div>
+
+      <!-- Main Chat Layout -->
+      <div v-else class="flex flex-1 min-h-0">
+         <!-- Left Sidebar - Conversations List -->
+         <div class="flex w-96 flex-col border-r border-gray-200 bg-white">
+            <!-- Search -->
+            <div class="border-b border-gray-200 p-4">
+               <div class="relative">
+                  <input
+                     v-model="searchQuery"
+                     type="text"
+                     :placeholder="$t('chat.search')"
+                     class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-900 focus:border-gray-500 focus:ring-0"
+                  />
+                  <PhMagnifyingGlass class="absolute left-3 top-2.5 text-gray-500" :size="20" />
+               </div>
+            </div>
+            <!-- Conversations List -->
+            <div class="flex-1 overflow-y-auto">
+               <div
+                  v-for="chat in filteredChats"
+                  :key="chat.pubkey"
+                  class="cursor-pointer border-b border-gray-100 p-4 hover:bg-gray-50"
+                  :class="{ 'bg-gray-100': selectedChat?.pubkey === chat.pubkey }"
+                  @click="selectChat(chat)"
+               >
+                  <div class="flex items-center gap-3">
+                     <img
+                        :src="chat.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
+                        class="h-12 w-12 rounded-full"
+                        alt="Profile"
+                     />
+                     <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                           <h3 class="font-semibold">
+                              {{ formatDisplayName(chat.userProfile?.name, chat.pubkey) }}
+                           </h3>
+                           <span class="text-xs text-gray-500">
+                              {{ formatTime(chat.lastMessage?.created_at) }}
+                           </span>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">
+                           {{ pubkeyToNpub(chat.pubkey) }}
+                        </p>
+                        <p class="mt-1 text-sm text-gray-600 line-clamp-1">
+                           {{ chat.lastMessage?.content || '' }}
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Right Side - Chat Messages -->
+         <div class="flex flex-1 flex-col bg-gray-50 min-h-0">
+            <template v-if="selectedChat">
+               <!-- Chat Header -->
+               <div class="flex items-center justify-between border-b border-gray-200 bg-white p-4">
+                  <div class="flex items-center gap-3">
+                     <img
+                        :src="selectedChat.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
+                        class="h-10 w-10 rounded-full"
+                        alt="Profile"
+                     />
+                     <div>
+                        <h2 class="font-semibold">
+                           {{ formatDisplayName(selectedChat.userProfile?.name, selectedChat.pubkey) }}
+                        </h2>
+                        <p class="text-xs text-gray-500">
+                           {{ pubkeyToNpub(selectedChat.pubkey) }}
+                        </p>
+                     </div>
+                  </div>
+                  <a
+                     :href="'https://njump.me/' + pubkeyToNpub(selectedChat.pubkey)"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     class="rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                  >
+                     View on njump
+                  </a>
+               </div>
+
+               <!-- Messages -->
+               <div ref="messagesContainer" class="flex-1 overflow-y-auto p-4">
+                  <FlowbiteChatBubble
+                     v-for="msg in selectedChat.messages"
+                     :key="msg.id"
+                     :message="msg.content"
+                     :name="formatDisplayName(msg.userProfile?.name, msg.pubkey)"
+                     :time="(new Date(msg.created_at * 1000)).toLocaleString()"
+                     :profile-image="msg.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
+                     :is-sent="msg.isSent"
+                  />
+               </div>
+
+               <!-- Message Input -->
+               <div class="border-t border-gray-200 bg-white p-4">
+                  <div class="flex w-full items-center rounded-lg border bg-white">
+                     <textarea
+                        v-model="newMessage"
+                        rows="1"
+                        :placeholder="$t('chat.typeMessage')"
+                        class="flex-grow rounded-l-lg border-none bg-transparent px-4 py-2 focus:outline-none resize-none overflow-y-auto max-h-[250px]"
+                        @keyup.enter.exact="sendMessage"
+                        @keydown.shift.enter.prevent="addNewline"
+                        @input="autoGrow"
+                        :disabled="isSending"
+                     />
+                     <button
+                        class="rounded-r-lg border-none bg-transparent p-4 focus:outline-none disabled:opacity-50"
+                        @click="sendMessage"
+                        :disabled="isSending"
+                        :title="$t('chat.send')"
+                     >
+                        <PhPaperPlaneTilt :size="20" />
+                     </button>
+                  </div>
+               </div>
+            </template>
+            <div v-else class="flex h-full items-center justify-center text-gray-500">
+               {{ $t('chat.selectConversation') }}
+            </div>
+         </div>
+      </div>
+   </section>
+</template>
+
+<script setup lang="ts">
+import { PhMagnifyingGlass, PhPaperPlaneTilt, PhWarning } from "@phosphor-icons/vue";
+import { useChatStore } from '~/stores/chat';
+import { useNostrStore } from '~/stores/nostr';
+import type { Chat } from '~/stores/chat';
+import { nip19 } from 'nostr-tools';
+
+definePageMeta({
+   layout: "white",
+   middleware: ['auth'],
+   hideBottomBar: true
+});
+
+const chatStore = useChatStore();
+const nostrStore = useNostrStore();
+const searchQuery = ref('');
+const selectedChat = ref<Chat | null>(null);
+const newMessage = ref('');
+const isSending = ref(false);
+const messagesContainer = ref<HTMLElement | null>(null);
+const isLoading = ref(true);
+const error = ref<string | null>(null);
+
+// Initialize
+async function initializeChat() {
+   try {
+      isLoading.value = true;
+      error.value = null;
+      await chatStore.init();
+      await chatStore.fetchChats();
+   } catch (err) {
+      error.value = err instanceof Error ? err.message : 'An error occurred';
+      console.error('Failed to initialize chat:', err);
+   } finally {
+      isLoading.value = false;
+   }
+}
+
+async function retryInitialization() {
+   await initializeChat();
+}
+
+onMounted(async () => {
+   await initializeChat();
+});
+
+// Computed
+const filteredChats = computed(() => {
+   if (!searchQuery.value) return chatStore.chats;
+   
+   const query = searchQuery.value.toLowerCase();
+   return chatStore.chats.filter(chat => {
+      const name = chat.userProfile?.name?.toLowerCase() || '';
+      const pubkey = chat.pubkey.toLowerCase();
+      return name.includes(query) || pubkey.includes(query);
+   });
+});
+
+// Methods
+function selectChat(chat: Chat) {
+   selectedChat.value = chat;
+   nextTick(() => {
+      scrollToBottom();
+   });
+}
+
+function scrollToBottom() {
+   if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+   }
+}
+
+async function sendMessage() {
+   if (!newMessage.value.trim() || isSending.value || !selectedChat.value) return;
+
+   try {
+      isSending.value = true;
+
+      console.log('sendMessage', selectedChat.value.pubkey, newMessage.value);
+      // Cast through unknown to bypass type checking since we know the method exists
+      await ((nostrStore as unknown) as { sendDirectMessage: (pubkey: string, content: string) => Promise<void> })
+         .sendDirectMessage(selectedChat.value.pubkey, newMessage.value);
+      newMessage.value = '';
+      
+      // Reset textarea height
+      const textarea = document.querySelector('textarea');
+      if (textarea) {
+         textarea.style.height = 'auto';
+      }
+      
+      scrollToBottom();
+   } finally {
+      isSending.value = false;
+   }
+}
+
+function autoGrow(e: Event) {
+   const textarea = e.target as HTMLTextAreaElement;
+   textarea.style.height = 'auto';
+   const newHeight = Math.min(textarea.scrollHeight, 250);
+   textarea.style.height = newHeight + 'px';
+}
+
+function addNewline(e: Event) {
+   newMessage.value += '\n';
+   nextTick(() => autoGrow(e));
+}
+
+function formatTime(timestamp?: number): string {
+   if (!timestamp) return '';
+   
+   const date = new Date(timestamp * 1000);
+   const now = new Date();
+   
+   if (date.toDateString() === now.toDateString()) {
+      return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+   }
+   
+   if (now.getFullYear() === date.getFullYear()) {
+      return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+   }
+   
+   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+// Helper function to format display names
+function formatDisplayName(name?: string | null, pubkey?: string | null): string {
+   if (name) return name;
+   if (pubkey) return pubkey.slice(0, 8);
+   return 'Unknown';
+}
+
+// Helper function to convert pubkey to npub
+function pubkeyToNpub(pubkey?: string | null): string {
+   if (!pubkey) return '';
+   return nip19.npubEncode(pubkey);
+}
+
+// Watch for new messages
+watch(() => chatStore.chats, () => {
+   if (selectedChat.value) {
+      const updatedChat = chatStore.chats.find(c => c.pubkey === selectedChat.value?.pubkey);
+      if (updatedChat) {
+         selectedChat.value = updatedChat;
+         nextTick(() => {
+            scrollToBottom();
+         });
+      }
+   }
+}, { deep: true });
+</script>
+
+<style scoped>
+.line-clamp-1 {
+   display: -webkit-box;
+   -webkit-line-clamp: 1;
+   -webkit-box-orient: vertical;
+   overflow: hidden;
+}
+</style> 

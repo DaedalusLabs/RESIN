@@ -40,7 +40,7 @@
     "profile": "Profiel",
     "messages": "Berichten",
     "messagesWithCount": "Berichten ({count})",
-    "nostrKeys": "Nostr Keys",
+    "nostrKeys": "Nostr Sleutels",
     "settings": "Instellingen",
     "help": "Help",
     "logout": "Uitloggen",
@@ -374,5 +374,14 @@
       "placeholder": "Stad, regio, land...",
       "clear": "Zoekopdracht wissen"
     }
+  },
+  "chat": {
+    "title": "Berichten",
+    "search": "Zoek gesprekken",
+    "typeMessage": "Typ een bericht...",
+    "send": "Verstuur bericht",
+    "selectConversation": "Selecteer een gesprek om te beginnen met chatten",
+    "loading": "Berichten laden...",
+    "retry": "Probeer opnieuw"
   }
 }

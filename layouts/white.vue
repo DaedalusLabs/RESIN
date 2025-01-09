@@ -1,6 +1,6 @@
 <template>
    <div class="flex h-dvh flex-col bg-hex-white bg-cover bg-center">
-      <main class="h-full flex-1 overflow-scroll pb-14">
+      <main class="h-full flex-1 overflow-scroll" :class="{ 'pb-14': !$route.meta.hideBottomBar }">
          <slot />
       </main>
       <MenuBar :show-drawer="showDrawer" @close="showDrawer = false" />
