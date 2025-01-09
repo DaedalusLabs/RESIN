@@ -26,12 +26,35 @@
                 <!-- Language Selection -->
                 <div class="flex flex-col gap-2">
                     <label class="text-sm font-medium text-pirate-950">{{ $t('settings.language.label') }}</label>
-                    <select :value="locale" @change="switchLanguage($event.target.value)" 
-                        class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500">
+                    <select 
+                        :value="locale" 
+                        @change="switchLanguage($event.target.value)"
+                        class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500"
+                    >
                         <option v-for="locale in locales" :key="locale.code" :value="locale.code">
                             {{ $t(`settings.language.${locale.code}`) }}
                         </option>
                     </select>
+                </div>
+
+                <!-- Push Notifications -->
+                <div class="flex items-center justify-between border-b border-gray-200 py-4">
+                    <div>
+                        <h3 class="text-base font-semibold text-pirate-950">
+                            {{ $t('settings.pushNotifications') }}
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            {{ $t('settings.pushNotificationsDescription') }}
+                        </p>
+                    </div>
+                    <div class="relative inline-flex cursor-pointer items-center">
+                        <input
+                            type="checkbox"
+                            :checked="settingsStore.notifications"
+                            @change="togglePushNotifications"
+                            class=""
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,6 +66,7 @@ import { useSettingsStore } from '~/stores/settings';
 import { PhCaretLeft } from "@phosphor-icons/vue";
 const { locale, locales } = useI18n();
 
+const nostrStore = useNostrStore();
 const settingsStore = useSettingsStore();
 const switchLocalePath = useSwitchLocalePath();
 const router = useRouter();
@@ -61,6 +85,11 @@ const switchLanguage = async (newLocale) => {
     settingsStore.display.language = newLocale;
     await router.push(switchLocalePath(newLocale))
 }
+
+const togglePushNotifications = async () => {
+    console.log('togglePushNotifications', settingsStore.notifications);
+    await nostrStore.togglePushNotifications();
+};
 
 definePageMeta({
   layout: "white",

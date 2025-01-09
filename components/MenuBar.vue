@@ -76,7 +76,7 @@ import {
 const nostrStore = useNostrStore();
 const { t } = useI18n();
 const localePath = useLocalePath()
-
+const router = useRouter();
 const emit = defineEmits(["close"]);
 defineProps({
    showDrawer: Boolean,
@@ -125,9 +125,14 @@ const handleCloseDrawer = () => {
    emit("close");
 };
 
-const logout = () => {
-   nostrStore.logout();
-   navigateTo(localePath('/'));
+const logout = async () => {
+   console.log('logout');
+   try {
+      await nostrStore.logout();
+   } catch (error) {
+      console.error('Error logging out', error);
+   }
+   window.location.href = localePath('/');
 };
 </script>
 

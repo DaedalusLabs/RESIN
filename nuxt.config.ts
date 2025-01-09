@@ -112,6 +112,7 @@ export default defineNuxtConfig({
          TYPESENSE_PORT: process.env.TYPESENSE_PORT,
          TYPESENSE_API_KEY: process.env.TYPESENSE_API_KEY,
          MESSAGES_NPUB: process.env.MESSAGES_NPUB,
+         PUBKEY_WHITELIST: (process.env.PUBKEY_WHITELIST || '').split(','),
          FILES_BASE_URL: process.env.FILES_BASE_URL,
          SHOW_TRENDING_AREAS: process.env.SHOW_TRENDING_AREAS,
          SHOW_TRANSACTIONS: process.env.SHOW_TRANSACTIONS,

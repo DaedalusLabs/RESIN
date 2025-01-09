@@ -76,7 +76,11 @@
       "hide": "Hide",
       "privateKeyNotAvailable": "Your private key can not be shown by RESIN, because it is managed by an extension.",
       "copied": "Copied"
-    }
+    },
+    "language": "Language",
+    "languageDescription": "Choose your preferred language",
+    "pushNotifications": "Push Notifications",
+    "pushNotificationsDescription": "Get notified when you receive new messages"
   },
   "menu": {
     "account": "Account",

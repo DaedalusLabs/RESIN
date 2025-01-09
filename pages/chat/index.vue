@@ -5,6 +5,37 @@
          <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
             {{ $t('chat.title') }}
          </h1>
+         <div class="flex justify-between items-center">
+            <button
+               @click="fetchFullHistory"
+               class="text-sm px-4 py-2 bg-resin-500 text-white rounded-lg hover:bg-resin-600 disabled:opacity-50"
+               :disabled="isLoadingHistory"
+            >
+               {{ isLoadingHistory ? $t('chat.loadingHistory') : $t('chat.fetchHistory') }}
+            </button>
+            <div v-if="isLoadingHistory" class="flex flex-col gap-2 ml-4">
+               <div class="flex items-center gap-2">
+                  <div class="text-sm text-gray-600">{{ phase }}</div>
+                  <div class="text-sm text-gray-600">{{ processedEvents }}/{{ totalEvents }}</div>
+                  <div class="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+                     <div 
+                        class="h-full bg-resin-500 transition-all duration-300"
+                        :style="{ width: `${(processedEvents / totalEvents) * 100}%` }"
+                     ></div>
+                  </div>
+               </div>
+               <div v-if="decryptionPhase" class="flex items-center gap-2">
+                  <div class="text-sm text-gray-600">Decrypting</div>
+                  <div class="text-sm text-gray-600">{{ decryptedEvents }}/{{ totalDecryptEvents }}</div>
+                  <div class="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+                     <div 
+                        class="h-full bg-resin-500 transition-all duration-300"
+                        :style="{ width: `${(decryptedEvents / totalDecryptEvents) * 100}%` }"
+                     ></div>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
 
       <!-- Loading State -->
@@ -166,6 +197,8 @@ import { useChatStore } from '~/stores/chat';
 import { useNostrStore } from '~/stores/nostr';
 import type { Chat } from '~/stores/chat';
 import { nip19 } from 'nostr-tools';
+import type { NDKFilter, NDKEvent, NDKKind } from '@nostr-dev-kit/ndk';
+import type { UnwrappedMessage } from '~/types/nostr';
 
 definePageMeta({
    layout: "white",
@@ -182,6 +215,13 @@ const isSending = ref(false);
 const messagesContainer = ref<HTMLElement | null>(null);
 const isLoading = ref(true);
 const error = ref<string | null>(null);
+const isLoadingHistory = ref(false);
+const processedEvents = ref(0);
+const totalEvents = ref(0);
+const decryptionPhase = ref(false);
+const decryptedEvents = ref(0);
+const totalDecryptEvents = ref(0);
+const phase = ref('Fetching');
 
 // Initialize
 async function initializeChat() {
@@ -310,6 +350,86 @@ watch(() => chatStore.chats, () => {
       }
    }
 }, { deep: true });
+
+async function fetchFullHistory() {
+   const ndk = useNDK();
+   if (!ndk) {
+      console.error('NDK not initialized');
+      return;
+   }
+
+   try {
+      console.log('Starting to fetch full message history...');
+      isLoadingHistory.value = true;
+      processedEvents.value = 0;
+      decryptionPhase.value = false;
+      decryptedEvents.value = 0;
+      phase.value = 'Fetching';
+
+      const filter: NDKFilter = {
+         kinds: [1059 as NDKKind],
+         '#p': [nostrStore.pubkey!],
+      };
+      console.log('Using filter:', filter);
+
+      // Fetch all events
+      console.log('Fetching events from relays...');
+      const events = await ndk.fetchEvents(filter);
+      const eventArray = Array.from(events);
+      totalEvents.value = eventArray.length;
+      console.log(`Found ${totalEvents.value} events to process`);
+
+      // Process events in batches to show progress
+      for (const event of eventArray) {
+         try {
+            console.log(`Processing event ${processedEvents.value + 1}/${totalEvents.value}:`, event.id);
+            processedEvents.value++;
+         } catch (error) {
+            console.error('Error processing event:', event.id, error);
+         }
+      }
+
+      // Start decryption phase
+      console.log('Starting decryption phase...');
+      phase.value = 'Decrypting';
+      decryptionPhase.value = true;
+      totalDecryptEvents.value = eventArray.length;
+
+      for (const event of eventArray) {
+         try {
+            console.log(`Decrypting event ${decryptedEvents.value + 1}/${totalDecryptEvents.value}:`, event.id);
+            // Cast through unknown to bypass type checking since we know the method exists
+            const unwrappedMessage = await ((nostrStore as unknown) as { unwrapMessage: (event: NDKEvent) => Promise<UnwrappedMessage> }).unwrapMessage(event);
+            
+            // Convert to ChatMessage format
+            const message = {
+               id: unwrappedMessage.id,
+               pubkey: unwrappedMessage.pubkey,
+               content: unwrappedMessage.content,
+               created_at: unwrappedMessage.created_at,
+               tags: unwrappedMessage.tags,
+               userProfile: unwrappedMessage.user?.profile ? JSON.parse(JSON.stringify(unwrappedMessage.user.profile)) : undefined,
+               isSent: unwrappedMessage.isSent,
+               recipientPubkey: unwrappedMessage.recipientPubkey,
+               encryptedContent: event.content
+            };
+
+            await chatStore.addMessage(message);
+            decryptedEvents.value++;
+            console.log(`Successfully decrypted message from ${unwrappedMessage.isSent ? 'you to' : ''} ${unwrappedMessage.pubkey}`);
+         } catch (error) {
+            console.error('Error decrypting event:', event.id, error);
+         }
+      }
+      console.log('Finished processing all events');
+   } catch (error) {
+      console.error('Error fetching history:', error);
+   } finally {
+      isLoadingHistory.value = false;
+      decryptionPhase.value = false;
+      console.log('History fetch completed');
+   }
+}
 </script>
 
 <style scoped>

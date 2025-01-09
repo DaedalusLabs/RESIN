@@ -65,6 +65,7 @@ const nostrStore = useNostrStore();
 const chatStore = useChatStore();
 const runtimeConfig = useRuntimeConfig();
 
+// Use whitelistedChats instead of all chats
 definePageMeta({
    layout: "white",
    title: "Messages",
@@ -84,6 +85,20 @@ const goBack = () => {
 const messages = computed(() => {
    const chat = chatStore.chats.find(c => c.pubkey === runtimeConfig.public.MESSAGES_NPUB);
    return chat?.messages || [];
+
+   const whitelist = runtimeConfig.public.PUBKEY_WHITELIST || [];
+   // whitelist.push(nostrStore.pubkey);
+   // console.log(nostrStore.pubkey, whitelist);
+   const allMessages = chatStore.chats.flatMap(chat => chat.messages);
+   
+   return allMessages.filter(msg => {
+      // Allow messages from whitelisted pubkeys
+      if (whitelist.includes(msg.pubkey)) return true;
+      // Allow messages sent by the user to whitelisted pubkeys
+      if (msg.isSent && whitelist.includes(msg.recipientPubkey)) return true;
+      console.log('msg', msg);
+      return false;
+   }).sort((a, b) => a.created_at - b.created_at);
 });
 
 const newMessage = ref("");
