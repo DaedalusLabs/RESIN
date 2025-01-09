@@ -116,6 +116,10 @@ export const usePropertiesStore = defineStore("properties", {
                if (event) {
                   this.favorites = event;
                } 
+
+               console.log('loading chat store');
+               const chatStore = useChatStore();
+               await chatStore.init();
             } catch (error) {
                console.error('Failed to load favorites from Nostr:', error);
             }

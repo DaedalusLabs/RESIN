@@ -6,6 +6,8 @@ import type { NDKUserProfile, NDKUser, NDKFilter } from '@nostr-dev-kit/ndk';
 import { useNostrStore } from './nostr';
 import { useNDK } from '~/composables/useNDK';
 import { useLocalStorage } from '@vueuse/core';
+import { useSettingsStore } from './settings';
+import { useRouter } from 'vue-router';
 
 interface SerializedUser {
     pubkey: string;
@@ -43,17 +45,20 @@ export interface Chat {
     messages: ChatMessage[];
     lastMessage?: ChatMessage;
     unreadCount: number;
+    lastMessageTimestamp?: number;
 }
 
 class ChatDatabase extends Dexie {
     messages!: Dexie.Table<ChatMessage, string>;
     users!: Dexie.Table<SerializedUser, string>;
+    chats!: Dexie.Table<Chat, string>; // Store chats by pubkey
 
     constructor() {
         super('ChatDatabase');
-        this.version(1).stores({
-            messages: 'id, pubkey, created_at',
-            users: 'pubkey'
+        this.version(2).stores({
+            messages: 'id, pubkey, created_at, recipientPubkey',
+            users: 'pubkey',
+            chats: 'pubkey, lastMessageTimestamp' // Index chats by pubkey and last message timestamp
         });
     }
 }
@@ -66,9 +71,49 @@ export const useChatStore = defineStore('chat', {
         initialized: false,
         cacheAdapter: null as NDKCacheAdapterDexie | null,
         lastMessageTimestamp: useLocalStorage('chat-last-message-timestamp', null as number | null),
+        processingQueue: Promise.resolve(),
     }),
 
+    getters: {
+        whitelistedChats: (state) => {
+            const config = useRuntimeConfig();
+            const whitelist = config.public.PUBKEY_WHITELIST || [];
+            
+            return state.chats.filter(chat => {
+                // Allow messages from whitelisted pubkeys
+                if (whitelist.includes(chat.pubkey)) return true;
+                // Allow messages sent by the user to whitelisted pubkeys
+                if (chat.lastMessage?.isSent && whitelist.includes(chat.lastMessage.recipientPubkey)) return true;
+                return false;
+            });
+        },
+        whitelistedMessages: (state) => {
+            const config = useRuntimeConfig();
+            const whitelist = config.public.PUBKEY_WHITELIST || [];
+            
+            return state.chats.filter(chat => {
+                // Allow messages from whitelisted pubkeys
+                if (whitelist.includes(chat.pubkey)) return true;
+                // Allow messages sent by the user to whitelisted pubkeys
+                if (chat.lastMessage?.isSent && whitelist.includes(chat.lastMessage.recipientPubkey)) return true;
+                return false;
+            }).flatMap(chat => chat.messages);
+        }
+    },
+
     actions: {
+        async processMessageInQueue(callback: () => Promise<void>) {
+            // Chain the new operation to the existing queue
+            this.processingQueue = this.processingQueue
+                .then(callback)
+                .catch(error => {
+                    console.error('Error processing message in queue:', error);
+                });
+            
+            // Wait for this operation to complete
+            await this.processingQueue;
+        },
+
         async init() {
             if (this.initialized) return;
 
@@ -76,7 +121,6 @@ export const useChatStore = defineStore('chat', {
             
             // Wait for nostr authentication
             if (!nostrStore.authenticated) {
-                // Cast through unknown to bypass type checking since we know the method exists
                 await ((nostrStore as unknown) as { checkAuthenticated: () => Promise<boolean> }).checkAuthenticated();
             }
 
@@ -91,6 +135,10 @@ export const useChatStore = defineStore('chat', {
                 ndk.cacheAdapter = this.cacheAdapter;
             }
 
+            // Load chats from database
+            const storedChats = await db.chats.orderBy('lastMessageTimestamp').reverse().toArray();
+            this.chats = storedChats;
+
             this.initialized = true;
         },
 
@@ -104,61 +152,62 @@ export const useChatStore = defineStore('chat', {
             }
 
             try {
-                // Fetch and display messages from cache first
-                const cachedMessages = await db.messages.toArray();
-                await this.processMessages(cachedMessages, true); // Skip profile fetching initially
-
                 // Set up subscription for new messages
                 const filter: { kinds: number[]; '#p': string[]; since?: number } = {
                     kinds: [1059], // Gift wrap kind
                     '#p': nostrStore.pubkey ? [nostrStore.pubkey] : [],
-                    ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp - 1000 } : {})
+                    // ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp - 1000 } : {}),
+                    // since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 2000 : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime()
                 };
-
-                // If we don't have any cached messages, fetch the last week
-                if (cachedMessages.length === 0) {
-                    filter.since = Math.floor(Date.now() / 1000) - (60 * 60 * 24 * 7); // Last week
-                }
-
-                console.log('Filter:', filter);
-
+                console.log('filter', filter);
                 const sub = ndk.subscribe(filter as unknown as NDKFilter, { closeOnEose: false });
 
-                sub.on('event', async (event: NDKEvent) => {
-                    try {
-                        // Store the original encrypted content
-                        const encryptedContent = event.content;
+                // Keep track of processed message IDs to prevent duplicates
+                const processedMessageIds = new Set<string>();
 
-                        // Cast through unknown to bypass type checking since we know the method exists
-                        const unwrappedMessage = await ((nostrStore as unknown) as { unwrapMessage: (event: NDKEvent) => Promise<UnwrappedMessage> }).unwrapMessage(event);
-                        
-                       
-                        // Update last message timestamp
-                        if (!this.lastMessageTimestamp || unwrappedMessage.created_at > this.lastMessageTimestamp) {
-                            this.lastMessageTimestamp = unwrappedMessage.created_at;
+                sub.on('event', async (event: NDKEvent) => {
+                    console.log('event', event);
+                    // Process each message in sequence using the queue
+                    await this.processMessageInQueue(async () => {
+                        try {
+                            // Skip if we've already processed this message
+                            if (processedMessageIds.has(event.id)) {
+                                return;
+                            }
+
+                            // Add to processed set BEFORE async operations
+                            processedMessageIds.add(event.id);
+
+                            // Store the original encrypted content
+                            const encryptedContent = event.content;
+
+                            // Process message synchronously to prevent race conditions
+                            const unwrappedMessage = await ((nostrStore as unknown) as { unwrapMessage: (event: NDKEvent) => Promise<UnwrappedMessage> }).unwrapMessage(event);
+                            
+                            // Update last message timestamp
+                            if (!this.lastMessageTimestamp || unwrappedMessage.created_at > this.lastMessageTimestamp) {
+                                this.lastMessageTimestamp = unwrappedMessage.created_at;
+                            }
+                            
+                            // Convert to ChatMessage format and ensure it's serializable
+                            const message: ChatMessage = {
+                                id: unwrappedMessage.id,
+                                pubkey: unwrappedMessage.pubkey,
+                                content: unwrappedMessage.content,
+                                created_at: unwrappedMessage.created_at,
+                                tags: unwrappedMessage.tags,
+                                userProfile: unwrappedMessage.user?.profile ? JSON.parse(JSON.stringify(unwrappedMessage.user.profile)) : undefined,
+                                isSent: unwrappedMessage.isSent,
+                                recipientPubkey: unwrappedMessage.recipientPubkey,
+                                encryptedContent
+                            };
+
+                            await this.addMessage(message);
+                        } catch (error) {
+                            processedMessageIds.delete(event.id);
+                            console.error('Error processing message:', error);
                         }
-                        
-                        // Convert to ChatMessage format and ensure it's serializable
-                        const message: ChatMessage = {
-                            id: unwrappedMessage.id,
-                            pubkey: unwrappedMessage.pubkey,
-                            content: unwrappedMessage.content,
-                            created_at: unwrappedMessage.created_at,
-                            tags: unwrappedMessage.tags,
-                            userProfile: unwrappedMessage.user?.profile ? JSON.parse(JSON.stringify(unwrappedMessage.user.profile)) : undefined,
-                            isSent: unwrappedMessage.isSent,
-                            recipientPubkey: unwrappedMessage.recipientPubkey,
-                            encryptedContent // Store the original encrypted content
-                        };
-                        
-                        // Cache the message
-                        await db.messages.put(message);
-                        
-                        // Update the chat
-                        await this.addMessage(message);
-                    } catch (error) {
-                        console.error('Error processing message:', error);
-                    }
+                    });
                 });
 
                 // Load profiles in the background
@@ -166,135 +215,8 @@ export const useChatStore = defineStore('chat', {
 
             } catch (error) {
                 console.error('Error fetching chats:', error);
-                throw error; // Re-throw to handle in the UI
+                throw error;
             }
-        },
-
-        async processMessages(messages: ChatMessage[], skipProfiles = false) {
-            const nostrStore = useNostrStore();
-            const ndk = useNDK();
-
-            if (!ndk || !nostrStore.authenticated) {
-                console.log('Nostr not ready for processing messages');
-                return;
-            }
-
-            // Group messages by chat (pubkey)
-            const chatMap = new Map<string, Chat>();
-
-            // First pass: Create chats and load profiles
-            for (const message of messages) {
-                // Skip messages without a valid pubkey
-                if (!message.pubkey) {
-                    console.warn('Skipping message without pubkey:', message);
-                    continue;
-                }
-
-                // For outgoing messages, use recipientPubkey as the chat key
-                const chatPubkey = message.isSent ? message.recipientPubkey : message.pubkey;
-                
-                let chat = chatMap.get(chatPubkey);
-                if (!chat) {
-                    chat = {
-                        pubkey: chatPubkey,
-                        messages: [],
-                        unreadCount: 0,
-                    };
-                    chatMap.set(chatPubkey, chat);
-
-                    // Try to get user profile from cache only
-                    if (!skipProfiles) {
-                        try {
-                            const cachedUser = await db.users.get(chatPubkey);
-                            if (cachedUser?.profile) {
-                                const userProfile = JSON.parse(JSON.stringify(cachedUser.profile));
-                                // If the profile doesn't have an image or name but we have cached values, use them
-                                if (!userProfile.image && cachedUser.imageUrl) {
-                                    userProfile.image = cachedUser.imageUrl;
-                                }
-                                if (!userProfile.name && cachedUser.name) {
-                                    userProfile.name = cachedUser.name;
-                                }
-                                chat.userProfile = userProfile;
-                            }
-                        } catch (error) {
-                            console.error('Error fetching cached user profile:', error);
-                        }
-                    }
-                }
-            }
-
-            // Second pass: Process messages and decrypt if needed
-            for (const message of messages) {
-                if (!message.pubkey) continue;
-
-                const chatPubkey = message.isSent ? message.recipientPubkey : message.pubkey;
-                const chat = chatMap.get(chatPubkey);
-                if (!chat) continue;
-
-                // If we have decrypted content, use it directly
-                if (message.content) {
-                    chat.messages.push(message);
-                }
-                // Otherwise, try to decrypt if we have encrypted content
-                else if (message.encryptedContent && ndk) {
-                    try {
-                        const event = new NDKEvent(ndk);
-                        event.content = message.encryptedContent;
-                        event.pubkey = message.pubkey;
-                        event.id = message.id;
-                        event.created_at = message.created_at;
-                        event.tags = message.tags;
-
-                        // Cast through unknown to bypass type checking since we know the method exists
-                        const unwrappedMessage = await ((nostrStore as unknown) as { unwrapMessage: (event: NDKEvent) => Promise<UnwrappedMessage> }).unwrapMessage(event);
-                        
-                        // Update the message with decrypted content
-                        message.content = unwrappedMessage.content;
-                        await db.messages.put(message);
-                        
-                        chat.messages.push(message);
-                    } catch (error) {
-                        console.error('Error decrypting cached message:', error);
-                    }
-                }
-                
-                // Update last message if this is more recent
-                if (!chat.lastMessage || message.created_at > chat.lastMessage.created_at) {
-                    chat.lastMessage = message;
-                }
-
-                // Also update the message's user profile if needed
-                if (!message.userProfile && !skipProfiles) {
-                    try {
-                        const messagePubkey = message.isSent ? message.recipientPubkey : message.pubkey;
-                        const cachedUser = await db.users.get(messagePubkey);
-                        if (cachedUser?.profile) {
-                            const userProfile = JSON.parse(JSON.stringify(cachedUser.profile));
-                            // If the profile doesn't have an image or name but we have cached values, use them
-                            if (!userProfile.image && cachedUser.imageUrl) {
-                                userProfile.image = cachedUser.imageUrl;
-                            }
-                            if (!userProfile.name && cachedUser.name) {
-                                userProfile.name = cachedUser.name;
-                            }
-                            message.userProfile = userProfile;
-                        }
-                    } catch (error) {
-                        console.error('Error fetching cached user profile for message:', error);
-                    }
-                }
-            }
-
-            // Sort messages in each chat by timestamp
-            for (const chat of chatMap.values()) {
-                chat.messages.sort((a, b) => a.created_at - b.created_at);
-            }
-
-            // Update store
-            this.chats = Array.from(chatMap.values()).sort((a, b) => {
-                return (b.lastMessage?.created_at || 0) - (a.lastMessage?.created_at || 0);
-            });
         },
 
         async addMessage(message: ChatMessage) {
@@ -304,11 +226,15 @@ export const useChatStore = defineStore('chat', {
                 return;
             }
 
-            // For outgoing messages, use recipientPubkey as the chat key
+            const settingsStore = useSettingsStore();
             const chatPubkey = message.isSent ? message.recipientPubkey : message.pubkey;
-            const chatIndex = this.chats.findIndex(c => c.pubkey === chatPubkey);
             
-            if (chatIndex === -1) {
+            // Find existing chat by pubkey
+            let chat = await db.chats.get(chatPubkey);
+            let isNewChat = false;
+
+            if (!chat) {
+                isNewChat = true;
                 // New chat
                 const ndk = useNDK();
                 let userProfile: NDKUserProfile | undefined;
@@ -335,35 +261,66 @@ export const useChatStore = defineStore('chat', {
                     }
                 }
 
-                this.chats.unshift({
+                chat = {
                     pubkey: chatPubkey,
-                    messages: [message],
+                    messages: [],
                     lastMessage: message,
                     unreadCount: message.isSent ? 0 : 1,
                     userProfile,
-                });
-            } else {
-                // Existing chat
-                const chat = this.chats[chatIndex];
-                
-                // Add message if not already present
-                if (!chat.messages.find(m => m.id === message.id)) {
-                    chat.messages.push(message);
-                    chat.messages.sort((a, b) => a.created_at - b.created_at);
-                    
-                    // Update last message if this is more recent
-                    if (!chat.lastMessage || message.created_at > chat.lastMessage.created_at) {
-                        chat.lastMessage = message;
-                    }
-                    
-                    // Update unread count
-                    if (!message.isSent) {
-                        chat.unreadCount++;
-                    }
+                };
+            }
 
-                    // Move chat to top if it's a new message
-                    if (message.created_at > (chat.lastMessage?.created_at || 0)) {
-                        this.chats.splice(chatIndex, 1);
+            // Add message if not already present
+            if (!chat.messages.find(m => m.id === message.id)) {
+                chat.messages.push(message);
+                chat.messages.sort((a, b) => a.created_at - b.created_at);
+                
+                // Update last message if this is more recent
+                if (!chat.lastMessage || message.created_at > chat.lastMessage.created_at) {
+                    chat.lastMessage = message;
+                }
+                
+                // Update unread count and show notification
+                if (!message.isSent) {
+                    chat.unreadCount++;
+                    if (settingsStore.notifications) {
+                        const name = chat.userProfile?.name || chatPubkey.slice(0, 8);
+                        try {
+                            const notification = new Notification(name, {
+                                body: message.content,
+                                icon: '/images/logos/Resin_Hexagon_Orange_Fill.svg',
+                                tag: 'resin-chat'
+                            });
+
+                            notification.onclick = () => {
+                                window.focus();
+                                notification.close();
+                                // Navigate to chat
+                                const router = useRouter();
+                                router.push('/chat');
+                            };
+                        } catch (error) {
+                            console.error('Error showing notification:', error);
+                        }
+                    }
+                }
+
+                // Save message to database
+                await db.messages.put(message);
+
+                // Update chat in database with last message timestamp
+                await db.chats.put({
+                    ...chat,
+                    lastMessageTimestamp: message.created_at
+                });
+
+                // Update store state
+                if (isNewChat) {
+                    this.chats.unshift(chat);
+                } else {
+                    const index = this.chats.findIndex(c => c.pubkey === chatPubkey);
+                    if (index !== -1) {
+                        this.chats.splice(index, 1);
                         this.chats.unshift(chat);
                     }
                 }
@@ -405,6 +362,31 @@ export const useChatStore = defineStore('chat', {
                         console.error('Error fetching user profile:', error);
                     }
                 }
+            }
+        },
+
+        async clearCache() {
+            try {
+                // Clear Dexie database
+                await db.messages.clear();
+                await db.users.clear();
+
+                // Clear NDK cache if available
+                if (this.cacheAdapter) {
+                    const ndkDb = new Dexie('ndk');
+                    await ndkDb.delete();
+                    this.cacheAdapter = null;
+                }
+
+                // Reset store state
+                this.chats = [];
+                this.initialized = false;
+                this.lastMessageTimestamp = null;
+
+                console.log('Chat cache cleared successfully');
+            } catch (error) {
+                console.error('Error clearing chat cache:', error);
+                throw error;
             }
         },
     },

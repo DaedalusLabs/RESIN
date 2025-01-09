@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import type { NDKFilter, NDKUser, NDKUserProfile } from '@nostr-dev-kit/ndk';
 import * as bip39 from '@scure/bip39';
 import { HDKey } from '@scure/bip32'
-import { NDKEvent, NDKNip07Signer, NDKPrivateKeySigner } from '@nostr-dev-kit/ndk';
+import { getRelayListForUser, NDKEvent, NDKNip07Signer, NDKPrivateKeySigner, NDKRelay } from '@nostr-dev-kit/ndk';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import { bytesToHex } from '@noble/hashes/utils'
 import { setSigner, useNDK } from '~/composables/useNDK';
@@ -18,6 +18,7 @@ interface NostrState {
     mnemonic: string | null;
     typeKey: NostrLoginType | null;
     lastMessagesRead: number | null;
+    pushNotificationsEnabled: boolean;
 }
 
 export enum NostrLoginType {
@@ -39,11 +40,12 @@ export const useNostrStore = defineStore('nostr', {
         mnemonic: null,
         typeKey: null,
         lastMessagesRead: null,
+        pushNotificationsEnabled: false,
     }),
     persist: {
         key: 'nostr-store',
         storage: localStorage,
-        paths: ['mnemonic', 'typeKey', 'authenticated', 'lastMessagesRead'] 
+        paths: ['mnemonic', 'typeKey', 'authenticated', 'lastMessagesRead', 'pushNotificationsEnabled'] 
     },
     getters: {
         unreadMessagesCount(): number {
@@ -140,8 +142,12 @@ export const useNostrStore = defineStore('nostr', {
                 pubkey: this.pubkey
             };
         },
-        logout() {
+        async logout() {
             const ndk = useNDK();
+            const chatStore = useChatStore();
+
+            // Clear chat cache
+            await chatStore.clearCache();
 
             if (ndk) {
                 ndk.signer = undefined;
@@ -152,7 +158,8 @@ export const useNostrStore = defineStore('nostr', {
             this.typeKey = null;
             this.mnemonic = null;
             this.lastMessagesRead = null;
-            
+            this.authenticated = false;
+            this.pushNotificationsEnabled = false;
         },
         async fetchDirectMessages() {
             const chatStore = useChatStore();
@@ -161,6 +168,7 @@ export const useNostrStore = defineStore('nostr', {
         },
         async sendDirectMessage(recipientPubkey: string, content: string) {
             const ndk = useNDK();
+            if (!ndk) throw new Error('NDK not initialized');
 
             // Create unsigned kind 14 message
             const unsignedMsg = {
@@ -174,14 +182,53 @@ export const useNostrStore = defineStore('nostr', {
 
             const recipient = await ndk.getUser({
                 pubkey: recipientPubkey,
-            });
+            })
+
+            // Get recipient's preferred relays
+            // const relayList = recipient.relayUrls
+            let writeRelays = await getRelayListForUser(recipientPubkey, ndk);
+
+            // if (writeRelays.length == 0) {
+            //     // writeRelays = new Set<NDKRelay>();
+            //     writeRelays.setBoth(new NDKRelay("wss://nostr1.daedaluslabs.io"), true, true);
+            //     writeRelays.add(new NDKRelay("wss://nostr2.daedaluslabs.io"));
+            //     writeRelays.add(new NDKRelay("wss://nostr3.daedaluslabs.io"));
+            //     writeRelays.add(new NDKRelay("wss://nostr4.daedaluslabs.io"));
+            // }
+
+            if (writeRelays && writeRelays.relays.size > 0) {
+                console.log('relayList', writeRelays.relays);
+            }
+            // let writeRelays = relayList ? 
+            //     Object.entries(relayList)
+            //         .filter(([_, info]) => info?.write !== false)
+            //         .map(([url]) => url) : 
+            //     [];
+
+
+            // if (writeRelays.length == 0) {
+            //     writeRelays = new RelaySet["wss://nostr1.daedaluslabs.io", "wss://nostr2.daedaluslabs.io", "wss://nostr3.daedaluslabs.io", "wss://nostr4.daedaluslabs.io"];
+            // }
+            console.log('writeRelays', writeRelays);
+            // Create wraps for both recipient and sender
+            const senderUser = await ndk.signer?.user();
+            if (!senderUser) throw new Error('No signer available');
 
             const wraps = await Promise.all([
                 this.giftWrapMessage(unsignedMsg, recipient),
-                this.giftWrapMessage(unsignedMsg, await ndk?.signer?.user()!)
+                this.giftWrapMessage(unsignedMsg, senderUser)
             ]);
             
-            await Promise.all(wraps.map(wrap => wrap.publish()));
+            // Publish to recipient's write relays and our own relays
+            await Promise.all(wraps.map(async (wrap) => {
+                if (writeRelays && writeRelays.relays.size > 0) {
+                    // Publish to recipient's write relays
+                    await wrap.publish(writeRelays);
+                } else {
+                    // Fallback to default relays if no write relays found
+                    await wrap.publish();
+                }
+            }));
 
             if (this.user)
                 await this.user.fetchProfile();
@@ -363,6 +410,40 @@ export const useNostrStore = defineStore('nostr', {
             } catch (e) {
                 console.error('Failed to parse preferences:', e);
                 return null;
+            }
+        },
+        async togglePushNotifications() {
+            if (!this.pushNotificationsEnabled) {
+                // Request permission if not already granted
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    this.pushNotificationsEnabled = true;
+                }
+            } else {
+                this.pushNotificationsEnabled = false;
+            }
+        },
+        async showNotification(title: string, body: string) {
+            console.log('showNotification', this.pushNotificationsEnabled);
+            if (!this.pushNotificationsEnabled) return;
+
+            try {
+                const notification = new Notification(title, {
+                    body,
+                    icon: '/images/logos/Resin_Hexagon_Orange_Fill.svg',
+                    tag: 'resin-chat',
+                    renotify: true
+                });
+
+                notification.onclick = () => {
+                    window.focus();
+                    notification.close();
+                    // Navigate to chat
+                    const router = useRouter();
+                    router.push('/chat');
+                };
+            } catch (error) {
+                console.error('Error showing notification:', error);
             }
         }
     }
