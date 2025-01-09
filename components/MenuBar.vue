@@ -75,6 +75,7 @@ import {
 } from "@phosphor-icons/vue";
 const nostrStore = useNostrStore();
 const { t } = useI18n();
+const localePath = useLocalePath()
 
 const emit = defineEmits(["close"]);
 defineProps({
@@ -126,7 +127,7 @@ const handleCloseDrawer = () => {
 
 const logout = () => {
    nostrStore.logout();
-   navigateTo('/');
+   navigateTo(localePath('/'));
 };
 </script>
 

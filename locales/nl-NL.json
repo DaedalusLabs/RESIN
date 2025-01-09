@@ -46,6 +46,54 @@
     "logout": "Uitloggen",
     "termsAndConditions": "Algemene voorwaarden"
   },
+  "settings": {
+    "title": "Instellingen",
+    "currency": {
+      "label": "Valuta",
+      "usd": "USD - US Dollar",
+      "srd": "SRD - Surinamese Dollar"
+    },
+    "language": {
+      "label": "Taal",
+      "en": "Engels",
+      "nl": "Nederlands",
+      "nl-NL": "Nederlands (Nederland)"
+    },
+    "profile": {
+      "title": "Profiel",
+      "personalInfo": "Persoonlijke informatie",
+      "displayName": {
+        "label": "Weergavenaam",
+        "placeholder": "Voer je naam in"
+      },
+      "about": {
+        "label": "Over mij",
+        "placeholder": "Vertel ons iets over jezelf"
+      },
+      "picture": {
+        "alt": "Profiel foto",
+        "upload": "Upload profiel foto"
+      },
+      "saveChanges": "Opslaan",
+      "saved": "Profiel opgeslagen"
+    },
+    "nostrKeys": {
+      "title": "NOSTR Keys",
+      "npub": "npub",
+      "publicKey": "Openbare sleutel (Hex)",
+      "recoveryPhrase": "Herstelwoord",
+      "privateKey": "Geheime sleutel",
+      "show": "Tonen",
+      "hide": "Verbergen",
+      "privateKeyNotAvailable": "Uw geheime sleutel kan niet worden getoond door RESIN, omdat het wordt beheerd door een extensie.",
+      "copied": "Gekopieerd"
+    }
+  },
+  "messages": {
+    "title": "Berichten",
+    "typeMessage": "Schrijf een bericht...",
+    "send": "Bericht verzenden"
+  },
   "property": {
     "notFound": {
       "title": "Object niet gevonden",
@@ -99,10 +147,13 @@
         "title": "Extra Details",
         "yes": "Ja",
         "no": "Nee"
+      },
+      "keyFeatures": {
+        "title": "Belangrijke kenmerken"
       }
     },
     "overview": {
-      "noProperties": "No properties to display",
+      "noProperties": "Geen objecten te tonen",
       "filters": {
         "toggle": "Filter weergeven",
         "apply": "Filter toepassen",
@@ -173,5 +224,35 @@
       "title": "Resin",
       "text": "Bekijk deze objecten op Resin"
     }
+  },
+  "introduction": {
+    "login": {
+      "title": "Inloggen met NOSTR",
+      "description": "Kies een optie hieronder om toegang te krijgen tot je account.",
+      "recoveryPhrase": {
+        "button": "Gebruik herstelzin (12 woorden)",
+        "title": "Inloggen met herstelzin",
+        "wordPlaceholder": "Woord {number}",
+        "error": "Vul je herstelzin in",
+        "invalidPhrase": "Onjuiste herstelzin"
+      },
+      "extension": {
+        "useExtension": "Gebruik browser extensie",
+        "noExtension": "Geen extensie gevonden - meer info",
+        "noNip44": "Je Nostr Extensie ondersteunt NIP-44 niet"
+      }
+    },
+    "nsec": {
+      "title": "Inloggen met NOSTR privésleutel",
+      "placeholder": "Voer je nsec in",
+      "error": "Vul je Nsec sleutel in",
+      "invalidKey": "Ongeldige Nsec sleutel"
+    }
+  },
+  "nostr": {
+    "creating": "NOSTR sleutel aanmaken...",
+    "created": "NOSTR account aangemaakt!",
+    "addDetails": "Je kunt later je persoonlijke gegevens toevoegen als je wilt.",
+    "continue": "Doorgaan met RESIN"
   }
 }

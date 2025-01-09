@@ -45,7 +45,8 @@
     "language": {
       "label": "Language",
       "en": "English",
-      "nl": "Dutch"
+      "nl": "Dutch",
+      "nl-NL": "Dutch (Netherlands)"
     },
     "profile": {
       "title": "Profile",
@@ -335,5 +336,35 @@
       "title": "Resin",
       "text": "Check out these listings on Resin"
     }
+  },
+  "introduction": {
+    "login": {
+      "title": "Log in with NOSTR",
+      "description": "Choose an option below to access your account.",
+      "recoveryPhrase": {
+        "button": "Use recovery phrase (12 words)",
+        "title": "Log in with recovery phrase",
+        "wordPlaceholder": "Word {number}",
+        "error": "Please fill in your recovery phrase",
+        "invalidPhrase": "Incorrect recovery phrase"
+      },
+      "extension": {
+        "useExtension": "Use browser extension",
+        "noExtension": "No extension found - more info",
+        "noNip44": "Your Nostr Extension does not support NIP-44"
+      }
+    },
+    "nsec": {
+      "title": "Log in with NOSTR private key",
+      "placeholder": "Enter your nsec",
+      "error": "Please fill in your Nsec key",
+      "invalidKey": "Invalid Nsec key"
+    }
+  },
+  "nostr": {
+    "creating": "Creating NOSTR key...",
+    "created": "NOSTR account created!",
+    "addDetails": "You can add your personal details later if you like.",
+    "continue": "Continue with RESIN"
   }
 } 

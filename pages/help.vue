@@ -80,58 +80,60 @@
 <script setup>
 import { PhCaretLeft, PhCaretDown, PhMagnifyingGlass } from "@phosphor-icons/vue";
 
+const { t } = useI18n();
+
 const openSections = ref([]);
 const searchQuery = ref('');
 const selectedCategory = ref('All');
 
 const categories = [
-  { key: 'all', label: $t('help.categories.all') },
-  { key: 'account', label: $t('help.categories.account') },
-  { key: 'properties', label: $t('help.categories.properties') },
-  { key: 'payments', label: $t('help.categories.payments') },
-  { key: 'technical', label: $t('help.categories.technical') }
+  { key: 'all', label: t('help.categories.all') },
+  { key: 'account', label: t('help.categories.account') },
+  { key: 'properties', label: t('help.categories.properties') },
+  { key: 'payments', label: t('help.categories.payments') },
+  { key: 'technical', label: t('help.categories.technical') }
 ];
 
 const faqs = [
   {
     category: 'account',
-    question: $t('help.faq.whatIsNostr.question'),
-    answer: $t('help.faq.whatIsNostr.answer')
+    question: t('help.faq.whatIsNostr.question'),
+    answer: t('help.faq.whatIsNostr.answer')
   },
   {
     category: 'account',
-    question: $t('help.faq.accountRecovery.question'),
-    answer: $t('help.faq.accountRecovery.answer')
+    question: t('help.faq.accountRecovery.question'),
+    answer: t('help.faq.accountRecovery.answer')
   },
   {
     category: 'properties',
-    question: $t('help.faq.rentToOwn.question'),
-    answer: $t('help.faq.rentToOwn.answer')
+    question: t('help.faq.rentToOwn.question'),
+    answer: t('help.faq.rentToOwn.answer')
   },
   {
     category: 'properties',
-    question: $t('help.faq.listProperty.question'),
-    answer: $t('help.faq.listProperty.answer')
+    question: t('help.faq.listProperty.question'),
+    answer: t('help.faq.listProperty.answer')
   },
   {
     category: 'payments',
-    question: $t('help.faq.paymentMethods.question'),
-    answer: $t('help.faq.paymentMethods.answer')
+    question: t('help.faq.paymentMethods.question'),
+    answer: t('help.faq.paymentMethods.answer')
   },
   {
     category: 'payments',
-    question: $t('help.faq.equityCalculation.question'),
-    answer: $t('help.faq.equityCalculation.answer')
+    question: t('help.faq.equityCalculation.question'),
+    answer: t('help.faq.equityCalculation.answer')
   },
   {
     category: 'technical',
-    question: $t('help.faq.browsers.question'),
-    answer: $t('help.faq.browsers.answer')
+    question: t('help.faq.browsers.question'),
+    answer: t('help.faq.browsers.answer')
   },
   {
     category: 'technical',
-    question: $t('help.faq.dataSecurity.question'),
-    answer: $t('help.faq.dataSecurity.answer')
+    question: t('help.faq.dataSecurity.question'),
+    answer: t('help.faq.dataSecurity.answer')
   }
 ];
 

@@ -1,10 +1,10 @@
 <template>
    <FlowbiteModal :is-open="isModalOpen" @update:is-open="handleModalUpdate">
-      <template #title>Log in with NOSTR</template>
-      <p class="my-6 text-sm">Choose an option below to access your account.</p>
+      <template #title>{{ $t('introduction.login.title') }}</template>
+      <p class="my-6 text-sm">{{ $t('introduction.login.description') }}</p>
       <div class="mt-4 flex w-full flex-col gap-4">    
          <FlowbiteBorderButton
-            :text="`Use recovery phrase (12 words)`"
+            :text="$t('introduction.login.recoveryPhrase.button')"
             @click="() => {
                emit('openPhraseDrawer');
                handleModalUpdate(false);
@@ -12,13 +12,19 @@
          />
 
          <FlowbiteBorderButton
-v-if="hasNip44()"
-            :text="hasExtension() ? 'Use browser extension' : 'No extension found - more info'" 
-            class="w-full border-gray text-gray " @click="hasExtension() ? handleExtensionLogin() : openExtensionApps()" />
-            <button v-else-if="!hasNip44()" class="inline-flex items-center justify-center rounded-lg border border-pirate-500 bg-transparent px-4 py-2 text-center text-sm font-medium text-pirate-500" disabled>Your Nostr Extension does not support NIP-44</button>
- 
+            v-if="hasNip44()"
+            :text="hasExtension() ? $t('introduction.login.extension.useExtension') : $t('introduction.login.extension.noExtension')" 
+            class="w-full border-gray text-gray" 
+            @click="hasExtension() ? handleExtensionLogin() : openExtensionApps()" 
+         />
+         <button 
+            v-else-if="!hasNip44()" 
+            class="inline-flex items-center justify-center rounded-lg border border-pirate-500 bg-transparent px-4 py-2 text-center text-sm font-medium text-pirate-500" 
+            disabled
+         >
+            {{ $t('introduction.login.extension.noNip44') }}
+         </button>
       </div>
-     
    </FlowbiteModal>
 </template>
 

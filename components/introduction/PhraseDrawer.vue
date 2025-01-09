@@ -1,12 +1,12 @@
 <template>
    <div>
       <FlowbiteErrorToast
-         :text="`Invalid Nsec key`"
+         :text="$t('introduction.nsec.invalidKey')"
          :show-toast="wrongPhrase"
          @close-toast="wrongPhrase = false"
       />
       <FlowbiteDrawer :is-open="showDrawer" @close="handleCloseDrawer">
-         <template #title> Log in with recovery phrase </template>
+         <template #title>{{ $t('introduction.login.recoveryPhrase.title') }}</template>
          <template #content>
             <form action="#" method="POST" @submit.prevent="validatePhrase">
                <div class="grid grid-cols-2 gap-4">
@@ -14,7 +14,7 @@
                      v-for="(word, index) in recoveryPhrase"
                      :key="index"
                      v-model="recoveryPhrase[index]"
-                     :placeholder="'Word ' + (index + 1)"
+                     :placeholder="$t('introduction.login.recoveryPhrase.wordPlaceholder', { number: index + 1 })"
                      :error-messages="wordErrors[index]"
                      @paste="handlePaste"
                   />
@@ -38,6 +38,7 @@
 <script setup>
 import { wordlist } from '@scure/bip39/wordlists/english';
 const { loginWithMnemonic, isAuthenticated, checkAuthenticated } = useNostr();
+const { t } = useI18n();
 
 const recoveryPhrase = ref(Array(12).fill(""));
 const wordErrors = ref(Array(12).fill([]));
@@ -47,7 +48,7 @@ const wrongPhrase = ref(false);
 
 const validatePhrase = async() => {
    if (recoveryPhrase.value.filter((e) => e == "").length || wordErrors.value.find((e) => e == "error")) {
-      errorMessages.value.push("Please fill in your recovery phrase");
+      errorMessages.value.push(t('introduction.login.recoveryPhrase.error'));
    } else {
       await loginWithMnemonic(recoveryPhrase.value.join(' '));
       await checkAuthenticated();
@@ -61,8 +62,7 @@ const validatePhrase = async() => {
             return navigateTo(route.fullPath);
          }
       }
-      errorMessages.value.push("Incorrect recovery phrase");
-
+      errorMessages.value.push(t('introduction.login.recoveryPhrase.invalidPhrase'));
    }
 };
 
@@ -94,12 +94,11 @@ watchEffect(() => {
    if (recoveryPhrase.value.some((word) => word.trim() !== "")) {
       for (const w in recoveryPhrase.value) {
          if (recoveryPhrase.value[w].length && !wordlist.includes(recoveryPhrase.value[w])) {
-            wordErrors.value[w] = "error" ;
+            wordErrors.value[w] = "error";
          } else {
             wordErrors.value[w] = "";
          }
       }
-      //errorMessages.value.g
    }
 });
 

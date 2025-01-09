@@ -19,21 +19,21 @@
             class="mx-auto w-24"
          />
          <p class="mt-4 font-extrabold text-gray-900">
-            {{ loading ? "Creating NOSTR key..." : "NOSTR account created!" }}
+            {{ loading ? $t('nostr.creating') : $t('nostr.created') }}
          </p>
 
          <!-- Wait for modal expansion before showing text and button -->
          <transition name="fade-in" mode="out-in" appear>
             <div v-if="!loading" key="success-message" class="mt-4">
                <p class="text-sm text-gray-500">
-                  You can add your personal details later if you like.
+                  {{ $t('nostr.addDetails') }}
                </p>
 
                <!-- Button for success state, only visible after loading -->
                <NuxtLinkLocale to="choose-property-type">
                   <FlowbiteButton
                      :show-icon="false"
-                     text="Continue with RESIN"
+                     :text="$t('nostr.continue')"
                      class="mt-4 text-center"
                   />
                </NuxtLinkLocale>
@@ -46,7 +46,6 @@
 <script setup>
 const loading = ref(true);
 const { generateKeyPair, isAuthenticated } = useNostr();
-
 
 onMounted(async () => {
    await generateKeyPair();
