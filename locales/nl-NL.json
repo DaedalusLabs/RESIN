@@ -113,16 +113,16 @@
     },
     "details": {
       "addressNotAvailable": "Adres niet beschikbaar",
-      "requestSuccess": "Your information has been submitted successfully.",
+      "requestSuccess": "Uw informatie is succesvol verzonden.",
       "summary": {
         "title": "Samenvatting",
         "readMore": "Lees volledige beschrijving",
         "collapse": "Samenvatting sluiten"
       },
       "actions": {
-        "contactAgent": "Contact Agent",
-        "requestTour": "Request Tour",
-        "rentProperty": "Huur dit object",
+        "contactAgent": "Contact opnemen met makelaar",
+        "requestTour": "Bezichtiging aanvragen",
+        "rentProperty": "Dit object huren",
         "rentToOwn": "Huur tot aankoop"
       },
       "map": {
@@ -193,6 +193,13 @@
         "sizeAsc": "Grootte (klein naar groot)",
         "sizeDesc": "Grootte (groot naar klein)"
       }
+    },
+    "card": {
+      "perMonth": "per maand",
+      "beds": "Slaapkamers",
+      "size": {
+        "squareMeters": "m²"
+      }
     }
   },
   "myResin": {
@@ -254,5 +261,110 @@
     "created": "NOSTR account aangemaakt!",
     "addDetails": "Je kunt later je persoonlijke gegevens toevoegen als je wilt.",
     "continue": "Doorgaan met RESIN"
+  },
+  "help": {
+    "title": "Help",
+    "search": "Zoeken",
+    "categories": {
+      "all": "Alles",
+      "account": "Account",
+      "properties": "Objecten",
+      "payments": "Betalingen",
+      "technical": "Technisch"
+    },
+    "cantFind": "Kunt u niet vinden wat u zoekt?",
+    "contactSupport": "Neem contact op met Support",
+    "faq": {
+      "whatIsNostr": {
+        "question": "Wat is NOSTR en waarom heb ik het nodig?",
+        "answer": "NOSTR is een gedecentraliseerd protocol waarmee u eigenaar bent van uw identiteit en gegevens. RESIN gebruikt NOSTR om ervoor te zorgen dat uw account en transacties veilig en privé zijn."
+      },
+      "accountRecovery": {
+        "question": "Hoe herstel ik mijn account?",
+        "answer": "U kunt uw account herstellen met uw herstelzin van 12 woorden of uw NOSTR privésleutel. Bewaar deze goed, want dit is de enige manier om weer toegang te krijgen tot uw account."
+      },
+      "rentToOwn": {
+        "question": "Hoe werkt huur tot aankoop?",
+        "answer": "Bij huur tot aankoop kunt u een woning huren terwijl u vermogen opbouwt voor eigendom. Een deel van uw maandelijkse betaling gaat naar uw toekomstige eigendom van de woning."
+      },
+      "listProperty": {
+        "question": "Kan ik mijn object op RESIN aanbieden?",
+        "answer": "Ja, eigenaren kunnen hun objecten op RESIN aanbieden. Neem contact op met ons supportteam voor meer informatie over het aanbiedingsproces en de vereisten."
+      },
+      "paymentMethods": {
+        "question": "Welke betaalmethoden worden geaccepteerd?",
+        "answer": "RESIN accepteert momenteel verschillende betaalmethoden, waaronder bankoverschrijvingen en cryptocurrency. De beschikbare opties kunnen per regio verschillen."
+      },
+      "equityCalculation": {
+        "question": "Hoe wordt mijn vermogen berekend?",
+        "answer": "Uw vermogen wordt berekend op basis van het deel van uw maandelijkse betalingen dat naar eigendom gaat, zoals gespecificeerd in uw huur tot aankoop overeenkomst."
+      },
+      "browsers": {
+        "question": "Welke browsers worden ondersteund?",
+        "answer": "RESIN werkt het beste op moderne browsers zoals Chrome, Firefox, Safari en Edge. Zorg ervoor dat uw browser up-to-date is voor de beste ervaring."
+      },
+      "dataSecurity": {
+        "question": "Zijn mijn gegevens veilig?",
+        "answer": "Ja, RESIN gebruikt het NOSTR-protocol en industriestandaard encryptie om uw gegevens te beschermen. Uw privésleutels en gevoelige informatie verlaten nooit uw apparaat."
+      }
+    }
+  },
+  "termsAndConditions": {
+    "title": "Algemene voorwaarden",
+    "lastUpdated": "Laatst bijgewerkt: {date}",
+    "sections": {
+      "acceptanceOfTerms": {
+        "title": "Acceptatie van voorwaarden",
+        "content": "Door toegang te krijgen tot of gebruik te maken van RESIN, gaat u akkoord met deze Algemene voorwaarden (\"Voorwaarden\"). Als u niet akkoord gaat met alle voorwaarden van deze overeenkomst, mag u de website niet bezoeken of gebruik maken van diensten."
+      },
+      "descriptionOfService": {
+        "title": "Beschrijving van de dienst",
+        "content": "RESIN biedt een online platform voor vastgoedtransacties, waaronder het aanbieden, marketing en verkoop of langdurige verhuur van woningen. Onze diensten omvatten, maar zijn niet beperkt tot, objectaanbiedingen, het faciliteren van communicatie tussen kopers/huurders en verkopers/verhuurders, en het bieden van tools voor transactiebeheer."
+      },
+      "userEligibility": {
+        "title": "Gebruikersgeschiktheid",
+        "content": "U moet minimaal 18 jaar oud zijn om deze dienst te gebruiken. Door toegang te krijgen tot of gebruik te maken van RESIN, verklaart en garandeert u dat u het recht, de bevoegdheid en de capaciteit heeft om deze overeenkomst aan te gaan en om alle voorwaarden van deze overeenkomst na te leven."
+      },
+      "userAccounts": {
+        "title": "Gebruikersaccounts",
+        "content": "Account aanmaken: U moet mogelijk een account aanmaken om bepaalde functies van de dienst te gebruiken. U gaat ermee akkoord om nauwkeurige, actuele en volledige informatie te verstrekken tijdens het registratieproces en om dergelijke informatie bij te werken om deze nauwkeurig, actueel en volledig te houden.<br><br>Accountbeveiliging: U bent verantwoordelijk voor het beveiligen van de privésleutel die u gebruikt om toegang te krijgen tot de Service en voor alle activiteiten of acties onder uw privésleutel. RESIN kan en zal niet aansprakelijk zijn voor verlies of schade door uw nalatigheid om aan deze beveiligingsverplichting te voldoen."
+      },
+      "userConduct": {
+        "title": "Gebruikersgedrag",
+        "content": "U gaat ermee akkoord om RESIN niet te gebruiken voor:<br>• Het schenden van lokale, provinciale, nationale of internationale wet- of regelgeving.<br>• Het schenden van onze intellectuele eigendomsrechten of de intellectuele eigendomsrechten van anderen.<br>• Het verzenden van virussen, wormen, defecten, Trojaanse paarden of items van destructieve aard.<br>• Het vertonen van gedrag dat beledigend, intimiderend, bedreigend of lasterlijk is."
+      },
+      "content": {
+        "title": "Inhoud",
+        "content": "Gebruikersinhoud: U bent als enige verantwoordelijk voor de inhoud die u op RESIN plaatst. U behoudt alle rechten op, en bent als enige verantwoordelijk voor, de Gebruikersinhoud die u op de Service plaatst."
+      },
+      "paymentAndFees": {
+        "title": "Betaling en kosten",
+        "content": "Alle kosten voor het aanbieden van objecten, transactiediensten of aanvullende functies zijn direct verschuldigd en niet-restitueerbaar, tenzij anders vermeld. RESIN kan gebruik maken van externe betalingsverwerkers voor het afhandelen van betalingstransacties."
+      },
+      "transactions": {
+        "title": "Transacties",
+        "content": "Alle vastgoedtransacties die via RESIN worden gefaciliteerd, zijn onderworpen aan de voorwaarden die door de betrokken partijen zijn overeengekomen. RESIN treedt niet op als makelaar, bemiddelaar of tussenpersoon bij deze transacties, maar biedt alleen een platform waar deze activiteiten kunnen plaatsvinden."
+      },
+      "disclaimers": {
+        "title": "Disclaimers en aansprakelijkheidsbeperking",
+        "content": "RESIN wordt \"as is\" en \"as available\" aangeboden zonder enige garantie. We wijzen alle garanties af voor zover toegestaan door de wet.<br><br>In geen geval zullen RESIN, haar functionarissen, directeuren, werknemers of agenten aansprakelijk zijn jegens u voor enige indirecte, incidentele, speciale, gevolg- of punitieve schade."
+      },
+      "termination": {
+        "title": "Beëindiging",
+        "content": "We kunnen de toegang tot onze Service onmiddellijk beëindigen of opschorten, zonder voorafgaande kennisgeving of aansprakelijkheid, om welke reden dan ook, inclusief zonder beperking als u de Voorwaarden schendt."
+      },
+      "governingLaw": {
+        "title": "Toepasselijk recht",
+        "content": "Deze Voorwaarden worden beheerst door en geïnterpreteerd in overeenstemming met de wetten van de staat Delaware, zonder rekening te houden met de bepalingen inzake wetsconflicten."
+      },
+      "changes": {
+        "title": "Wijzigingen in de voorwaarden",
+        "content": "RESIN behoudt zich het recht voor om deze Voorwaarden naar eigen goeddunken op elk moment te wijzigen of te vervangen. Als een herziening materieel is, zullen we proberen ten minste 30 dagen van tevoren kennisgeving te doen voordat nieuwe voorwaarden van kracht worden."
+      },
+      "contactInfo": {
+        "title": "Contactgegevens",
+        "content": "Voor vragen over deze Voorwaarden kunt u contact met ons opnemen via hello@daedaluslabs.io"
+      }
+    }
   }
 }
