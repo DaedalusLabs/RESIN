@@ -129,7 +129,7 @@ onMounted(async () => {
    // Cast through unknown to bypass type checking since we know the methods exist
    await ((nostrStore as unknown) as { checkAuthenticated: () => Promise<void> }).checkAuthenticated();
    await chatStore.init();
-   await chatStore.fetchChats();
+   // await chatStore.fetchChats();
    
    // Update last read timestamp for whitelisted messages
    const whitelist = runtimeConfig.public.PUBKEY_WHITELIST || [];

@@ -178,7 +178,7 @@ export const useNostrStore = defineStore('nostr', {
         async fetchDirectMessages() {
             const chatStore = useChatStore();
             await chatStore.init();
-            await chatStore.fetchChats();
+            // await chatStore.fetchChats();
         },
         async sendDirectMessage(recipientPubkey: string, content: string, eventId?: string, eventKind?: number) {
             const ndk = useNDK();

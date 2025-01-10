@@ -268,7 +268,7 @@ async function initializeChat() {
       isLoading.value = true;
       error.value = null;
       await chatStore.init();
-      await chatStore.fetchChats();
+    //   await chatStore.fetchChats();
    } catch (err) {
       error.value = err instanceof Error ? err.message : 'An error occurred';
       console.error('Failed to initialize chat:', err);

@@ -114,6 +114,7 @@ export const useChatStore = defineStore('chat', {
 
         async init() {
             if (this.initialized) return;
+            this.initialized = true;
 
             const nostrStore = useNostrStore();
             
@@ -137,7 +138,6 @@ export const useChatStore = defineStore('chat', {
             const storedChats = await db.chats.orderBy('lastMessageTimestamp').reverse().toArray();
             this.chats = storedChats;
 
-            this.initialized = true;
 
             // Set up subscription for new messages
             await this.fetchChats();
@@ -158,8 +158,10 @@ export const useChatStore = defineStore('chat', {
                     kinds: [1059], // Gift wrap kind
                     '#p': nostrStore.pubkey ? [nostrStore.pubkey] : [],
                     // ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp - 1000 } : {}),
-                    since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 100 : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime() / 1000
+                    since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 100 : Math.floor(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).getTime() / 1000)    
                 };
+
+
                 const sub = ndk.subscribe(filter as unknown as NDKFilter, { closeOnEose: false });
 
                 // Keep track of processed message IDs to prevent duplicates

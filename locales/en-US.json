@@ -79,7 +79,7 @@
     },
     "languageDescription": "Choose your preferred language",
     "pushNotifications": "Push Notifications",
-    "pushNotificationsDescription": "Get notified when you receive new messages"
+    "pushNotificationsDescription": "Get notified when you receive new messages (experimental)"
   },
   "menu": {
     "account": "Account",
