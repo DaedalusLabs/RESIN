@@ -86,7 +86,7 @@
                <div
                   v-for="chat in filteredChats"
                   :key="chat.pubkey"
-                  class="cursor-pointer border-b border-gray-100 p-4 hover:bg-gray-50"
+                  class="cursor-pointer border-b border-gray-100 p-4 hover:bg-gray-50 relative group"
                   :class="{ 'bg-gray-100': selectedChat?.pubkey === chat.pubkey }"
                   @click="selectChat(chat)"
                >
@@ -96,16 +96,16 @@
                         class="h-12 w-12 rounded-full"
                         alt="Profile"
                      />
-                     <div class="flex-1">
+                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between">
-                           <h3 class="font-semibold">
+                           <h3 class="font-semibold truncate">
                               {{ formatDisplayName(chat.userProfile?.name, chat.pubkey) }}
                            </h3>
                            <span class="text-xs text-gray-500">
                               {{ formatTime(chat.lastMessage?.created_at) }}
                            </span>
                         </div>
-                        <p class="mt-1 text-xs text-gray-500">
+                        <p class="mt-1 text-xs text-gray-500 truncate">
                            {{ pubkeyToNpub(chat.pubkey) }}
                         </p>
                         <p class="mt-1 text-sm text-gray-600 line-clamp-1">
@@ -113,6 +113,14 @@
                         </p>
                      </div>
                   </div>
+                  <!-- Hide chat button -->
+                  <button
+                     class="absolute right-2 top-2 p-1 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                     @click.stop="hideChat(chat.pubkey)"
+                     title="Hide chat"
+                  >
+                     <PhX :size="16" />
+                  </button>
                </div>
             </div>
          </div>
@@ -215,7 +223,7 @@
 </template>
 
 <script setup lang="ts">
-import { PhArrowClockwise, PhMagnifyingGlass, PhPaperPlaneTilt, PhWarning } from "@phosphor-icons/vue";
+import { PhArrowClockwise, PhMagnifyingGlass, PhPaperPlaneTilt, PhWarning, PhX } from "@phosphor-icons/vue";
 import { useChatStore } from '~/stores/chat';
 import { useNostrStore } from '~/stores/nostr';
 import type { Chat } from '~/stores/chat';
@@ -261,6 +269,7 @@ const decryptionPhase = ref(false);
 const decryptedEvents = ref(0);
 const totalDecryptEvents = ref(0);
 const phase = ref('Fetching');
+const hiddenChats = ref<Set<string>>(new Set());
 
 // Initialize
 async function initializeChat() {
@@ -282,19 +291,31 @@ async function retryInitialization() {
 }
 
 onMounted(async () => {
+   const stored = localStorage.getItem('hidden-chats');
+   if (stored) {
+      hiddenChats.value = new Set(JSON.parse(stored));
+   }
    await initializeChat();
 });
 
 // Computed
 const filteredChats = computed(() => {
-   if (!searchQuery.value) return chatStore.chats;
+   let chats = chatStore.chats;
    
-   const query = searchQuery.value.toLowerCase();
-   return chatStore.chats.filter(chat => {
-      const name = chat.userProfile?.name?.toLowerCase() || '';
-      const pubkey = chat.pubkey.toLowerCase();
-      return name.includes(query) || pubkey.includes(query);
-   });
+   // Filter out hidden chats
+   chats = chats.filter(chat => !hiddenChats.value.has(chat.pubkey));
+   
+   // Apply search filter
+   if (searchQuery.value) {
+      const query = searchQuery.value.toLowerCase();
+      chats = chats.filter(chat => {
+         const name = chat.userProfile?.name?.toLowerCase() || '';
+         const pubkey = chat.pubkey.toLowerCase();
+         return name.includes(query) || pubkey.includes(query);
+      });
+   }
+   
+   return chats;
 });
 
 // Methods
@@ -501,6 +522,16 @@ function isPropertyReference(message: { tags: string[][] }) {
    
    return eTags.length > 0 && kTags.length > 0 && 
           (kTags[0][1] === '30402' || kTags[0][1] === '30403');
+}
+
+function hideChat(pubkey: string) {
+   hiddenChats.value.add(pubkey);
+   localStorage.setItem('hidden-chats', JSON.stringify(Array.from(hiddenChats.value)));
+   
+   // If the hidden chat was selected, clear selection
+   if (selectedChat.value?.pubkey === pubkey) {
+      selectedChat.value = null;
+   }
 }
 </script>
 
