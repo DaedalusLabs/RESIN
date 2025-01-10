@@ -404,5 +404,12 @@
   },
   "properties": {
     "title": "Properties"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "noTransactions": {
+      "title": "No transactions yet",
+      "description": "Your transaction history will appear here once you start making payments."
+    }
   }
 }
