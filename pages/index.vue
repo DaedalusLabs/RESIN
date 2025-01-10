@@ -6,21 +6,24 @@
       />
    </div>
 </template>
-<script>
-export default {
-   beforeRouteEnter(to, from, next) {
-    const isAuthenticated = localStorage.getItem('nostr-store') ? JSON.parse(localStorage.getItem('nostr-store')).authenticated : false;
-    console.log('isAuthenticated', isAuthenticated);
-    if (!isAuthenticated) {
-      next(); // Redirect to the intro logo if not authenticated
-    } else {
-      next('/home'); // Proceed to the route
-    }
-  }
-}
-</script>
 <script setup>
 definePageMeta({
    layout: "startup",
+   middleware: [
+      async function (to, from, next) {
+         const store = useNostrStore();
+
+         const isAuthenticated = await store.checkAuthenticated();
+
+         if (isAuthenticated) {
+            return navigateTo('/home');
+         } else {
+            return navigateTo('/introduction');
+         }
+         console.log('to', to);
+         console.log('from', from);
+         next();
+      }
+   ]
 });
 </script>

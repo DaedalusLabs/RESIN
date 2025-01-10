@@ -51,6 +51,7 @@ const searches = ref([propertiesStore.searches.reverse()]);
 const viewedProperties = ref([propertiesStore.viewedLocations.reverse()]);
 
 definePageMeta({
+   title: 'home.title',
    layout: "white",
    middleware: ['auth']
 });

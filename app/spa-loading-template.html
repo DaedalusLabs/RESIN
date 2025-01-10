@@ -1,45 +1,76 @@
 <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
     <div style="display: flex; align-items: center; gap: 1rem; flex-direction: column;">
-        <img src="/images/logos/resin-text.png" alt="Loading illustration" class="h-10" />
+        <img src="/images/logos/resin-text.png" alt="Loading illustration" class="h-20" />
         <div class="loader"></div>
 
     </div>
 </div>
 <style>
     body {
-        background: #303030;
+        background: #303030 url('/_nuxt/assets/images/backgrounds/BG_Hexagon_White10.webp');
     }
 
     .loader {
-        width: 18px;
-        height: 18px;
+        margin-top: 25px;
+        width: 75px;
+        height: 75px;
         box-sizing: border-box;
-        border: solid 2px transparent;
+        border: solid 10px transparent;
         border-top-color: #F07E19;
-        border-left-color: #F07E19;
-        border-bottom-color: #efefef;
-        border-right-color: #efefef;
+        border-right-color: rgba(240, 126, 25, 0.2);
+        border-bottom-color: rgba(240, 126, 25, 0.4);
+        border-left-color: rgba(240, 126, 25, 0.8);
         border-radius: 50%;
-        animation: loader 400ms linear infinite;
+        animation: loader 1400ms ease-in-out infinite;
     }
 
-    \@-webkit-keyframes loader {
+    @-webkit-keyframes loader {
         0% {
-            -webkit-transform: translate(-50%, -50%) rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            border-top-color: #F07E19;
+            border-right-color: rgba(240, 126, 25, 0.2);
+            border-bottom-color: rgba(240, 126, 25, 0.4);
+            border-left-color: rgba(240, 126, 25, 0.8);
+        }
+
+        50% {
+            border-top-color: rgba(240, 126, 25, 0.8);
+            border-right-color: #F07E19;
+            border-bottom-color: rgba(240, 126, 25, 0.2);
+            border-left-color: rgba(240, 126, 25, 0.4);
         }
 
         100% {
-            -webkit-transform: translate(-50%, -50%) rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            border-top-color: #F07E19;
+            border-right-color: rgba(240, 126, 25, 0.2);
+            border-bottom-color: rgba(240, 126, 25, 0.4);
+            border-left-color: rgba(240, 126, 25, 0.8);
         }
     }
 
-    \@keyframes loader {
+    @keyframes loader {
         0% {
-            transform: translate(-50%, -50%) rotate(0deg);
+            transform: rotate(0deg);
+            border-top-color: #F07E19;
+            border-right-color: rgba(240, 126, 25, 0.2);
+            border-bottom-color: rgba(240, 126, 25, 0.4);
+            border-left-color: rgba(240, 126, 25, 0.8);
+        }
+
+        50% {
+            border-top-color: rgba(240, 126, 25, 0.8);
+            border-right-color: #F07E19;
+            border-bottom-color: rgba(240, 126, 25, 0.2);
+            border-left-color: rgba(240, 126, 25, 0.4);
         }
 
         100% {
-            transform: translate(-50%, -50%) rotate(360deg);
+            transform: rotate(360deg);
+            border-top-color: #F07E19;
+            border-right-color: rgba(240, 126, 25, 0.2);
+            border-bottom-color: rgba(240, 126, 25, 0.4);
+            border-left-color: rgba(240, 126, 25, 0.8);
         }
     }
 </style>

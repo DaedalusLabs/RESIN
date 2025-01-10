@@ -108,7 +108,7 @@
                      :is-sent="msg.isSent"
                   >
                      <template #below-message>
-                        <div v-if="isPropertyReference(msg)" class="mt-2">
+                        <div v-if="isPropertyReference(msg)" class="mt-2 mb-4">
                            <Suspense>
                               <PropertyCard 
                                  v-if="msg.property"
