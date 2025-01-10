@@ -25,6 +25,16 @@
               <PhCopy :size="20" />
             </button>
           </div>
+          <div class="flex justify-center">
+            <div class="inline-flex items-center justify-center rounded-lg border border-gray-300 p-2.5">
+              <QRCode 
+                :data="npub"
+                :width="120"
+                :height="120"
+                :image="'/images/logos/Resin_Hexagon_Orange_Fill.svg'"
+              />
+            </div>
+          </div>
         </div>
 
         <!-- Public Key -->
