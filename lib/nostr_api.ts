@@ -1,1 +1,0 @@
-/Users/padjuri/src/dl-resin-backend/src/lib/nostr_api.ts
