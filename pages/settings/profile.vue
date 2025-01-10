@@ -95,7 +95,7 @@ useHead({
 });
 
 const nostrStore = useNostrStore();
-const ndk = useNDK();
+const { ndk } = useNDK();
 const showSavedAlert = ref(false);
 const fileInput = ref<HTMLInputElement | null>(null);
 
@@ -111,9 +111,17 @@ const profilePicture = computed(() => profile.value?.picture);
 
 onMounted(async () => {
   if (nostrStore.user) {
-    const metadata = await nostrStore.user.profile;
-    if (metadata) {  
-      profile.value = metadata;
+    try {
+      const metadata = await nostrStore.user.fetchProfile();
+      if (metadata) {
+        profile.value = {
+          name: metadata.name || '',
+          about: metadata.about || '',
+          picture: metadata.picture
+        };
+      }
+    } catch (err) {
+      console.error('Failed to fetch profile:', err);
     }
   }
 });
@@ -146,19 +154,15 @@ const handleFileChange = async (event: Event) => {
 
 const saveProfile = async () => {
   try {
-    if (!ndk || !nostrStore.user) return;
+    if (!ndk.value || !nostrStore.user) return;
 
-    const event = {
-      kind: 0,
-      content: JSON.stringify({
-        name: profile.value.name,
-        about: profile.value.about,
-      })
-    };
+    const event = await nostrStore.user.setMetadata({
+      name: profile.value.name,
+      about: profile.value.about,
+      picture: profile.value.picture
+    });
 
-    nostrStore.user.profile = profile.value;
-
-    await nostrStore.user.publish(event);
+    await event.publish();
     showSavedAlert.value = true;
     setTimeout(() => {
       showSavedAlert.value = false;
