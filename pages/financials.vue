@@ -12,7 +12,21 @@
          </button>
       </div>
       <div class="flex flex-col gap-8">
-         <template v-if="hasData">
+         <template v-if="transactionsStore.isLoading">
+            <div class="flex items-center justify-center py-16">
+               <div class="loader"></div>
+            </div>
+         </template>
+         <template v-else-if="transactionsStore.error">
+            <div class="flex flex-col items-center justify-center py-16 text-center">
+               <div class="mb-4 rounded-full bg-red-100 p-4">
+                  <PhWarning :size="48" class="text-red-400" />
+               </div>
+               <h3 class="mb-2 text-lg font-semibold text-gray-900">{{ t('common.error') }}</h3>
+               <p class="text-sm text-gray-500">{{ transactionsStore.error }}</p>
+            </div>
+         </template>
+         <template v-else-if="hasData">
             <ClientOnly fallback-tag="span">
                <FinancialsEquityChart
                   :equity="transactionsStore.getPaidOffAmount"
@@ -45,17 +59,34 @@
 import { useTransactionsStore } from "~/stores/transactions";
 import { usePropertiesStore } from "~/stores/properties";
 import { useShare } from "@vueuse/core";
-import { PhExport, PhCaretLeft, PhChartPie } from "@phosphor-icons/vue";
+import { PhExport, PhCaretLeft, PhChartPie, PhWarning } from "@phosphor-icons/vue";
+import { useNDK } from "~/composables/useNDK";
+import { NostrAPI } from "~/lib/nostr_api";
 
 const { share, isSupported } = useShare();
 const transactionsStore = useTransactionsStore();
 const propertiesStore = usePropertiesStore();
-
 const { t } = useI18n();
 
 useHead({
    title: t('financials.title'),
 });
+
+const nostrStore = useNostrStore();
+watch(() => nostrStore.authenticated, async (isAuthenticated) => {
+   console.log('finacials: watch authenticated');
+   if (isAuthenticated) {
+      const ndk = useNDK();
+
+      console.log('finacials: is authenticated');
+      const nostrApi = new NostrAPI(ndk);
+      console.log('fetching transactions');
+      await transactionsStore.fetchTransactions(nostrApi);
+   } else {
+      console.log('finacials: is not authenticated');
+   }
+});
+
 
 const hasData = computed(() => 
    transactionsStore.getPaidOffAmount > 0 || 
@@ -70,6 +101,18 @@ function startShare() {
       url: location.href,
    });
 }
+
+// Fetch data when component mounts
+onMounted(async () => {
+   console.log('finacials: on mounted', nostrStore.authenticated);
+   if (nostrStore.authenticated) {
+      console.log('finacials: authenticated');
+      const ndk = useNDK();
+      const nostrApi = new NostrAPI(ndk);
+      await transactionsStore.fetchTransactions(nostrApi);
+   }
+});
+
 
 definePageMeta({
    layout: "white",

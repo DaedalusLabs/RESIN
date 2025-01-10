@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { PhCurrencyCircleDollar } from "@phosphor-icons/vue";
+import type { Transaction } from "~/stores/transactions";
 
 defineProps({
    transactions: {
