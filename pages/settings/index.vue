@@ -47,14 +47,10 @@
                             {{ $t('settings.pushNotificationsDescription') }}
                         </p>
                     </div>
-                    <div class="relative inline-flex cursor-pointer items-center">
-                        <input
-                            type="checkbox"
-                            :checked="settingsStore.notifications"
-                            @change="togglePushNotifications"
-                            class=""
-                        />
-                    </div>
+                    <FlowbiteSwitch
+                        :model-value="nostrStore.notificationsEnabled"
+                        @update:model-value="togglePushNotifications"
+                    />
                 </div>
             </div>
         </div>
@@ -64,6 +60,7 @@
 <script setup>
 import { useSettingsStore } from '~/stores/settings';
 import { PhCaretLeft } from "@phosphor-icons/vue";
+import FlowbiteSwitch from '~/components/Flowbite/Switch.vue';
 const { locale, locales } = useI18n();
 
 const nostrStore = useNostrStore();
@@ -87,7 +84,6 @@ const switchLanguage = async (newLocale) => {
 }
 
 const togglePushNotifications = async () => {
-    console.log('togglePushNotifications', settingsStore.notifications);
     await nostrStore.togglePushNotifications();
 };
 
