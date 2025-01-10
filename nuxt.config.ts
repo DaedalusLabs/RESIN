@@ -101,7 +101,16 @@ export default defineNuxtConfig({
             },
             { name: 'mobile-web-app-capable', content: 'yes' },
             { name: 'apple-mobile-web-app-capable', content: 'yes' },
-            { name: 'apple-mobile-web-app-status-bar-style', content: 'default' }
+            { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
+            { name: 'apple-mobile-web-app-title', content: 'RESIN' },
+
+            { name: 'theme-color', content: '#F07E19' },
+            { name: 'icon', content: '/favicon.ico', rel: 'shortcut icon' },
+            { name: 'icon', content: '/favicon-96x96.png', rel: 'icon', sizes: '96x96', type: 'image/png' },
+            { name: 'icon', content: '/favicon.svg', rel: 'icon', type: 'image/svg+xml' },
+            { name: 'icon', content: '/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180' },
+            { name: 'icon', content: '/site.webmanifest', rel: 'manifest' },
+            { name: 'manifest', content: '/site.webmanifest', rel: 'manifest' }
          ],
       },
    },
