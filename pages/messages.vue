@@ -1,27 +1,24 @@
 <template>
-   <section class="flex max-h-full flex-col justify-between">
+   <section class="h-full flex flex-col overflow-hidden">
       <!-- Header -->
-      <div
-         class="mb-5 flex w-full flex-col gap-5 border-b border-gray-200 bg-white px-10 pb-5 pt-10"
-      >
-         <NuxtLinkLocale @click="goBack">
-            <PhCaretLeft :size="24" class="text-pirate-300" />
-         </NuxtLinkLocale>
-         <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
-            {{ $t('messages.title') }}
-         </h1>
+      <div class="flex w-full items-center justify-between border-b border-gray-200 bg-white px-10 py-5">
+         <div class="flex items-center gap-4">
+            <button @click="goBack" class="text-gray-500 hover:text-gray-700">
+               <PhArrowLeft :size="24" />
+            </button>
+            <h1 class="text-2xl font-extrabold leading-tight text-pirate-950">
+               {{ $t('messages.title') }}
+            </h1>
+         </div>
       </div>
 
-      <!-- Chat container -->
-      <div
-         ref="chatContainer"
-         class="no-scrollbar mx-auto flex w-10/12 flex-1 flex-col gap-10 overflow-y-scroll pb-28"
-      >
+      <!-- Messages -->
+      <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 bg-gray-50">
          <FlowbiteChatBubble
             v-for="msg in messages"
             :key="msg.id"
             :message="msg.content"
-            :name="msg.userProfile?.name || ''"
+            :name="formatDisplayName(msg.userProfile?.name, msg.pubkey)"
             :time="(new Date(msg.created_at * 1000)).toLocaleString()"
             :profile-image="msg.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
             :is-sent="msg.isSent"
@@ -29,74 +26,60 @@
             <template #below-message>
                <div v-if="isPropertyReference(msg)" class="mt-2">
                   <Suspense>
-                     <PropertyCard v-if="msg.property" :property="msg.property" compact />
+                     <PropertyCard 
+                        v-if="msg.property"
+                        :property="msg.property" 
+                        compact
+                     />
+                     <template #fallback>
+                        <div class="rounded-lg border border-gray-200 bg-white p-4">
+                           <div class="animate-pulse flex space-x-4">
+                              <div class="flex-1 space-y-3">
+                                 <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                                 <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                              </div>
+                           </div>
+                        </div>
+                     </template>
                   </Suspense>
                </div>
             </template>
          </FlowbiteChatBubble>
       </div>
 
-      <!-- Input  -->
-      <div
-         class="shadow-top absolute bottom-14 flex w-full items-center bg-white px-3 py-5"
-      >
-         <div class="flex w-full items-center rounded-lg border bg-white">
-            <textarea
-               v-model="newMessage"
-               rows="1"
-               :placeholder="$t('messages.typeMessage')"
-               class="flex-grow rounded-l-lg border-none bg-transparent px-4 py-2 focus:outline-none resize-none overflow-y-auto max-h-[250px]"
-               @keyup.enter.exact="sendMessage"
-               @keydown.shift.enter.prevent="addNewline"
-               @input="autoGrow"
-               :disabled="isSending"
-            />
-            <button
-               class="rounded-r-lg border-none bg-transparent p-2 focus:outline-none disabled:opacity-50"
-               @click="sendMessage"
-               :disabled="isSending"
-               :title="$t('messages.send')"
-            >
-               <PhPaperPlaneTilt :size="16" />
-            </button>
-         </div>
-      </div>
+      <!-- Message Input -->
+      <ChatMessageInput
+         :is-sending="isSending"
+         @send="sendMessage"
+      />
    </section>
 </template>
 
 <script setup lang="ts">
-import { PhCaretLeft, PhPaperPlaneTilt } from "@phosphor-icons/vue";
+import { PhArrowLeft } from "@phosphor-icons/vue";
 import { useChatStore } from '~/stores/chat';
 import { useNostrStore } from '~/stores/nostr';
+import type { ChatMessage } from '~/stores/chat';
+import type { Property } from '~/types/property';
 
-const nostrStore = useNostrStore();
-const chatStore = useChatStore();
-const runtimeConfig = useRuntimeConfig();
+interface MessageWithProperty extends ChatMessage {
+   property?: Property;
+}
 
-// Use whitelistedChats instead of all chats
 definePageMeta({
    layout: "white",
-   title: "Messages",
-   middleware: ['auth']
+   middleware: ['auth'],
+   hideBottomBar: false
 });
 
-const goBack = () => {
-   if (window.history.length > 1) {
-      window.history.back();
-   } else {
-      // Fallback: navigate to home if there is no history
-      const router = useRouter();
-      router.push('/');
-   }
-};
+const chatStore = useChatStore();
+const nostrStore = useNostrStore();
+const runtimeConfig = useRuntimeConfig();
+const chatContainer = ref<HTMLElement | null>(null);
+const isSending = ref(false);
 
 const messages = computed(() => {
-   // const chat = chatStore.chats.find(c => c.pubkey === runtimeConfig.public.MESSAGES_PUBKEY);
-   // return chat?.messages || [];
-
    const whitelist = runtimeConfig.public.PUBKEY_WHITELIST || [];
-   // whitelist.push(nostrStore.pubkey);
-   // console.log(nostrStore.pubkey, whitelist);
    const allMessages = chatStore.chats.flatMap(chat => chat.messages);
    
    return allMessages.filter(msg => {
@@ -107,10 +90,6 @@ const messages = computed(() => {
       return false;
    }).sort((a, b) => a.created_at - b.created_at);
 });
-
-const newMessage = ref("");
-const chatContainer = ref<HTMLElement | null>(null);
-const isSending = ref(false);
 
 function scrollToBottom() {
    nextTick(() => {
@@ -129,7 +108,6 @@ onMounted(async () => {
    // Cast through unknown to bypass type checking since we know the methods exist
    await ((nostrStore as unknown) as { checkAuthenticated: () => Promise<void> }).checkAuthenticated();
    await chatStore.init();
-   // await chatStore.fetchChats();
    
    // Update last read timestamp for whitelisted messages
    const whitelist = runtimeConfig.public.PUBKEY_WHITELIST || [];
@@ -147,41 +125,40 @@ onMounted(async () => {
    }
 });
 
-async function sendMessage() {
-   if (!newMessage.value.trim() || isSending.value) return;
+async function sendMessage(message: string) {
+   if (!message.trim() || isSending.value) return;
 
    try {
       isSending.value = true;
       // Cast through unknown to bypass type checking since we know the method exists
       await ((nostrStore as unknown) as { sendDirectMessage: (pubkey: string, content: string) => Promise<void> })
-         .sendDirectMessage(runtimeConfig.public.MESSAGES_PUBKEY, newMessage.value);
-      newMessage.value = "";
-      // Reset textarea height
-      const textarea = document.querySelector('textarea');
-      if (textarea) {
-         textarea.style.height = 'auto';
-      }
+         .sendDirectMessage(runtimeConfig.public.MESSAGES_PUBKEY, message);
       scrollToBottom();
    } finally {
       isSending.value = false;
    }
 }
 
-function autoGrow(e: Event) {
-   const textarea = e.target as HTMLTextAreaElement;
-   textarea.style.height = 'auto';
-   const newHeight = Math.min(textarea.scrollHeight, 250); // 250px is approximately 10 rows
-   textarea.style.height = newHeight + 'px';
+function goBack() {
+   if (window.history.length > 1) {
+      window.history.back();
+   } else {
+      // Fallback: navigate to home if there is no history
+      const router = useRouter();
+      router.push('/');
+   }
 }
 
-function addNewline(e: Event) {
-   newMessage.value += '\n';
-   nextTick(() => autoGrow(e));
+// Helper function to format display names
+function formatDisplayName(name?: string | null, pubkey?: string | null): string {
+   if (name) return name;
+   if (pubkey) return pubkey.slice(0, 8);
+   return 'Unknown';
 }
 
 const propertiesStore = usePropertiesStore();
 
-async function loadPropertyForMessage(message: ChatMessage) {
+async function loadPropertyForMessage(message: MessageWithProperty) {
    if (!message.property) {
       const propertyId = message.tags.find((tag: string[]) => tag[0] === 'e')?.[1];
       if (propertyId) {
@@ -194,10 +171,10 @@ async function loadPropertyForMessage(message: ChatMessage) {
    }
 }
 
-// Watch for changes in selectedChat messages and load properties
-watch(() => messages.value, async (messages?: ChatMessage[]) => {
-   if (messages) {
-      for (const message of messages) {
+// Watch for changes in messages and load properties
+watch(() => messages.value, async (newMessages?: MessageWithProperty[]) => {
+   if (newMessages) {
+      for (const message of newMessages) {
          if (isPropertyReference(message)) {
             await loadPropertyForMessage(message);
          }
@@ -205,7 +182,7 @@ watch(() => messages.value, async (messages?: ChatMessage[]) => {
    }
 }, { immediate: true, deep: true });
 
-function isPropertyReference(message: { tags: string[][] }) {
+function isPropertyReference(message: MessageWithProperty): message is MessageWithProperty & { property: Property } {
    const eTags = message.tags.filter((tag: string[]) => tag[0] === 'e');
    const kTags = message.tags.filter((tag: string[]) => tag[0] === 'k');
    
@@ -213,24 +190,3 @@ function isPropertyReference(message: { tags: string[][] }) {
           (kTags[0][1] === '30402' || kTags[0][1] === '30403');
 }
 </script>
-
-<style scoped>
-section {
-   height: calc(94vh);
-}
-
-.shadow-top {
-   box-shadow:
-      0px -4px 6px -1px rgba(0, 0, 0, 0.1),
-      0px -2px 4px -2px rgba(0, 0, 0, 0.1);
-}
-
-.no-scrollbar::-webkit-scrollbar {
-   display: none;
-}
-
-.no-scrollbar {
-   -ms-overflow-style: none;
-   scrollbar-width: none;
-}
-</style>

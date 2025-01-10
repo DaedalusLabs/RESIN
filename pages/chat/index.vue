@@ -68,92 +68,33 @@
       <!-- Main Chat Layout -->
       <div v-else class="flex flex-1 min-h-0">
          <!-- Left Sidebar - Conversations List -->
-         <div class="flex w-96 flex-col border-r border-gray-200 bg-white">
-            <!-- Search -->
-            <div class="border-b border-gray-200 p-4">
-               <div class="relative">
-                  <input
-                     v-model="searchQuery"
-                     type="text"
-                     :placeholder="$t('chat.search')"
-                     class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-900 focus:border-gray-500 focus:ring-0"
-                  />
-                  <PhMagnifyingGlass class="absolute left-3 top-2.5 text-gray-500" :size="20" />
-               </div>
-            </div>
-            <!-- Conversations List -->
-            <div class="flex-1 overflow-y-auto">
-               <div
-                  v-for="chat in filteredChats"
-                  :key="chat.pubkey"
-                  class="cursor-pointer border-b border-gray-100 p-4 hover:bg-gray-50 relative group"
-                  :class="{ 'bg-gray-100': selectedChat?.pubkey === chat.pubkey }"
-                  @click="selectChat(chat)"
-               >
-                  <div class="flex items-center gap-3">
-                     <img
-                        :src="chat.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
-                        class="h-12 w-12 rounded-full"
-                        alt="Profile"
-                     />
-                     <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between">
-                           <h3 class="font-semibold truncate">
-                              {{ formatDisplayName(chat.userProfile?.name, chat.pubkey) }}
-                           </h3>
-                           <span class="text-xs text-gray-500">
-                              {{ formatTime(chat.lastMessage?.created_at) }}
-                           </span>
-                        </div>
-                        <p class="mt-1 text-xs text-gray-500 truncate">
-                           {{ pubkeyToNpub(chat.pubkey) }}
-                        </p>
-                        <p class="mt-1 text-sm text-gray-600 line-clamp-1">
-                           {{ chat.lastMessage?.content || '' }}
-                        </p>
-                     </div>
-                  </div>
-                  <!-- Hide chat button -->
-                  <button
-                     class="absolute right-2 top-2 p-1 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                     @click.stop="hideChat(chat.pubkey)"
-                     title="Hide chat"
-                  >
-                     <PhX :size="16" />
-                  </button>
-               </div>
-            </div>
-         </div>
+         <ChatList 
+            :chats="filteredChats"
+            :selected-pubkey="selectedChat?.pubkey"
+            :show-hide-button="true"
+            @select="selectChat"
+            @hide="hideChat"
+         />
 
          <!-- Right Side - Chat Messages -->
          <div class="flex flex-1 flex-col bg-gray-50 min-h-0">
             <template v-if="selectedChat">
                <!-- Chat Header -->
-               <div class="flex items-center justify-between border-b border-gray-200 bg-white p-4">
-                  <div class="flex items-center gap-3">
-                     <img
-                        :src="selectedChat.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
-                        class="h-10 w-10 rounded-full"
-                        alt="Profile"
-                     />
-                     <div>
-                        <h2 class="font-semibold">
-                           {{ formatDisplayName(selectedChat.userProfile?.name, selectedChat.pubkey) }}
-                        </h2>
-                        <p class="text-xs text-gray-500">
-                           {{ pubkeyToNpub(selectedChat.pubkey) }}
-                        </p>
-                     </div>
-                  </div>
-                  <a
-                     :href="'https://njump.me/' + pubkeyToNpub(selectedChat.pubkey)"
-                     target="_blank"
-                     rel="noopener noreferrer"
-                     class="rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                  >
-                     View on njump
-                  </a>
-               </div>
+               <ChatMessageHeader
+                  :user-profile="selectedChat.userProfile"
+                  :pubkey="selectedChat.pubkey"
+               >
+                  <template #actions>
+                     <a
+                        :href="'https://njump.me/' + pubkeyToNpub(selectedChat.pubkey)"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                     >
+                        View on njump
+                     </a>
+                  </template>
+               </ChatMessageHeader>
 
                <!-- Messages -->
                <div ref="messagesContainer" class="flex-1 overflow-y-auto p-4">
@@ -191,28 +132,10 @@
                </div>
 
                <!-- Message Input -->
-               <div class="border-t border-gray-200 bg-white p-4">
-                  <div class="flex w-full items-center rounded-lg border bg-white">
-                     <textarea
-                        v-model="newMessage"
-                        rows="1"
-                        :placeholder="$t('chat.typeMessage')"
-                        class="flex-grow rounded-l-lg border-none bg-transparent px-4 py-2 focus:outline-none resize-none overflow-y-auto max-h-[250px]"
-                        @keyup.enter.exact="sendMessage"
-                        @keydown.shift.enter.prevent="addNewline"
-                        @input="autoGrow"
-                        :disabled="isSending"
-                     />
-                     <button
-                        class="rounded-r-lg border-none bg-transparent p-4 focus:outline-none disabled:opacity-50"
-                        @click="sendMessage"
-                        :disabled="isSending"
-                        :title="$t('chat.send')"
-                     >
-                        <PhPaperPlaneTilt :size="20" />
-                     </button>
-                  </div>
-               </div>
+               <ChatMessageInput
+                  :is-sending="isSending"
+                  @send="handleSendMessage"
+               />
             </template>
             <div v-else class="flex h-full items-center justify-center text-gray-500">
                {{ $t('chat.selectConversation') }}
@@ -223,28 +146,17 @@
 </template>
 
 <script setup lang="ts">
-import { PhArrowClockwise, PhMagnifyingGlass, PhPaperPlaneTilt, PhWarning, PhX } from "@phosphor-icons/vue";
+import { PhArrowClockwise, PhWarning } from "@phosphor-icons/vue";
 import { useChatStore } from '~/stores/chat';
 import { useNostrStore } from '~/stores/nostr';
-import type { Chat } from '~/stores/chat';
+import type { Chat, ChatMessage } from '~/stores/chat';
 import { nip19 } from 'nostr-tools';
 import type { NDKFilter, NDKEvent, NDKKind } from '@nostr-dev-kit/ndk';
 import type { UnwrappedMessage } from '~/types/nostr';
+import type { Property } from '~/types/property';
 
-interface ChatMessage {
-   id: string;
-   pubkey: string;
-   content: string;
-   created_at: number;
-   tags: string[][];
-   userProfile?: {
-      [x: string]: string | number | undefined;
-      created_at?: number;
-      name?: string;
-   };
-   isSent: boolean;
-   recipientPubkey: string;
-   property?: any;
+interface MessageWithProperty extends ChatMessage {
+   property?: Property;
 }
 
 definePageMeta({
@@ -332,39 +244,16 @@ function scrollToBottom() {
    }
 }
 
-async function sendMessage() {
-   if (!newMessage.value.trim() || isSending.value || !selectedChat.value) return;
-
+async function handleSendMessage(message: string) {
    try {
       isSending.value = true;
-
       // Cast through unknown to bypass type checking since we know the method exists
       await ((nostrStore as unknown) as { sendDirectMessage: (pubkey: string, content: string) => Promise<void> })
-         .sendDirectMessage(selectedChat.value.pubkey, newMessage.value);
-      newMessage.value = '';
-      
-      // Reset textarea height
-      const textarea = document.querySelector('textarea');
-      if (textarea) {
-         textarea.style.height = 'auto';
-      }
-      
+         .sendDirectMessage(selectedChat.value!.pubkey, message);
       scrollToBottom();
    } finally {
       isSending.value = false;
    }
-}
-
-function autoGrow(e: Event) {
-   const textarea = e.target as HTMLTextAreaElement;
-   textarea.style.height = 'auto';
-   const newHeight = Math.min(textarea.scrollHeight, 250);
-   textarea.style.height = newHeight + 'px';
-}
-
-function addNewline(e: Event) {
-   newMessage.value += '\n';
-   nextTick(() => autoGrow(e));
 }
 
 function formatTime(timestamp?: number): string {
@@ -492,7 +381,7 @@ async function fetchFullHistory() {
 
 const propertiesStore = usePropertiesStore();
 
-async function loadPropertyForMessage(message: ChatMessage) {
+async function loadPropertyForMessage(message: MessageWithProperty) {
    if (!message.property) {
       const propertyId = message.tags.find((tag: string[]) => tag[0] === 'e')?.[1];
       if (propertyId) {
@@ -506,7 +395,7 @@ async function loadPropertyForMessage(message: ChatMessage) {
 }
 
 // Watch for changes in selectedChat messages and load properties
-watch(() => selectedChat.value?.messages, async (messages?: ChatMessage[]) => {
+watch(() => selectedChat.value?.messages, async (messages?: MessageWithProperty[]) => {
    if (messages) {
       for (const message of messages) {
          if (isPropertyReference(message)) {
@@ -516,7 +405,7 @@ watch(() => selectedChat.value?.messages, async (messages?: ChatMessage[]) => {
    }
 }, { immediate: true, deep: true });
 
-function isPropertyReference(message: { tags: string[][] }) {
+function isPropertyReference(message: MessageWithProperty): message is MessageWithProperty & { property: Property } {
    const eTags = message.tags.filter((tag: string[]) => tag[0] === 'e');
    const kTags = message.tags.filter((tag: string[]) => tag[0] === 'k');
    
