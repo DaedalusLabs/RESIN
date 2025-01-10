@@ -16,6 +16,10 @@
                      v-model="recoveryPhrase[index]"
                      :placeholder="$t('introduction.login.recoveryPhrase.wordPlaceholder', { number: index + 1 })"
                      :error-messages="wordErrors[index]"
+                     autocapitalize="none"
+                     autocorrect="off"
+                     autocomplete="off"
+                     spellcheck="false"
                      @paste="handlePaste"
                   />
                </div>

@@ -11,6 +11,7 @@
          }"
          :value="modelValue"
          @input="onInput"
+         v-bind="$attrs"
       />
    </div>
 </template>
@@ -35,6 +36,11 @@ const props = defineProps({
       type: String,
       default: "text",
    },
+});
+
+// Disable attribute inheritance on the root element
+defineOptions({
+   inheritAttrs: false
 });
 
 const emit = defineEmits(["update:modelValue"]);
