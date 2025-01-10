@@ -417,12 +417,31 @@ export const useNostrStore = defineStore('nostr', {
                     // Request permission for notifications
                     const permission = await Notification.requestPermission();
                     if (permission === 'granted') {
+                        // Unregister any existing service workers first
+                        const existingRegistrations = await navigator.serviceWorker.getRegistrations();
+                        for (const reg of existingRegistrations) {
+                            if (reg.scope.includes('/')) {
+                                await reg.unregister();
+                            }
+                        }
+
                         // Register service worker with scope
                         const registration = await navigator.serviceWorker.register('/nostr-notifications-sw.js', {
                             type: 'classic',
-                            scope: '/'
+                            scope: '/',
+                            updateViaCache: 'none'
                         });
-                        await registration.update();
+
+                        // Wait for the service worker to be ready
+                        if (registration.installing) {
+                            await new Promise<void>((resolve) => {
+                                registration.installing?.addEventListener('statechange', (e) => {
+                                    if ((e.target as ServiceWorker).state === 'activated') {
+                                        resolve();
+                                    }
+                                });
+                            });
+                        }
 
                         // Initialize the subscription with the user's pubkey
                         registration.active?.postMessage({
@@ -435,6 +454,7 @@ export const useNostrStore = defineStore('nostr', {
                     }
                 } catch (error) {
                     console.error('Failed to enable notifications:', error);
+                    throw error; // Re-throw to handle in UI
                 }
             } else {
                 this.notificationsEnabled = false;

@@ -67,8 +67,18 @@ export default defineNuxtConfig({
          ],
       },
       workbox: {
-         navigateFallback: '/',
-         navigateFallbackAllowlist: [/^\/$/],
+         navigateFallback: null,
+         navigateFallbackAllowlist: [],
+         globDirectory: 'public',
+         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+         ignoreURLParametersMatching: [/^utm_/, /^fbclid$/],
+         skipWaiting: true,
+         clientsClaim: true,
+         cleanupOutdatedCaches: true,
+         additionalManifestEntries: [
+            { url: '/nostr-notifications-sw.js', revision: null },
+            { url: '/ndk-bundle.min.js', revision: null }
+         ]
       },
       devOptions: {
          enabled: false,
