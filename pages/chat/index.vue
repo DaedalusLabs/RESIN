@@ -164,6 +164,7 @@
                               <PropertyCard 
                                  v-if="msg.property"
                                  :property="msg.property" 
+                                 compact
                               />
                               <template #fallback>
                                  <div class="rounded-lg border border-gray-200 bg-white p-4">

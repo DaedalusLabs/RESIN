@@ -77,7 +77,6 @@
       "privateKeyNotAvailable": "Your private key can not be shown by RESIN, because it is managed by an extension.",
       "copied": "Copied"
     },
-    "language": "Language",
     "languageDescription": "Choose your preferred language",
     "pushNotifications": "Push Notifications",
     "pushNotificationsDescription": "Get notified when you receive new messages"
@@ -386,6 +385,12 @@
     "selectConversation": "Select a conversation to start messaging",
     "loading": "Loading messages...",
     "retry": "Try again",
-    "fetchHistory": "Fetch history"
+    "fetchHistory": "Fetch history",
+    "loadingHistory": "Loading history..."
+  },
+  "maintenance": {
+    "title": "Site Maintenance",
+    "description": "We're experiencing some technical difficulties. We'll be back shortly.",
+    "nextRetry": "Next retry in {seconds} seconds"
   }
 } 

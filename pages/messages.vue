@@ -25,7 +25,15 @@
             :time="(new Date(msg.created_at * 1000)).toLocaleString()"
             :profile-image="msg.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
             :is-sent="msg.isSent"
-         />
+         >
+            <template #below-message>
+               <div v-if="isPropertyReference(msg)" class="mt-2">
+                  <Suspense>
+                     <PropertyCard v-if="msg.property" :property="msg.property" compact />
+                  </Suspense>
+               </div>
+            </template>
+         </FlowbiteChatBubble>
       </div>
 
       <!-- Input  -->
@@ -83,8 +91,8 @@ const goBack = () => {
 };
 
 const messages = computed(() => {
-   const chat = chatStore.chats.find(c => c.pubkey === runtimeConfig.public.MESSAGES_NPUB);
-   return chat?.messages || [];
+   // const chat = chatStore.chats.find(c => c.pubkey === runtimeConfig.public.MESSAGES_NPUB);
+   // return chat?.messages || [];
 
    const whitelist = runtimeConfig.public.PUBKEY_WHITELIST || [];
    // whitelist.push(nostrStore.pubkey);
@@ -96,7 +104,6 @@ const messages = computed(() => {
       if (whitelist.includes(msg.pubkey)) return true;
       // Allow messages sent by the user to whitelisted pubkeys
       if (msg.isSent && whitelist.includes(msg.recipientPubkey)) return true;
-      console.log('msg', msg);
       return false;
    }).sort((a, b) => a.created_at - b.created_at);
 });
@@ -120,10 +127,24 @@ watch(messages, () => {
 onMounted(async () => {
    scrollToBottom();
    // Cast through unknown to bypass type checking since we know the methods exist
-   await ((nostrStore as unknown) as { checkAuthenticated: () => Promise<boolean> }).checkAuthenticated();
+   await ((nostrStore as unknown) as { checkAuthenticated: () => Promise<void> }).checkAuthenticated();
    await chatStore.init();
    await chatStore.fetchChats();
-   ((nostrStore as unknown) as { updateLastMessagesRead: () => void }).updateLastMessagesRead();
+   
+   // Update last read timestamp for whitelisted messages
+   const whitelist = runtimeConfig.public.PUBKEY_WHITELIST || [];
+   const latestMessageTime = messages.value.reduce((latest, msg) => {
+      const isFromWhitelist = whitelist.includes(msg.pubkey);
+      const isSentToWhitelist = msg.isSent && whitelist.includes(msg.recipientPubkey);
+      if ((isFromWhitelist || isSentToWhitelist) && msg.created_at > latest) {
+         return msg.created_at;
+      }
+      return latest;
+   }, 0);
+
+   if (latestMessageTime > 0) {
+      nostrStore.$patch({ lastMessagesRead: latestMessageTime });
+   }
 });
 
 async function sendMessage() {
@@ -156,6 +177,40 @@ function autoGrow(e: Event) {
 function addNewline(e: Event) {
    newMessage.value += '\n';
    nextTick(() => autoGrow(e));
+}
+
+const propertiesStore = usePropertiesStore();
+
+async function loadPropertyForMessage(message: ChatMessage) {
+   if (!message.property) {
+      const propertyId = message.tags.find((tag: string[]) => tag[0] === 'e')?.[1];
+      if (propertyId) {
+         try {
+            message.property = await propertiesStore.get(propertyId);
+         } catch (error) {
+            console.error('Error loading property:', error);
+         }
+      }
+   }
+}
+
+// Watch for changes in selectedChat messages and load properties
+watch(() => messages.value, async (messages?: ChatMessage[]) => {
+   if (messages) {
+      for (const message of messages) {
+         if (isPropertyReference(message)) {
+            await loadPropertyForMessage(message);
+         }
+      }
+   }
+}, { immediate: true, deep: true });
+
+function isPropertyReference(message: { tags: string[][] }) {
+   const eTags = message.tags.filter((tag: string[]) => tag[0] === 'e');
+   const kTags = message.tags.filter((tag: string[]) => tag[0] === 'k');
+   
+   return eTags.length > 0 && kTags.length > 0 && 
+          (kTags[0][1] === '30402' || kTags[0][1] === '30403');
 }
 </script>
 

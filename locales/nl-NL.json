@@ -89,7 +89,6 @@
       "privateKeyNotAvailable": "Uw geheime sleutel kan niet worden getoond door RESIN, omdat het wordt beheerd door een extensie.",
       "copied": "Gekopieerd"
     },
-    "language": "Taal",
     "languageDescription": "Kies je voorkeurstaal",
     "pushNotifications": "Push Meldingen",
     "pushNotificationsDescription": "Ontvang meldingen wanneer je nieuwe berichten krijgt"
