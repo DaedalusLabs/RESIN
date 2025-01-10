@@ -17,12 +17,12 @@
             </div>
          </section>
 
-         <section class="flex flex-col gap-4">
+         <section v-if="propertiesStore.ownedProperties.length > 0" class="flex flex-col gap-4">
             <MyResinNavbar title="Properties" link="my-properties" />
 
             <div v-if="propertiesStore.ownedProperties.length === 0">
                <p class="mt-20 gap-2 font-semibold text-pirate-950">
-                  You have no properties yet
+                  {{ $t('myResin.properties.noProperties') }}
                </p>
             </div>
             <div v-else class="space-y-4">
@@ -42,7 +42,7 @@
                </div>
             </div>
          </section>
-         <section>
+         <section v-if="transactionsStore.getTotalAmount > 0">
             <MyResinNavbar title="Transactions" link="transactions" />
             <TransactionsBarChart
                class="mt-4"
@@ -52,14 +52,14 @@
                :progress-percentage="transactionsStore.getPayedOffPercentage"
             />
          </section>
-         <section>
+         <section v-if="transactionsStore.getTotalAmount > 0">
             <MyResinNavbar
                title="Agreements"
                link="my-agreements"
                class="mb-4"
             />
-            <div v-if="transactionsStore.agreements.length === 0">
-               <p class="mt-20 gap-2 font-semibold text-pirate-950">
+            <div v-if="transactionsStore.getAgreements.length === 0">
+               <p class="gap-2 font-semibold text-pirate-950">
                   You have no agreements yet
                </p>
             </div>
@@ -77,7 +77,7 @@
                />
             </div>
          </section>
-         <section>
+         <section v-if="transactionsStore.getTotalAmount > 0">
             <MyResinNavbar title="Financials" link="financials" />
             <FinancialsEquityChart
                class="mt-4"

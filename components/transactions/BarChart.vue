@@ -9,7 +9,7 @@
             <span
                class="inline-block rounded-md bg-resin-50 px-3 py-1 text-sm font-medium text-resin-500"
             >
-               Payed off {{ progressPercentage.toFixed(1) }}%
+               Paid off {{ progressPercentage.toFixed(1) }}%
             </span>
          </div>
          <dd class="text-3xl font-bold text-pirate-900">
