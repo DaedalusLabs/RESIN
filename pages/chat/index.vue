@@ -418,14 +418,14 @@ async function fetchFullHistory() {
       console.log(`Found ${totalEvents.value} events to process`);
 
       // Process events in batches to show progress
-      for (const event of eventArray) {
-         try {
-            console.log(`Processing event ${processedEvents.value + 1}/${totalEvents.value}:`, event.id);
-            processedEvents.value++;
-         } catch (error) {
-            console.error('Error processing event:', event.id, error);
-         }
-      }
+    //   for (const event of eventArray) {
+    //      try {
+    //         console.log(`Processing event ${processedEvents.value + 1}/${totalEvents.value}:`, event.id);
+    //         processedEvents.value++;
+    //      } catch (error) {
+    //         console.error('Error processing event:', event.id, error);
+    //      }
+    //   }
 
       // Start decryption phase
       console.log('Starting decryption phase...');
@@ -435,7 +435,7 @@ async function fetchFullHistory() {
 
       for (const event of eventArray) {
          try {
-            console.log(`Decrypting event ${decryptedEvents.value + 1}/${totalDecryptEvents.value}:`, event.id);
+            // console.log(`Decrypting event ${decryptedEvents.value + 1}/${totalDecryptEvents.value}:`, event.id);
             // Cast through unknown to bypass type checking since we know the method exists
             const unwrappedMessage = await ((nostrStore as unknown) as { unwrapMessage: (event: NDKEvent) => Promise<UnwrappedMessage> }).unwrapMessage(event);
             
@@ -454,7 +454,7 @@ async function fetchFullHistory() {
 
             await chatStore.addMessage(message);
             decryptedEvents.value++;
-            console.log(`Successfully decrypted message from ${unwrappedMessage.isSent ? 'you to' : ''} ${unwrappedMessage.pubkey}`);
+            // console.log(`Successfully decrypted message from ${unwrappedMessage.isSent ? 'you to' : ''} ${unwrappedMessage.pubkey}`);
          } catch (error) {
             console.error('Error decrypting event:', event.id, error);
          }

@@ -111,6 +111,7 @@ export default defineNuxtConfig({
          TYPESENSE_HOST: process.env.TYPESENSE_HOST,
          TYPESENSE_PORT: process.env.TYPESENSE_PORT,
          TYPESENSE_API_KEY: process.env.TYPESENSE_API_KEY,
+         TYPESENSE_PROTOCOL: process.env.TYPESENSE_PROTOCOL,
          MESSAGES_NPUB: process.env.MESSAGES_NPUB,
          PUBKEY_WHITELIST: (process.env.PUBKEY_WHITELIST || '').split(','),
          FILES_BASE_URL: process.env.FILES_BASE_URL,
@@ -127,5 +128,15 @@ export default defineNuxtConfig({
          FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
          FIREBASE_VAPID_KEY: process.env.FIREBASE_VAPID_KEY,
       },
+   },
+
+   nitro: {
+      publicAssets: [
+         {
+            baseURL: '/',
+            dir: 'public',
+            maxAge: 0 // Disable caching for service worker
+         }
+      ]
    },
 });

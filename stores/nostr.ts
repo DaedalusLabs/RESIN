@@ -417,8 +417,11 @@ export const useNostrStore = defineStore('nostr', {
                     // Request permission for notifications
                     const permission = await Notification.requestPermission();
                     if (permission === 'granted') {
-                        // Register service worker
-                        const registration = await navigator.serviceWorker.register('/nostr-notifications-sw.js');
+                        // Register service worker with scope
+                        const registration = await navigator.serviceWorker.register('/nostr-notifications-sw.js', {
+                            type: 'classic',
+                            scope: '/'
+                        });
                         await registration.update();
 
                         // Initialize the subscription with the user's pubkey
@@ -436,9 +439,11 @@ export const useNostrStore = defineStore('nostr', {
             } else {
                 this.notificationsEnabled = false;
                 // Unregister service worker
-                const registration = await navigator.serviceWorker.getRegistration('/nostr-notifications-sw.js');
-                if (registration) {
-                    await registration.unregister();
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const registration of registrations) {
+                    if (registration.scope.includes('/')) {
+                        await registration.unregister();
+                    }
                 }
             }
         },

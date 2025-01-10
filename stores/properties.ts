@@ -35,6 +35,7 @@ interface PropertiesState {
    typesenseHost: string;
    typesensePort: string;
    typesenseApiKey: string;
+   typesenseProtocol: string;
    isInitialized: boolean;
 }
 
@@ -55,6 +56,7 @@ export const usePropertiesStore = defineStore("properties", {
       typesenseHost: '',
       typesensePort: '',
       typesenseApiKey: '',
+      typesenseProtocol: '',
       isInitialized: false,
    }),
    persist: {
@@ -102,7 +104,7 @@ export const usePropertiesStore = defineStore("properties", {
          this.typesenseHost = config.public.TYPESENSE_HOST;
          this.typesensePort = config.public.TYPESENSE_PORT;
          this.typesenseApiKey = config.public.TYPESENSE_API_KEY;
-
+         this.typesenseProtocol = config.public.TYPESENSE_PROTOCOL || 'https';
          this.initializeSearch();
 
          this.isInitialized = true;
@@ -163,7 +165,7 @@ export const usePropertiesStore = defineStore("properties", {
                   {
                      host: this.typesenseHost,
                      port: parseInt(this.typesensePort),
-                     protocol: this.typesenseHost.includes('localhost') ? 'http' : 'https'
+                     protocol: this.typesenseProtocol
                   }
                ]
             },
