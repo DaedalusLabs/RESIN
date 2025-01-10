@@ -1,11 +1,9 @@
 import { defineStore } from "pinia";
+import { useNostrStore } from "./nostr";
 
 interface SettingsState {
   // Theme settings
   theme: 'light' | 'dark' | 'system';
-  
-  // Notification preferences
-  notifications: boolean;
   
   // Display preferences
   display: {
@@ -27,8 +25,6 @@ interface SettingsState {
 export const useSettingsStore = defineStore("settings", {
   state: (): SettingsState => ({
     theme: 'system',
-    
-    notifications: false,
     
     display: {
       language: 'en',
@@ -58,6 +54,10 @@ export const useSettingsStore = defineStore("settings", {
       }
       return this.theme === 'dark';
     },
+    notifications(): boolean {
+      const nostrStore = useNostrStore();
+      return nostrStore.notificationsEnabled;
+    }
   },
 
   actions: {
@@ -67,10 +67,6 @@ export const useSettingsStore = defineStore("settings", {
 
     setPropertyTypes(types: string[]): void {
       this.propertyTypes = types;
-    },
-
-    setNotifications(enabled: boolean): void {
-      this.notifications = enabled;
     },
 
     updateDisplaySettings(settings: Partial<SettingsState['display']>): void {

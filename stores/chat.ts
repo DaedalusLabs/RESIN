@@ -1,12 +1,10 @@
 import { defineStore } from 'pinia';
 import Dexie from 'dexie';
 import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
-import { NDKEvent } from '@nostr-dev-kit/ndk';
-import type { NDKUserProfile, NDKUser, NDKFilter } from '@nostr-dev-kit/ndk';
+import type { NDKEvent , NDKUserProfile, NDKUser, NDKFilter } from '@nostr-dev-kit/ndk';
 import { useNostrStore } from './nostr';
 import { useNDK } from '~/composables/useNDK';
 import { useLocalStorage } from '@vueuse/core';
-import { useSettingsStore } from './settings';
 import { useRouter } from 'vue-router';
 
 interface SerializedUser {
@@ -140,6 +138,9 @@ export const useChatStore = defineStore('chat', {
             this.chats = storedChats;
 
             this.initialized = true;
+
+            // Set up subscription for new messages
+            await this.fetchChats();
         },
 
         async fetchChats() {
@@ -150,7 +151,6 @@ export const useChatStore = defineStore('chat', {
                 console.log('Nostr not ready:', { ndk: !!ndk, pubkey: !!nostrStore.pubkey, authenticated: nostrStore.authenticated });
                 return;
             }
-            console.log('fetching chats');
 
             try {
                 // Set up subscription for new messages
@@ -158,9 +158,8 @@ export const useChatStore = defineStore('chat', {
                     kinds: [1059], // Gift wrap kind
                     '#p': nostrStore.pubkey ? [nostrStore.pubkey] : [],
                     // ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp - 1000 } : {}),
-                    since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 2000 : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime() / 1000
+                    since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 100 : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime() / 1000
                 };
-                console.log('filter', filter);
                 const sub = ndk.subscribe(filter as unknown as NDKFilter, { closeOnEose: false });
 
                 // Keep track of processed message IDs to prevent duplicates
@@ -227,7 +226,6 @@ export const useChatStore = defineStore('chat', {
                 return;
             }
 
-            const settingsStore = useSettingsStore();
             const chatPubkey = message.isSent ? message.recipientPubkey : message.pubkey;
             
             // Find existing chat by pubkey
@@ -285,7 +283,7 @@ export const useChatStore = defineStore('chat', {
                 if (!message.isSent) {
                     chat.unreadCount++;
                     const nostrStore = useNostrStore();
-                    if (nostrStore.pushNotificationsEnabled) {
+                    if (nostrStore.notificationsEnabled) {
                         const name = chat.userProfile?.name || chatPubkey.slice(0, 8);
                         try {
                             const notification = new Notification(`New message from ${name} - Resin`, {
@@ -295,7 +293,6 @@ export const useChatStore = defineStore('chat', {
                                 tag: 'resin-chat',
                                 requireInteraction: true
                             });
-                            console.log('notification', notification);
                             notification.onclick = () => {
                                 window.focus();
                                 notification.close();

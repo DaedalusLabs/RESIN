@@ -19,8 +19,7 @@ interface NostrState {
     mnemonic: string | null;
     typeKey: NostrLoginType | null;
     lastMessagesRead: number | null;
-    pushNotificationsEnabled: boolean;
-    pushToken: string | null;
+    notificationsEnabled: boolean;
 }
 
 export enum NostrLoginType {
@@ -42,18 +41,30 @@ export const useNostrStore = defineStore('nostr', {
         mnemonic: null,
         typeKey: null,
         lastMessagesRead: null,
-        pushNotificationsEnabled: false,
-        pushToken: null
+        notificationsEnabled: false,
     }),
     persist: {
         key: 'nostr-store',
         storage: localStorage,
-        paths: ['mnemonic', 'typeKey', 'authenticated', 'lastMessagesRead', 'pushNotificationsEnabled'] 
+        paths: ['mnemonic', 'typeKey', 'authenticated', 'lastMessagesRead', 'notificationsEnabled'] 
     },
     getters: {
         unreadMessagesCount(): number {
             const chatStore = useChatStore();
-            return chatStore.chats.reduce((count, chat) => count + chat.unreadCount, 0);
+            const config = useRuntimeConfig();
+            const whitelist = config.public.PUBKEY_WHITELIST || [];
+            const lastRead = this.lastMessagesRead || 0;
+
+            return chatStore.chats.reduce((count, chat) => {
+                // Only count messages from whitelisted pubkeys that are not sent by us
+                const unreadWhitelistedMessages = chat.messages.filter(msg => {
+                    const isFromWhitelist = whitelist.includes(msg.pubkey);
+                    const isUnread = msg.created_at > lastRead;
+                    // Don't count messages sent by us
+                    return isFromWhitelist && isUnread && !msg.isSent;
+                }).length;
+                return count + unreadWhitelistedMessages;
+            }, 0);
         },
         getTypeKey(): NostrLoginType | null {
             return this.typeKey;
@@ -162,7 +173,7 @@ export const useNostrStore = defineStore('nostr', {
             this.mnemonic = null;
             this.lastMessagesRead = null;
             this.authenticated = false;
-            this.pushNotificationsEnabled = false;
+            this.notificationsEnabled = false;
         },
         async fetchDirectMessages() {
             const chatStore = useChatStore();
@@ -332,8 +343,8 @@ export const useNostrStore = defineStore('nostr', {
                 console.log('no ndk');
                 return null;
             }
-
             await ndk.connect();
+
 
             // // Wait for at least one relay to connect (with 5 second timeout)
             // try {
@@ -373,6 +384,7 @@ export const useNostrStore = defineStore('nostr', {
             // Create a promise that will resolve when we get our first event or timeout
             const event = await new Promise<NDKEvent | null>((resolve, reject) => {
                 const timeout = setTimeout(() => {
+                    console.log('timeout');
                     resolve(null);
                 }, 5000); // 5 second timeout
         
@@ -392,72 +404,54 @@ export const useNostrStore = defineStore('nostr', {
                 const decryptedContent = await ndk.signer?.decrypt(user, event.content, 'nip44');
                 if (!decryptedContent) return null;
 
+
                 return JSON.parse(decryptedContent);
             } catch (e) {
                 console.error('Failed to parse preferences:', e);
                 return null;
             }
         },
-        async savePushToken(token: string) {
-            this.pushToken = token;
-            
-            // Save the token to nostr preferences
-            await this.savePreferences('push_token', [token]);
-            
-            // Enable push notifications
-            this.pushNotificationsEnabled = true;
-        },
-        async loadPushToken() {
-            const tokens = await this.loadPreferences('push_token');
-            if (tokens && tokens.length > 0) {
-                this.pushToken = tokens[0];
-                return this.pushToken;
-            }
-            return null;
-        },
         async togglePushNotifications() {
-            if (!this.pushNotificationsEnabled) {
-                // For iOS devices, use FCM
-                if (import.meta.client && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
-                    const fcm = useFCM();
-                    const token = await fcm.requestPermission();
-                    if (token) {
-                        this.pushNotificationsEnabled = true;
-                    }
-                } else {
-                    // For other devices, use native notifications
+            if (!this.notificationsEnabled) {
+                try {
+                    // Request permission for notifications
                     const permission = await Notification.requestPermission();
                     if (permission === 'granted') {
-                        this.pushNotificationsEnabled = true;
-                        console.log('push notifications enabled');
+                        // Register service worker
+                        const registration = await navigator.serviceWorker.register('/nostr-notifications-sw.js');
+                        await registration.update();
+
+                        // Initialize the subscription with the user's pubkey
+                        registration.active?.postMessage({
+                            type: 'INIT_NOSTR_SUB',
+                            pubkey: this.pubkey
+                        });
+
+                        this.notificationsEnabled = true;
+                        await this.showNotification('RESIN', 'Push notifications enabled');
                     }
+                } catch (error) {
+                    console.error('Failed to enable notifications:', error);
                 }
-                await this.showNotification('Resin', 'Push notifications enabled');
-                console.log('push notifications enabled');
             } else {
-                this.pushNotificationsEnabled = false;
-                // Clear FCM token if it exists
-                if (this.pushToken) {
-                    this.pushToken = null;
-                    await this.savePreferences('push_token', []);
+                this.notificationsEnabled = false;
+                // Unregister service worker
+                const registration = await navigator.serviceWorker.getRegistration('/nostr-notifications-sw.js');
+                if (registration) {
+                    await registration.unregister();
                 }
-                console.log('push notifications disabled');
             }
         },
         async showNotification(title: string, body: string) {
-            if (!this.pushNotificationsEnabled) return;
-            console.log('showNotification', this.pushNotificationsEnabled);
+            if (!this.notificationsEnabled) return;
+
             try {
-                // Only show native notifications if not on iOS
-                if (import.meta.client && !/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                if (import.meta.client) {
                     const notification = new Notification(title, {
                         body,
                         icon: '/images/logos/Resin_Hexagon_Orange_Fill.svg',
                         tag: 'resin-chat',
-                        requireInteraction: true
                     });
-
-                    console.log('notification', notification);
 
                     notification.onclick = () => {
                         window.focus();
@@ -467,7 +461,6 @@ export const useNostrStore = defineStore('nostr', {
                         router.push('/chat');
                     };
                 }
-                // iOS devices will receive notifications through FCM
             } catch (error) {
                 console.error('Error showing notification:', error);
             }
