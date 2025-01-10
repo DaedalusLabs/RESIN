@@ -65,10 +65,14 @@ const props = defineProps({
       type: Boolean,
       required: true
    },
-   propertyAddress: {
-      type: String,
+   property: {
+      type: Object,
       required: true
    }
+});
+
+const propertyAddress = computed(() => {
+   return `${props.property.title} ${props.property.location.street}, ${props.property.location.city}, ${props.property.location.country}`;
 });
 
 const phone = ref('');
@@ -103,7 +107,7 @@ const isFormValid = computed(() => {
 const handleSendRequest = async () => {
    if (isFormValid.value) {
       // Create message content based on provided contact details
-      let contactMessage = `I want contact with an agent about ${props.propertyAddress}.`;
+      let contactMessage = `I want contact with an agent about ${propertyAddress.value}.`;
       
       if (email.value && phone.value) {
          contactMessage += ` You can reach me by email at ${email.value} or by phone at ${phone.value}.`;
@@ -113,7 +117,7 @@ const handleSendRequest = async () => {
          contactMessage += ` You can reach me by phone at ${phone.value}.`;
       }
 
-      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, contactMessage);
+      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, contactMessage, props.property.id, props.property.kind);
 
       emit('sendRequest', {
          email: email.value,

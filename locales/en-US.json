@@ -385,6 +385,7 @@
     "send": "Send message",
     "selectConversation": "Select a conversation to start messaging",
     "loading": "Loading messages...",
-    "retry": "Try again"
+    "retry": "Try again",
+    "fetchHistory": "Fetch history"
   }
 } 

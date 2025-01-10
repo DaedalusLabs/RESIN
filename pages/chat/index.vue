@@ -8,9 +8,10 @@
          <div class="flex justify-between items-center">
             <button
                @click="fetchFullHistory"
-               class="text-sm px-4 py-2 bg-resin-500 text-white rounded-lg hover:bg-resin-600 disabled:opacity-50"
+               class="text-sm px-4 py-2 bg-resin-500 text-white rounded-lg hover:bg-resin-600 disabled:opacity-50 flex items-center gap-2" 
                :disabled="isLoadingHistory"
             >
+            <PhArrowClockwise :size="20" />
                {{ isLoadingHistory ? $t('chat.loadingHistory') : $t('chat.fetchHistory') }}
             </button>
             <div v-if="isLoadingHistory" class="flex flex-col gap-2 ml-4">
@@ -156,7 +157,28 @@
                      :time="(new Date(msg.created_at * 1000)).toLocaleString()"
                      :profile-image="msg.userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
                      :is-sent="msg.isSent"
-                  />
+                  >
+                     <template #below-message>
+                        <div v-if="isPropertyReference(msg)" class="mt-2">
+                           <Suspense>
+                              <PropertyCard 
+                                 v-if="msg.property"
+                                 :property="msg.property" 
+                              />
+                              <template #fallback>
+                                 <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                    <div class="animate-pulse flex space-x-4">
+                                       <div class="flex-1 space-y-3">
+                                          <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                                          <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </template>
+                           </Suspense>
+                        </div>
+                     </template>
+                  </FlowbiteChatBubble>
                </div>
 
                <!-- Message Input -->
@@ -192,13 +214,29 @@
 </template>
 
 <script setup lang="ts">
-import { PhMagnifyingGlass, PhPaperPlaneTilt, PhWarning } from "@phosphor-icons/vue";
+import { PhArrowClockwise, PhMagnifyingGlass, PhPaperPlaneTilt, PhWarning } from "@phosphor-icons/vue";
 import { useChatStore } from '~/stores/chat';
 import { useNostrStore } from '~/stores/nostr';
 import type { Chat } from '~/stores/chat';
 import { nip19 } from 'nostr-tools';
 import type { NDKFilter, NDKEvent, NDKKind } from '@nostr-dev-kit/ndk';
 import type { UnwrappedMessage } from '~/types/nostr';
+
+interface ChatMessage {
+   id: string;
+   pubkey: string;
+   content: string;
+   created_at: number;
+   tags: string[][];
+   userProfile?: {
+      [x: string]: string | number | undefined;
+      created_at?: number;
+      name?: string;
+   };
+   isSent: boolean;
+   recipientPubkey: string;
+   property?: any;
+}
 
 definePageMeta({
    layout: "white",
@@ -429,6 +467,40 @@ async function fetchFullHistory() {
       decryptionPhase.value = false;
       console.log('History fetch completed');
    }
+}
+
+const propertiesStore = usePropertiesStore();
+
+async function loadPropertyForMessage(message: ChatMessage) {
+   if (!message.property) {
+      const propertyId = message.tags.find((tag: string[]) => tag[0] === 'e')?.[1];
+      if (propertyId) {
+         try {
+            message.property = await propertiesStore.get(propertyId);
+         } catch (error) {
+            console.error('Error loading property:', error);
+         }
+      }
+   }
+}
+
+// Watch for changes in selectedChat messages and load properties
+watch(() => selectedChat.value?.messages, async (messages?: ChatMessage[]) => {
+   if (messages) {
+      for (const message of messages) {
+         if (isPropertyReference(message)) {
+            await loadPropertyForMessage(message);
+         }
+      }
+   }
+}, { immediate: true, deep: true });
+
+function isPropertyReference(message: { tags: string[][] }) {
+   const eTags = message.tags.filter((tag: string[]) => tag[0] === 'e');
+   const kTags = message.tags.filter((tag: string[]) => tag[0] === 'k');
+   
+   return eTags.length > 0 && kTags.length > 0 && 
+          (kTags[0][1] === '30402' || kTags[0][1] === '30403');
 }
 </script>
 

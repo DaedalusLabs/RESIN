@@ -51,7 +51,7 @@
          <ModalContactAgent
             v-if="isBuyNow"
             :is-open="isModalOpen"
-            :property-address="propertyAddress"
+            :property="property"
             @update:is-open="isModalOpen = $event"
             @send-request="handleSendRequest"
          />
@@ -59,7 +59,7 @@
             v-else
             :is-open="isModalOpen"
             :is-request-sent="isRequestSent"
-            :property-address="propertyAddress"
+            :property="property"
             :reference-number="referenceNumber"
             @update:is-open="isModalOpen = $event"
             @send-request="handleSendRequest"
@@ -300,10 +300,6 @@ const handleSendRequest = async() => {
       showSuccessAlert.value = false;
    }, 5000);  
 };
-
-const propertyAddress = computed(() => {
-   return `${property.value.title} ${property.value.location.street}, ${property.value.location.city}, ${property.value.location.country}`;
-});
 
 const isBuyNow = computed(() => {
    return property.value && property.value['resin-type'] === 'Buy Now';

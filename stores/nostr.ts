@@ -166,7 +166,7 @@ export const useNostrStore = defineStore('nostr', {
             await chatStore.init();
             await chatStore.fetchChats();
         },
-        async sendDirectMessage(recipientPubkey: string, content: string) {
+        async sendDirectMessage(recipientPubkey: string, content: string, eventId?: string, eventKind?: number) {
             const ndk = useNDK();
             if (!ndk) throw new Error('NDK not initialized');
 
@@ -175,7 +175,11 @@ export const useNostrStore = defineStore('nostr', {
                 kind: 14,
                 content,
                 tags: [
-                    ['p', recipientPubkey]
+                    ['p', recipientPubkey],
+                    ...(eventId ? [
+                        ['e', eventId],
+                        ...(eventKind ? [['k', eventKind.toString()]] : [])
+                    ] : [])
                 ],
                 created_at: Math.floor(Date.now() / 1000)
             };
@@ -186,30 +190,8 @@ export const useNostrStore = defineStore('nostr', {
 
             // Get recipient's preferred relays
             // const relayList = recipient.relayUrls
-            let writeRelays = await getRelayListForUser(recipientPubkey, ndk);
-
-            // if (writeRelays.length == 0) {
-            //     // writeRelays = new Set<NDKRelay>();
-            //     writeRelays.setBoth(new NDKRelay("wss://nostr1.daedaluslabs.io"), true, true);
-            //     writeRelays.add(new NDKRelay("wss://nostr2.daedaluslabs.io"));
-            //     writeRelays.add(new NDKRelay("wss://nostr3.daedaluslabs.io"));
-            //     writeRelays.add(new NDKRelay("wss://nostr4.daedaluslabs.io"));
-            // }
-
-            if (writeRelays && writeRelays.relays.size > 0) {
-                console.log('relayList', writeRelays.relays);
-            }
-            // let writeRelays = relayList ? 
-            //     Object.entries(relayList)
-            //         .filter(([_, info]) => info?.write !== false)
-            //         .map(([url]) => url) : 
-            //     [];
-
-
-            // if (writeRelays.length == 0) {
-            //     writeRelays = new RelaySet["wss://nostr1.daedaluslabs.io", "wss://nostr2.daedaluslabs.io", "wss://nostr3.daedaluslabs.io", "wss://nostr4.daedaluslabs.io"];
-            // }
-            console.log('writeRelays', writeRelays);
+            const writeRelays = await getRelayListForUser(recipientPubkey, ndk);
+        
             // Create wraps for both recipient and sender
             const senderUser = await ndk.signer?.user();
             if (!senderUser) throw new Error('No signer available');

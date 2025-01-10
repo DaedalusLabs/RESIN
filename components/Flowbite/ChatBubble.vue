@@ -32,6 +32,9 @@
          >
             <p class="text-sm font-normal break-words whitespace-pre-wrap">{{ message }}</p>
          </div>
+         <div class="mt-2">
+            <slot name="below-message"></slot>
+         </div>
       </div>
    </div>
 </template>

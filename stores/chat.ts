@@ -150,6 +150,7 @@ export const useChatStore = defineStore('chat', {
                 console.log('Nostr not ready:', { ndk: !!ndk, pubkey: !!nostrStore.pubkey, authenticated: nostrStore.authenticated });
                 return;
             }
+            console.log('fetching chats');
 
             try {
                 // Set up subscription for new messages
@@ -157,16 +158,15 @@ export const useChatStore = defineStore('chat', {
                     kinds: [1059], // Gift wrap kind
                     '#p': nostrStore.pubkey ? [nostrStore.pubkey] : [],
                     // ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp - 1000 } : {}),
-                    // since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 2000 : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime()
+                    since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 2000 : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime()
                 };
-                console.log('filter', filter);
                 const sub = ndk.subscribe(filter as unknown as NDKFilter, { closeOnEose: false });
 
                 // Keep track of processed message IDs to prevent duplicates
                 const processedMessageIds = new Set<string>();
 
                 sub.on('event', async (event: NDKEvent) => {
-                    console.log('event', event);
+                    // console.log('event', event);
                     // Process each message in sequence using the queue
                     await this.processMessageInQueue(async () => {
                         try {

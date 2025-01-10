@@ -35,6 +35,7 @@
 
 <script setup>
 import { PhCheck } from "@phosphor-icons/vue";
+import { computed } from 'vue';
 
 const nostrStore = useNostrStore();
 const runtimeConfig = useRuntimeConfig();
@@ -47,8 +48,8 @@ const props = defineProps({
       type: Boolean,
       required: true
    },
-   propertyAddress: {
-      type: String,
+   property: {
+      type: Object,
       required: true
    },
    referenceNumber: {
@@ -57,17 +58,17 @@ const props = defineProps({
    }
 });
 
+const propertyAddress = computed(() => {
+   return `${props.property.title} ${props.property.location.street}, ${props.property.location.city}, ${props.property.location.country}`;
+});
+
 const emit = defineEmits(['update:isOpen', 'sendRequest']);
 
 const handleSendRequest = async () => {
-
-      const contactMessage = `I want to request a tour to see ${props.propertyAddress}.`;
+      const contactMessage = `I want to request a tour to see ${propertyAddress.value}.`;
       
-      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, contactMessage);
+      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, contactMessage, props.property.id, props.property.kind);
 
-      emit('sendRequest', {
- 
-      });
-
+      emit('sendRequest', {});
 };
 </script> 

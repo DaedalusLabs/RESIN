@@ -1,5 +1,5 @@
 <template>
-   <div class="overflow-hidden rounded-2xl bg-white shadow-lg">
+   <div class="overflow-hidden rounded-2xl bg-white shadow-lg" v-if="property">
       <div class="relative">
          <FlowbiteCarousel
             :items="property.images"
@@ -15,11 +15,13 @@
 
          <span
             class="absolute bottom-4 right-4 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
+            v-if="property['resin-type']"
          >
+         
             {{ $t(`property.types.${property['resin-type'].split(' ').map((word, index) => index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('')}`) }}
          </span>
       </div>
-      <div class="flex flex-col gap-2 p-4">
+      <div class="flex flex-col gap-2 p-4 text-left">
          <div class="flex items-center justify-between">
             <h3 class="text-lg font-bold text-resin-500">
                {{ property.title }}
@@ -32,7 +34,7 @@
                @click="toggleFavorite"
             />
          </div>
-         <p class="text-gray-600">
+         <p class="text-gray-600 " >
             {{ property.location.city }},
             {{ property.location.country }}
          </p>
@@ -85,6 +87,8 @@ const props = defineProps({
       default: true,
    },
 });
+
+console.log('props.property', props.property);
 
 const isFavorite = computed(() => propertiesStore.isFavorite(props.property.id));
 

@@ -4,21 +4,86 @@
       <NuxtLayout>
          <NuxtPage />
       </NuxtLayout>
+      
+      <!-- Relay Status Overlay -->
+      <div v-if="nostrStore.authenticated && showRelays" class="fixed bottom-4 right-4 z-50 max-w-sm bg-white rounded-lg shadow-lg p-4 text-sm">
+         <div class="flex items-center justify-between">
+            <h3 class="font-semibold">Connected Relays ({{ connectedRelays.length }})</h3>
+            &nbsp;
+            <button @click="showRelays = !showRelays" class="text-gray-500 hover:text-gray-700">
+               <span v-if="showRelays">Hide</span>
+               <span v-else>Show</span>
+            </button>
+         </div>
+         <div v-if="showRelays" class="space-y-2">
+            <div v-for="relay in connectedRelays" :key="relay" class="flex items-center gap-2">
+               <div class="w-2 h-2 rounded-full bg-green-500"></div>
+               <span class="text-xs truncate" :title="relay">{{ relay }}</span>
+            </div>
+            <div v-if="connectedRelays.length === 0" class="text-gray-500 text-xs">
+               No relays connected
+            </div>
+         </div>
+      </div>
    </div>
 </template>
 
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
-const runtimeConfig = useRuntimeConfig();
+import { useNostrStore } from "~/stores/nostr";
+import { useNDK } from "~/composables/useNDK";
 
+const runtimeConfig = useRuntimeConfig();
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
+const showRelays = ref(false);
+const altKeyPressCount = ref(0);
+const altKeyTimer = ref(null);
+
+const TRIPLE_PRESS_TIMEOUT = 500; // 500ms timeout for triple press
+
+const handleKeyDown = (event) => {
+   if (event.key === 'Alt') {
+      altKeyPressCount.value++;
+      
+      // Clear existing timer
+      if (altKeyTimer.value) {
+         clearTimeout(altKeyTimer.value);
+      }
+      
+      // Set new timer
+      altKeyTimer.value = setTimeout(() => {
+         if (altKeyPressCount.value >= 3) {
+            showRelays.value = !showRelays.value;
+         }
+         altKeyPressCount.value = 0;
+      }, TRIPLE_PRESS_TIMEOUT);
+   }
+};
+
 propertiesStore.init();
 
-onMounted(async () => {
-  propertiesStore.watchNostrAuth();
+const connectedRelays = computed(() => {
+   const ndk = useNDK();
+   if (!ndk) return [];
+   
+   return Array.from(ndk.pool.relays.values())
+      .filter(relay => relay.connected)
+      .map(relay => relay.url);
 });
 
-const nostrStore = useNostrStore();
+onMounted(() => {
+   window.addEventListener('keydown', handleKeyDown);
+   propertiesStore.watchNostrAuth();
+});
+
+onUnmounted(() => {
+   window.removeEventListener('keydown', handleKeyDown);
+   if (altKeyTimer.value) {
+      clearTimeout(altKeyTimer.value);
+   }
+});
+
 nostrStore.checkAuthenticated().then(async () => {
    nostrStore.fetchDirectMessages();
    if (nostrStore.authenticated) {
@@ -29,12 +94,6 @@ nostrStore.checkAuthenticated().then(async () => {
 async function getProperties() {
    const properties = await fetch(`${runtimeConfig.public.BACKEND_ENDPOINT}/listings`);
    return (await properties.json()).hits.map(d => d.document);
-}
-
-async function getTrendingAreas() {
-   return [
-    
-   ];
 }
 
 propertiesStore.properties = await getProperties();
