@@ -58,6 +58,12 @@ const route = useRoute();
 const propertiesStore = usePropertiesStore();
 const searchStore = useSearchStore();
 
+const { t } = useI18n();
+
+useHead({
+   title: t('properties.title'),
+});
+
 const handleStateChange = ({uiState, setUiState}) => {
   searchStore.updateSearchState(uiState)
   setUiState(uiState);

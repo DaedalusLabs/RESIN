@@ -309,6 +309,10 @@ definePageMeta({
    layout: "white",
 });
 
+useHead({
+   title: () => property.value ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}` : 'Property Details',
+});
+
 defineProps({
    showToasts: {
       type: Boolean,

@@ -50,8 +50,12 @@ const query = ref("");
 const searches = ref([propertiesStore.searches.reverse()]);
 const viewedProperties = ref([propertiesStore.viewedLocations.reverse()]);
 
+const { t } = useI18n();
+useHead({
+   title: t('home.title'),
+});
+
 definePageMeta({
-   title: 'home.title',
    layout: "white",
    middleware: ['auth']
 });

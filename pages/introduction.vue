@@ -78,6 +78,11 @@ const authenticationStatus = ref(false)
 
 authenticationStatus.value = await checkAuthenticated();
 
+const { t } = useI18n();
+
+useHead({
+   title: t('introduction.title'),
+});
 
 definePageMeta({
    layout: "intro",

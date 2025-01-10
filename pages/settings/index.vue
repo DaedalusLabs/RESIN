@@ -68,6 +68,12 @@ const settingsStore = useSettingsStore();
 const switchLocalePath = useSwitchLocalePath();
 const router = useRouter();
 
+const { t } = useI18n();
+
+useHead({
+   title: t('settings.title'),
+});
+
 const goBack = () => {
    if (window.history.length > 1) {
       window.history.back();

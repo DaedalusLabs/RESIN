@@ -88,6 +88,12 @@ import { PhCaretLeft, PhCamera } from "@phosphor-icons/vue";
 import { useNDK } from '~/composables/useNDK';
 import type { NDKUserProfile } from '@nostr-dev-kit/ndk';
 
+const { t } = useI18n();
+
+useHead({
+   title: t('settings.profile.title'),
+});
+
 const nostrStore = useNostrStore();
 const ndk = useNDK();
 const showSavedAlert = ref(false);

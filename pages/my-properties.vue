@@ -45,6 +45,12 @@ import { PhExport, PhCaretLeft } from "@phosphor-icons/vue";
 
 const { share, isSupported } = useShare();
 
+const { t } = useI18n();
+
+useHead({
+   title: t('my-properties.title'),
+});
+
 function startShare() {
    share({
       title: "Resin",

@@ -86,6 +86,10 @@ const openSections = ref([]);
 const searchQuery = ref('');
 const selectedCategory = ref('All');
 
+useHead({
+   title: t('help.title'),
+});
+
 const categories = [
   { key: 'all', label: t('help.categories.all') },
   { key: 'account', label: t('help.categories.account') },

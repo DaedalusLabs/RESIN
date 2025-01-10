@@ -98,6 +98,12 @@ import { useNostrStore } from '~/stores/nostr';
 import { PhCaretLeft, PhCopy } from "@phosphor-icons/vue";
 import { nip19 } from 'nostr-tools';
 
+const { t } = useI18n();
+
+useHead({
+   title: t('settings.nostrKeys.title'),
+});
+
 const nostrStore = useNostrStore();
 const showPhrase = ref(false);
 const showCopiedAlert = ref(false);

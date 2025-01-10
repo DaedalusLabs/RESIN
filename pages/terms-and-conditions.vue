@@ -43,6 +43,12 @@
 <script setup>
 import { PhCaretLeft, PhCaretDown } from "@phosphor-icons/vue";
 
+const { t } = useI18n();
+
+useHead({
+   title: t('termsAndConditions.title'),
+});
+
 const openSections = ref(new Array(13).fill(true));
 
 const sections = [

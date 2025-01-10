@@ -51,6 +51,11 @@ const searchStore = useSearchStore()
 propertiesStore.initializeSearch();
 const searchClient:SearchClient = propertiesStore.searchClient;
 
+const { t } = useI18n();
+
+useHead({
+   title: t('map.title'),
+});
 
 const mapCenter = ref({ lat: 15.76, lng: -81.84 });
 

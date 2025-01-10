@@ -26,6 +26,11 @@ import { usePropertiesStore } from "~/stores/properties";
 const propertiesStore = usePropertiesStore();
 const favorites = computed(() => propertiesStore.favoriteLocations);
 
+const { t } = useI18n();
+
+useHead({
+   title: t('my-resin.title'),
+});
 
 onMounted(() => {
 });

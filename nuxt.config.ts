@@ -87,7 +87,7 @@ export default defineNuxtConfig({
 
    app: {
       head: {
-         title: "Resin",
+         // title: "Resin",
          meta: [
             { charset: "utf-8" },
             {

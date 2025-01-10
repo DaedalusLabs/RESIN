@@ -329,7 +329,8 @@
     "trendingAreas": {
       "title": "Trending areas",
       "noAreas": "No trending areas"
-    }
+    },
+    "title": "Home"
   },
   "favorites": {
     "title": "Favorites",
@@ -362,7 +363,8 @@
       "placeholder": "Enter your nsec",
       "error": "Please fill in your Nsec key",
       "invalidKey": "Invalid Nsec key"
-    }
+    },
+    "title": "Introduction"
   },
   "nostr": {
     "creating": "Creating NOSTR key...",
@@ -375,7 +377,8 @@
     "search": {
       "placeholder": "City, region, country...",
       "clear": "Clear search"
-    }
+    },
+    "title": "Map"
   },
   "chat": {
     "title": "Messages",
@@ -392,5 +395,14 @@
     "title": "Site Maintenance",
     "description": "We're experiencing some technical difficulties. We'll be back shortly.",
     "nextRetry": "Next retry in {seconds} seconds"
+  },
+  "my-resin": {
+    "title": "My Resin"
+  },
+  "my-properties": {
+    "title": "My Properties"
+  },
+  "properties": {
+    "title": "Properties"
   }
-} 
+}

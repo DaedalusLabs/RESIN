@@ -30,6 +30,12 @@ import { useTransactionsStore } from "~/stores/transactions";
 import { useShare } from "@vueuse/core";
 import { PhExport, PhCaretLeft } from "@phosphor-icons/vue";
 
+const { t } = useI18n();
+
+useHead({
+   title: t('transactions.title'),
+});
+
 const { share, isSupported } = useShare();
 const transactionsStore = useTransactionsStore();
 

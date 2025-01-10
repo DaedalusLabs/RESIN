@@ -41,6 +41,10 @@ const { t } = useI18n();
 
 const { share, isSupported } = useShare();
 
+useHead({
+   title: t('favorites.title'),
+});
+
 function startShare() {
    share({
       title: t('favorites.share.title'),

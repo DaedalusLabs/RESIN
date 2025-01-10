@@ -159,6 +159,12 @@ interface MessageWithProperty extends ChatMessage {
    property?: Property;
 }
 
+const { t } = useI18n();
+
+useHead({
+   title: t('chat.title'),
+});
+
 definePageMeta({
    layout: "white",
    middleware: ['auth'],

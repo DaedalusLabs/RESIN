@@ -104,6 +104,10 @@ const connectedRelays = computed(() => {
       .map(relay => relay.url);
 });
 
+useHead({
+   titleTemplate: (title) => title ? `${title} | Resin` : 'Resin',
+});
+
 onMounted(() => {
    window.addEventListener('keydown', handleKeyDown);
    propertiesStore.watchNostrAuth();

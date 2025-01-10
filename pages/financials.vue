@@ -41,6 +41,12 @@ const { share, isSupported } = useShare();
 const transactionsStore = useTransactionsStore();
 const propertiesStore = usePropertiesStore();
 
+const { t } = useI18n();
+
+useHead({
+   title: t('financials.title'),
+});
+
 function startShare() {
    share({
       title: "Resin",
