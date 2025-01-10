@@ -316,7 +316,6 @@ async function sendMessage() {
    try {
       isSending.value = true;
 
-      console.log('sendMessage', selectedChat.value.pubkey, newMessage.value);
       // Cast through unknown to bypass type checking since we know the method exists
       await ((nostrStore as unknown) as { sendDirectMessage: (pubkey: string, content: string) => Promise<void> })
          .sendDirectMessage(selectedChat.value.pubkey, newMessage.value);

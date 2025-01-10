@@ -8,6 +8,7 @@ import { bytesToHex } from '@noble/hashes/utils'
 import { setSigner, useNDK } from '~/composables/useNDK';
 import { getPublicKey } from 'nostr-tools';
 import { useChatStore } from './chat';
+import { useFCM } from '~/composables/useFCM';
 
 const DERIVATION_PATH = `m/44'/1237'`
 
@@ -19,6 +20,7 @@ interface NostrState {
     typeKey: NostrLoginType | null;
     lastMessagesRead: number | null;
     pushNotificationsEnabled: boolean;
+    pushToken: string | null;
 }
 
 export enum NostrLoginType {
@@ -41,6 +43,7 @@ export const useNostrStore = defineStore('nostr', {
         typeKey: null,
         lastMessagesRead: null,
         pushNotificationsEnabled: false,
+        pushToken: null
     }),
     persist: {
         key: 'nostr-store',
@@ -204,6 +207,7 @@ export const useNostrStore = defineStore('nostr', {
             // Publish to recipient's write relays and our own relays
             await Promise.all(wraps.map(async (wrap) => {
                 if (writeRelays && writeRelays.relays.size > 0) {
+                    console.log('writeRelays', writeRelays);
                     // Publish to recipient's write relays
                     await wrap.publish(writeRelays);
                 } else {
@@ -394,36 +398,76 @@ export const useNostrStore = defineStore('nostr', {
                 return null;
             }
         },
+        async savePushToken(token: string) {
+            this.pushToken = token;
+            
+            // Save the token to nostr preferences
+            await this.savePreferences('push_token', [token]);
+            
+            // Enable push notifications
+            this.pushNotificationsEnabled = true;
+        },
+        async loadPushToken() {
+            const tokens = await this.loadPreferences('push_token');
+            if (tokens && tokens.length > 0) {
+                this.pushToken = tokens[0];
+                return this.pushToken;
+            }
+            return null;
+        },
         async togglePushNotifications() {
             if (!this.pushNotificationsEnabled) {
-                // Request permission if not already granted
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    this.pushNotificationsEnabled = true;
+                // For iOS devices, use FCM
+                if (import.meta.client && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                    const fcm = useFCM();
+                    const token = await fcm.requestPermission();
+                    if (token) {
+                        this.pushNotificationsEnabled = true;
+                    }
+                } else {
+                    // For other devices, use native notifications
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        this.pushNotificationsEnabled = true;
+                        console.log('push notifications enabled');
+                    }
                 }
+                await this.showNotification('Resin', 'Push notifications enabled');
+                console.log('push notifications enabled');
             } else {
                 this.pushNotificationsEnabled = false;
+                // Clear FCM token if it exists
+                if (this.pushToken) {
+                    this.pushToken = null;
+                    await this.savePreferences('push_token', []);
+                }
+                console.log('push notifications disabled');
             }
         },
         async showNotification(title: string, body: string) {
-            console.log('showNotification', this.pushNotificationsEnabled);
             if (!this.pushNotificationsEnabled) return;
-
+            console.log('showNotification', this.pushNotificationsEnabled);
             try {
-                const notification = new Notification(title, {
-                    body,
-                    icon: '/images/logos/Resin_Hexagon_Orange_Fill.svg',
-                    tag: 'resin-chat',
-                    renotify: true
-                });
+                // Only show native notifications if not on iOS
+                if (import.meta.client && !/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                    const notification = new Notification(title, {
+                        body,
+                        icon: '/images/logos/Resin_Hexagon_Orange_Fill.svg',
+                        tag: 'resin-chat',
+                        requireInteraction: true
+                    });
 
-                notification.onclick = () => {
-                    window.focus();
-                    notification.close();
-                    // Navigate to chat
-                    const router = useRouter();
-                    router.push('/chat');
-                };
+                    console.log('notification', notification);
+
+                    notification.onclick = () => {
+                        window.focus();
+                        notification.close();
+                        // Navigate to chat
+                        const router = useRouter();
+                        router.push('/chat');
+                    };
+                }
+                // iOS devices will receive notifications through FCM
             } catch (error) {
                 console.error('Error showing notification:', error);
             }

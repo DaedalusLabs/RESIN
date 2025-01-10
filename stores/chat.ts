@@ -158,8 +158,9 @@ export const useChatStore = defineStore('chat', {
                     kinds: [1059], // Gift wrap kind
                     '#p': nostrStore.pubkey ? [nostrStore.pubkey] : [],
                     // ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp - 1000 } : {}),
-                    since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 2000 : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime()
+                    since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 2000 : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime() / 1000
                 };
+                console.log('filter', filter);
                 const sub = ndk.subscribe(filter as unknown as NDKFilter, { closeOnEose: false });
 
                 // Keep track of processed message IDs to prevent duplicates
@@ -283,15 +284,18 @@ export const useChatStore = defineStore('chat', {
                 // Update unread count and show notification
                 if (!message.isSent) {
                     chat.unreadCount++;
-                    if (settingsStore.notifications) {
+                    const nostrStore = useNostrStore();
+                    if (nostrStore.pushNotificationsEnabled) {
                         const name = chat.userProfile?.name || chatPubkey.slice(0, 8);
                         try {
-                            const notification = new Notification(name, {
+                            const notification = new Notification(`New message from ${name} - Resin`, {
                                 body: message.content,
-                                icon: '/images/logos/Resin_Hexagon_Orange_Fill.svg',
-                                tag: 'resin-chat'
+                                icon: chat.userProfile?.image || `/images/logos/Resin_Hexagon_Orange_Fill.svg`,
+                                badge: chat.userProfile?.image || `/images/logos/Resin_Hexagon_Orange_Fill.svg`,
+                                tag: 'resin-chat',
+                                requireInteraction: true
                             });
-
+                            console.log('notification', notification);
                             notification.onclick = () => {
                                 window.focus();
                                 notification.close();
