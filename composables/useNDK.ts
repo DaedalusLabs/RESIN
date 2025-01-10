@@ -8,10 +8,10 @@ export function setSigner(newSigner: NDKSigner) {
 }
 
 export function useNDK() {
-    if (!signer) {
-        console.log('No signer');
-        return;
-    }
+    // if (!signer) {
+    //     console.log('No signer');
+    //     return;
+    // }
 
     if (!ndkInstance) {
         ndkInstance = new NDK({
@@ -29,6 +29,11 @@ export function useNDK() {
             ],
             signer
         });
+
+        // Listen for auth requirements
+        ndkInstance.pool.on('relay:auth', (relay) => {
+            console.log(`Relay ${relay.url} requires authentication`)
+        })
     }
 
     

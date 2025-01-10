@@ -356,6 +356,20 @@
         "useExtension": "Use browser extension",
         "noExtension": "No extension found - more info",
         "noNip44": "Your Nostr Extension does not support NIP-44"
+      },
+      "nsecBunker": {
+        "button": "Use NSec Bunker",
+        "title": "Log in with NSec Bunker",
+        "error": "Failed to connect to NSec Bunker",
+        "connecting": "Connecting to NSec Bunker...",
+        "timeout": "Connection to NSec Bunker timed out",
+        "invalidResponse": "Invalid response from NSec Bunker",
+        "success": "Successfully connected to NSec Bunker",
+        "generatingKeys": "Generating client keypair...",
+        "connectString": "NSec Bunker connect string:",
+        "scanQr": "Scan this QR code with your NSec Bunker app",
+        "enterUrl": "Or enter a bunker URL manually",
+        "urlPlaceholder": "Enter bunker URL..."
       }
     },
     "nsec": {

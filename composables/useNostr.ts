@@ -1,64 +1,107 @@
 // composables/useNostr.ts
-import { NDKNip07Signer, NDKPrivateKeySigner } from '@nostr-dev-kit/ndk';
-import { ref } from 'vue';
-import { useNostrStore } from '~/stores/nostr';
+import { NDKPrivateKeySigner, NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
+import { storeToRefs } from 'pinia';
+import { useNostrStore } from "~/stores/nostr";
+import { useNDK } from "./useNDK";
 
 export function useNostr() {
-  const isLoading = ref(false);
-  const error = ref<string | null>(null);
-  const store = useNostrStore();
+   const nostrStore = useNostrStore();
+   const { user, isLoading, error } = storeToRefs(nostrStore);
+   const ndk = useNDK();
 
-  const loginWithExtension = async () => {
-    isLoading.value = true;
-    error.value = null;
-    
-    try {
-      const pubkey = await store.login();
-      setSigner(new NDKNip07Signer());
-      store.pubkey = pubkey;
+   const isAuthenticated = computed(() => nostrStore.authenticated);
+   const pubkey = computed(() => user.value?.pubkey);
 
-      return pubkey;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to login';
-      throw err;
-    } finally {
-      isLoading.value = false;
-    }
-  };
+   async function loginWithExtension() {
+      if (!ndk) throw new Error("NDK not initialized");
+      return nostrStore.loginWithExtension(ndk);
+   }
 
-  const hasExtension = () => 'nostr' in window
+   async function loginWithMnemonic(mnemonic: string) {
+      if (!ndk) throw new Error("NDK not initialized");
+      return nostrStore.loginWithMnemonic(ndk, mnemonic);
+   }
 
-  const hasNip44 = () => 'nostr' in window && 'nip44' in window.nostr
+   async function loginWithNsecBunker(pubkey: string, relay: string, secret: string) {
+      if (!ndk) throw new Error('NDK not initialized');
 
-  const generateKeyPair = () => {
- //   authType = 'generated'
-    return store.generateKeyPair()
-  }
+      try {
+         // Create a temporary signer for the session
+         const tempSigner = NDKPrivateKeySigner.generate();
+         ndk.signer = tempSigner;
 
-  const loginWithMnemonic = async (mnemonic: string) => {
-//    authType = 'generated'
-    const { privateKey, _, pubkey } = await store.generateKeyPair(mnemonic);
-    setSigner(new NDKPrivateKeySigner(privateKey));
-    store.pubkey = pubkey;
-    return privateKey;
-  }
+         // Create a bunker auth request event
+         const authEvent = new NDKEvent(ndk);
+         authEvent.kind = 27235; // Bunker auth request
+         authEvent.tags = [
+            ["p", pubkey], // The bunker's public key
+            ["relay", relay], // The bunker's relay
+            ["secret", secret], // The secret from the bunker URL
+            ["u", window.location.origin], // The app's origin
+            ["c", "resin-app"] // Client identifier
+         ];
+         await authEvent.sign();
 
-  const checkAuthenticated = async() => {
-    return await store.checkAuthenticated();
-  }
+         // Connect to NDK and wait for bunker response
+         await ndk.connect();
 
+         // Set up subscription for bunker response
+         const sub = ndk.subscribe(
+            {
+               kinds: [27235],
+               "#e": [authEvent.id!],
+               limit: 1
+            },
+            { closeOnEose: false }
+         );
 
+         // Wait for bunker response or timeout
+         const response = await new Promise<NDKEvent>((resolve, reject) => {
+            const timeout = setTimeout(() => {
+               reject(new Error("Bunker connection timeout"));
+               sub.stop();
+            }, 30000);
 
-  return {
-    isLoading,
-    error,
-    loginWithExtension,
-    loginWithMnemonic,
-    hasExtension,
-    hasNip44,
-    generateKeyPair,
-    checkAuthenticated,
-    isAuthenticated: computed(() => store.authenticated),
-    pubkey: computed(() => store.pubkey)
-  };
+            sub.on("event", (event: NDKEvent) => {
+               clearTimeout(timeout);
+               resolve(event);
+               sub.stop();
+            });
+         });
+
+         // Update user with bunker response
+         const userObj = ndk.getUser({ pubkey: response.pubkey });
+         if (!userObj) throw new Error('Failed to get user');
+         nostrStore.user = userObj;
+      } catch (error) {
+         console.error("Failed to login with NSec Bunker:", error);
+         throw error;
+      }
+   }
+
+   function hasExtension() {
+      return typeof window !== "undefined" && "nostr" in window;
+   }
+
+   function hasNip44() {
+      return typeof window !== "undefined" && "nip44" in window;
+   }
+
+   async function checkAuthenticated() {
+      return nostrStore.authenticated;
+   }
+
+   return {
+      isLoading,
+      error,
+      loginWithExtension,
+      loginWithMnemonic,
+      loginWithNsecBunker,
+      hasExtension,
+      hasNip44,
+      checkAuthenticated,
+      isAuthenticated,
+      pubkey,
+      user,
+   };
 }

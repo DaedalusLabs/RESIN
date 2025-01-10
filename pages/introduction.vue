@@ -1,32 +1,11 @@
 <template>
-   <section
-      class="flex h-full flex-col items-center justify-between px-12 py-20"
-   >
-      <!-- Overlays -->
-      <IntroductionLoginModal
-         :show="showLoginModal"
-         @close="handleCloseModal"
-         @open-nsec-drawer="openNsecDrawer"
-         @open-phrase-drawer="openPhraseDrawer"
-      />
-      <FlowbiteNostrModal v-if="showRegisterModal" />
-      <IntroductionNsecDrawer
-         :show-nsec-drawer="showNsecDrawer"
-         @close="handleCloseDrawer"
-      />
-      <IntroductionPhraseDrawer
-         :show-phrase-drawer="showPhraseDrawer"
-         @close="handleCloseDrawer"
-      />
-
+   <section class="flex h-full flex-col items-center justify-between px-12 py-20">
+      <!-- Main page layout -->
       <div class="flex h-full flex-col items-center justify-between">
-         <!-- Main page layout -->
          <NuxtImg src="/images/logos/resin-text.png" alt="Logo" class="h-10" />
          <div class="flex flex-col items-center justify-center gap-6">
             <div>
-               <h1
-                  class="text-center text-4xl font-bold leading-tight text-white"
-               >
+               <h1 class="text-center text-4xl font-bold leading-tight text-white">
                   {{ $t("rentToOwn") }}
                </h1>
                <h1 class="text-center text-4xl font-bold text-white">
@@ -35,11 +14,15 @@
             </div>
 
             <FlowbiteButton
-v-if="authenticationStatus" class="px-5 py-3" :text="$t('continueButton')"
-               :show-icon="false" @click="skipRegistration" />
+               v-if="isAuthenticated" 
+               class="px-5 py-3" 
+               :text="$t('continueButton')"
+               :show-icon="false" 
+               @click="skipRegistration" 
+            />
 
             <FlowbiteButton
-v-else
+               v-else
                class="px-5 py-3"
                :text="$t('introductionButton')"
                :show-icon="false"
@@ -54,30 +37,45 @@ v-else
 
          <div class="flex flex-col items-center justify-center gap-2">
             <FlowbiteButton
-v-if="!authenticationStatus"
+               v-if="!isAuthenticated"
                :text="$t('signIn')"
                class="border border-pirate-400 bg-transparent px-3 py-3 font-normal text-pirate-50"
                :show-icon="false"
                @click="openLoginModal"
             />
-            <NuxtLinkLocale
-               to="#"
-               class="mb-2 me-2 mt-10 rounded-lg px-5 py-2.5 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700"
-            >
-            </NuxtLinkLocale>
          </div>
       </div>
+
+      <!-- Overlays -->
+      <IntroductionLoginModal
+         :show="showLoginModal"
+         @open-nsec-drawer="openNsecDrawer"
+         @open-phrase-drawer="openPhraseDrawer"
+         @close="handleCloseModal"
+      />
+
+      <IntroductionPhraseDrawer
+         :show="showPhraseDrawer"
+         @close="handleCloseDrawer"
+      />
+
+      <IntroductionNsecBunkerDrawer
+         :show="showNsecDrawer"
+         @close="handleCloseDrawer"
+      />
+
+      <RegisterModal
+         :show="showRegisterModal"
+         @close="handleCloseModal"
+      />
    </section>
 </template>
 
-<script setup>
-const { checkAuthenticated, isAuthenticated } = useNostr();
-const localePath = useLocalePath()
+<script setup lang="ts">
+import { useNostr } from '~/composables/useNostr';
 
-const authenticationStatus = ref(false)
-
-authenticationStatus.value = await checkAuthenticated();
-
+const { isAuthenticated } = useNostr();
+const localePath = useLocalePath();
 const { t } = useI18n();
 
 useHead({
@@ -89,9 +87,9 @@ definePageMeta({
 });
 
 const showLoginModal = ref(false);
-const showRegisterModal = ref(false);
-const showNsecDrawer = ref(false);
 const showPhraseDrawer = ref(false);
+const showNsecDrawer = ref(false);
+const showRegisterModal = ref(false);
 
 const openLoginModal = () => {
    showLoginModal.value = true;

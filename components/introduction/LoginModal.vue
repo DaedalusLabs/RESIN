@@ -20,19 +20,26 @@
             </button>
          </section>
          <section v-else>
-            <FlowbiteBorderButton :text="$t('introduction.login.extension.noExtension')" class="w-full " color="gray-500" hoverTextColor="gray-500"  @click="openExtensionApps()" />
+            <FlowbiteBorderButton :text="$t('introduction.login.extension.noExtension')" class="w-full" color="gray-500" hoverTextColor="gray-500"  @click="openExtensionApps()" />
          </section>
+
+         <FlowbiteBorderButton 
+            :text="$t('introduction.login.nsecBunker.button')" 
+            class="w-full"
+            @click="handleNsecBunkerLogin" 
+         />
       </div>
    </FlowbiteModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useNostr } from '~/composables/useNostr';
-import DisabledButton from '../Flowbite/DisabledButton.vue';
+import { usePropertiesStore } from '~/stores/properties';
+
 const { loginWithExtension, isAuthenticated, hasExtension, hasNip44, checkAuthenticated } = useNostr();
 
 const emit = defineEmits(["openNsecDrawer", "openPhraseDrawer", "close"]);
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 
 const isModalOpen = ref(false);
 
@@ -46,7 +53,7 @@ watchEffect(() => {
    }
 });
 
-const handleModalUpdate = (value) => {
+const handleModalUpdate = (value: boolean) => {
    isModalOpen.value = value;
    if (!value) {
       emit("close");
@@ -68,11 +75,12 @@ async function handleExtensionLogin() {
    }
 }
 
+function handleNsecBunkerLogin() {
+   emit('openNsecDrawer');
+   handleModalUpdate(false);
+}
+
 function openExtensionApps() {
-   navigateTo('https://nostrapps.com/#signers', {
-      open: {
-         target: '_blank'
-      }
-   });
+   window.open('https://getalby.com/', '_blank');
 }
 </script>
