@@ -33,7 +33,10 @@
          </div>
       </div>
       <!-- Pie Chart -->
-      <div id="pie-chart" class="py-6"></div>
+      <div v-if="hasData" id="pie-chart" class="py-6"></div>
+      <div v-else class="flex items-center justify-center py-6 text-gray-400">
+         No equity data available
+      </div>
    </div>
 </template>
 
@@ -53,6 +56,8 @@ const props = defineProps({
       required: true,
    },
 });
+
+const hasData = computed(() => props.equity > 0 || props.payOffAmount > 0);
 
 const getChartOptions = () => {
    return {
@@ -125,7 +130,7 @@ const getChartOptions = () => {
 };
 
 onMounted(async () => {
-   if (import.meta.client) {
+   if (import.meta.client && hasData.value) {
       const ApexCharts = (await import("apexcharts")).default;
       const chart = new ApexCharts(
          document.getElementById("pie-chart"),

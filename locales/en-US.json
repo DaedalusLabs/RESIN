@@ -411,5 +411,12 @@
       "title": "No transactions yet",
       "description": "Your transaction history will appear here once you start making payments."
     }
+  },
+  "financials": {
+    "title": "Financials",
+    "noData": {
+      "title": "No financial data yet",
+      "description": "Your financial overview will appear here once you start investing in properties."
+    }
   }
 }
