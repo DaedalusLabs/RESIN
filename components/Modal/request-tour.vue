@@ -67,7 +67,7 @@ const emit = defineEmits(['update:isOpen', 'sendRequest']);
 const handleSendRequest = async () => {
       const contactMessage = `I want to request a tour to see ${propertyAddress.value}.`;
       
-      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, contactMessage, props.property.id, props.property.kind);
+      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_PUBKEY, contactMessage, props.property.id, props.property.kind);
 
       emit('sendRequest', {});
 };

@@ -117,7 +117,7 @@ const handleSendRequest = async () => {
          contactMessage += ` You can reach me by phone at ${phone.value}.`;
       }
 
-      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, contactMessage, props.property.id, props.property.kind);
+      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_PUBKEY, contactMessage, props.property.id, props.property.kind);
 
       emit('sendRequest', {
          email: email.value,

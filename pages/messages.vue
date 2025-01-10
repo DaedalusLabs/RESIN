@@ -91,7 +91,7 @@ const goBack = () => {
 };
 
 const messages = computed(() => {
-   // const chat = chatStore.chats.find(c => c.pubkey === runtimeConfig.public.MESSAGES_NPUB);
+   // const chat = chatStore.chats.find(c => c.pubkey === runtimeConfig.public.MESSAGES_PUBKEY);
    // return chat?.messages || [];
 
    const whitelist = runtimeConfig.public.PUBKEY_WHITELIST || [];
@@ -154,7 +154,7 @@ async function sendMessage() {
       isSending.value = true;
       // Cast through unknown to bypass type checking since we know the method exists
       await ((nostrStore as unknown) as { sendDirectMessage: (pubkey: string, content: string) => Promise<void> })
-         .sendDirectMessage(runtimeConfig.public.MESSAGES_NPUB, newMessage.value);
+         .sendDirectMessage(runtimeConfig.public.MESSAGES_PUBKEY, newMessage.value);
       newMessage.value = "";
       // Reset textarea height
       const textarea = document.querySelector('textarea');

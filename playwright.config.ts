@@ -57,7 +57,7 @@ export default defineConfig({
       TYPESENSE_HOST: process.env.TYPESENSE_HOST || 'localhost',
       TYPESENSE_PORT: process.env.TYPESENSE_PORT || '8109',
       TYPESENSE_API_KEY: process.env.TYPESENSE_API_KEY || 'resin_development',
-      MESSAGES_NPUB: process.env.MESSAGES_NPUB || '',
+      MESSAGES_PUBKEY: process.env.MESSAGES_PUBKEY || '',
       BTCPAY_BASE_URL: process.env.BTCPAY_BASE_URL || 'https://btcpay.resin.estate',
     },
   },
