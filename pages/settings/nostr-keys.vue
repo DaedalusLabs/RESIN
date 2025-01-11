@@ -67,30 +67,38 @@
           </div>
           
           <template v-if="nostrStore.getTypeKey === 'mnemonic'">
-            <div v-if="showPhrase" class="relative grid grid-cols-2 gap-2 rounded-lg border border-gray-300 p-4">
+            <div v-if="showPhrase" class="relative rounded-lg border border-gray-300 p-4">
               <button 
                 @click="copyToClipboard(nostrStore.mnemonic)"
                 class="absolute right-4 top-4 text-resin-500 hover:text-resin-600"
               >
                 <PhCopy :size="20" />
               </button>
-              <div 
-                v-for="(word, index) in mnemonic" 
-                :key="index"
-                class="flex items-center gap-2"
-              >
-                <span class="text-xs text-pirate-300">{{ index + 1 }}</span>
-                <span class="font-mono text-sm text-pirate-950">{{ word }}</span>
+              <div class="grid grid-cols-2 gap-4">
+                <ol class="list-decimal space-y-2 pl-6 text-xs text-pirate-300" start="1">
+                  <li v-for="(word, index) in mnemonic.slice(0, 6)" :key="index">
+                    <span class="font-mono text-sm text-pirate-950">{{ word }}</span>
+                  </li>
+                </ol>
+                <ol class="list-decimal space-y-2 pl-6 text-xs text-pirate-300" start="7">
+                  <li v-for="(word, index) in mnemonic.slice(6, 12)" :key="index + 6">
+                    <span class="font-mono text-sm text-pirate-950">{{ word }}</span>
+                  </li>
+                </ol>
               </div>
             </div>
-            <div v-else class="grid grid-cols-2 gap-2 rounded-lg border border-gray-300 p-4">
-              <div 
-                v-for="index in 12" 
-                :key="index"
-                class="flex items-center gap-2"
-              >
-                <span class="text-xs text-pirate-300">{{ index }}</span>
-                <span class="font-mono text-sm text-pirate-300">●●●●●●</span>
+            <div v-else class="relative rounded-lg border border-gray-300 p-4">
+              <div class="grid grid-cols-2 gap-4">
+                <ol class="list-decimal space-y-2 pl-6 text-xs text-pirate-300" start="1">
+                  <li v-for="index in 6" :key="index">
+                    <span class="font-mono text-sm text-pirate-300">●●●●●●</span>
+                  </li>
+                </ol>
+                <ol class="list-decimal space-y-2 pl-6 text-xs text-pirate-300" start="7">
+                  <li v-for="index in 6" :key="index + 6">
+                    <span class="font-mono text-sm text-pirate-300">●●●●●●</span>
+                  </li>
+                </ol>
               </div>
             </div>
           </template>
