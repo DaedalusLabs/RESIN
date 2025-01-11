@@ -2,13 +2,12 @@ import { defineStore } from 'pinia';
 import type { NDKFilter, NDKUser, NDKUserProfile } from '@nostr-dev-kit/ndk';
 import * as bip39 from '@scure/bip39';
 import { HDKey } from '@scure/bip32'
-import { getRelayListForUser, NDKEvent, NDKNip07Signer, NDKPrivateKeySigner, NDKRelay } from '@nostr-dev-kit/ndk';
+import NDK, { getRelayListForUser, NDKEvent, NDKNip07Signer, NDKNip46Signer, NDKPrivateKeySigner, NDKRelay } from '@nostr-dev-kit/ndk';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import { bytesToHex } from '@noble/hashes/utils'
 import { setSigner, useNDK } from '~/composables/useNDK';
 import { getPublicKey } from 'nostr-tools';
 import { useChatStore } from './chat';
-import { useFCM } from '~/composables/useFCM';
 
 const DERIVATION_PATH = `m/44'/1237'`
 
@@ -19,12 +18,16 @@ interface NostrState {
     mnemonic: string | null;
     typeKey: NostrLoginType | null;
     lastMessagesRead: number | null;
+    signer: NDKSigner | null;
     notificationsEnabled: boolean;
+    nip46localKey: string | null;
+    nip46remoteKey: string | null;
 }
 
 export enum NostrLoginType {
     Extension = "ext",
-    Mnemonic = "mnemonic"
+    Mnemonic = "mnemonic",
+    NsecBunker = "nsecbunker"
 }
 
 export interface NostrStore {
@@ -41,12 +44,15 @@ export const useNostrStore = defineStore('nostr', {
         mnemonic: null,
         typeKey: null,
         lastMessagesRead: null,
+        signer: null,
         notificationsEnabled: false,
+        nip46localKey: null,
+        nip46remoteKey: null,
     }),
     persist: {
         key: 'nostr-store',
         storage: localStorage,
-        paths: ['mnemonic', 'typeKey', 'authenticated', 'lastMessagesRead', 'notificationsEnabled'] 
+        paths: ['mnemonic', 'typeKey', 'authenticated', 'lastMessagesRead', 'notificationsEnabled', 'nip46localKey', 'pubkey'] 
     },
     getters: {
         unreadMessagesCount(): number {
@@ -76,10 +82,102 @@ export const useNostrStore = defineStore('nostr', {
         }
     },
     actions: {
+        async getNostrConnectUri(): Promise<string> {
+            const signer = this.getNip46Signer();
+            const user = await signer.user();
+            const publicKey = user.pubkey;
+
+            const connectUri = new URL(`nostrconnect://${publicKey}?relay=wss://nostr1.daedaluslabs.io&secret=1234`);
+            connectUri.searchParams.set('perms', "sign_event,nip44_encrypt,nip44_decrypt");
+            connectUri.searchParams.set('name', "Resin");
+            return connectUri.toString();
+        },
+        async waitForNip46Signer() {
+            console.log('waitForNip46Signer');
+            const signer = this.getNip46Signer();
+            const user = await signer.user();
+            const localPubkey = user.pubkey;
+
+            const ndk = new NDK({
+                explicitRelayUrls: ['wss://nostr1.daedaluslabs.io']
+            });
+            
+            // Connect to relay
+            await ndk.connect();
+            const remoteNip05: string | null = null;
+
+            this.signer = new NDKNip46Signer(ndk, "" as unknown as undefined, signer);
+
+            // Filter for kind 24133 connect response events
+            const filter: NDKFilter = {
+                kinds: [24133],
+                "#p": [localPubkey]  // Filter for events tagged with our local pubkey
+            };
+
+            // // Create subscription
+            // const subscription = ndk.subscribe(filter);
+            // console.log('subscription', subscription);
+            // // Handle incoming events
+            // subscription.on('event', async (event) => {
+            //     // Decrypt the response content using your local signer
+            //     const decryptedContent = await signer.decrypt(
+            //         event.pubkey,
+            //         event.content
+            //     );
+                
+            //     // Parse the decrypted JSON response
+            //     const response = JSON.parse(decryptedContent);
+                
+            //     // Handle the connect response
+            //     if (response.result) {
+            //         // Store the remote signer's pubkey (event.pubkey)
+            //         localStorage.setItem('remotePubkey', event.pubkey);
+            //     }
+            // });
+
+
+            // this.signer.on('authUrl', (url) => {
+            //     console.log('authUrl', url);
+            // });
+
+            await this.signer?.blockUntilReady();
+        },
+        getNip46Signer() {
+            if (!this.nip46localKey) {
+                const signer = NDKPrivateKeySigner.generate();
+                this.nip46localKey = signer.privateKey;
+                return signer;
+            }
+
+            return new NDKPrivateKeySigner(this.nip46localKey);
+        },
+        async connectToBunker(bunkerUrl: string) {
+            
+            const bunkerNdk = new NDK({
+                // explicitRelayUrls: [bunkerUrl],
+//                debug: true
+            });
+
+            this.signer = new NDKNip46Signer(bunkerNdk, bunkerUrl, this.getNip46Signer());
+            await bunkerNdk.connect();
+            console.log('connected to bunker');
+           // await this.signer?.blockUntilReady();
+            this.nip46remoteKey = this.signer?.bunkerPubkey;
+            this.pubkey = this.signer?.userPubkey;
+        },
         async checkAuthenticated() {
             if (import.meta.client && this.typeKey) {
                 console.log('check authenticated');
                 switch (this.typeKey) {
+                    case NostrLoginType.NsecBunker:
+                        const ndk = useNDK();
+                        if (!ndk || !this.pubkey) {
+                           await this.connectToBunker(`bunker://${this.nip46remoteKey}?pubkey=${this.getNip46Signer().publicKey}`);
+                           console.log(`bunker://${this.nip46remoteKey}?pubkey=${this.getNip46Signer().publicKey}`);
+                        }
+                        this.pubkey = await this.signer?.userPubkey;
+                        console.log('pubkey', this.pubkey);
+                        break;
                     case NostrLoginType.Extension:
                         await this.login();
                         
@@ -109,6 +207,16 @@ export const useNostrStore = defineStore('nostr', {
             return this.authenticated
             }
             
+        },
+        async loginWithRemoteSigner() {
+            setSigner(this.signer);
+            const ndk = useNDK();
+
+            await ndk?.connect();
+
+            this.typeKey = NostrLoginType.NsecBunker;
+            this.authenticated = true;
+            console.log('loginWithRemoteSigner', ndk);
         },
         async login() {
             try {

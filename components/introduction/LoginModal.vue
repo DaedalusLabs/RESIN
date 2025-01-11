@@ -22,6 +22,11 @@
          <section v-else>
             <FlowbiteBorderButton :text="$t('introduction.login.extension.noExtension')" class="w-full " color="gray-500" hoverTextColor="gray-500"  @click="openExtensionApps()" />
          </section>
+
+         <FlowbiteBorderButton text="Use NSec Bunker" @click="() => {
+               emit('openNsecBunkerDrawer');
+               handleModalUpdate(false);
+            }" />
       </div>
    </FlowbiteModal>
 </template>
@@ -31,7 +36,7 @@ import { useNostr } from '~/composables/useNostr';
 import DisabledButton from '../Flowbite/DisabledButton.vue';
 const { loginWithExtension, isAuthenticated, hasExtension, hasNip44, checkAuthenticated } = useNostr();
 
-const emit = defineEmits(["openNsecDrawer", "openPhraseDrawer", "close"]);
+const emit = defineEmits(["openNsecDrawer", "openPhraseDrawer", "openNsecBunkerDrawer", "close"]);
 const localePath = useLocalePath()
 
 const isModalOpen = ref(false);

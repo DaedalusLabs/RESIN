@@ -364,7 +364,15 @@
       "error": "Please fill in your Nsec key",
       "invalidKey": "Invalid Nsec key"
     },
-    "title": "Introduction"
+    "title": "Introduction",
+    "nsecBunker": {
+      "title": "NSec Bunker Login",
+      "clickToCopy": "Click QR code to copy URI",
+      "uriCopied": "URI copied to clipboard",
+      "copyFailed": "Failed to copy URI",
+      "enterUrl": "Please enter a bunker URL",
+      "connect": "Connect"
+    }
   },
   "nostr": {
     "creating": "Creating NOSTR key...",

@@ -8,6 +8,7 @@
          @close="handleCloseModal"
          @open-nsec-drawer="openNsecDrawer"
          @open-phrase-drawer="openPhraseDrawer"
+         @open-nsec-bunker-drawer="openNsecBunkerDrawer"
       />
       <FlowbiteNostrModal v-if="showRegisterModal" />
       <IntroductionNsecDrawer
@@ -16,6 +17,10 @@
       />
       <IntroductionPhraseDrawer
          :show-phrase-drawer="showPhraseDrawer"
+         @close="handleCloseDrawer"
+      />
+      <IntroductionNsecBunkerDrawer
+         :show="showNsecBunkerDrawer"
          @close="handleCloseDrawer"
       />
 
@@ -92,6 +97,7 @@ const showLoginModal = ref(false);
 const showRegisterModal = ref(false);
 const showNsecDrawer = ref(false);
 const showPhraseDrawer = ref(false);
+const showNsecBunkerDrawer = ref(false);
 
 const openLoginModal = () => {
    showLoginModal.value = true;
@@ -109,9 +115,14 @@ const openRegisterModal = () => {
    showRegisterModal.value = true;
 };
 
+const openNsecBunkerDrawer = () => {
+   showNsecBunkerDrawer.value = true;
+};
+
 const handleCloseDrawer = () => {
    showNsecDrawer.value = false;
    showPhraseDrawer.value = false;
+   showNsecBunkerDrawer.value = false;
    showLoginModal.value = true;
 };
 

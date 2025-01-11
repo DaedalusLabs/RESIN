@@ -258,6 +258,14 @@
       "placeholder": "Voer je nsec in",
       "error": "Vul je Nsec sleutel in",
       "invalidKey": "Ongeldige Nsec sleutel"
+    },
+    "nsecBunker": {
+      "title": "NSec Bunker Inloggen",
+      "clickToCopy": "Klik op QR-code om URI te kopiëren",
+      "uriCopied": "URI gekopieerd naar klembord",
+      "copyFailed": "URI kopiëren mislukt",
+      "enterUrl": "Voer een bunker-URL in",
+      "connect": "Verbinden"
     }
   },
   "nostr": {

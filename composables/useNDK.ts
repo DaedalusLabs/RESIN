@@ -8,10 +8,10 @@ export function setSigner(newSigner: NDKSigner) {
 }
 
 export function useNDK() {
-    if (!signer) {
-        console.log('No signer');
-        return;
-    }
+    // if (!signer) {
+    //     console.log('No signer');
+    //     return;
+    // }
 
     if (!ndkInstance) {
         ndkInstance = new NDK({
@@ -28,6 +28,13 @@ export function useNDK() {
                 // Add more relays as needed
             ],
             signer
+        });
+
+        ndkInstance.on('connect', () => {
+            console.log('connect');
+        });
+        ndkInstance.pool.on('relay:ready', (relay) => {
+            console.log('relay:ready', relay);
         });
     }
 
