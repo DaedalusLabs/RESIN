@@ -28,7 +28,6 @@
 
 <script setup>
 import { useNostr } from '~/composables/useNostr';
-import DisabledButton from '../Flowbite/DisabledButton.vue';
 const { loginWithExtension, isAuthenticated, hasExtension, hasNip44, checkAuthenticated } = useNostr();
 
 const emit = defineEmits(["openNsecDrawer", "openPhraseDrawer", "close"]);
@@ -55,6 +54,7 @@ const handleModalUpdate = (value) => {
 
 async function handleExtensionLogin() {
    try {
+      handleModalUpdate(false);
       await loginWithExtension();
       await checkAuthenticated();
       await usePropertiesStore().init();
@@ -69,6 +69,7 @@ async function handleExtensionLogin() {
 }
 
 function openExtensionApps() {
+   handleModalUpdate(false);
    navigateTo('https://nostrapps.com/#signers', {
       open: {
          target: '_blank'
