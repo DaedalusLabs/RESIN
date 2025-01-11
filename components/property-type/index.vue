@@ -6,7 +6,7 @@
    >
       <div class="flex justify-between">
          <h5
-            class="mb-1 w-3/4 text-md font-bold leading-tight tracking-tight text-gray-900"
+            class="text-md mb-1 w-3/4 font-bold leading-tight tracking-tight text-gray-900"
          >
             {{ title }}
          </h5>
@@ -31,14 +31,14 @@
             </svg>
          </div>
       </div>
-      <p class="font-normal text-sm text-gray-400">
+      <p class="text-sm font-normal text-gray-400">
          {{ description }}
       </p>
    </div>
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
    id: {
       type: String,
       required: true,

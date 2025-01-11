@@ -1,7 +1,9 @@
 <template>
    <section class="mx-auto flex w-10/12 flex-col py-20">
       <div class="mb-5 flex items-center justify-between text-pirate-950">
-         <h1 class="text-2xl font-extrabold leading-tight">{{ $t('favorites.title') }}</h1>
+         <h1 class="text-2xl font-extrabold leading-tight">
+            {{ $t("favorites.title") }}
+         </h1>
          <button :v-if="isSupported" @click="startShare">
             <PhExport :size="28" class="text-xl text-pirate-950" />
          </button>
@@ -12,19 +14,18 @@
          class="items center flex flex-col items-center justify-center"
       >
          <p class="mt-20 gap-2 font-semibold text-pirate-950">
-            {{ $t('favorites.noFavorites') }}
+            {{ $t("favorites.noFavorites") }}
          </p>
          <NuxtLinkLocale to="properties">
             <p
                class="mt-4 inline-block rounded-lg border-2 border-resin-500 bg-resin-500 px-4 py-2 text-white"
             >
-               {{ $t('favorites.browseListings') }}
+               {{ $t("favorites.browseListings") }}
             </p>
          </NuxtLinkLocale>
       </div>
       <div class="space-y-4">
          <FavoritesCard
-         
             v-for="favorite in favorites"
             :key="favorite.id"
             :property="favorite"
@@ -43,27 +44,33 @@ const { t } = useI18n();
 const { share, isSupported } = useShare();
 
 useHead({
-   title: t('favorites.title'),
+   title: t("favorites.title"),
 });
 
 function startShare() {
    share({
-      title: t('favorites.share.title'),
-      text: t('favorites.share.text'),
+      title: t("favorites.share.title"),
+      text: t("favorites.share.text"),
       url: location.href,
    });
 }
 
 const propertiesStore = usePropertiesStore();
 const favorites = ref([]);
-watch(() => propertiesStore.favorites, async (newFavorites) => {
-   console.log('newFavorites', newFavorites);
-   favorites.value = await Promise.all(newFavorites.map(async (id) => await propertiesStore.get(id)));
-}, { immediate: true, deep: true });
+watch(
+   () => propertiesStore.favorites,
+   async (newFavorites) => {
+      console.log("newFavorites", newFavorites);
+      favorites.value = await Promise.all(
+         newFavorites.map(async (id) => await propertiesStore.get(id)),
+      );
+   },
+   { immediate: true, deep: true },
+);
 
 definePageMeta({
    layout: "white",
-   middleware: ['auth'],
+   middleware: ["auth"],
 });
 
 const removeFavorite = (id) => {

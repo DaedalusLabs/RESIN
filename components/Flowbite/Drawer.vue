@@ -18,7 +18,7 @@
                @click="close"
             />
 
-            <div class="mb-4 flex items-center px-4" v-if="!props.hideTitle">
+            <div v-if="!props.hideTitle" class="mb-4 flex items-center px-4">
                <h3
                   id="drawer-title"
                   class="w-full text-center text-xl font-bold text-gray-900"

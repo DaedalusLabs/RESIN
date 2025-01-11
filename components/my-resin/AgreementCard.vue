@@ -7,15 +7,16 @@
                {{ agreement.title }}
             </h3>
             <p class="text-xs text-gray-500">
-               {{ agreement.isSigned ? `Signed ${formatDate(agreement.signedDate)}` : 'Not signed' }}
+               {{
+                  agreement.isSigned
+                     ? `Signed ${formatDate(agreement.signedDate)}`
+                     : "Not signed"
+               }}
             </p>
          </div>
       </div>
 
-      <NuxtLink
-         :to="agreement.url"
-         class="text-sm font-bold text-resin-500"
-      >
+      <NuxtLink :to="agreement.url" class="text-sm font-bold text-resin-500">
          Download
       </NuxtLink>
    </div>

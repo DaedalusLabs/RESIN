@@ -25,11 +25,11 @@
             </div>
             <div class="ml-3">
                <h3 class="text-sm font-medium text-red-800">
-                  {{ $t('property.notFound.title') }}
+                  {{ $t("property.notFound.title") }}
                </h3>
                <div class="mt-2 text-sm text-red-700">
                   <p>
-                     {{ $t('property.notFound.message') }}
+                     {{ $t("property.notFound.message") }}
                   </p>
                </div>
                <div class="mt-4">
@@ -37,7 +37,7 @@
                      to="properties"
                      class="text-sm font-medium text-red-800 hover:text-red-900"
                   >
-                     {{ $t('property.notFound.backToProperties') }}
+                     {{ $t("property.notFound.backToProperties") }}
                   </NuxtLinkLocale>
                </div>
             </div>
@@ -47,7 +47,6 @@
 
    <section v-else class="mb-28">
       <ClientOnly fallback-tag="span">
-        
          <ModalContactAgent
             v-if="isBuyNow"
             :is-open="isModalOpen"
@@ -65,9 +64,6 @@
             @send-request="handleSendRequest"
          />
       </ClientOnly>
-      
-
-   
 
       <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
 
@@ -89,20 +85,18 @@
             v-if="property && property['resin-type'] === 'Buy Now'"
             class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
-            {{ $t('property.types.buyNow') }}
+            {{ $t("property.types.buyNow") }}
          </span>
          <span
             v-else
             class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
          >
-            {{ $t('property.types.rentToOwn') }}
+            {{ $t("property.types.rentToOwn") }}
          </span>
 
          <DetailsTopBar :property="property" />
       </div>
 
-      
-    
       <div class="mx-auto mt-16 flex w-10/12 justify-between lg:w-9/12">
          <div
             class="sticky top-16 hidden flex-shrink flex-col gap-5 lg:w-[40%] xl:flex"
@@ -123,7 +117,6 @@
             </div>
             <div class="flex h-12 justify-between gap-3">
                <div class="flex justify-between gap-2">
-                 
                   <NuxtLinkLocale
                      v-if="property && property['resin-type'] === 'Rent to Own'"
                      :to="`/properties/${route.params.id}/rent-to-own`"
@@ -134,9 +127,7 @@
                         @click="handleClick"
                      />
                   </NuxtLinkLocale>
-                  <NuxtLinkLocale
-                     v-else
-                  >
+                  <NuxtLinkLocale v-else>
                      <FlowbiteButton
                         class="h-full"
                         :text="$t('property.actions.contactAgent')"
@@ -148,15 +139,15 @@
                   <button
                      :v-if="isSupported"
                      class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
-                     @click="startShare"
                      :title="$t('property.actions.share')"
+                     @click="startShare"
                   >
                      <PhExport class="h-6 w-6 text-black" />
                   </button>
                   <button
                      class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
-                     @click="toggleFavorite"
                      :title="$t('property.actions.favorite')"
+                     @click="toggleFavorite"
                   >
                      <PhHeartStraight
                         :class="{ 'text-resin-500': isFavorite }"
@@ -170,11 +161,11 @@
 
          <!-- Property Details -->
          <div class="flex-1">
-            <div class="container w-full xl:w-11/12 xl:ml-auto xl:mr-0">
+            <div class="container w-full xl:ml-auto xl:mr-0 xl:w-11/12">
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
                      property.title ||
-                     $t('property.details.addressNotAvailable')
+                     $t("property.details.addressNotAvailable")
                   }}
                </h1>
                <p class="mt-1 text-sm">
@@ -192,7 +183,9 @@
                <DetailsKeyFeatures :property="property" />
                <DetailsAdditional :property="property" />
                <p
-                  v-if="property.attribution && property.attribution?.length > 0"
+                  v-if="
+                     property.attribution && property.attribution?.length > 0
+                  "
                   class="my-12 rounded-lg bg-pirate-50 py-2 text-center text-sm font-medium text-pirate-300"
                >
                   {{ property.attribution }}
@@ -207,7 +200,6 @@
                   @show-modal="handleShowModal"
                />
             </div>
-            
          </div>
       </div>
    </section>
@@ -240,9 +232,9 @@ const handleShowModal = () => {
 };
 
 const buttonText = computed(() => {
-   return property.value && property.value['resin-type'] !== 'Rent to Own'
-      ? t('property.actions.rentProperty')
-      : t('property.actions.rentToOwn');
+   return property.value && property.value["resin-type"] !== "Rent to Own"
+      ? t("property.actions.rentProperty")
+      : t("property.actions.rentToOwn");
 });
 
 const { share, isSupported } = useShare();
@@ -266,9 +258,7 @@ onMounted(() => {
 
 onMounted(async () => {
    try {
-      const foundProperty = await propertiesStore.get(
-         route.params.id,
-      );
+      const foundProperty = await propertiesStore.get(route.params.id);
 
       if (!foundProperty) {
          error.value = true;
@@ -292,17 +282,17 @@ onMounted(async () => {
    }
 });
 
-const handleSendRequest = async() => {
+const handleSendRequest = async () => {
    isModalOpen.value = false;
-   
+
    showSuccessAlert.value = true;
    setTimeout(() => {
       showSuccessAlert.value = false;
-   }, 5000);  
+   }, 5000);
 };
 
 const isBuyNow = computed(() => {
-   return property.value && property.value['resin-type'] === 'Buy Now';
+   return property.value && property.value["resin-type"] === "Buy Now";
 });
 
 definePageMeta({
@@ -310,7 +300,10 @@ definePageMeta({
 });
 
 useHead({
-   title: () => property.value ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}` : 'Property Details',
+   title: () =>
+      property.value
+         ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
+         : "Property Details",
 });
 
 defineProps({

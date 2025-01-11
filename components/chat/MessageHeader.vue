@@ -1,8 +1,13 @@
 <template>
-   <div class="flex items-center justify-between border-b border-gray-200 bg-white p-4">
+   <div
+      class="flex items-center justify-between border-b border-gray-200 bg-white p-4"
+   >
       <div class="flex items-center gap-3">
          <img
-            :src="userProfile?.image || '/images/logos/Resin_Hexagon_Orange_Fill.svg'"
+            :src="
+               userProfile?.image ||
+               '/images/logos/Resin_Hexagon_Orange_Fill.svg'
+            "
             class="h-10 w-10 rounded-full"
             alt="Profile"
          />
@@ -20,16 +25,16 @@
 </template>
 
 <script setup>
-import { nip19 } from 'nostr-tools';
+import { nip19 } from "nostr-tools";
 
 const props = defineProps({
    userProfile: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
    },
    pubkey: {
       type: String,
-      required: true
+      required: true,
    },
 });
 
@@ -40,4 +45,4 @@ const displayName = computed(() => {
 const npub = computed(() => {
    return nip19.npubEncode(props.pubkey);
 });
-</script> 
+</script>

@@ -1,28 +1,40 @@
 <template>
    <section class="mx-auto flex w-10/12 flex-col py-20">
-      <h1 class="mb-10 text-2xl font-extrabold leading-tight">{{ $t('myResin.title') }}</h1>
+      <h1 class="mb-10 text-2xl font-extrabold leading-tight">
+         {{ $t("myResin.title") }}
+      </h1>
 
       <div class="space-y-10">
          <section class="flex flex-col gap-4">
-            <MyResinNavbar :title="$t('myResin.favorites.title')" link="favorites" />
+            <MyResinNavbar
+               :title="$t('myResin.favorites.title')"
+               link="favorites"
+            />
 
             <div v-if="favorites.length === 0">
                <p class="mt-20 gap-2 font-semibold text-pirate-950">
-                  {{ $t('myResin.favorites.noProperties') }}
+                  {{ $t("myResin.favorites.noProperties") }}
                </p>
             </div>
             <div class="space-y-4">
-               <FavoritesCard v-for="favorite in favorites" :key="favorite.id" :property="favorite"
-                  @remove="removeFavorite(favorite.id)" />
+               <FavoritesCard
+                  v-for="favorite in favorites"
+                  :key="favorite.id"
+                  :property="favorite"
+                  @remove="removeFavorite(favorite.id)"
+               />
             </div>
          </section>
 
-         <section v-if="propertiesStore.ownedProperties.length > 0" class="flex flex-col gap-4">
+         <section
+            v-if="propertiesStore.ownedProperties.length > 0"
+            class="flex flex-col gap-4"
+         >
             <MyResinNavbar title="Properties" link="my-properties" />
 
             <div v-if="propertiesStore.ownedProperties.length === 0">
                <p class="mt-20 gap-2 font-semibold text-pirate-950">
-                  {{ $t('myResin.properties.noProperties') }}
+                  {{ $t("myResin.properties.noProperties") }}
                </p>
             </div>
             <div v-else class="space-y-4">
@@ -104,21 +116,27 @@ import { usePropertiesStore } from "~/stores/properties";
 const transactionsStore = useTransactionsStore();
 const propertiesStore = usePropertiesStore();
 const favorites = ref([]);
-watch(() => propertiesStore.favorites, async (newFavorites) => {
-   console.log('newFavorites', newFavorites);
-   favorites.value = await Promise.all(newFavorites.map(async (id) => await propertiesStore.get(id)));
-}, { immediate: true, deep: true });
-
+watch(
+   () => propertiesStore.favorites,
+   async (newFavorites) => {
+      console.log("newFavorites", newFavorites);
+      favorites.value = await Promise.all(
+         newFavorites.map(async (id) => await propertiesStore.get(id)),
+      );
+   },
+   { immediate: true, deep: true },
+);
 
 const { t } = useI18n();
-const features = [/*"End lease", "Refinance", "Sell a property" */];
+const features = [
+   /*"End lease", "Refinance", "Sell a property" */
+];
 
 useHead({
-   title: t('my-resin.title'),
+   title: t("my-resin.title"),
 });
 
-onMounted(() => {
-});
+onMounted(() => {});
 
 const removeFavorite = (id) => {
    propertiesStore.toggleFavorite(id);

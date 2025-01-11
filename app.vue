@@ -1,7 +1,7 @@
 <template>
    <div>
       <VitePwaManifest />
-      
+
       <!-- Maintenance Notice -->
       <ResinNotificationBar
          :show="maintenanceMode"
@@ -27,29 +27,48 @@
          position="top"
          color="blue"
          :title="$t('chat.processing.title')"
-         :description="$t('chat.processing.description', { count: chatStore.processingCount })"
+         :description="
+            $t('chat.processing.description', {
+               count: chatStore.processingCount,
+            })
+         "
       />
 
       <NuxtLayout>
          <NuxtPage />
       </NuxtLayout>
-      
+
       <!-- Relay Status Overlay -->
-      <div v-if="nostrStore.authenticated && showRelays" class="fixed bottom-4 right-4 z-50 max-w-sm bg-white rounded-lg shadow-lg p-4 text-sm">
+      <div
+         v-if="nostrStore.authenticated && showRelays"
+         class="fixed bottom-4 right-4 z-50 max-w-sm rounded-lg bg-white p-4 text-sm shadow-lg"
+      >
          <div class="flex items-center justify-between">
-            <h3 class="font-semibold">Connected Relays ({{ connectedRelays.length }})</h3>
+            <h3 class="font-semibold">
+               Connected Relays ({{ connectedRelays.length }})
+            </h3>
             &nbsp;
-            <button @click="showRelays = !showRelays" class="text-gray-500 hover:text-gray-700">
+            <button
+               class="text-gray-500 hover:text-gray-700"
+               @click="showRelays = !showRelays"
+            >
                <span v-if="showRelays">Hide</span>
                <span v-else>Show</span>
             </button>
          </div>
          <div v-if="showRelays" class="space-y-2">
-            <div v-for="relay in connectedRelays" :key="relay" class="flex items-center gap-2">
-               <div class="w-2 h-2 rounded-full bg-green-500"></div>
-               <span class="text-xs truncate" :title="relay">{{ relay }}</span>
+            <div
+               v-for="relay in connectedRelays"
+               :key="relay"
+               class="flex items-center gap-2"
+            >
+               <div class="h-2 w-2 rounded-full bg-green-500"></div>
+               <span class="truncate text-xs" :title="relay">{{ relay }}</span>
             </div>
-            <div v-if="connectedRelays.length === 0" class="text-gray-500 text-xs">
+            <div
+               v-if="connectedRelays.length === 0"
+               class="text-xs text-gray-500"
+            >
                No relays connected
             </div>
          </div>
@@ -76,14 +95,14 @@ const retryTimer = ref(null);
 const TRIPLE_PRESS_TIMEOUT = 500; // 500ms timeout for triple press
 
 const handleKeyDown = (event) => {
-   if (event.key === 'Alt') {
+   if (event.key === "Alt") {
       altKeyPressCount.value++;
-      
+
       // Clear existing timer
       if (altKeyTimer.value) {
          clearTimeout(altKeyTimer.value);
       }
-      
+
       // Set new timer
       altKeyTimer.value = setTimeout(() => {
          if (altKeyPressCount.value >= 3) {
@@ -99,23 +118,23 @@ propertiesStore.init();
 const connectedRelays = computed(() => {
    const ndk = useNDK();
    if (!ndk) return [];
-   
+
    return Array.from(ndk.pool.relays.values())
-      .filter(relay => relay.connected)
-      .map(relay => relay.url);
+      .filter((relay) => relay.connected)
+      .map((relay) => relay.url);
 });
 
 useHead({
-   titleTemplate: (title) => title ? `${title} | Resin` : 'Resin',
+   titleTemplate: (title) => (title ? `${title} | Resin` : "Resin"),
 });
 
 onMounted(() => {
-   window.addEventListener('keydown', handleKeyDown);
+   window.addEventListener("keydown", handleKeyDown);
    propertiesStore.watchNostrAuth();
 });
 
 onUnmounted(() => {
-   window.removeEventListener('keydown', handleKeyDown);
+   window.removeEventListener("keydown", handleKeyDown);
    if (altKeyTimer.value) {
       clearTimeout(altKeyTimer.value);
    }
@@ -143,8 +162,8 @@ html {
 }
 
 body {
-   touch-action: pan-y; 
-   overflow: hidden; 
+   touch-action: pan-y;
+   overflow: hidden;
 }
 
 /* font Inter for all text */

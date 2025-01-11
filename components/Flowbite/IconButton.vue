@@ -22,8 +22,8 @@
       </svg>
 
       <!-- MapPinLine -->
-      <PhMapPinLine class="h-6 w-6" weight="bold" v-else-if="icon === 'map'" />
-      <PhRows class="h-6 w-6" weight="bold" v-else />
+      <PhMapPinLine v-else-if="icon === 'map'" class="h-6 w-6" weight="bold" />
+      <PhRows v-else class="h-6 w-6" weight="bold" />
       <span class="sr-only">{{ description }}</span>
    </button>
 </template>

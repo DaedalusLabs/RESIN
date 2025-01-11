@@ -62,7 +62,7 @@ export const useTransactionsStore = defineStore("transactions", {
       equities: [],
       ownerships: [],
       isLoading: false,
-      error: null
+      error: null,
    }),
 
    getters: {
@@ -88,12 +88,18 @@ export const useTransactionsStore = defineStore("transactions", {
       getPaidOffAmount(): number {
          return this.transactions
             .filter((transaction) => transaction.status === "paid")
-            .reduce((acc, transaction) => acc + parseFloat(transaction.amount), 0);
+            .reduce(
+               (acc, transaction) => acc + parseFloat(transaction.amount),
+               0,
+            );
       },
       getToBePaidOffAmount(): number {
          return this.transactions
             .filter((transaction) => transaction.status === "pending")
-            .reduce((acc, transaction) => acc + parseFloat(transaction.amount), 0);
+            .reduce(
+               (acc, transaction) => acc + parseFloat(transaction.amount),
+               0,
+            );
       },
       getAgreements(): Agreement[] {
          return this.agreements;
@@ -102,11 +108,15 @@ export const useTransactionsStore = defineStore("transactions", {
 
    actions: {
       getOwnerShipPercentage(propertyId: string): number {
-         const transaction = this.transactions.find(t => t.property.id === propertyId);
+         const transaction = this.transactions.find(
+            (t) => t.property.id === propertyId,
+         );
          if (!transaction) return 0;
-         
+
          // Get the first ownership percentage value (assuming one owner for now)
-         const percentages = Object.values(transaction.property.ownershipPercentages);
+         const percentages = Object.values(
+            transaction.property.ownershipPercentages,
+         );
          return percentages.length > 0 ? percentages[0] : 0;
       },
 
@@ -120,41 +130,50 @@ export const useTransactionsStore = defineStore("transactions", {
             // Fetch transactions
             const transactionsData = await nostrApi.request<Transaction[]>(
                targetPubkey,
-               commands.get_transactions
+               commands.get_transactions,
             );
             this.transactions = transactionsData;
 
             // Fetch agreements
             const agreementsData = await nostrApi.request<Agreement[]>(
                targetPubkey,
-               commands.get_agreements
+               commands.get_agreements,
             );
             this.agreements = agreementsData;
 
             // Calculate equities based on transactions
-            this.equities = this.transactions.map(transaction => ({
+            this.equities = this.transactions.map((transaction) => ({
                id: transaction.id,
-               payoff: transaction.status === "paid" ? parseFloat(transaction.amount) : 0,
-               total: parseFloat(transaction.amount)
+               payoff:
+                  transaction.status === "paid"
+                     ? parseFloat(transaction.amount)
+                     : 0,
+               total: parseFloat(transaction.amount),
             }));
 
             // Calculate ownerships from transaction properties
             const ownershipMap = new Map<string, number>();
-            this.transactions.forEach(transaction => {
-               const percentages = Object.values(transaction.property.ownershipPercentages);
+            this.transactions.forEach((transaction) => {
+               const percentages = Object.values(
+                  transaction.property.ownershipPercentages,
+               );
                if (percentages.length > 0) {
                   ownershipMap.set(transaction.property.id, percentages[0]);
                }
             });
-            
-            this.ownerships = Array.from(ownershipMap.entries()).map(([propertyId, percentage]) => ({
-               propertyId,
-               percentage
-            }));
 
+            this.ownerships = Array.from(ownershipMap.entries()).map(
+               ([propertyId, percentage]) => ({
+                  propertyId,
+                  percentage,
+               }),
+            );
          } catch (error) {
-            console.error('Error fetching transactions:', error);
-            this.error = error instanceof Error ? error.message : 'Failed to fetch transactions';
+            console.error("Error fetching transactions:", error);
+            this.error =
+               error instanceof Error
+                  ? error.message
+                  : "Failed to fetch transactions";
          } finally {
             this.isLoading = false;
          }

@@ -1,5 +1,8 @@
 <template>
-   <FlowbiteModal :is-open="isOpen" @update:is-open="$emit('update:isOpen', $event)">
+   <FlowbiteModal
+      :is-open="isOpen"
+      @update:is-open="$emit('update:isOpen', $event)"
+   >
       <template #title>
          <div v-if="isRequestSent" class="mb-5 flex items-center gap-2">
             <PhCheck size="24" class="text-resin-500" />
@@ -11,9 +14,8 @@
       </template>
       <div v-if="isRequestSent">
          <p>
-            One of our agents will contact you shortly to make an
-            appointment. Make sure to check your messages inbox in your
-            profile.
+            One of our agents will contact you shortly to make an appointment.
+            Make sure to check your messages inbox in your profile.
          </p>
       </div>
       <div
@@ -35,40 +37,41 @@
 
 <script setup>
 import { PhCheck } from "@phosphor-icons/vue";
-import { computed } from 'vue';
+import { computed } from "vue";
 
 const nostrStore = useNostrStore();
 const runtimeConfig = useRuntimeConfig();
 const props = defineProps({
    isOpen: {
       type: Boolean,
-      required: true
+      required: true,
    },
    isRequestSent: {
       type: Boolean,
-      required: true
+      required: true,
    },
    property: {
       type: Object,
-      required: true
+      required: true,
    },
-   referenceNumber: {
-      type: Number,
-      required: false
-   }
 });
 
 const propertyAddress = computed(() => {
    return `${props.property.title} ${props.property.location.street}, ${props.property.location.city}, ${props.property.location.country}`;
 });
 
-const emit = defineEmits(['update:isOpen', 'sendRequest']);
+const emit = defineEmits(["update:isOpen", "sendRequest"]);
 
 const handleSendRequest = async () => {
-      const contactMessage = `I want to request a tour to see ${propertyAddress.value}.`;
-      
-      await nostrStore.sendDirectMessage(runtimeConfig.public.MESSAGES_PUBKEY, contactMessage, props.property.id, props.property.kind);
+   const contactMessage = `I want to request a tour to see ${propertyAddress.value}.`;
 
-      emit('sendRequest', {});
+   await nostrStore.sendDirectMessage(
+      runtimeConfig.public.MESSAGES_PUBKEY,
+      contactMessage,
+      props.property.id,
+      props.property.kind,
+   );
+
+   emit("sendRequest", {});
 };
-</script> 
+</script>

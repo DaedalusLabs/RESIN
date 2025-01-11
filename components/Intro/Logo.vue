@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-const { locale } = useI18n();
 const logo = ref(null);
 const router = useRouter();
 const localePath = useLocalePath();

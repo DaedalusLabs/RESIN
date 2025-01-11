@@ -25,7 +25,13 @@
             <FlowbiteIconButton
                :icon="showListIcon ? 'rows' : 'map'"
                description="view map"
-               @click="() => { showListIcon ? router.push($localePath('properties')) : router.push($localePath('map')) }"
+               @click="
+                  () => {
+                     showListIcon
+                        ? router.push($localePath('properties'))
+                        : router.push($localePath('map'));
+                  }
+               "
             />
 
             <!-- Search Bar -->
@@ -73,13 +79,12 @@
 const propertiesStore = usePropertiesStore();
 const route = useRoute();
 const showListIcon = ref(route.fullPath.includes("map"));
-const router = useRouter()
+const router = useRouter();
 
 const { t } = useI18n();
 
 const query = ref("");
 const mapCenter = ref(null);
-const visibleLocationsAmount = ref(propertiesStore.filteredProperties.length);
 const suggestions = propertiesStore.properties;
 
 const emits = defineEmits([
@@ -93,12 +98,8 @@ const filteredSuggestions = computed(() => {
    return suggestions.filter(
       (suggestion) =>
          suggestion.location.city.toLowerCase().includes(query.value) ||
-         suggestion.location.street
-            .toLowerCase()
-            .includes(query.value) ||
-         suggestion.location.country
-            .toLowerCase()
-            .includes(query.value),
+         suggestion.location.street.toLowerCase().includes(query.value) ||
+         suggestion.location.country.toLowerCase().includes(query.value),
    );
 });
 

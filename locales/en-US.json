@@ -1,434 +1,434 @@
 {
-  "rentToOwn": "Rent to own",
-  "withoutALoan": "without a loan",
-  "introductionButton": "Create Account",
-  "signIn": "Log in with NOSTR",
-  "logIn": "Log in",
-  "checkCountryAvailability": "Check country availability",
-  "propertyType": "What kind of property are you looking for?",
-  "propertyTypes": {
-    "shortToMediumTermStay": {
-      "title": "Short to medium term stay",
-      "description": "Ideal for digital nomads or expats needing temporary housing."
-    },
-    "longerTermResidentialHouse": {
-      "title": "A longer term residential house",
-      "description": "Suitable for families or those looking for a permanent home."
-    },
-    "commercialProperty": {
-      "title": "Commercial property",
-      "description": "Perfect for buying office buildings or retail spaces for business."
-    }
-  },
-  "chooseLocation": "Choose location",
-  "skip": "Skip",
-  "fetching": "Fetching Nostr...",
-  "details": "Details",
-  "continueButton": "Continue",
-  "navigation": {
-    "home": "Home",
-    "properties": "Properties",
-    "myResin": "My Resin",
-    "favorites": "Favorites",
-    "profile": "Profile",
-    "map": "Map",
-    "messages": "Messages",
-    "settings": "Settings"
-  },
-  "settings": {
-    "title": "Settings",
-    "currency": {
-      "label": "Currency",
-      "usd": "USD - US Dollar",
-      "srd": "SRD - Surinamese Dollar"
-    },
-    "language": {
-      "label": "Language",
-      "en-US": "English",
-      "nl": "Dutch",
-      "nl-NL": "Dutch"
-    },
-    "profile": {
-      "title": "Profile",
-      "personalInfo": "Personal Information",
-      "displayName": {
-        "label": "Display Name",
-        "placeholder": "Enter your name"
+   "rentToOwn": "Rent to own",
+   "withoutALoan": "without a loan",
+   "introductionButton": "Create Account",
+   "signIn": "Log in with NOSTR",
+   "logIn": "Log in",
+   "checkCountryAvailability": "Check country availability",
+   "propertyType": "What kind of property are you looking for?",
+   "propertyTypes": {
+      "shortToMediumTermStay": {
+         "title": "Short to medium term stay",
+         "description": "Ideal for digital nomads or expats needing temporary housing."
       },
-      "about": {
-        "label": "About",
-        "placeholder": "Tell us about yourself"
+      "longerTermResidentialHouse": {
+         "title": "A longer term residential house",
+         "description": "Suitable for families or those looking for a permanent home."
       },
-      "picture": {
-        "alt": "Profile picture",
-        "upload": "Upload profile picture"
+      "commercialProperty": {
+         "title": "Commercial property",
+         "description": "Perfect for buying office buildings or retail spaces for business."
+      }
+   },
+   "chooseLocation": "Choose location",
+   "skip": "Skip",
+   "fetching": "Fetching Nostr...",
+   "details": "Details",
+   "continueButton": "Continue",
+   "navigation": {
+      "home": "Home",
+      "properties": "Properties",
+      "myResin": "My Resin",
+      "favorites": "Favorites",
+      "profile": "Profile",
+      "map": "Map",
+      "messages": "Messages",
+      "settings": "Settings"
+   },
+   "settings": {
+      "title": "Settings",
+      "currency": {
+         "label": "Currency",
+         "usd": "USD - US Dollar",
+         "srd": "SRD - Surinamese Dollar"
       },
-      "saveChanges": "Save Changes",
-      "saved": "Profile saved"
-    },
-    "nostrKeys": {
-      "title": "NOSTR Keys",
-      "npub": "npub",
-      "publicKey": "Public Key (Hex)",
-      "recoveryPhrase": "Recovery Phrase",
-      "privateKey": "Private Key",
-      "show": "Show",
-      "hide": "Hide",
-      "privateKeyNotAvailable": "Your private key can not be shown by RESIN, because it is managed by an extension.",
-      "copied": "Copied"
-    },
-    "languageDescription": "Choose your preferred language",
-    "pushNotifications": "Push Notifications",
-    "pushNotificationsDescription": "Get notified when you receive new messages (experimental)"
-  },
-  "menu": {
-    "account": "Account",
-    "profile": "Profile",
-    "messages": "Messages",
-    "messagesWithCount": "Messages ({count})",
-    "nostrKeys": "Nostr Keys",
-    "settings": "Settings",
-    "help": "Help",
-    "logout": "Log out",
-    "termsAndConditions": "Terms & conditions"
-  },
-  "messages": {
-    "title": "Messages",
-    "typeMessage": "Type a message...",
-    "send": "Send message"
-  },
-  "property": {
-    "notFound": {
-      "title": "Property Not Found",
-      "message": "The property you're looking for could not be found. Please check the URL or go back to the properties list.",
-      "backToProperties": "Go back to properties →"
-    },
-    "types": {
-      "buyNow": "Buy Now",
-      "rentToOwn": "Rent to Own"
-    },
-    "actions": {
-      "contactAgent": "Contact agent",
-      "rentProperty": "Rent this property",
-      "rentToOwn": "Rent-to-own",
-      "share": "Share property",
-      "favorite": "Add to favorites"
-    },
-    "details": {
-      "addressNotAvailable": "Address not available",
-      "requestSuccess": "Your information has been submitted successfully.",
-      "summary": {
-        "title": "Summary",
-        "readMore": "Read full description",
-        "collapse": "Collapse"
+      "language": {
+         "label": "Language",
+         "en-US": "English",
+         "nl": "Dutch",
+         "nl-NL": "Dutch"
+      },
+      "profile": {
+         "title": "Profile",
+         "personalInfo": "Personal Information",
+         "displayName": {
+            "label": "Display Name",
+            "placeholder": "Enter your name"
+         },
+         "about": {
+            "label": "About",
+            "placeholder": "Tell us about yourself"
+         },
+         "picture": {
+            "alt": "Profile picture",
+            "upload": "Upload profile picture"
+         },
+         "saveChanges": "Save Changes",
+         "saved": "Profile saved"
+      },
+      "nostrKeys": {
+         "title": "NOSTR Keys",
+         "npub": "npub",
+         "publicKey": "Public Key (Hex)",
+         "recoveryPhrase": "Recovery Phrase",
+         "privateKey": "Private Key",
+         "show": "Show",
+         "hide": "Hide",
+         "privateKeyNotAvailable": "Your private key can not be shown by RESIN, because it is managed by an extension.",
+         "copied": "Copied"
+      },
+      "languageDescription": "Choose your preferred language",
+      "pushNotifications": "Push Notifications",
+      "pushNotificationsDescription": "Get notified when you receive new messages (experimental)"
+   },
+   "menu": {
+      "account": "Account",
+      "profile": "Profile",
+      "messages": "Messages",
+      "messagesWithCount": "Messages ({count})",
+      "nostrKeys": "Nostr Keys",
+      "settings": "Settings",
+      "help": "Help",
+      "logout": "Log out",
+      "termsAndConditions": "Terms & conditions"
+   },
+   "messages": {
+      "title": "Messages",
+      "typeMessage": "Type a message...",
+      "send": "Send message"
+   },
+   "property": {
+      "notFound": {
+         "title": "Property Not Found",
+         "message": "The property you're looking for could not be found. Please check the URL or go back to the properties list.",
+         "backToProperties": "Go back to properties →"
+      },
+      "types": {
+         "buyNow": "Buy Now",
+         "rentToOwn": "Rent to Own"
       },
       "actions": {
-        "contactAgent": "Contact Agent",
-        "requestTour": "Request Tour",
-        "rentProperty": "Rent this property",
-        "rentToOwn": "Rent-to-own"
+         "contactAgent": "Contact agent",
+         "rentProperty": "Rent this property",
+         "rentToOwn": "Rent-to-own",
+         "share": "Share property",
+         "favorite": "Add to favorites"
       },
-      "map": {
-        "title": "Location",
-        "viewOnMap": "View on map"
+      "details": {
+         "addressNotAvailable": "Address not available",
+         "requestSuccess": "Your information has been submitted successfully.",
+         "summary": {
+            "title": "Summary",
+            "readMore": "Read full description",
+            "collapse": "Collapse"
+         },
+         "actions": {
+            "contactAgent": "Contact Agent",
+            "requestTour": "Request Tour",
+            "rentProperty": "Rent this property",
+            "rentToOwn": "Rent-to-own"
+         },
+         "map": {
+            "title": "Location",
+            "viewOnMap": "View on map"
+         },
+         "nearby": {
+            "title": "Nearby Properties",
+            "noProperties": "No nearby properties found"
+         },
+         "prices": {
+            "rentPrice": "Rent Price",
+            "propertyPrice": "Property Price",
+            "perMonth": "per month"
+         },
+         "size": {
+            "bed": "bed",
+            "beds": "beds",
+            "squareMeters": "m²"
+         },
+         "additional": {
+            "title": "Additional Details",
+            "yes": "Yes",
+            "no": "No"
+         },
+         "keyFeatures": {
+            "title": "Key Features"
+         }
       },
-      "nearby": {
-        "title": "Nearby Properties",
-        "noProperties": "No nearby properties found"
+      "overview": {
+         "noProperties": "No properties to display",
+         "filters": {
+            "toggle": "Toggle filters",
+            "apply": "Apply filters",
+            "clear": "Clear filters",
+            "price": {
+               "label": "Price",
+               "min": "Min price",
+               "max": "Max price"
+            },
+            "size": {
+               "label": "Size",
+               "min": "Min size",
+               "max": "Max size"
+            },
+            "bedrooms": {
+               "label": "Bedrooms",
+               "min": "Min bedrooms",
+               "max": "Max bedrooms"
+            },
+            "bathrooms": {
+               "label": "Bathrooms",
+               "min": "Min bathrooms",
+               "max": "Max bathrooms"
+            },
+            "propertyType": {
+               "label": "Property type",
+               "house": "House",
+               "apartment": "Apartment",
+               "commercial": "Commercial"
+            }
+         },
+         "sort": {
+            "label": "Sort by",
+            "newest": "Newest first",
+            "priceAsc": "Price (low to high)",
+            "priceDesc": "Price (high to low)",
+            "sizeAsc": "Size (small to large)",
+            "sizeDesc": "Size (large to small)"
+         }
       },
-      "prices": {
-        "rentPrice": "Rent Price",
-        "propertyPrice": "Property Price",
-        "perMonth": "per month"
-      },
-      "size": {
-        "bed": "bed",
-        "beds": "beds",
-        "squareMeters": "m²"
-      },
-      "additional": {
-        "title": "Additional Details",
-        "yes": "Yes",
-        "no": "No"
-      },
-      "keyFeatures": {
-        "title": "Key Features"
+      "card": {
+         "perMonth": "per month",
+         "beds": "Beds",
+         "size": {
+            "squareMeters": "m²"
+         },
+         "countof": "Property { count } of { total }"
       }
-    },
-    "overview": {
-      "noProperties": "No properties to display",
-      "filters": {
-        "toggle": "Toggle filters",
-        "apply": "Apply filters",
-        "clear": "Clear filters",
-        "price": {
-          "label": "Price",
-          "min": "Min price",
-          "max": "Max price"
-        },
-        "size": {
-          "label": "Size",
-          "min": "Min size",
-          "max": "Max size"
-        },
-        "bedrooms": {
-          "label": "Bedrooms",
-          "min": "Min bedrooms",
-          "max": "Max bedrooms"
-        },
-        "bathrooms": {
-          "label": "Bathrooms",
-          "min": "Min bathrooms",
-          "max": "Max bathrooms"
-        },
-        "propertyType": {
-          "label": "Property type",
-          "house": "House",
-          "apartment": "Apartment",
-          "commercial": "Commercial"
-        }
-      },
-      "sort": {
-        "label": "Sort by",
-        "newest": "Newest first",
-        "priceAsc": "Price (low to high)",
-        "priceDesc": "Price (high to low)",
-        "sizeAsc": "Size (small to large)",
-        "sizeDesc": "Size (large to small)"
+   },
+   "myResin": {
+      "title": "My Resin",
+      "favorites": {
+         "title": "Favorites",
+         "noProperties": "You have no properties yet"
       }
-    },
-    "card": {
-      "perMonth": "per month",
-      "beds": "Beds",
-      "size": {
-        "squareMeters": "m²"
+   },
+   "help": {
+      "title": "Help",
+      "search": "Search",
+      "categories": {
+         "all": "All",
+         "account": "Account",
+         "properties": "Properties",
+         "payments": "Payments",
+         "technical": "Technical"
       },
-      "countof": "Property { count } of { total }"
-    }
-  },
-  "myResin": {
-    "title": "My Resin",
-    "favorites": {
+      "cantFind": "Can't find what you're looking for?",
+      "contactSupport": "Contact Support",
+      "faq": {
+         "whatIsNostr": {
+            "question": "What is NOSTR and why do I need it?",
+            "answer": "NOSTR is a decentralized protocol that allows you to own your identity and data. RESIN uses NOSTR to ensure your account and transactions are secure and private."
+         },
+         "accountRecovery": {
+            "question": "How do I recover my account?",
+            "answer": "You can recover your account using your 12-word recovery phrase or your NOSTR private key. Keep these safe as they are the only way to regain access to your account."
+         },
+         "rentToOwn": {
+            "question": "How does rent-to-own work?",
+            "answer": "Rent-to-own allows you to rent a property while building equity towards ownership. Part of your monthly payment goes towards your future ownership of the property."
+         },
+         "listProperty": {
+            "question": "Can I list my property on RESIN?",
+            "answer": "Yes, property owners can list their properties on RESIN. Contact our support team to learn more about the listing process and requirements."
+         },
+         "paymentMethods": {
+            "question": "What payment methods are accepted?",
+            "answer": "RESIN currently accepts various payment methods including bank transfers and cryptocurrency. The available options may vary by region."
+         },
+         "equityCalculation": {
+            "question": "How is my equity calculated?",
+            "answer": "Your equity is calculated based on the portion of your monthly payments that goes towards ownership, as specified in your rent-to-own agreement."
+         },
+         "browsers": {
+            "question": "What browsers are supported?",
+            "answer": "RESIN works best on modern browsers like Chrome, Firefox, Safari, and Edge. Make sure to keep your browser updated for the best experience."
+         },
+         "dataSecurity": {
+            "question": "Is my data secure?",
+            "answer": "Yes, RESIN uses NOSTR protocol and industry-standard encryption to protect your data. Your private keys and sensitive information never leave your device."
+         }
+      }
+   },
+   "termsAndConditions": {
+      "title": "Terms & Conditions",
+      "lastUpdated": "Last Updated: {date}",
+      "sections": {
+         "acceptanceOfTerms": {
+            "title": "Acceptance of Terms",
+            "content": "By accessing or using RESIN, you agree to be bound by these Terms and Conditions (\"Terms\"). If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any services."
+         },
+         "descriptionOfService": {
+            "title": "Description of Service",
+            "content": "RESIN provides an online platform for real estate transactions including the listing, marketing, and sale or long-term rental of residential properties. Our services include but are not limited to property listings, facilitating communication between buyers/renters and sellers/landlords, and providing tools for transaction management."
+         },
+         "userEligibility": {
+            "title": "User Eligibility",
+            "content": "You must be at least 18 years old to use this service. By accessing or using RESIN, you represent and warrant that you have the right, authority, and capacity to enter into this agreement and to abide by all of the terms and conditions of this agreement."
+         },
+         "userAccounts": {
+            "title": "User Accounts",
+            "content": "Account Creation: You may need to create an account to use certain features of the service. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.<br><br>Account Security: You are responsible for safeguarding the private key that you use to access the Service and for any activities or actions under your private key. RESIN cannot and will not be liable for any loss or damage from your failure to comply with this security obligation."
+         },
+         "userConduct": {
+            "title": "User Conduct",
+            "content": "You agree not to use RESIN to:<br>• Violate any local, state, national, or international law or regulation.<br>• Infringe upon or violate our intellectual property rights or the intellectual property rights of others.<br>• Transmit any viruses, worms, defects, Trojan horses, or any items of a destructive nature.<br>• Engage in any behavior that is abusive, harassing, threatening, or defamatory."
+         },
+         "content": {
+            "title": "Content",
+            "content": "User Content: You are solely responsible for the content you post on RESIN. You retain all rights in, and are solely responsible for, the User Content you post to the Service."
+         },
+         "paymentAndFees": {
+            "title": "Payment and Fees",
+            "content": "All fees associated with listing properties, transaction services, or any additional features are due immediately and are non-refundable unless otherwise stated. RESIN may use third-party payment processors to handle payment transactions."
+         },
+         "transactions": {
+            "title": "Transactions",
+            "content": "All real estate transactions facilitated through RESIN are subject to the terms agreed upon by the parties involved. RESIN does not act as a real estate agent, broker, or intermediary in these transactions but merely provides a platform for these activities to occur."
+         },
+         "disclaimers": {
+            "title": "Disclaimers and Limitation of Liability",
+            "content": "RESIN is provided \"as is\" and \"as available\" without warranty of any kind. We disclaim all warranties to the fullest extent permitted by law.<br><br>In no event will RESIN, its officers, directors, employees, or agents be liable to you for any indirect, incidental, special, consequential or punitive damages."
+         },
+         "termination": {
+            "title": "Termination",
+            "content": "We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms."
+         },
+         "governingLaw": {
+            "title": "Governing Law",
+            "content": "These Terms shall be governed and construed in accordance with the laws of the State of Delaware, without regard to its conflict of law provisions."
+         },
+         "changes": {
+            "title": "Changes to Terms",
+            "content": "RESIN reserves the right, at its sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect."
+         },
+         "contactInfo": {
+            "title": "Contact Information",
+            "content": "For any questions about these Terms, please contact us at hello@daedaluslabs.io"
+         }
+      }
+   },
+   "home": {
+      "recentSearches": {
+         "title": "Recent searches",
+         "noSearches": "No recent searches"
+      },
+      "recentlyViewed": {
+         "title": "Recently viewed",
+         "noProperties": "No recently viewed properties"
+      },
+      "trendingAreas": {
+         "title": "Trending areas",
+         "noAreas": "No trending areas"
+      },
+      "title": "Home"
+   },
+   "favorites": {
       "title": "Favorites",
-      "noProperties": "You have no properties yet"
-    }
-  },
-  "help": {
-    "title": "Help",
-    "search": "Search",
-    "categories": {
-      "all": "All",
-      "account": "Account",
-      "properties": "Properties",
-      "payments": "Payments",
-      "technical": "Technical"
-    },
-    "cantFind": "Can't find what you're looking for?",
-    "contactSupport": "Contact Support",
-    "faq": {
-      "whatIsNostr": {
-        "question": "What is NOSTR and why do I need it?",
-        "answer": "NOSTR is a decentralized protocol that allows you to own your identity and data. RESIN uses NOSTR to ensure your account and transactions are secure and private."
-      },
-      "accountRecovery": {
-        "question": "How do I recover my account?",
-        "answer": "You can recover your account using your 12-word recovery phrase or your NOSTR private key. Keep these safe as they are the only way to regain access to your account."
-      },
-      "rentToOwn": {
-        "question": "How does rent-to-own work?",
-        "answer": "Rent-to-own allows you to rent a property while building equity towards ownership. Part of your monthly payment goes towards your future ownership of the property."
-      },
-      "listProperty": {
-        "question": "Can I list my property on RESIN?",
-        "answer": "Yes, property owners can list their properties on RESIN. Contact our support team to learn more about the listing process and requirements."
-      },
-      "paymentMethods": {
-        "question": "What payment methods are accepted?",
-        "answer": "RESIN currently accepts various payment methods including bank transfers and cryptocurrency. The available options may vary by region."
-      },
-      "equityCalculation": {
-        "question": "How is my equity calculated?",
-        "answer": "Your equity is calculated based on the portion of your monthly payments that goes towards ownership, as specified in your rent-to-own agreement."
-      },
-      "browsers": {
-        "question": "What browsers are supported?",
-        "answer": "RESIN works best on modern browsers like Chrome, Firefox, Safari, and Edge. Make sure to keep your browser updated for the best experience."
-      },
-      "dataSecurity": {
-        "question": "Is my data secure?",
-        "answer": "Yes, RESIN uses NOSTR protocol and industry-standard encryption to protect your data. Your private keys and sensitive information never leave your device."
+      "noFavorites": "You have no favorites yet",
+      "browseListings": "Browse listings",
+      "share": {
+         "title": "Resin",
+         "text": "Check out these listings on Resin"
       }
-    }
-  },
-  "termsAndConditions": {
-    "title": "Terms & Conditions",
-    "lastUpdated": "Last Updated: {date}",
-    "sections": {
-      "acceptanceOfTerms": {
-        "title": "Acceptance of Terms",
-        "content": "By accessing or using RESIN, you agree to be bound by these Terms and Conditions (\"Terms\"). If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any services."
+   },
+   "introduction": {
+      "login": {
+         "title": "Log in with NOSTR",
+         "description": "Choose an option below to access your account.",
+         "recoveryPhrase": {
+            "button": "Use recovery phrase (12 words)",
+            "title": "Log in with recovery phrase",
+            "wordPlaceholder": "Word {number}",
+            "error": "Please fill in your recovery phrase",
+            "invalidPhrase": "Incorrect recovery phrase"
+         },
+         "extension": {
+            "useExtension": "Use browser extension",
+            "noExtension": "No extension found - more info",
+            "noNip44": "Your Nostr Extension does not support NIP-44"
+         }
       },
-      "descriptionOfService": {
-        "title": "Description of Service",
-        "content": "RESIN provides an online platform for real estate transactions including the listing, marketing, and sale or long-term rental of residential properties. Our services include but are not limited to property listings, facilitating communication between buyers/renters and sellers/landlords, and providing tools for transaction management."
+      "nsec": {
+         "title": "Log in with NOSTR private key",
+         "placeholder": "Enter your nsec",
+         "error": "Please fill in your Nsec key",
+         "invalidKey": "Invalid Nsec key"
       },
-      "userEligibility": {
-        "title": "User Eligibility",
-        "content": "You must be at least 18 years old to use this service. By accessing or using RESIN, you represent and warrant that you have the right, authority, and capacity to enter into this agreement and to abide by all of the terms and conditions of this agreement."
-      },
-      "userAccounts": {
-        "title": "User Accounts",
-        "content": "Account Creation: You may need to create an account to use certain features of the service. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.<br><br>Account Security: You are responsible for safeguarding the private key that you use to access the Service and for any activities or actions under your private key. RESIN cannot and will not be liable for any loss or damage from your failure to comply with this security obligation."
-      },
-      "userConduct": {
-        "title": "User Conduct",
-        "content": "You agree not to use RESIN to:<br>• Violate any local, state, national, or international law or regulation.<br>• Infringe upon or violate our intellectual property rights or the intellectual property rights of others.<br>• Transmit any viruses, worms, defects, Trojan horses, or any items of a destructive nature.<br>• Engage in any behavior that is abusive, harassing, threatening, or defamatory."
-      },
-      "content": {
-        "title": "Content",
-        "content": "User Content: You are solely responsible for the content you post on RESIN. You retain all rights in, and are solely responsible for, the User Content you post to the Service."
-      },
-      "paymentAndFees": {
-        "title": "Payment and Fees",
-        "content": "All fees associated with listing properties, transaction services, or any additional features are due immediately and are non-refundable unless otherwise stated. RESIN may use third-party payment processors to handle payment transactions."
-      },
-      "transactions": {
-        "title": "Transactions",
-        "content": "All real estate transactions facilitated through RESIN are subject to the terms agreed upon by the parties involved. RESIN does not act as a real estate agent, broker, or intermediary in these transactions but merely provides a platform for these activities to occur."
-      },
-      "disclaimers": {
-        "title": "Disclaimers and Limitation of Liability",
-        "content": "RESIN is provided \"as is\" and \"as available\" without warranty of any kind. We disclaim all warranties to the fullest extent permitted by law.<br><br>In no event will RESIN, its officers, directors, employees, or agents be liable to you for any indirect, incidental, special, consequential or punitive damages."
-      },
-      "termination": {
-        "title": "Termination",
-        "content": "We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms."
-      },
-      "governingLaw": {
-        "title": "Governing Law",
-        "content": "These Terms shall be governed and construed in accordance with the laws of the State of Delaware, without regard to its conflict of law provisions."
-      },
-      "changes": {
-        "title": "Changes to Terms",
-        "content": "RESIN reserves the right, at its sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect."
-      },
-      "contactInfo": {
-        "title": "Contact Information",
-        "content": "For any questions about these Terms, please contact us at hello@daedaluslabs.io"
+      "title": "Introduction"
+   },
+   "nostr": {
+      "creating": "Creating NOSTR key...",
+      "created": "NOSTR account created!",
+      "addDetails": "You can add your personal details later if you like.",
+      "continue": "Continue with RESIN",
+      "loading": {
+         "title": "Loading Nostr Data",
+         "description": "Please wait while we restore your favorites and messages from Nostr..."
       }
-    }
-  },
-  "home": {
-    "recentSearches": {
-      "title": "Recent searches",
-      "noSearches": "No recent searches"
-    },
-    "recentlyViewed": {
-      "title": "Recently viewed",
-      "noProperties": "No recently viewed properties"
-    },
-    "trendingAreas": {
-      "title": "Trending areas",
-      "noAreas": "No trending areas"
-    },
-    "title": "Home"
-  },
-  "favorites": {
-    "title": "Favorites",
-    "noFavorites": "You have no favorites yet",
-    "browseListings": "Browse listings",
-    "share": {
-      "title": "Resin",
-      "text": "Check out these listings on Resin"
-    }
-  },
-  "introduction": {
-    "login": {
-      "title": "Log in with NOSTR",
-      "description": "Choose an option below to access your account.",
-      "recoveryPhrase": {
-        "button": "Use recovery phrase (12 words)",
-        "title": "Log in with recovery phrase",
-        "wordPlaceholder": "Word {number}",
-        "error": "Please fill in your recovery phrase",
-        "invalidPhrase": "Incorrect recovery phrase"
+   },
+   "map": {
+      "viewProperties": "View {count} properties",
+      "search": {
+         "placeholder": "City, region, country...",
+         "clear": "Clear search"
       },
-      "extension": {
-        "useExtension": "Use browser extension",
-        "noExtension": "No extension found - more info",
-        "noNip44": "Your Nostr Extension does not support NIP-44"
+      "title": "Map",
+      "multipleProperties": "There are {count} properties on this location"
+   },
+   "chat": {
+      "title": "Messages",
+      "search": "Search conversations",
+      "typeMessage": "Type a message...",
+      "send": "Send message",
+      "selectConversation": "Select a conversation to start messaging",
+      "loading": "Loading messages...",
+      "retry": "Try again",
+      "fetchHistory": "Fetch history",
+      "loadingHistory": "Loading history...",
+      "processing": {
+         "title": "Processing Messages",
+         "description": "Processing {count} messages..."
       }
-    },
-    "nsec": {
-      "title": "Log in with NOSTR private key",
-      "placeholder": "Enter your nsec",
-      "error": "Please fill in your Nsec key",
-      "invalidKey": "Invalid Nsec key"
-    },
-    "title": "Introduction"
-  },
-  "nostr": {
-    "creating": "Creating NOSTR key...",
-    "created": "NOSTR account created!",
-    "addDetails": "You can add your personal details later if you like.",
-    "continue": "Continue with RESIN",
-    "loading": {
-      "title": "Loading Nostr Data",
-      "description": "Please wait while we restore your favorites and messages from Nostr..."
-    }
-  },
-  "map": {
-    "viewProperties": "View {count} properties",
-    "search": {
-      "placeholder": "City, region, country...",
-      "clear": "Clear search"
-    },
-    "title": "Map",
-    "multipleProperties": "There are {count} properties on this location"
-  },
-  "chat": {
-    "title": "Messages",
-    "search": "Search conversations",
-    "typeMessage": "Type a message...",
-    "send": "Send message",
-    "selectConversation": "Select a conversation to start messaging",
-    "loading": "Loading messages...",
-    "retry": "Try again",
-    "fetchHistory": "Fetch history",
-    "loadingHistory": "Loading history...",
-    "processing": {
-      "title": "Processing Messages",
-      "description": "Processing {count} messages..."
-    }
-  },
-  "maintenance": {
-    "title": "Site Maintenance",
-    "description": "We're experiencing some technical difficulties. We'll be back shortly.",
-    "nextRetry": "Next retry in {seconds} seconds"
-  },
-  "my-resin": {
-    "title": "My Resin"
-  },
-  "my-properties": {
-    "title": "My Properties"
-  },
-  "properties": {
-    "title": "Properties"
-  },
-  "transactions": {
-    "title": "Transactions",
-    "noTransactions": {
-      "title": "No transactions yet",
-      "description": "Your transaction history will appear here once you start making payments."
-    }
-  },
-  "financials": {
-    "title": "Financials",
-    "noData": {
-      "title": "No financial data yet",
-      "description": "Your financial overview will appear here once you start investing in properties."
-    }
-  },
-  "previous": "Previous",
-  "next": "Next"
+   },
+   "maintenance": {
+      "title": "Site Maintenance",
+      "description": "We're experiencing some technical difficulties. We'll be back shortly.",
+      "nextRetry": "Next retry in {seconds} seconds"
+   },
+   "my-resin": {
+      "title": "My Resin"
+   },
+   "my-properties": {
+      "title": "My Properties"
+   },
+   "properties": {
+      "title": "Properties"
+   },
+   "transactions": {
+      "title": "Transactions",
+      "noTransactions": {
+         "title": "No transactions yet",
+         "description": "Your transaction history will appear here once you start making payments."
+      }
+   },
+   "financials": {
+      "title": "Financials",
+      "noData": {
+         "title": "No financial data yet",
+         "description": "Your financial overview will appear here once you start investing in properties."
+      }
+   },
+   "previous": "Previous",
+   "next": "Next"
 }

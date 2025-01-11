@@ -5,7 +5,7 @@
    >
       <!-- Backdrop overlay -->
       <div class="absolute inset-0 bg-black/50" @click="closeToast"></div>
-      
+
       <div
          id="toast-message-cta"
          class="relative w-full max-w-xs rounded-lg bg-white p-4 text-gray-500 shadow dark:bg-gray-800 dark:text-gray-400"
@@ -28,8 +28,9 @@
             <div class="ms-3 text-sm font-normal">
                <span
                   class="mb-1 text-sm font-semibold text-gray-900 dark:text-white"
-                  >Let's find a property!</span
                >
+                  Let's find a property!
+               </span>
                <div class="mb-2 text-sm font-normal">
                   RESIN offers apartments, single family homes, commercial real
                   estate and more around LatAm.

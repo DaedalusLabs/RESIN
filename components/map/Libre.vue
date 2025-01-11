@@ -4,23 +4,20 @@
 
       <!-- Button to View Properties -->
 
-         <NuxtLinkLocale
-            class="fixed bottom-20 lg:hidden"
-            to="properties"
-         >
-            <FlowbiteButton
-               :text="$t('map.viewProperties', { count: visibleLocationsAmount })"
-               class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
-            />
-         </NuxtLinkLocale>
+      <NuxtLinkLocale class="fixed bottom-20 lg:hidden" to="properties">
+         <FlowbiteButton
+            :text="$t('map.viewProperties', { count: visibleLocationsAmount })"
+            class="rounded bg-resin-500 px-4 py-2 text-white hover:bg-resin-600"
+         />
+      </NuxtLinkLocale>
 
-         <!-- GPS Location Button -->
-         <button
-            class="fixed bottom-20 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-white p-2 shadow-md"
-            @click="getUserLocation"
-         >
-            <PhGps :size="32" />
-         </button>
+      <!-- GPS Location Button -->
+      <button
+         class="fixed bottom-20 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-white p-2 shadow-md"
+         @click="getUserLocation"
+      >
+         <PhGps :size="32" />
+      </button>
 
       <!-- Property Card Transition -->
       <transition
@@ -43,8 +40,8 @@
       </transition>
 
       <!-- Add Alert component -->
-      <ResinAlert 
-         :show="showOverlapAlert" 
+      <ResinAlert
+         :show="showOverlapAlert"
          :text="$t('map.multipleProperties', { count: overlapCount })"
          type="info"
          position="top"
@@ -116,7 +113,6 @@ const calculateVisibleLocations = () => {
 
 let geojson;
 
-
 const refreshProperties = () => {
    geojson = {
       type: "FeatureCollection",
@@ -133,22 +129,22 @@ const refreshProperties = () => {
       })),
    };
 
-   map.value.getSource('properties')?.setData(geojson);
-}
+   map.value.getSource("properties")?.setData(geojson);
+};
 
 onMounted(() => {
-   maplibregl.addProtocol("pmtiles",protocol.tile);
+   maplibregl.addProtocol("pmtiles", protocol.tile);
 
-   map.value = new Map({     
+   map.value = new Map({
       container: mapContainer.value,
       style: "/map-liberty.json",
-   //   style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
+      //   style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
       center: [props.mapCenter.lng, props.mapCenter.lat],
       zoom: zoom.value,
       maxZoom: 15,
    });
 
-   map.value.on("styleimagemissing", (e) => {   
+   map.value.on("styleimagemissing", (e) => {
       const emptyImage = new Uint8Array(4).fill(0);
       map.value.addImage(e.id, { width: 1, height: 1, data: emptyImage });
    });
@@ -224,10 +220,14 @@ onMounted(() => {
                "interpolate",
                ["linear"],
                ["zoom"],
-               0, 8,  // zoom level 0-12: radius 8
-               10, 10, // zoom level 13: radius 8
-               14, 22, // zoom level 14+: radius 12
-               17, 30, // zoom level 17+: radius 30
+               0,
+               8, // zoom level 0-12: radius 8
+               10,
+               10, // zoom level 13: radius 8
+               14,
+               22, // zoom level 14+: radius 12
+               17,
+               30, // zoom level 17+: radius 30
             ],
             "circle-stroke-width": 2,
             "circle-stroke-color": "#fff",
@@ -236,14 +236,14 @@ onMounted(() => {
 
       map.value.on("click", "unclustered-point", (e) => {
          e.originalEvent.stopPropagation();
-         
+
          // Query all points at the clicked location
          const bbox = [
             [e.point.x - 5, e.point.y - 5],
-            [e.point.x + 5, e.point.y + 5]
+            [e.point.x + 5, e.point.y + 5],
          ];
          const features = map.value.queryRenderedFeatures(bbox, {
-            layers: ['unclustered-point']
+            layers: ["unclustered-point"],
          });
 
          if (features.length > 1) {
@@ -252,7 +252,9 @@ onMounted(() => {
             setTimeout(() => {
                showOverlapAlert.value = false;
             }, 3000);
-            clickedLocations.value = features.map(f => fixNestedStrings(f.properties));
+            clickedLocations.value = features.map((f) =>
+               fixNestedStrings(f.properties),
+            );
             clickedLocation.value = null;
          } else {
             clickedLocation.value = fixNestedStrings(features[0].properties);
@@ -278,19 +280,19 @@ onMounted(() => {
       calculateVisibleLocations();
 
       map.value.on("mouseenter", "clusters", () => {
-         map.value.getCanvas().style.cursor = 'pointer';
+         map.value.getCanvas().style.cursor = "pointer";
       });
 
       map.value.on("mouseleave", "clusters", () => {
-         map.value.getCanvas().style.cursor = 'grab';
+         map.value.getCanvas().style.cursor = "grab";
       });
 
       map.value.on("mouseenter", "unclustered-point", () => {
-         map.value.getCanvas().style.cursor = 'pointer';
+         map.value.getCanvas().style.cursor = "pointer";
       });
 
       map.value.on("mouseleave", "unclustered-point", () => {
-         map.value.getCanvas().style.cursor = 'grab';
+         map.value.getCanvas().style.cursor = "grab";
       });
 
       map.value.on("moveend", calculateVisibleLocations);
@@ -318,13 +320,10 @@ onMounted(() => {
          duration: 500,
       });
    }
-
-
-  
 });
 
 onUnmounted(() => {
-  map.value?.remove();
+   map.value?.remove();
 });
 
 watch(
@@ -348,9 +347,8 @@ watch(
          calculateVisibleLocations();
       }
    },
-   { deep: true, immediate: true }
+   { deep: true, immediate: true },
 );
-
 
 // Click Outside Handling
 const clickedOutside = (event) => {
@@ -374,7 +372,7 @@ const removeClickOutsideListener = () => {
 
 // Watch for click events outside of the property card
 watchEffect(() => {
-   if (clickedLocation.value || clickedLocations.value.length) {     
+   if (clickedLocation.value || clickedLocations.value.length) {
       addClickOutsideListener();
    } else {
       removeClickOutsideListener();
@@ -420,12 +418,12 @@ watchEffect(() => {
 }
 
 :deep(.maplibregl-canvas-container) {
-  cursor: grab;
+   cursor: grab;
 }
 
 :deep(.maplibregl-canvas-container.maplibregl-interactive:active) {
-  cursor: grabbing;
-} 
+   cursor: grabbing;
+}
 
 /* Cluster and point interaction cursors
 :deep(.maplibregl-canvas-container.maplibregl-interactive[class*="clusters"]:hover),

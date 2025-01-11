@@ -5,17 +5,17 @@
             v-model="message"
             rows="1"
             :placeholder="$t('chat.typeMessage')"
-            class="flex-grow rounded-l-lg border-none bg-transparent px-4 py-2 focus:outline-none resize-none overflow-y-auto max-h-[250px]"
+            class="max-h-[250px] flex-grow resize-none overflow-y-auto rounded-l-lg border-none bg-transparent px-4 py-2 focus:outline-none"
+            :disabled="isSending"
             @keydown.enter.exact.prevent="handleEnter"
             @keydown.shift.enter.prevent="addNewline"
             @input="(e) => autoGrow(e.target as HTMLTextAreaElement)"
-            :disabled="isSending"
          />
          <button
             class="rounded-r-lg border-none bg-transparent p-4 focus:outline-none disabled:opacity-50"
-            @click="handleSend"
             :disabled="isSending"
             :title="$t('chat.send')"
+            @click="handleSend"
          >
             <PhPaperPlaneTilt :size="20" />
          </button>
@@ -29,25 +29,25 @@ import { PhPaperPlaneTilt } from "@phosphor-icons/vue";
 const props = defineProps({
    isSending: {
       type: Boolean,
-      default: false
-   }
+      default: false,
+   },
 });
 
 const emit = defineEmits<{
-   send: [message: string]
+   send: [message: string];
 }>();
 
-const message = ref('');
+const message = ref("");
 
 function autoGrow(textarea: HTMLTextAreaElement) {
-   textarea.style.height = 'auto';
+   textarea.style.height = "auto";
    const newHeight = Math.min(textarea.scrollHeight, 250);
-   textarea.style.height = newHeight + 'px';
+   textarea.style.height = newHeight + "px";
 }
 
 function addNewline() {
-   message.value += '\n';
-   const textarea = document.querySelector('textarea');
+   message.value += "\n";
+   const textarea = document.querySelector("textarea");
    if (textarea) {
       nextTick(() => autoGrow(textarea));
    }
@@ -64,16 +64,16 @@ function handleEnter(e: KeyboardEvent) {
 
 function handleSend() {
    if (!message.value.trim() || props.isSending) return;
-   
+
    // Remove trailing newlines
-   const cleanMessage = message.value.replace(/\n+$/, '');
-   emit('send', cleanMessage);
-   message.value = '';
-   
+   const cleanMessage = message.value.replace(/\n+$/, "");
+   emit("send", cleanMessage);
+   message.value = "";
+
    // Reset textarea height
-   const textarea = document.querySelector('textarea');
+   const textarea = document.querySelector("textarea");
    if (textarea) {
-      textarea.style.height = 'auto';
+      textarea.style.height = "auto";
    }
 }
-</script> 
+</script>

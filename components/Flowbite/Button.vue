@@ -1,13 +1,13 @@
 <template>
    <button
       type="button"
-      class="inline-flex items-center rounded-lg px-4 py-2 text-center text-sm font-medium text-white  focus:outline-none"
+      class="inline-flex items-center rounded-lg px-4 py-2 text-center text-sm font-medium text-white focus:outline-none"
       :class="{
          'bg-resin-500 hover:bg-resin-600': !disabled,
-         'bg-gray-500 cursor-not-allowed': disabled,
+         'cursor-not-allowed bg-gray-500': disabled,
       }"
       :disabled="disabled"
-      >
+   >
       <PhSignIn v-if="isLogin" :size="24" class="mr-3" />
 
       {{ text }}

@@ -6,7 +6,7 @@
          @close-toast="wrongNsec = false"
       />
       <FlowbiteDrawer :is-open="showDrawer" @close="handleCloseNsecDrawer">
-         <template #title>{{ $t('introduction.nsec.title') }}</template>
+         <template #title>{{ $t("introduction.nsec.title") }}</template>
          <template #content>
             <form action="#" method="POST" @submit.prevent="validateKey">
                <FlowbiteTextInput
@@ -43,10 +43,10 @@ const emit = defineEmits(["close"]);
 
 const validateKey = () => {
    if (!isNsecFilled.value) {
-      errorMessages.value.push(t('introduction.nsec.error'));
+      errorMessages.value.push(t("introduction.nsec.error"));
    } else if (nsecKey.value != "123456") {
       wrongNsec.value = true;
-      errorMessages.value.push(t('introduction.nsec.invalidKey'));
+      errorMessages.value.push(t("introduction.nsec.invalidKey"));
    } else {
       const localeRoute = useLocaleRoute();
       const route = localeRoute({

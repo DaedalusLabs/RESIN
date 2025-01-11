@@ -18,20 +18,20 @@ export default defineNuxtConfig({
       "@nuxt/fonts",
       "@pinia/nuxt",
       "@vueuse/nuxt",
-      'pinia-plugin-persistedstate/nuxt',
-      '@nuxt/test-utils'
+      "pinia-plugin-persistedstate/nuxt",
+      "@nuxt/test-utils",
    ],
 
    i18n: {
       locales: [
          {
             code: "en-US",
-            name: "English"
+            name: "English",
          },
          {
             code: "nl-NL",
-            name: "Nederlands"
-         }
+            name: "Nederlands",
+         },
       ],
       strategy: "prefix_except_default",
       defaultLocale: "en-US",
@@ -69,16 +69,16 @@ export default defineNuxtConfig({
       workbox: {
          navigateFallback: null,
          navigateFallbackAllowlist: [],
-         globDirectory: 'public',
-         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+         globDirectory: "public",
+         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
          ignoreURLParametersMatching: [/^utm_/, /^fbclid$/],
          skipWaiting: true,
          clientsClaim: true,
          cleanupOutdatedCaches: true,
          additionalManifestEntries: [
-            { url: '/nostr-notifications-sw.js', revision: null },
-            { url: '/ndk-bundle.min.js', revision: null }
-         ]
+            { url: "/nostr-notifications-sw.js", revision: null },
+            { url: "/ndk-bundle.min.js", revision: null },
+         ],
       },
       devOptions: {
          enabled: false,
@@ -99,18 +99,37 @@ export default defineNuxtConfig({
                name: "description",
                content: "Resin - Buy a home without a bank",
             },
-            { name: 'mobile-web-app-capable', content: 'yes' },
-            { name: 'apple-mobile-web-app-capable', content: 'yes' },
-            { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
-            { name: 'apple-mobile-web-app-title', content: 'RESIN' },
+            { name: "mobile-web-app-capable", content: "yes" },
+            { name: "apple-mobile-web-app-capable", content: "yes" },
+            {
+               name: "apple-mobile-web-app-status-bar-style",
+               content: "default",
+            },
+            { name: "apple-mobile-web-app-title", content: "RESIN" },
 
-            { name: 'theme-color', content: '#F07E19' },
-            { name: 'icon', content: '/favicon.ico', rel: 'shortcut icon' },
-            { name: 'icon', content: '/favicon-96x96.png', rel: 'icon', sizes: '96x96', type: 'image/png' },
-            { name: 'icon', content: '/favicon.svg', rel: 'icon', type: 'image/svg+xml' },
-            { name: 'icon', content: '/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180' },
-            { name: 'icon', content: '/site.webmanifest', rel: 'manifest' },
-            { name: 'manifest', content: '/site.webmanifest', rel: 'manifest' }
+            { name: "theme-color", content: "#F07E19" },
+            { name: "icon", content: "/favicon.ico", rel: "shortcut icon" },
+            {
+               name: "icon",
+               content: "/favicon-96x96.png",
+               rel: "icon",
+               sizes: "96x96",
+               type: "image/png",
+            },
+            {
+               name: "icon",
+               content: "/favicon.svg",
+               rel: "icon",
+               type: "image/svg+xml",
+            },
+            {
+               name: "icon",
+               content: "/apple-touch-icon.png",
+               rel: "apple-touch-icon",
+               sizes: "180x180",
+            },
+            { name: "icon", content: "/site.webmanifest", rel: "manifest" },
+            { name: "manifest", content: "/site.webmanifest", rel: "manifest" },
          ],
       },
    },
@@ -119,7 +138,7 @@ export default defineNuxtConfig({
    image: {
       format: ["webp"],
       quality: 80,
-      provider: "none"
+      provider: "none",
    },
 
    runtimeConfig: {
@@ -132,23 +151,23 @@ export default defineNuxtConfig({
          TYPESENSE_API_KEY: process.env.TYPESENSE_API_KEY,
          TYPESENSE_PROTOCOL: process.env.TYPESENSE_PROTOCOL,
          MESSAGES_PUBKEY: process.env.MESSAGES_PUBKEY,
-         PUBKEY_WHITELIST: (process.env.PUBKEY_WHITELIST || '').split(','),
+         PUBKEY_WHITELIST: (process.env.PUBKEY_WHITELIST || "").split(","),
          FILES_BASE_URL: process.env.FILES_BASE_URL,
          SHOW_TRENDING_AREAS: process.env.SHOW_TRENDING_AREAS,
          SHOW_TRANSACTIONS: process.env.SHOW_TRANSACTIONS,
          SHOW_AGREEMENTS: process.env.SHOW_AGREEMENTS,
          SHOW_FINANCIALS: process.env.SHOW_FINANCIALS,
-         BTCPAY_BASE_URL: process.env.BTCPAY_BASE_URL
+         BTCPAY_BASE_URL: process.env.BTCPAY_BASE_URL,
       },
    },
 
    nitro: {
       publicAssets: [
          {
-            baseURL: '/',
-            dir: 'public',
-            maxAge: 0 // Disable caching for service worker
-         }
-      ]
+            baseURL: "/",
+            dir: "public",
+            maxAge: 0, // Disable caching for service worker
+         },
+      ],
    },
 });

@@ -19,14 +19,14 @@
             class="mx-auto w-24"
          />
          <p class="mt-4 font-extrabold text-gray-900">
-            {{ loading ? $t('nostr.creating') : $t('nostr.created') }}
+            {{ loading ? $t("nostr.creating") : $t("nostr.created") }}
          </p>
 
          <!-- Wait for modal expansion before showing text and button -->
          <transition name="fade-in" mode="out-in" appear>
             <div v-if="!loading" key="success-message" class="mt-4">
                <p class="text-sm text-gray-500">
-                  {{ $t('nostr.addDetails') }}
+                  {{ $t("nostr.addDetails") }}
                </p>
 
                <!-- Button for success state, only visible after loading -->
@@ -50,8 +50,7 @@ const { generateKeyPair, isAuthenticated } = useNostr();
 onMounted(async () => {
    await generateKeyPair();
 
-   if (isAuthenticated) 
-      loading.value = false
+   if (isAuthenticated) loading.value = false;
 });
 </script>
 

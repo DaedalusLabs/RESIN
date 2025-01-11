@@ -7,10 +7,8 @@ onMounted(() => {
 </script>
 
 <template>
-   <div
-      class="fixed inset-0 bg-pirate-950 bg-hex-dark bg-cover bg-center"
-   >
-      <main class="relative h-screen flex">
+   <div class="fixed inset-0 bg-pirate-950 bg-hex-dark bg-cover bg-center">
+      <main class="relative flex h-screen">
          <div class="hidden h-full w-3/5 lg:block">
             <NuxtImg
                v-if="isDesktop"

@@ -35,11 +35,15 @@
             </div>
 
             <FlowbiteButton
-v-if="authenticationStatus" class="px-5 py-3" :text="$t('continueButton')"
-               :show-icon="false" @click="skipRegistration" />
+               v-if="authenticationStatus"
+               class="px-5 py-3"
+               :text="$t('continueButton')"
+               :show-icon="false"
+               @click="skipRegistration"
+            />
 
             <FlowbiteButton
-v-else
+               v-else
                class="px-5 py-3"
                :text="$t('introductionButton')"
                :show-icon="false"
@@ -54,7 +58,7 @@ v-else
 
          <div class="flex flex-col items-center justify-center gap-2">
             <FlowbiteButton
-v-if="!authenticationStatus"
+               v-if="!authenticationStatus"
                :text="$t('signIn')"
                class="border border-pirate-400 bg-transparent px-3 py-3 font-normal text-pirate-50"
                :show-icon="false"
@@ -63,8 +67,7 @@ v-if="!authenticationStatus"
             <NuxtLinkLocale
                to="#"
                class="mb-2 me-2 mt-10 rounded-lg px-5 py-2.5 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700"
-            >
-            </NuxtLinkLocale>
+            ></NuxtLinkLocale>
          </div>
       </div>
    </section>
@@ -72,16 +75,16 @@ v-if="!authenticationStatus"
 
 <script setup>
 const { checkAuthenticated, isAuthenticated } = useNostr();
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 
-const authenticationStatus = ref(false)
+const authenticationStatus = ref(false);
 
 authenticationStatus.value = await checkAuthenticated();
 
 const { t } = useI18n();
 
 useHead({
-   title: t('introduction.title'),
+   title: t("introduction.title"),
 });
 
 definePageMeta({
@@ -122,7 +125,7 @@ const handleCloseModal = () => {
 
 const skipRegistration = () => {
    if (isAuthenticated) {
-      navigateTo(localePath('properties'));
+      navigateTo(localePath("properties"));
    }
-}
+};
 </script>

@@ -3,7 +3,11 @@
       <span class="filter-title">{{ label }}</span>
       <div class="mt-2">
          <div class="flex flex-col space-y-2">
-            <div v-for="option in visibleOptions" :key="option.value" class="flex justify-between items-center">
+            <div
+               v-for="option in visibleOptions"
+               :key="option.value"
+               class="flex items-center justify-between"
+            >
                <input
                   :id="option.value"
                   :checked="option.isRefined"
@@ -12,7 +16,11 @@
                   :value="option.value"
                   @change="handleChange"
                />
-               <div class="ml-2 text-sm grow">{{ props.valueProperty ? option[valueProperty] : option.label }}</div>
+               <div class="ml-2 grow text-sm">
+                  {{
+                     props.valueProperty ? option[valueProperty] : option.label
+                  }}
+               </div>
                <div class="text-sm text-gray-400">{{ option.count }}</div>
             </div>
             <div v-show="props.options.length > 5" class="pt-2">
@@ -53,7 +61,8 @@ const props = defineProps({
    valueProperty: {
       type: String,
       required: false,
-   }
+      default: "label",
+   },
 });
 
 const showMore = ref(false);

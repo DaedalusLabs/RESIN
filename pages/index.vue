@@ -16,14 +16,14 @@ definePageMeta({
          const isAuthenticated = await store.checkAuthenticated();
 
          if (isAuthenticated) {
-            return navigateTo('/home');
+            return navigateTo("/home");
          } else {
-            return navigateTo('/introduction');
+            return navigateTo("/introduction");
          }
-         console.log('to', to);
-         console.log('from', from);
+         console.log("to", to);
+         console.log("from", from);
          next();
-      }
-   ]
+      },
+   ],
 });
 </script>

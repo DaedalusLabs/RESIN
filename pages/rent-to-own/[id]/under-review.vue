@@ -1,7 +1,7 @@
 <template>
    <section
-      class="mx-auto flex w-10/12 flex-col items-center justify-center text-pirate-950"
       v-if="property && property.id"
+      class="mx-auto flex w-10/12 flex-col items-center justify-center text-pirate-950"
    >
       <div class="mb-8 mt-10">
          <div
@@ -62,8 +62,7 @@ import { PhArrowRight, PhCheckCircle } from "@phosphor-icons/vue";
 
 const route = useRoute();
 const propertiesStore = usePropertiesStore();
-const property = ref({
-});
+const property = ref({});
 
 onMounted(async () => {
    const foundProperty = await propertiesStore.get(route.params.id);

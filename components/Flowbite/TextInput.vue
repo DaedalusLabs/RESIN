@@ -10,8 +10,8 @@
             'border-red-500 bg-red-50 focus:border-red-500': showError,
          }"
          :value="modelValue"
-         @input="onInput"
          v-bind="$attrs"
+         @input="onInput"
       />
    </div>
 </template>
@@ -40,7 +40,7 @@ const props = defineProps({
 
 // Disable attribute inheritance on the root element
 defineOptions({
-   inheritAttrs: false
+   inheritAttrs: false,
 });
 
 const emit = defineEmits(["update:modelValue"]);

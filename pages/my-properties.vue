@@ -48,7 +48,7 @@ const { share, isSupported } = useShare();
 const { t } = useI18n();
 
 useHead({
-   title: t('my-properties.title'),
+   title: t("my-properties.title"),
 });
 
 function startShare() {

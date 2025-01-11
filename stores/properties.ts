@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
-import TypesenseInstantSearchAdapter, { type SearchClient } from 'typesense-instantsearch-adapter';
-import { useNostrStore } from './nostr';
-import { watch } from 'vue';
+import TypesenseInstantSearchAdapter, {
+   type SearchClient,
+} from "typesense-instantsearch-adapter";
+import { useNostrStore } from "./nostr";
+import { watch } from "vue";
 
 interface Address {
    street: string;
@@ -52,19 +54,19 @@ export const usePropertiesStore = defineStore("properties", {
       recoveryPhrase: [],
       ownedProperties: [],
       searchClient: undefined!,
-      imagesBaseUrl: '',
-      apiEndpoint: '',
-      typesenseHost: '',
-      typesensePort: '',
-      typesenseApiKey: '',
-      typesenseProtocol: '',
+      imagesBaseUrl: "",
+      apiEndpoint: "",
+      typesenseHost: "",
+      typesensePort: "",
+      typesenseApiKey: "",
+      typesenseProtocol: "",
       isInitialized: false,
       isLoadingNostr: false,
    }),
    persist: {
-      key: 'properties',
+      key: "properties",
       storage: piniaPluginPersistedstate.localStorage(),
-      pick: ['hasSeenMapToast'] 
+      pick: ["hasSeenMapToast"],
    },
    getters: {
       getLocations(): Property[] {
@@ -106,7 +108,7 @@ export const usePropertiesStore = defineStore("properties", {
          this.typesenseHost = config.public.TYPESENSE_HOST;
          this.typesensePort = config.public.TYPESENSE_PORT;
          this.typesenseApiKey = config.public.TYPESENSE_API_KEY;
-         this.typesenseProtocol = config.public.TYPESENSE_PROTOCOL || 'https';
+         this.typesenseProtocol = config.public.TYPESENSE_PROTOCOL || "https";
          this.initializeSearch();
 
          this.isInitialized = true;
@@ -117,16 +119,16 @@ export const usePropertiesStore = defineStore("properties", {
          if (nostrStore.authenticated) {
             try {
                this.isLoadingNostr = true;
-               const event = await nostrStore.loadPreferences('favorites');
+               const event = await nostrStore.loadPreferences("favorites");
                if (event) {
                   this.favorites = event;
-               } 
+               }
 
-               console.log('loading chat store');
+               console.log("loading chat store");
                const chatStore = useChatStore();
                await chatStore.init();
             } catch (error) {
-               console.error('Failed to load favorites from Nostr:', error);
+               console.error("Failed to load favorites from Nostr:", error);
             } finally {
                this.isLoadingNostr = false;
             }
@@ -135,14 +137,17 @@ export const usePropertiesStore = defineStore("properties", {
 
       watchNostrAuth() {
          const nostrStore = useNostrStore();
-         watch(() => nostrStore.authenticated, async (isAuthenticated) => {
-            if (isAuthenticated) {
-               await new Promise(resolve => setTimeout(resolve, 3000));
-               await this.loadNostrPreferences();
-            } else {
-               this.favorites = [];
-            }
-         });
+         watch(
+            () => nostrStore.authenticated,
+            async (isAuthenticated) => {
+               if (isAuthenticated) {
+                  await new Promise((resolve) => setTimeout(resolve, 3000));
+                  await this.loadNostrPreferences();
+               } else {
+                  this.favorites = [];
+               }
+            },
+         );
       },
 
       async get(id: string) {
@@ -150,9 +155,9 @@ export const usePropertiesStore = defineStore("properties", {
             const response = await fetch(`${this.apiEndpoint}/listings/${id}`);
             if (!response.ok) {
                if (response.status === 404) {
-                  throw new Error('Property not found');
+                  throw new Error("Property not found");
                } else if (response.status >= 500) {
-                  throw new Error('Server error');
+                  throw new Error("Server error");
                }
             }
             const data = await response.json();
@@ -170,16 +175,15 @@ export const usePropertiesStore = defineStore("properties", {
                   {
                      host: this.typesenseHost,
                      port: parseInt(this.typesensePort),
-                     protocol: this.typesenseProtocol
-                  }
-               ]
+                     protocol: this.typesenseProtocol,
+                  },
+               ],
             },
-            geoLocationField: 'location.coordinates',
+            geoLocationField: "location.coordinates",
             additionalSearchParameters: {
-               query_by: 'title,location.street,location.city,location.country'
+               query_by: "title,location.street,location.city,location.country",
             },
          });
-
 
          this.searchClient = typesenseAdapter.searchClient;
       },
@@ -203,7 +207,6 @@ export const usePropertiesStore = defineStore("properties", {
          if (this.searches.length > 10) {
             this.searches = this.searches.slice(1);
          }
-
       },
 
       setFilteredLocations(filteredProperties: Property[]): void {
@@ -241,9 +244,9 @@ export const usePropertiesStore = defineStore("properties", {
          const nostrStore = useNostrStore();
          if (nostrStore.authenticated) {
             try {
-               await nostrStore.savePreferences('favorites', this.favorites);
+               await nostrStore.savePreferences("favorites", this.favorites);
             } catch (error) {
-               console.error('Failed to save favorites to Nostr:', error);
+               console.error("Failed to save favorites to Nostr:", error);
             }
          }
       },

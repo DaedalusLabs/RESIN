@@ -38,9 +38,9 @@
 
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
-const propertiesStore = usePropertiesStore();
 
 import { useNostrStore } from "~/stores/nostr";
+const propertiesStore = usePropertiesStore();
 const nostrStore = useNostrStore();
 
 const showDrawer = ref(true);
@@ -57,7 +57,7 @@ const props = defineProps({
 
 // Generate a random recovery phrase (12 words)
 const getRecoveryPhrase = () => {
-   return nostrStore.mnemonic.split(" ");;
+   return nostrStore.mnemonic.split(" ");
 };
 
 watchEffect(() => {

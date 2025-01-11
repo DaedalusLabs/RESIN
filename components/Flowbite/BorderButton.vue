@@ -16,18 +16,18 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
    text: {
       type: String,
       required: true,
    },
    color: {
       type: String,
-      default: 'resin-500',
+      default: "resin-500",
    },
    hoverTextColor: {
       type: String,
-      default: 'white',
+      default: "white",
    },
 });
 </script>

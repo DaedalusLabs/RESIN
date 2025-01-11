@@ -6,10 +6,10 @@ Resin is an open-source real estate platform that helps users buy homes without 
 
 This project is built using cutting-edge technologies to ensure scalability, maintainability, and ease of development:
 
--  **[Nuxt 3](https://nuxt.com/)** - The framework powering the entire app, built on Vue 3 and designed for both server-side and static site generation.
--  **[TailwindCSS](https://tailwindcss.com/)** - Utility-first CSS framework for fast and responsive styling.
--  **[Flowbite](https://flowbite.com/)** - Pre-built UI components for TailwindCSS to quickly build out user interfaces.
--  **[MapLibre](https://maplibre.org/)** - Open-source map library for rendering maps and enhancing location-based searches.
+- **[Nuxt 3](https://nuxt.com/)** - The framework powering the entire app, built on Vue 3 and designed for both server-side and static site generation.
+- **[TailwindCSS](https://tailwindcss.com/)** - Utility-first CSS framework for fast and responsive styling.
+- **[Flowbite](https://flowbite.com/)** - Pre-built UI components for TailwindCSS to quickly build out user interfaces.
+- **[MapLibre](https://maplibre.org/)** - Open-source map library for rendering maps and enhancing location-based searches.
 
 ---
 

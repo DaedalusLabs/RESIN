@@ -22,7 +22,7 @@
             v-if="property['resin-type'] === 'Buy Now'"
             class="text-sm font-bold text-pirate-950"
          >
-            $ {{ property?.price.toLocaleString() }} 
+            $ {{ property?.price.toLocaleString() }}
          </p>
          <p v-else class="text-sm font-bold text-pirate-950">
             $ {{ property?.price.toLocaleString() }} per month

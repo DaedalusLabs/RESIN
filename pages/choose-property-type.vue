@@ -8,8 +8,8 @@
       <div class="grid grid-cols-1 justify-items-center gap-4 md:grid-rows-3">
          <PropertyType
             v-for="propertyType in propertyTypes"
-            :key="propertyType.id"
             :id="propertyType.id"
+            :key="propertyType.id"
             :title="$t(propertyType.title)"
             :description="$t(propertyType.description)"
             class="w-full flex-grow"
@@ -36,23 +36,23 @@
 </template>
 
 <script setup>
-import { useSettingsStore } from '@/stores/settings';
+import { useSettingsStore } from "@/stores/settings";
 
 const settingsStore = useSettingsStore();
 
 const propertyTypes = ref([
    {
-      id: 'short-term-stay',
+      id: "short-term-stay",
       title: "propertyTypes.shortToMediumTermStay.title",
       description: "propertyTypes.shortToMediumTermStay.description",
    },
    {
-      id: 'longer-term-residential-house',
+      id: "longer-term-residential-house",
       title: "propertyTypes.longerTermResidentialHouse.title",
       description: "propertyTypes.longerTermResidentialHouse.description",
    },
    {
-      id: 'commercial-property',
+      id: "commercial-property",
       title: "propertyTypes.commercialProperty.title",
       description: "propertyTypes.commercialProperty.description",
    },
@@ -68,9 +68,7 @@ const togglePropertyType = (propertyTypeId) => {
    }
 };
 
-
-
 definePageMeta({
-  layout: "intro",
+   layout: "intro",
 });
 </script>

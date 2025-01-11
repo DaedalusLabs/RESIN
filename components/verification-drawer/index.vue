@@ -22,7 +22,7 @@
          @close="handleCloseDrawer"
          @next="handleNext"
          @back="handleBack"
-      /> 
+      />
       <VerificationDrawerIdentitySumsub
          :show="currentStep === 5"
          @close="handleCloseDrawer"
@@ -97,7 +97,6 @@ const propertiesStore = usePropertiesStore();
 const currentStep = ref(-1);
 const MAX_STEPS = 14;
 
-
 const emit = defineEmits(["close"]);
 
 const props = defineProps({
@@ -112,7 +111,7 @@ const props = defineProps({
    skipKeyBackup: {
       type: Boolean,
       default: false,
-   }
+   },
 });
 
 watchEffect(() => {
@@ -127,9 +126,12 @@ const handleCloseDrawer = () => {
 };
 
 const handleFinish = () => {
-   console.log('handleFinish', { path: localePath(`/rent-to-own/${props.propertyId}/under-review`) });
-   router.push({ path: localePath(`/rent-to-own/${props.propertyId}/under-review`) });
-
+   console.log("handleFinish", {
+      path: localePath(`/rent-to-own/${props.propertyId}/under-review`),
+   });
+   router.push({
+      path: localePath(`/rent-to-own/${props.propertyId}/under-review`),
+   });
 };
 
 console.log("skipKeyBackup", props.skipKeyBackup);

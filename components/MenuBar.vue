@@ -7,7 +7,7 @@
    >
       <template #title>
          <div class="mb-5 flex items-center justify-between text-pirate-300">
-            <h2 class="text-base font-semibold">{{ $t('menu.account') }}</h2>
+            <h2 class="text-base font-semibold">{{ $t("menu.account") }}</h2>
             <PhX :size="20" class="cursor-pointer" @click="handleCloseDrawer" />
          </div>
       </template>
@@ -45,16 +45,19 @@
 
             <div class="mb-10">
                <NuxtLinkLocale
-                  class="flex items-center space-x-2 px-4 py-3 text-red-600 cursor-pointer hover:underline"
-                  @click="logout"   
+                  class="flex cursor-pointer items-center space-x-2 px-4 py-3 text-red-600 hover:underline"
+                  @click="logout"
                >
                   <PhSignOut :size="16" />
-                  <span>{{ $t('menu.logout') }}</span>
+                  <span>{{ $t("menu.logout") }}</span>
                </NuxtLinkLocale>
 
                <div class="mt-4 px-4 text-pirate-500">
-                  <NuxtLinkLocale to="/terms-and-conditions" @click="handleCloseDrawer">   
-                     {{ $t('menu.termsAndConditions') }}
+                  <NuxtLinkLocale
+                     to="/terms-and-conditions"
+                     @click="handleCloseDrawer"
+                  >
+                     {{ $t("menu.termsAndConditions") }}
                   </NuxtLinkLocale>
                </div>
             </div>
@@ -75,8 +78,7 @@ import {
 } from "@phosphor-icons/vue";
 const nostrStore = useNostrStore();
 const { t } = useI18n();
-const localePath = useLocalePath()
-const router = useRouter();
+const localePath = useLocalePath();
 const emit = defineEmits(["close"]);
 defineProps({
    showDrawer: Boolean,
@@ -89,14 +91,16 @@ const hasUnreadMessages = computed(() => {
 
 const menuItems = [
    {
-      label: t('menu.profile'),
+      label: t("menu.profile"),
       icon: PhUser,
       link: "/settings/profile",
    },
    {
       label: computed(() => {
          const count = nostrStore.unreadMessagesCount;
-         return count > 0 ? t('menu.messagesWithCount', { count }) : t('menu.messages');
+         return count > 0
+            ? t("menu.messagesWithCount", { count })
+            : t("menu.messages");
       }),
       icon: PhChatCircle,
       link: "/messages",
@@ -105,17 +109,17 @@ const menuItems = [
       },
    },
    {
-      label: t('menu.nostrKeys'),
+      label: t("menu.nostrKeys"),
       icon: PhKey,
       link: "/settings/nostr-keys",
    },
    {
-      label: t('menu.settings'),
+      label: t("menu.settings"),
       icon: PhGear,
       link: "/settings",
    },
    {
-      label: t('menu.help'),
+      label: t("menu.help"),
       icon: PhQuestion,
       link: "/help",
    },
@@ -126,13 +130,13 @@ const handleCloseDrawer = () => {
 };
 
 const logout = async () => {
-   console.log('logout');
+   console.log("logout");
    try {
       await nostrStore.logout();
    } catch (error) {
-      console.error('Error logging out', error);
+      console.error("Error logging out", error);
    }
-   window.location.href = localePath('/');
+   window.location.href = localePath("/");
 };
 </script>
 

@@ -1,17 +1,32 @@
 <template>
-   <div class="overflow-hidden rounded-2xl bg-white shadow-lg" v-if="properties.length">
+   <div
+      v-if="properties.length"
+      class="overflow-hidden rounded-2xl bg-white shadow-lg"
+   >
       <div class="relative">
          <!-- Property Image -->
          <FlowbiteCarousel
             :items="properties[currentIndex].images"
-            :class="'z-0 w-full h-48 object-cover'"
+            :class="'z-0 h-48 w-full object-cover'"
          />
 
          <span
-            class="absolute bottom-4 right-4 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md"
             v-if="properties[currentIndex]['resin-type']"
+            class="absolute bottom-4 right-4 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md"
          >
-            {{ $t(`property.types.${properties[currentIndex]['resin-type'].split(' ').map((word, index) => index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('')}`) }}
+            {{
+               $t(
+                  `property.types.${properties[currentIndex]["resin-type"]
+                     .split(" ")
+                     .map((word, index) =>
+                        index === 0
+                           ? word.toLowerCase()
+                           : word.charAt(0).toUpperCase() +
+                             word.slice(1).toLowerCase(),
+                     )
+                     .join("")}`,
+               )
+            }}
          </span>
       </div>
 
@@ -39,7 +54,8 @@
                      v-if="properties[currentIndex]['resin-type'] !== 'Buy Now'"
                      class="text-sm font-bold text-gray-800"
                   >
-                     ${{ properties[currentIndex].price.toLocaleString() }} {{ $t('property.card.perMonth') }}
+                     ${{ properties[currentIndex].price.toLocaleString() }}
+                     {{ $t("property.card.perMonth") }}
                   </p>
                   <p v-else class="text-sm font-bold text-gray-800">
                      ${{ properties[currentIndex].price?.toLocaleString() }}
@@ -52,44 +68,55 @@
                   <p class="flex items-center gap-1">
                      <PhRuler :size="20" class="inline" />
                      <span class="text-gray-500">
-                        {{ properties[currentIndex].property.size }} {{ $t('property.card.size.squareMeters') }}
+                        {{ properties[currentIndex].property.size }}
+                        {{ $t("property.card.size.squareMeters") }}
                      </span>
                   </p>
                   <p class="flex items-center gap-1">
                      <PhBed :size="20" class="inline" />
                      <span class="text-gray-500">
-                        {{ properties[currentIndex].property.bedrooms }} {{ $t('property.card.beds') }}
+                        {{ properties[currentIndex].property.bedrooms }}
+                        {{ $t("property.card.beds") }}
                      </span>
                   </p>
                </div>
-               <FlowbiteButton 
-                  :text="$t('details')" 
-                  @click="openDetails"
+               <FlowbiteButton
+                  :text="$t('details')"
                   size="sm"
+                  @click="openDetails"
                />
             </div>
          </div>
       </transition>
 
       <!-- Property Navigation -->
-      <div class="relative flex items-center justify-between border-t border-gray-100 px-4 py-3">
+      <div
+         class="relative flex items-center justify-between border-t border-gray-100 px-4 py-3"
+      >
          <button
-            @click="previousProperty"
             class="flex items-center gap-2 text-sm text-gray-600 hover:text-resin-500 disabled:opacity-50 disabled:hover:text-gray-600"
             :disabled="currentIndex === 0"
+            @click="previousProperty"
          >
             <PhCaretLeft :size="20" />
-            {{ $t('previous') }}
+            {{ $t("previous") }}
          </button>
-         <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm font-medium text-gray-600">
-            {{ $t('property.card.countof', { count: currentIndex + 1, total: properties.length }) }}
+         <span
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm font-medium text-gray-600"
+         >
+            {{
+               $t("property.card.countof", {
+                  count: currentIndex + 1,
+                  total: properties.length,
+               })
+            }}
          </span>
          <button
-            @click="nextProperty"
             class="flex items-center gap-2 text-sm text-gray-600 hover:text-resin-500 disabled:opacity-50 disabled:hover:text-gray-600"
             :disabled="currentIndex === properties.length - 1"
+            @click="nextProperty"
          >
-            {{ $t('next') }}
+            {{ $t("next") }}
             <PhCaretRight :size="20" />
          </button>
       </div>
@@ -97,21 +124,29 @@
 </template>
 
 <script setup>
-import { PhBed, PhRuler, PhHeartStraight, PhCaretLeft, PhCaretRight } from "@phosphor-icons/vue";
+import {
+   PhBed,
+   PhRuler,
+   PhHeartStraight,
+   PhCaretLeft,
+   PhCaretRight,
+} from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
 
 const propertiesStore = usePropertiesStore();
 const currentIndex = ref(0);
-const transitionName = ref('slide-right');
+const transitionName = ref("slide-right");
 
 const props = defineProps({
    properties: {
       type: Array,
       required: true,
-   }
+   },
 });
 
-const isFavorite = computed(() => propertiesStore.isFavorite(props.properties[currentIndex.value].id));
+const isFavorite = computed(() =>
+   propertiesStore.isFavorite(props.properties[currentIndex.value].id),
+);
 
 const toggleFavorite = () => {
    propertiesStore.toggleFavorite(props.properties[currentIndex.value].id);
@@ -119,14 +154,14 @@ const toggleFavorite = () => {
 
 const nextProperty = () => {
    if (currentIndex.value < props.properties.length - 1) {
-      transitionName.value = 'slide-left';
+      transitionName.value = "slide-left";
       currentIndex.value++;
    }
 };
 
 const previousProperty = () => {
    if (currentIndex.value > 0) {
-      transitionName.value = 'slide-right';
+      transitionName.value = "slide-right";
       currentIndex.value--;
    }
 };
@@ -170,4 +205,4 @@ const openDetails = () => {
    opacity: 0;
    transform: translateX(20px);
 }
-</style> 
+</style>
