@@ -17,7 +17,7 @@
          </NuxtLinkLocale>
          <NuxtLinkLocale to="favorites" class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isFavoritesView }">
-            <PhHeartStraight :size="24" weight="regular" class="mb-1" />
+            <PhHeartStraight :size="24" :weight="hasFavorites ? 'fill' : 'regular'" class="mb-1" />
          </NuxtLinkLocale>
          <NuxtLinkLocale to="profile"
             class="relative flex cursor-pointer flex-col items-center text-pirate-500 hover:text-pirate-900"
@@ -40,6 +40,11 @@ import {
 const nostrStore = useNostrStore();
 const localePath = useLocalePath();
 const emit = defineEmits(["toggleMenuBar"]);
+
+const propertiesStore = usePropertiesStore();
+const hasFavorites = computed(() => {
+   return propertiesStore.favorites.length > 0;
+});
 
 const handleProfileClick = () => {
    emit("toggleMenuBar");
