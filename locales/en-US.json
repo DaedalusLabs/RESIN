@@ -202,7 +202,8 @@
       "beds": "Beds",
       "size": {
         "squareMeters": "m²"
-      }
+      },
+      "countof": "Property { count } of { total }"
     }
   },
   "myResin": {
@@ -378,7 +379,8 @@
       "placeholder": "City, region, country...",
       "clear": "Clear search"
     },
-    "title": "Map"
+    "title": "Map",
+    "multipleProperties": "There are {count} properties on this location"
   },
   "chat": {
     "title": "Messages",
@@ -418,5 +420,7 @@
       "title": "No financial data yet",
       "description": "Your financial overview will appear here once you start investing in properties."
     }
-  }
+  },
+  "previous": "Previous",
+  "next": "Next"
 }

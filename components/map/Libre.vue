@@ -34,7 +34,22 @@
             :property="clickedLocation"
             class="force-top property-card absolute bottom-0 w-screen rounded-none bg-white shadow-lg"
          />
+         <MultiPropertyCard
+            v-else-if="clickedLocations.length"
+            :key="'multi'"
+            :properties="clickedLocations"
+            class="force-top property-card absolute bottom-0 w-screen rounded-none bg-white shadow-lg"
+         />
       </transition>
+
+      <!-- Add Alert component -->
+      <ResinAlert 
+         :show="showOverlapAlert" 
+         :text="$t('map.multipleProperties', { count: overlapCount })"
+         type="info"
+         position="top"
+         class="z-[10000]"
+      />
    </div>
 </template>
 
@@ -44,6 +59,7 @@ import { PhGps } from "@phosphor-icons/vue";
 import { fixNestedStrings } from "~/utils/jsonParser";
 import maplibregl, { Map } from "maplibre-gl";
 import { Protocol } from "pmtiles";
+import MultiPropertyCard from "~/components/property-card/MultiPropertyCard.vue";
 
 const protocol = new Protocol();
 
@@ -55,7 +71,10 @@ const map = ref(null);
 const visibleLocationsAmount = ref(propertiesStore.filteredProperties.length);
 const userLocation = ref(null);
 const clickedLocation = ref(null);
+const clickedLocations = ref([]);
 const route = useRoute();
+const showOverlapAlert = ref(false);
+const overlapCount = ref(0);
 
 const props = defineProps({
    mapCenter: {
@@ -200,7 +219,15 @@ onMounted(() => {
          filter: ["!", ["has", "point_count"]],
          paint: {
             "circle-color": "#F07E19",
-            "circle-radius": 8,
+            "circle-radius": [
+               "interpolate",
+               ["linear"],
+               ["zoom"],
+               0, 8,  // zoom level 0-12: radius 8
+               10, 10, // zoom level 13: radius 8
+               14, 22, // zoom level 14+: radius 12
+               17, 30, // zoom level 17+: radius 30
+            ],
             "circle-stroke-width": 2,
             "circle-stroke-color": "#fff",
          },
@@ -208,8 +235,28 @@ onMounted(() => {
 
       map.value.on("click", "unclustered-point", (e) => {
          e.originalEvent.stopPropagation();
-         console.log(e.features[0].properties);
-         clickedLocation.value = fixNestedStrings(e.features[0].properties);
+         
+         // Query all points at the clicked location
+         const bbox = [
+            [e.point.x - 5, e.point.y - 5],
+            [e.point.x + 5, e.point.y + 5]
+         ];
+         const features = map.value.queryRenderedFeatures(bbox, {
+            layers: ['unclustered-point']
+         });
+
+         if (features.length > 1) {
+            overlapCount.value = features.length;
+            showOverlapAlert.value = true;
+            setTimeout(() => {
+               showOverlapAlert.value = false;
+            }, 3000);
+            clickedLocations.value = features.map(f => fixNestedStrings(f.properties));
+            clickedLocation.value = null;
+         } else {
+            clickedLocation.value = fixNestedStrings(features[0].properties);
+            clickedLocations.value = [];
+         }
       });
 
       // click on a cluster
@@ -306,11 +353,10 @@ watch(
 
 // Click Outside Handling
 const clickedOutside = (event) => {
-   if (!clickedLocation.value) return;
-
    const propertyCard = document.querySelector(".property-card");
    if (propertyCard && !propertyCard.contains(event.target)) {
       clickedLocation.value = null;
+      clickedLocations.value = [];
       removeClickOutsideListener();
    }
 };
@@ -327,7 +373,7 @@ const removeClickOutsideListener = () => {
 
 // Watch for click events outside of the property card
 watchEffect(() => {
-   if (clickedLocation.value) {     
+   if (clickedLocation.value || clickedLocations.value.length) {     
       addClickOutsideListener();
    } else {
       removeClickOutsideListener();
