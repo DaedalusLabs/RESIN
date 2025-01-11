@@ -264,7 +264,11 @@
     "creating": "NOSTR sleutel aanmaken...",
     "created": "NOSTR account aangemaakt!",
     "addDetails": "Je kunt later je persoonlijke gegevens toevoegen als je wilt.",
-    "continue": "Doorgaan met RESIN"
+    "continue": "Doorgaan met RESIN",
+    "loading": {
+      "title": "Nostr Gegevens Laden",
+      "description": "Even geduld terwijl we je favorieten en berichten van Nostr herstellen..."
+    }
   },
   "help": {
     "title": "Help",
@@ -385,6 +389,10 @@
     "send": "Verstuur bericht",
     "selectConversation": "Selecteer een gesprek om te beginnen met chatten",
     "loading": "Berichten laden...",
-    "retry": "Probeer opnieuw"
+    "retry": "Probeer opnieuw",
+    "processing": {
+      "title": "Berichten Verwerken",
+      "description": "{count} berichten aan het verwerken..."
+    }
   }
 }

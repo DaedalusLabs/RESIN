@@ -70,6 +70,8 @@ export const useChatStore = defineStore('chat', {
         cacheAdapter: null as NDKCacheAdapterDexie | null,
         lastMessageTimestamp: useLocalStorage('chat-last-message-timestamp', null as number | null),
         processingQueue: Promise.resolve(),
+        isProcessingMessages: false,
+        processingMessageCount: 0,
     }),
 
     getters: {
@@ -96,16 +98,28 @@ export const useChatStore = defineStore('chat', {
                 if (chat.lastMessage?.isSent && whitelist.includes(chat.lastMessage.recipientPubkey)) return true;
                 return false;
             }).flatMap(chat => chat.messages);
-        }
+        },
+        isProcessing: (state) => state.isProcessingMessages,
+        processingCount: (state) => state.processingMessageCount
     },
 
     actions: {
         async processMessageInQueue(callback: () => Promise<void>) {
+            this.isProcessingMessages = true;
+            this.processingMessageCount++;
+            
             // Chain the new operation to the existing queue
             this.processingQueue = this.processingQueue
                 .then(callback)
                 .catch(error => {
                     console.error('Error processing message in queue:', error);
+                })
+                .finally(() => {
+                    this.processingMessageCount--;
+                    // Check if this is the last item in the queue
+                    if (this.processingMessageCount === 0) {
+                        this.isProcessingMessages = false;
+                    }
                 });
             
             // Wait for this operation to complete
@@ -158,6 +172,8 @@ export const useChatStore = defineStore('chat', {
                     kinds: [1059], // Gift wrap kind
                     '#p': nostrStore.pubkey ? [nostrStore.pubkey] : [],
                     // ...(this.lastMessageTimestamp ? { since: this.lastMessageTimestamp - 1000 } : {}),
+                    // If we have a last message timestamp, get messages from 100 seconds before it
+                    // Otherwise get messages from the last 30 days
                     since: this.lastMessageTimestamp ? this.lastMessageTimestamp - 100 : Math.floor(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).getTime() / 1000)    
                 };
 

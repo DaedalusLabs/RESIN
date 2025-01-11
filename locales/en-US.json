@@ -371,7 +371,11 @@
     "creating": "Creating NOSTR key...",
     "created": "NOSTR account created!",
     "addDetails": "You can add your personal details later if you like.",
-    "continue": "Continue with RESIN"
+    "continue": "Continue with RESIN",
+    "loading": {
+      "title": "Loading Nostr Data",
+      "description": "Please wait while we restore your favorites and messages from Nostr..."
+    }
   },
   "map": {
     "viewProperties": "View {count} properties",
@@ -391,7 +395,11 @@
     "loading": "Loading messages...",
     "retry": "Try again",
     "fetchHistory": "Fetch history",
-    "loadingHistory": "Loading history..."
+    "loadingHistory": "Loading history...",
+    "processing": {
+      "title": "Processing Messages",
+      "description": "Processing {count} messages..."
+    }
   },
   "maintenance": {
     "title": "Site Maintenance",

@@ -37,6 +37,7 @@ interface PropertiesState {
    typesenseApiKey: string;
    typesenseProtocol: string;
    isInitialized: boolean;
+   isLoadingNostr: boolean;
 }
 
 export const usePropertiesStore = defineStore("properties", {
@@ -58,6 +59,7 @@ export const usePropertiesStore = defineStore("properties", {
       typesenseApiKey: '',
       typesenseProtocol: '',
       isInitialized: false,
+      isLoadingNostr: false,
    }),
    persist: {
       key: 'properties',
@@ -114,6 +116,7 @@ export const usePropertiesStore = defineStore("properties", {
          const nostrStore = useNostrStore();
          if (nostrStore.authenticated) {
             try {
+               this.isLoadingNostr = true;
                const event = await nostrStore.loadPreferences('favorites');
                if (event) {
                   this.favorites = event;
@@ -124,6 +127,8 @@ export const usePropertiesStore = defineStore("properties", {
                await chatStore.init();
             } catch (error) {
                console.error('Failed to load favorites from Nostr:', error);
+            } finally {
+               this.isLoadingNostr = false;
             }
          }
       },

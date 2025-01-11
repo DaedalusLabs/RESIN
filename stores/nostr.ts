@@ -167,6 +167,12 @@ export const useNostrStore = defineStore('nostr', {
                 ndk.signer = undefined;
             }
 
+            // Clear all IndexedDB data for this site
+            const databases = await window.indexedDB.databases();
+            await Promise.all(
+                databases.map(db => window.indexedDB.deleteDatabase(db.name))
+            );
+
             this.user = null;
             this.pubkey = null;
             this.typeKey = null;
