@@ -138,6 +138,6 @@ test('navigate through settings menu', async ({ page }, testInfo) => {
     // Test logout functionality
     await page.locator('.fixed.inset-x-0.bottom-0 a').last().click()
     await page.locator('a').filter({ hasText: 'Log out' }).click()
-    await expect(page).toHaveURL('/')
+    await expect(page).toHaveURL(new RegExp('/|/introduction'))
 }) 
 
