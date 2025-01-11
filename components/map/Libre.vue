@@ -145,6 +145,7 @@ onMounted(() => {
    //   style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
       center: [props.mapCenter.lng, props.mapCenter.lat],
       zoom: zoom.value,
+      maxZoom: 15,
    });
 
    map.value.on("styleimagemissing", (e) => {   
@@ -159,7 +160,7 @@ onMounted(() => {
          type: "geojson",
          data: geojson,
          cluster: true,
-         // clusterMaxZoom: 14,
+         clusterMaxZoom: 10,
          clusterRadius: 50,
       });
 
