@@ -52,7 +52,7 @@
         </div>
 
         <!-- Recovery Phrase -->
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2 pb-20">
           <div class="flex items-center justify-between">
             <label class="text-sm font-medium text-pirate-950" v-if="nostrStore.getTypeKey === 'mnemonic'">{{ $t('settings.nostrKeys.recoveryPhrase') }}</label>
             <label class="text-sm font-medium text-pirate-950" v-else>{{ $t('settings.nostrKeys.privateKey') }}</label>
