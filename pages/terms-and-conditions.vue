@@ -53,56 +53,56 @@ const openSections = ref(new Array(13).fill(true));
 
 const sections = [
   {
-    title: $t('termsAndConditions.sections.acceptanceOfTerms.title'),
-    content: $t('termsAndConditions.sections.acceptanceOfTerms.content')
+    title: t('termsAndConditions.sections.acceptanceOfTerms.title'),
+    content: t('termsAndConditions.sections.acceptanceOfTerms.content')
   },
   {
-    title: $t('termsAndConditions.sections.descriptionOfService.title'),
-    content: $t('termsAndConditions.sections.descriptionOfService.content')
+    title: t('termsAndConditions.sections.descriptionOfService.title'),
+    content: t('termsAndConditions.sections.descriptionOfService.content')
   },
   {
-    title: $t('termsAndConditions.sections.userEligibility.title'),
-    content: $t('termsAndConditions.sections.userEligibility.content')
+    title: t('termsAndConditions.sections.userEligibility.title'),
+    content: t('termsAndConditions.sections.userEligibility.content')
   },
   {
-    title: $t('termsAndConditions.sections.userAccounts.title'),
-    content: $t('termsAndConditions.sections.userAccounts.content')
+    title: t('termsAndConditions.sections.userAccounts.title'),
+    content: t('termsAndConditions.sections.userAccounts.content')
   },
   {
-    title: $t('termsAndConditions.sections.userConduct.title'),
-    content: $t('termsAndConditions.sections.userConduct.content')
+    title: t('termsAndConditions.sections.userConduct.title'),
+    content: t('termsAndConditions.sections.userConduct.content')
   },
   {
-    title: $t('termsAndConditions.sections.content.title'),
-    content: $t('termsAndConditions.sections.content.content')
+    title: t('termsAndConditions.sections.content.title'),
+    content: t('termsAndConditions.sections.content.content')
   },
   {
-    title: $t('termsAndConditions.sections.paymentAndFees.title'),
-    content: $t('termsAndConditions.sections.paymentAndFees.content')
+    title: t('termsAndConditions.sections.paymentAndFees.title'),
+    content: t('termsAndConditions.sections.paymentAndFees.content')
   },
   {
-    title: $t('termsAndConditions.sections.transactions.title'),
-    content: $t('termsAndConditions.sections.transactions.content')
+    title: t('termsAndConditions.sections.transactions.title'),
+    content: t('termsAndConditions.sections.transactions.content')
   },
   {
-    title: $t('termsAndConditions.sections.disclaimers.title'),
-    content: $t('termsAndConditions.sections.disclaimers.content')
+    title: t('termsAndConditions.sections.disclaimers.title'),
+    content: t('termsAndConditions.sections.disclaimers.content')
   },
   {
-    title: $t('termsAndConditions.sections.termination.title'),
-    content: $t('termsAndConditions.sections.termination.content')
+    title: t('termsAndConditions.sections.termination.title'),
+    content: t('termsAndConditions.sections.termination.content')
   },
   {
-    title: $t('termsAndConditions.sections.governingLaw.title'),
-    content: $t('termsAndConditions.sections.governingLaw.content')
+    title: t('termsAndConditions.sections.governingLaw.title'),
+    content: t('termsAndConditions.sections.governingLaw.content')
   },
   {
-    title: $t('termsAndConditions.sections.changes.title'),
-    content: $t('termsAndConditions.sections.changes.content')
+    title: t('termsAndConditions.sections.changes.title'),
+    content: t('termsAndConditions.sections.changes.content')
   },
   {
-    title: $t('termsAndConditions.sections.contactInfo.title'),
-    content: $t('termsAndConditions.sections.contactInfo.content')
+    title: t('termsAndConditions.sections.contactInfo.title'),
+    content: t('termsAndConditions.sections.contactInfo.content')
   }
 ];
 
