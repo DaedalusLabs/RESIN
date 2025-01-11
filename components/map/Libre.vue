@@ -32,13 +32,13 @@
             :key="clickedLocation.id"
             :show-media-icon="false"
             :property="clickedLocation"
-            class="force-top property-card absolute bottom-0 w-screen rounded-none bg-white shadow-lg"
+            class="force-top property-card fixed bottom-0 w-screen rounded-none bg-white shadow-lg"
          />
          <MultiPropertyCard
             v-else-if="clickedLocations.length"
             :key="'multi'"
             :properties="clickedLocations"
-            class="force-top property-card absolute bottom-0 w-screen rounded-none bg-white shadow-lg"
+            class="force-top property-card fixed bottom-0 w-screen rounded-none bg-white shadow-lg"
          />
       </transition>
 
