@@ -24,7 +24,7 @@
       <!-- Chat Processing Notice -->
       <ResinNotificationBar
          :show="chatStore.isProcessing"
-         position="bottom"
+         position="top"
          color="blue"
          :title="$t('chat.processing.title')"
          :description="$t('chat.processing.description', { count: chatStore.processingCount })"

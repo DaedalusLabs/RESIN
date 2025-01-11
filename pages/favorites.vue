@@ -24,6 +24,7 @@
       </div>
       <div class="space-y-4">
          <FavoritesCard
+         
             v-for="favorite in favorites"
             :key="favorite.id"
             :property="favorite"
@@ -54,7 +55,11 @@ function startShare() {
 }
 
 const propertiesStore = usePropertiesStore();
-const favorites = computed(() => propertiesStore.favoriteLocations);
+const favorites = ref([]);
+watch(() => propertiesStore.favorites, async (newFavorites) => {
+   console.log('newFavorites', newFavorites);
+   favorites.value = await Promise.all(newFavorites.map(async (id) => await propertiesStore.get(id)));
+}, { immediate: true, deep: true });
 
 definePageMeta({
    layout: "white",

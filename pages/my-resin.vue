@@ -103,7 +103,12 @@ import { usePropertiesStore } from "~/stores/properties";
 
 const transactionsStore = useTransactionsStore();
 const propertiesStore = usePropertiesStore();
-const favorites = computed(() => propertiesStore.favoriteLocations);
+const favorites = ref([]);
+watch(() => propertiesStore.favorites, async (newFavorites) => {
+   console.log('newFavorites', newFavorites);
+   favorites.value = await Promise.all(newFavorites.map(async (id) => await propertiesStore.get(id)));
+}, { immediate: true, deep: true });
+
 
 const { t } = useI18n();
 const features = [/*"End lease", "Refinance", "Sell a property" */];
