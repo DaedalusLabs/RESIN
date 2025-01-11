@@ -1,6 +1,6 @@
 <template>
    <section
-      class="flex h-full flex-col items-center justify-between px-12 py-20"
+      class="relative isolate flex h-full flex-col items-center justify-between px-12 py-20"
    >
       <!-- Overlays -->
       <IntroductionLoginModal

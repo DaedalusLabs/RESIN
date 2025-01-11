@@ -86,7 +86,7 @@ const backdropClickHandler = () => {
 
 const drawerClasses = computed(() => {
    return props.slideFrom === "bottom"
-      ? "absolute inset-x-0 bottom-0 z-50 flex max-h-svh w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
+      ? "fixed inset-x-0 bottom-0 z-50 flex max-h-svh w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
       : "absolute top-0 left-0 z-50 flex h-full w-3/4 flex-col  bg-white p-7 shadow-lg";
 });
 
