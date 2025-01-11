@@ -15,57 +15,61 @@
          </span>
       </div>
 
-      <div class="flex flex-col gap-2 p-4 text-left">
-         <div class="flex items-center justify-between">
-            <h3 class="text-lg font-bold text-resin-500">
-               {{ properties[currentIndex].title }}
-            </h3>
-            <PhHeartStraight
-               :size="21"
-               :class="{ 'text-resin-500': isFavorite }"
-               class="text-pirate-200 hover:cursor-pointer"
-               :weight="isFavorite ? 'fill' : 'regular'"
-               @click="toggleFavorite"
-            />
-         </div>
-         <p class="text-gray-600">
-            {{ properties[currentIndex].location.city }},
-            {{ properties[currentIndex].location.country }}
-         </p>
-         <div class="flex items-center justify-between">
-            <p
-               v-if="properties[currentIndex]['resin-type'] !== 'Buy Now'"
-               class="text-sm font-bold text-gray-800"
-            >
-               ${{ properties[currentIndex].price.toLocaleString() }} {{ $t('property.card.perMonth') }}
-            </p>
-            <p v-else class="text-sm font-bold text-gray-800">
-               ${{ properties[currentIndex].price?.toLocaleString() }}
-            </p>
-         </div>
-      </div>
+      <transition :name="transitionName" mode="out-in">
+         <div :key="currentIndex">
+            <div class="flex flex-col gap-2 p-4 text-left">
+               <div class="flex items-center justify-between">
+                  <h3 class="text-lg font-bold text-resin-500">
+                     {{ properties[currentIndex].title }}
+                  </h3>
+                  <PhHeartStraight
+                     :size="21"
+                     :class="{ 'text-resin-500': isFavorite }"
+                     class="text-pirate-200 hover:cursor-pointer"
+                     :weight="isFavorite ? 'fill' : 'regular'"
+                     @click="toggleFavorite"
+                  />
+               </div>
+               <p class="text-gray-600">
+                  {{ properties[currentIndex].location.city }},
+                  {{ properties[currentIndex].location.country }}
+               </p>
+               <div class="flex items-center justify-between">
+                  <p
+                     v-if="properties[currentIndex]['resin-type'] !== 'Buy Now'"
+                     class="text-sm font-bold text-gray-800"
+                  >
+                     ${{ properties[currentIndex].price.toLocaleString() }} {{ $t('property.card.perMonth') }}
+                  </p>
+                  <p v-else class="text-sm font-bold text-gray-800">
+                     ${{ properties[currentIndex].price?.toLocaleString() }}
+                  </p>
+               </div>
+            </div>
 
-      <div class="flex items-center justify-between p-4 pt-0 text-sm">
-         <div class="flex items-center gap-4">
-            <p class="flex items-center gap-1">
-               <PhRuler :size="20" class="inline" />
-               <span class="text-gray-500">
-                  {{ properties[currentIndex].property.size }} {{ $t('property.card.size.squareMeters') }}
-               </span>
-            </p>
-            <p class="flex items-center gap-1">
-               <PhBed :size="20" class="inline" />
-               <span class="text-gray-500">
-                  {{ properties[currentIndex].property.bedrooms }} {{ $t('property.card.beds') }}
-               </span>
-            </p>
+            <div class="flex items-center justify-between p-4 pt-0 text-sm">
+               <div class="flex items-center gap-4">
+                  <p class="flex items-center gap-1">
+                     <PhRuler :size="20" class="inline" />
+                     <span class="text-gray-500">
+                        {{ properties[currentIndex].property.size }} {{ $t('property.card.size.squareMeters') }}
+                     </span>
+                  </p>
+                  <p class="flex items-center gap-1">
+                     <PhBed :size="20" class="inline" />
+                     <span class="text-gray-500">
+                        {{ properties[currentIndex].property.bedrooms }} {{ $t('property.card.beds') }}
+                     </span>
+                  </p>
+               </div>
+               <FlowbiteButton 
+                  :text="$t('details')" 
+                  @click="openDetails"
+                  size="sm"
+               />
+            </div>
          </div>
-         <FlowbiteButton 
-            :text="$t('details')" 
-            @click="openDetails"
-            size="sm"
-         />
-      </div>
+      </transition>
 
       <!-- Property Navigation -->
       <div class="relative flex items-center justify-between border-t border-gray-100 px-4 py-3">
@@ -98,6 +102,7 @@ import { usePropertiesStore } from "~/stores/properties";
 
 const propertiesStore = usePropertiesStore();
 const currentIndex = ref(0);
+const transitionName = ref('slide-right');
 
 const props = defineProps({
    properties: {
@@ -114,12 +119,14 @@ const toggleFavorite = () => {
 
 const nextProperty = () => {
    if (currentIndex.value < props.properties.length - 1) {
+      transitionName.value = 'slide-left';
       currentIndex.value++;
    }
 };
 
 const previousProperty = () => {
    if (currentIndex.value > 0) {
+      transitionName.value = 'slide-right';
       currentIndex.value--;
    }
 };
@@ -134,4 +141,33 @@ const openDetails = () => {
       return navigateTo(route.fullPath);
    }
 };
-</script> 
+</script>
+
+<style scoped>
+.slide-left-enter-active,
+.slide-right-enter-active,
+.slide-left-leave-active,
+.slide-right-leave-active {
+   transition: all 0.2s ease;
+}
+
+.slide-left-enter-from {
+   opacity: 0;
+   transform: translateX(20px);
+}
+
+.slide-left-leave-to {
+   opacity: 0;
+   transform: translateX(-20px);
+}
+
+.slide-right-enter-from {
+   opacity: 0;
+   transform: translateX(-20px);
+}
+
+.slide-right-leave-to {
+   opacity: 0;
+   transform: translateX(20px);
+}
+</style> 
