@@ -71,17 +71,21 @@ const validatePhrase = async() => {
 };
 
 const handlePaste = (event) => {
-   event.preventDefault();
    const pastedText = event.clipboardData.getData('text/plain');
    const words = pastedText.trim().split(/\s+/);
 
-   if (words.length <= 12) {
-      words.forEach((word, index) => {
-         if (index < 12) {
-            recoveryPhrase.value[index] = word;
-         }
-      });
+   // If pasting multiple words, handle it specially
+   if (words.length > 1) {
+      event.preventDefault();
+      if (words.length <= 12) {
+         words.forEach((word, index) => {
+            if (index < 12) {
+               recoveryPhrase.value[index] = word;
+            }
+         });
+      }
    }
+   // For single word paste, let the default behavior handle it
 };
 
 const props = defineProps({
