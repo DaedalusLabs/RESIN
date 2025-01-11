@@ -67,7 +67,13 @@
           </div>
           
           <template v-if="nostrStore.getTypeKey === 'mnemonic'">
-            <div v-if="showPhrase" class="grid grid-cols-2 gap-2 rounded-lg border border-gray-300 p-4">
+            <div v-if="showPhrase" class="relative grid grid-cols-2 gap-2 rounded-lg border border-gray-300 p-4">
+              <button 
+                @click="copyToClipboard(nostrStore.mnemonic)"
+                class="absolute right-4 top-4 text-resin-500 hover:text-resin-600"
+              >
+                <PhCopy :size="20" />
+              </button>
               <div 
                 v-for="(word, index) in mnemonic" 
                 :key="index"
