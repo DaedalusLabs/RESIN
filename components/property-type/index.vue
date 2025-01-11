@@ -1,12 +1,12 @@
 <template>
    <div
       :class="{ 'border-resin-500': checked }"
-      class="block h-full max-w-sm cursor-pointer rounded-2xl border-4 border-gray-200 bg-white p-6 pr-4 shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+      class="block h-full max-w-sm cursor-pointer rounded-2xl border-4 border-gray-200 bg-white p-4 pr-4 shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
       @click="$emit('checked')"
    >
       <div class="flex justify-between">
          <h5
-            class="mb-2 w-3/4 text-lg font-bold leading-tight tracking-tight text-gray-900"
+            class="mb-1 w-3/4 text-md font-bold leading-tight tracking-tight text-gray-900"
          >
             {{ title }}
          </h5>
@@ -31,7 +31,7 @@
             </svg>
          </div>
       </div>
-      <p class="font-normal text-gray-400">
+      <p class="font-normal text-sm text-gray-400">
          {{ description }}
       </p>
    </div>
