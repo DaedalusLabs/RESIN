@@ -38,7 +38,7 @@
       </div>
       <ais-autocomplete>
          <template #default="{ currentRefinement, indices, refine }">
-            <TopBarInstantDropdown v-if="isDropdownOpen" class="absolute z-10 w-full" :filtered-suggestions="indices"
+            <TopBarInstantDropdown v-show="isDropdownOpen" class="absolute z-10 w-full" :filtered-suggestions="indices"
                :query="currentRefinement" @update:query="updateQuery" @close="isDropdownOpen = false" />
          </template>
       </ais-autocomplete>

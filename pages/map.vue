@@ -54,7 +54,7 @@ const route = useRoute();
 const propertiesStore = usePropertiesStore();
 
 const searchStore = useSearchStore();
-propertiesStore.initializeSearch();
+propertiesStore.init();
 const searchClient: SearchClient = propertiesStore.searchClient;
 
 const { t } = useI18n();
@@ -88,7 +88,6 @@ onMounted(() => {
 });
 
 const handleStateChange = ({ uiState, setUiState }) => {
-   console.log("handleStateChange", uiState);
    searchStore.updateSearchState(uiState);
    setUiState(uiState);
 };

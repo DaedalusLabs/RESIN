@@ -61,9 +61,7 @@ watch(
    () => propertiesStore.favorites,
    async (newFavorites) => {
       console.log("newFavorites", newFavorites);
-      favorites.value = await Promise.all(
-         newFavorites.map(async (id) => await propertiesStore.get(id)),
-      );
+      favorites.value = await propertiesStore.getBulk(newFavorites);
    },
    { immediate: true, deep: true },
 );

@@ -73,7 +73,7 @@
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
 const propertiesStore = usePropertiesStore();
-propertiesStore.initializeSearch();
+propertiesStore.init();
 const searchClient = propertiesStore.searchClient;
 
 const query = ref("");
@@ -105,6 +105,10 @@ function searchPropertiesOnMap(search) {
       return navigateTo(route.fullPath);
    }
 }
+
+onMounted(() => {
+
+})
 
 function updateQuery(newQuery, latitude, longitude) {
    query.value = newQuery;

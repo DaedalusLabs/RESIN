@@ -78,7 +78,7 @@ const handleStateChange = ({ uiState, setUiState }) => {
 const isLoading = ref(true);
 const properties = ref([]);
 const showFilterDrawer = ref(false);
-propertiesStore.initializeSearch();
+propertiesStore.init();
 const searchClient = propertiesStore.searchClient;
 
 onMounted(async () => {
