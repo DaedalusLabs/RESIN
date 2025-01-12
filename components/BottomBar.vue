@@ -85,6 +85,7 @@ import {
 
 const nostrStore = useNostrStore();
 const localePath = useLocalePath();
+const router = useRouter();
 const emit = defineEmits(["toggleMenuBar"]);
 
 const propertiesStore = usePropertiesStore();
@@ -93,6 +94,10 @@ const hasFavorites = computed(() => {
 });
 
 const handleProfileClick = () => {
+   if (!nostrStore.isAuthenticated) {
+      router.push(localePath("introduction"));
+      return;
+   }
    emit("toggleMenuBar");
 };
 

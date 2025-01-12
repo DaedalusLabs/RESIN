@@ -157,14 +157,22 @@
                      <PhExport class="h-6 w-6 text-black" />
                   </button>
                   <button
-                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+                     class="flex h-full w-12 items-center justify-center rounded-full border-2 bg-white shadow-md"
+                     :class="
+                        isAuthenticated
+                           ? 'cursor-pointer hover:border-resin-500'
+                           : 'cursor-not-allowed opacity-50'
+                     "
                      :title="$t('property.actions.favorite')"
                      @click="toggleFavorite"
                   >
                      <PhHeartStraight
-                        :class="{ 'text-resin-500': isFavorite }"
+                        :class="[
+                           isAuthenticated ? 'text-black' : 'text-pirate-200',
+                           { 'text-resin-500': isFavorite },
+                        ]"
                         :weight="isFavorite ? 'fill' : 'regular'"
-                        class="h-6 w-6 text-black"
+                        class="h-6 w-6"
                      />
                   </button>
                </div>
@@ -221,11 +229,13 @@
 import { ref, onMounted, computed } from "vue";
 import { PhImages, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
+import { useNostrStore } from "~/stores/nostr";
 import { fixNestedStrings } from "~/utils/jsonParser";
 import ModalContactAgent from "~/components/Modal/contact-agent.vue";
 import ModalRequestTour from "~/components/Modal/request-tour.vue";
 import { propertyImageUtils } from "~/types/property";
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
 const { t } = useI18n();
 
 const route = useRoute();
@@ -235,9 +245,14 @@ const property = ref(null);
 const isRequestSent = ref(false);
 const isModalOpen = ref(false);
 const referenceNumber = ref(0);
-const isFavorite = ref(null);
+//const isFavorite = ref(null);
 const showDrawer = ref(false);
 const showSuccessAlert = ref(false);
+
+const isAuthenticated = computed(() => nostrStore.isAuthenticated);
+const isFavorite = computed(() =>
+   property.value ? propertiesStore.isFavorite(property.value.id) : false,
+);
 
 const handleShowModal = () => {
    isModalOpen.value = true;
@@ -260,8 +275,10 @@ function startShare() {
 }
 
 const toggleFavorite = () => {
-   isFavorite.value = !isFavorite.value;
-   propertiesStore.toggleFavorite(property.value.id);
+   if (isAuthenticated.value) {
+      isFavorite.value = !isFavorite.value;
+      propertiesStore.toggleFavorite(property.value.id);
+   }
 };
 
 onMounted(() => {
@@ -277,6 +294,7 @@ onMounted(async () => {
          return;
       }
 
+      console.log("isFavorite", propertiesStore.isFavorite(foundProperty.id));
       isFavorite.value = propertiesStore.isFavorite(foundProperty.id);
 
       property.value = foundProperty;

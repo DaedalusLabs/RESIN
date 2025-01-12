@@ -11,7 +11,7 @@
          />
          <button
             v-if="showMediaIcon && !compact"
-            class="absolute right-4 top-4 z-1 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+            class="z-1 absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
             title="Open gallery"
             @click="openGallery"
          >
@@ -50,8 +50,13 @@
             <PhHeartStraight
                v-if="!compact"
                :size="21"
-               :class="{ 'text-resin-500': isFavorite }"
-               class="text-pirate-200 hover:cursor-pointer"
+               :class="[
+                  { 'text-resin-500': isFavorite },
+                  isAuthenticated
+                     ? 'hover:cursor-pointer'
+                     : 'cursor-not-allowed opacity-50',
+               ]"
+               class="text-pirate-200"
                :weight="isFavorite ? 'fill' : 'regular'"
                @click="toggleFavorite"
             />
@@ -123,10 +128,16 @@ import {
    PhArrowRight,
 } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
+import { useNostrStore } from "~/stores/nostr";
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
+
+const isAuthenticated = computed(() => nostrStore.isAuthenticated);
 
 const toggleFavorite = () => {
-   propertiesStore.toggleFavorite(props.property.id);
+   if (isAuthenticated.value) {
+      propertiesStore.toggleFavorite(props.property.id);
+   }
 };
 
 const props = defineProps({

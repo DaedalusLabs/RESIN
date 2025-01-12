@@ -39,8 +39,13 @@
                   </h3>
                   <PhHeartStraight
                      :size="21"
-                     :class="{ 'text-resin-500': isFavorite }"
-                     class="text-pirate-200 hover:cursor-pointer"
+                     :class="[
+                        { 'text-resin-500': isFavorite },
+                        isAuthenticated
+                           ? 'hover:cursor-pointer'
+                           : 'cursor-not-allowed opacity-50',
+                     ]"
+                     class="text-pirate-200"
                      :weight="isFavorite ? 'fill' : 'regular'"
                      @click="toggleFavorite"
                   />
@@ -132,8 +137,10 @@ import {
    PhCaretRight,
 } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
+import { useNostrStore } from "~/stores/nostr";
 
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
 const currentIndex = ref(0);
 const transitionName = ref("slide-right");
 
@@ -144,12 +151,16 @@ const props = defineProps({
    },
 });
 
+const isAuthenticated = computed(() => nostrStore.isAuthenticated);
+
 const isFavorite = computed(() =>
    propertiesStore.isFavorite(props.properties[currentIndex.value].id),
 );
 
 const toggleFavorite = () => {
-   propertiesStore.toggleFavorite(props.properties[currentIndex.value].id);
+   if (isAuthenticated.value) {
+      propertiesStore.toggleFavorite(props.properties[currentIndex.value].id);
+   }
 };
 
 const nextProperty = () => {

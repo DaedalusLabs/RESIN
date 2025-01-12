@@ -141,5 +141,6 @@ const removeFavorite = (id) => {
 
 definePageMeta({
    layout: "white",
+   middleware: ["auth"],
 });
 </script>
