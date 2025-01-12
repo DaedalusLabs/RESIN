@@ -163,4 +163,17 @@ const openDetails = () => {
       return navigateTo(route.fullPath);
    }
 };
+
+const blurhashRef = ref(null);
+const imageLoaded = ref(false);
+const blurhashReady = ref(false);
+
+const handleImageLoad = () => {
+   // Only start transition once both blurhash is ready and image is loaded
+   if (blurhashReady.value) {
+      imageLoaded.value = true;
+      // Fade out the blurhash
+      blurhashRef.value?.fadeOut();
+   }
+};
 </script>

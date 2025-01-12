@@ -1,6 +1,6 @@
 <template>
    <div
-      v-if="filteredSuggestions[0].hits.length && query"
+      v-if="filteredSuggestions[0] &&filteredSuggestions[0].hits.length && query"
       ref="dropdownContainer"
       class="absolute z-10 mt-1 w-full max-w-full rounded-xl bg-black py-4 shadow-lg"
    >

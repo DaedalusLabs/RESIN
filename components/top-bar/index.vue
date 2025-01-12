@@ -38,6 +38,7 @@
             <div class="relative max-w-xl flex-grow">
                <FlowbiteInstantSearchbar
                   class="w-full"
+                  :is-ready="!!propertiesStore.searchClient"
                   :query="query"
                   @update:query="updateQuery"
                />
