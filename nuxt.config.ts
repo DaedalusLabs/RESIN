@@ -221,7 +221,7 @@ export default defineNuxtConfig({
          new RegExp("/my-.*"),
       ],
       urls: async () => {
-         const urls = await fetch("http://localhost:3001/listings/urls");
+         const urls = await fetch(`${process.env.BACKEND_ENDPOINT}/listings/urls`);
          return urls;
       },
       sources: [`${process.env.BACKEND_ENDPOINT}/listings/urls`],
