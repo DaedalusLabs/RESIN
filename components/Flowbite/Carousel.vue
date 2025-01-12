@@ -8,10 +8,20 @@
             :class="['duration-200 ease-linear', { hidden: index !== 0 }]"
             :data-carousel-item="index === 0 ? 'active' : ''"
          >
+            <div v-if="blurhash" class="absolute inset-0">
+               <BlurhashCanvas
+                  :hash="blurhash"
+                  :width="320"
+                  :height="240"
+                  class="h-full w-full"
+                  :style="{ display: imageLoaded[index] ? 'none' : 'block' }"
+               />
+            </div>
             <NuxtImg
                :src="item"
                class="absolute inset-0 h-full w-full object-cover"
                alt="..."
+               @load="handleImageLoad(index)"
             />
          </div>
       </div>
@@ -73,6 +83,7 @@
 
 <script setup>
 import { useFlowbite } from "~/composables/useFlowbite";
+import BlurhashCanvas from './BlurhashCanvas.vue';
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -81,10 +92,20 @@ onMounted(() => {
    });
 });
 
+const imageLoaded = ref({});
+
+const handleImageLoad = (index) => {
+   imageLoaded.value[index] = true;
+};
+
 defineProps({
    items: {
       type: Array,
       required: true,
+   },
+   blurhash: {
+      type: String,
+      default: null,
    },
 });
 </script>

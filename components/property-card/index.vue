@@ -3,6 +3,7 @@
       <div class="relative">
          <FlowbiteCarousel
             :items="property.images"
+            :blurhash="property.blurhash"
             :class="[
                'z-0 w-full object-cover',
                compact ? 'h-32' : 'h-48 md:h-48',

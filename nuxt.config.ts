@@ -14,7 +14,8 @@ export default defineNuxtConfig({
             "flowbite",
             "maplibre-gl",
             "pmtiles",
-            "apexcharts"
+            "apexcharts",
+            "blurhash"
          ],
          force: true,
          holdUntilCrawlEnd: true,

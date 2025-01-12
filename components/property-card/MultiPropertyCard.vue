@@ -7,6 +7,7 @@
          <!-- Property Image -->
          <FlowbiteCarousel
             :items="properties[currentIndex].images"
+            :blurhash="properties[currentIndex].blurhash"
             :class="'z-0 h-48 w-full object-cover'"
          />
 

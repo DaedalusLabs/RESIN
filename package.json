@@ -30,6 +30,7 @@
       "@sumsub/websdk": "^2.3.11",
       "@vite-pwa/nuxt": "^0.10.6",
       "apexcharts": "^4.3.0",
+      "blurhash": "^2.0.5",
       "flowbite": "^2.5.2",
       "leaflet.markercluster": "^1.5.3",
       "maplibre-gl": "^4.7.1",
