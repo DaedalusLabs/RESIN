@@ -319,6 +319,23 @@ useHead({
       property.value
          ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
          : "Property Details",
+   meta: [
+      { name: "og:title", content: () => property.value ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}` : "Property Details" },
+      { name: "og:description", content: () => property.value ? `${property.value.description}` : "Property Details" },
+      { name: "og:image", content: () => property.value ? `${property.value.thumbnails?.[0]?.[2]?.url || property.value.images[0]}` : "/android-chrome-256x256.png" },
+      { name: "description", content: () => property.value ? `${property.value.description}` : "Property Details" },
+   ],
+});
+
+useSeoMeta({
+   title: () =>
+      property.value
+         ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
+         : "Property Details",
+   description: () => property.value ? `${property.value.description}` : "Property Details",
+   ogTitle: () => property.value ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}` : "Property Details",
+   ogDescription: () => property.value ? `${property.value.description}` : "Property Details",
+   ogImage: () => property.value ? `${property.value.thumbnails?.[0]?.[2]?.url || property.value.images[0]}` : "/android-chrome-256x256.png",   
 });
 
 defineProps({
