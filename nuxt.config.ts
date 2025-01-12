@@ -5,9 +5,21 @@ export default defineNuxtConfig({
    vite: {
       server: {
          hmr: {
-            overlay: true,
+            overlay: false,
          },
       },
+      optimizeDeps: {
+         include: [
+            "@phosphor-icons/vue", 
+            "flowbite",
+            "maplibre-gl",
+            "pmtiles",
+            "apexcharts"
+         ],
+         force: true,
+         holdUntilCrawlEnd: true,
+         noDiscovery: false
+      }
    },
    modules: [
       "@nuxt/image",

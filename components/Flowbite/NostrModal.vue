@@ -3,21 +3,19 @@
    <div class="fixed inset-0 z-40 bg-black bg-opacity-50" />
 
    <!-- Main modal with smooth expand animation -->
-   <div
-      class="fixed inset-0 z-50 flex items-center justify-center transition-all ease-in-out"
-   >
+   <div class="fixed inset-0 z-50 flex items-center justify-center transition-all ease-in-out">
       <div
          class="w-10/12 max-w-lg rounded-lg bg-white p-8 text-center shadow-lg transition-all duration-500 ease-in-out"
          :class="{
             'max-h-[100vh] overflow-visible': !loading,
             'max-h-[200px] overflow-hidden': loading,
-         }"
-      >
+         }">
          <!-- Dynamic content based on loading state -->
-         <NuxtImg
-            :src="loading ? '/icons/nostr.png' : '/icons/nostr-success.png'"
-            class="mx-auto w-24"
-         />
+         <section class="relative w-24 mx-auto">
+            <NuxtImg :src="loading ? '/images/running-nostrich.webp' : '/images/still-nostrich.webp'"
+               class="mx-auto w-24" />
+            <PhCheckCircle v-if="!loading" class="absolute -right-6 -top-2 w-8"  weight="bold" size="36" color="#9C27B0" />
+         </section>
          <p class="mt-4 font-extrabold text-gray-900">
             {{ loading ? $t("nostr.creating") : $t("nostr.created") }}
          </p>
@@ -31,11 +29,7 @@
 
                <!-- Button for success state, only visible after loading -->
                <NuxtLinkLocale to="choose-property-type">
-                  <FlowbiteButton
-                     :show-icon="false"
-                     :text="$t('nostr.continue')"
-                     class="mt-4 text-center"
-                  />
+                  <FlowbiteButton :show-icon="false" :text="$t('nostr.continue')" class="mt-4 text-center" />
                </NuxtLinkLocale>
             </div>
          </transition>
@@ -44,13 +38,24 @@
 </template>
 
 <script setup>
+import { PhCheckCircle } from '@phosphor-icons/vue';
+
 const loading = ref(true);
 const { generateKeyPair, isAuthenticated } = useNostr();
 
+
 onMounted(async () => {
+   setTimeout(() => {
+      loading.value = false;
+   }, 2000);
    await generateKeyPair();
 
-   if (isAuthenticated) loading.value = false;
+   const timeout = setTimeout(() => {
+      if (isAuthenticated) {
+         loading.value = false;
+         clearTimeout(timeout);
+      }
+   }, 500);
 });
 </script>
 
