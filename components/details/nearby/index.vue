@@ -1,17 +1,24 @@
 <template>
-   <div class="container mx-auto mt-8">
+   <div class="mx-auto mt-8 px-4 md:container md:px-0">
       <h2 class="text-xl font-bold">
          {{ $t("property.details.nearby.title") }}
       </h2>
-      <div class="mt-4 grid grid-cols-1 gap-8">
-         <div v-if="!nearbyProperties.length">
-            <p>{{ $t("property.details.nearby.noProperties") }}</p>
-         </div>
+      <div class="mt-4">
          <div
-            v-for="nearbyProperty in nearbyProperties"
-            :key="nearbyProperty.id"
+            class="grid w-full justify-items-stretch gap-6 lg:grid-cols-2 xl:grid-cols-3"
          >
-            <PropertyCard :property="nearbyProperty" :show-media-icon="false" />
+            <div v-if="!nearbyProperties.length" class="w-full">
+               <p>{{ $t("property.details.nearby.noProperties") }}</p>
+            </div>
+            <div
+               v-for="nearbyProperty in nearbyProperties"
+               :key="nearbyProperty.id"
+            >
+               <PropertyCard
+                  :property="nearbyProperty"
+                  :show-media-icon="false"
+               />
+            </div>
          </div>
       </div>
    </div>

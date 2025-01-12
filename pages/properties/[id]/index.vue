@@ -213,14 +213,17 @@
                <ClientOnly fallback-tag="span">
                   <DetailsMap :property="property" />
                </ClientOnly>
-               <DetailsNearby :property="property" />
-               <DetailsBottomBar
-                  class="block xl:hidden"
-                  :property="property"
-                  @show-modal="handleShowModal"
-               />
             </div>
          </div>
+
+         <DetailsBottomBar
+            class="block xl:hidden"
+            :property="property"
+            @show-modal="handleShowModal"
+         />
+      </div>
+      <div class="mx-auto mt-8 px-4 md:container md:px-0 xl:w-10/12 xl:px-16">
+         <DetailsNearby :property="property" />
       </div>
    </section>
 </template>
