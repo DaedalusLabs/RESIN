@@ -70,17 +70,16 @@
       <FlowbiteImageDrawer
          :show-drawer="showDrawer"
          :image-urls="property?.images"
-         :thumbnails="property?.thumbnails"
          @close="showDrawer = false"
       />
 
       <div class="relative xl:hidden">
          <NuxtImg
             v-if="property.images?.length"
-            :src="property.thumbnails?.[0]?.[2]?.url || property.images[0]"
+            :src="property.images[0]?.files[2]?.url"
             :srcset="
-               property.thumbnails?.[0]
-                  ?.map((thumb) => `${thumb.url} ${thumb.width}w`)
+               property.images[0]?.files
+                  ?.map((file) => `${file.url} ${file.width}w`)
                   .join(', ')
             "
             sizes="(max-width: 1280px) 100vw, 1280px"
@@ -111,12 +110,10 @@
             <div>
                <NuxtImg
                   v-if="property.images?.length"
-                  :src="
-                     property.thumbnails?.[0]?.[2]?.url || property.images[0]
-                  "
+                  :src="property.images[0]?.files[2]?.url"
                   :srcset="
-                     property.thumbnails?.[0]
-                        ?.map((thumb) => `${thumb.url} ${thumb.width}w`)
+                     property.images[0]?.files
+                        ?.map((file) => `${file.url} ${file.width}w`)
                         .join(', ')
                   "
                   sizes="(max-width: 1280px) 40vw, 512px"

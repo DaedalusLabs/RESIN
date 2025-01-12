@@ -8,8 +8,8 @@
       <NuxtImg
          :src="smallThumbnailUrl"
          :srcset="
-            property.thumbnails?.[0]
-               ?.map((thumb) => `${thumb.url} ${thumb.width}w`)
+            property.images[0]?.files
+               ?.map((file) => `${file.url} ${file.width}w`)
                .join(', ')
          "
          sizes="64px"
@@ -75,11 +75,11 @@ const props = defineProps({
 });
 
 const smallThumbnailUrl = computed(() => {
-   if (!props.property?.thumbnails?.[0]) return props.property?.images[0];
-   const smallThumbnail = props.property.thumbnails[0].find(
-      (thumb) => thumb.width === 375,
+   if (!props.property?.images?.[0]?.files) return null;
+   const smallThumbnail = props.property.images[0].files.find(
+      (file) => file.width === 375,
    );
-   return smallThumbnail?.url || props.property?.images[0];
+   return smallThumbnail?.url;
 });
 
 const swipeHandler = () => {

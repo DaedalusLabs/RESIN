@@ -2,8 +2,8 @@
    <div v-if="property" class="overflow-hidden rounded-2xl bg-white shadow-lg">
       <div class="relative">
          <FlowbiteCarousel
-            :items="property.thumbnails"
-            :blurhash="property.blurhash"
+            :items="property.images.map(img => img.files)"
+            :blurhash="property.images[0]?.blurhash"
             :class="[
                'z-0 w-full object-cover',
                compact ? 'h-32' : 'h-48 md:h-48',
@@ -151,7 +151,7 @@ const isFavorite = computed(() =>
 const emit = defineEmits(["open-gallery"]);
 
 const openGallery = () => {
-   emit("open-gallery", props.property.images, props.property.thumbnails);
+   emit("open-gallery", props.property.images);
 };
 
 const openDetails = () => {

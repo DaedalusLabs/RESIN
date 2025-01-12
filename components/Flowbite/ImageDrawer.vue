@@ -10,27 +10,23 @@ const props = defineProps({
       type: Array,
       required: true,
    },
-   thumbnails: {
-      type: Array,
-      default: () => [],
-   },
 });
 
 const getDefaultImage = (index) => {
-   const thumbnailSet = props.thumbnails[index];
-   if (!thumbnailSet) return props.imageUrls[index];
+   const imageSet = props.imageUrls[index]?.files;
+   if (!imageSet) return null;
 
-   // Find the largest thumbnail for default display
-   const largeThumbnail = thumbnailSet.find((thumb) => thumb.width === 1280);
-   return largeThumbnail?.url || thumbnailSet[0]?.url || props.imageUrls[index];
+   // Find the largest image for default display
+   const largeImage = imageSet.find((file) => file.width === 1280);
+   return largeImage?.url || imageSet[0]?.url;
 };
 
 const getSrcSet = (index) => {
-   const thumbnailSet = props.thumbnails[index];
-   if (!thumbnailSet) return "";
+   const imageSet = props.imageUrls[index]?.files;
+   if (!imageSet) return "";
 
-   return thumbnailSet
-      .map((thumb) => `${thumb.url} ${thumb.width}w`)
+   return imageSet
+      .map((file) => `${file.url} ${file.width}w`)
       .join(", ");
 };
 

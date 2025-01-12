@@ -5,8 +5,8 @@
    >
       <div class="relative">
          <FlowbiteCarousel
-            :items="properties[currentIndex].thumbnails"
-            :blurhash="properties[currentIndex].blurhash"
+            :items="properties[currentIndex].images.map(img => img.files)"
+            :blurhash="properties[currentIndex].images[0]?.blurhash"
             class="z-0 h-48 w-full object-cover"
          />
 
