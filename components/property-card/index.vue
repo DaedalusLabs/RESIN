@@ -2,7 +2,11 @@
    <div v-if="property" class="overflow-hidden rounded-2xl bg-white shadow-lg">
       <div class="relative">
          <FlowbiteCarousel
-            :items="property.images.map((img) => img.files)"
+            :items="
+               property.images.map((img) =>
+                  propertyImageUtils.getImagesUpToWidth(img.files, 1280),
+               )
+            "
             :blurhash="property.images[0]?.blurhash"
             :class="[
                'z-0 w-full object-cover',
@@ -132,6 +136,7 @@ import {
 import { usePropertiesStore } from "~/stores/properties";
 import { useNostrStore } from "~/stores/nostr";
 import type { Property } from "~/types/property";
+import { propertyImageUtils } from "~/types/property";
 
 const props = defineProps({
    property: {

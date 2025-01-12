@@ -47,6 +47,19 @@ export const propertyImageUtils = {
    },
 
    /**
+    * Get all images from a property up to a certain width
+    * @param images
+    * @returns
+    */
+   getImagesUpToWidth: (
+      images: Property["images"][number]["files"],
+      width: number,
+   ) => {
+      if (!images?.length) return [];
+      return images.filter((image) => image.width <= width);
+   },
+
+   /**
     * Get the largest image from a property's image array by width
     */
    getLargestImage: (images: Property["images"][number]["files"]) => {

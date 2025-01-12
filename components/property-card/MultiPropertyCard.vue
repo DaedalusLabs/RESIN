@@ -5,7 +5,11 @@
    >
       <div class="relative">
          <FlowbiteCarousel
-            :items="properties[currentIndex].images.map((img) => img.files)"
+            :items="
+               properties[currentIndex].images.map((img) =>
+                  propertyImageUtils.getImagesUpToWidth(img.files, 1920),
+               )
+            "
             :blurhash="properties[currentIndex].images[0]?.blurhash"
             class="z-0 h-48 w-full object-cover"
          />
@@ -138,7 +142,7 @@ import {
 } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
 import { useNostrStore } from "~/stores/nostr";
-
+import { propertyImageUtils } from "~/types/property";
 const propertiesStore = usePropertiesStore();
 const nostrStore = useNostrStore();
 const currentIndex = ref(0);

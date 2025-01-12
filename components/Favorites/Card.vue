@@ -8,7 +8,8 @@
       <NuxtImg
          :src="smallThumbnailUrl"
          :srcset="
-            property.images[0]?.files
+            propertyImageUtils
+               .getImagesUpToWidth(property.images[0]?.files, 100)
                ?.map((file) => `${file.url} ${file.width}w`)
                .join(', ')
          "
@@ -59,6 +60,8 @@
 </template>
 
 <script setup>
+import { propertyImageUtils } from "~/types/property";
+
 const isRemoving = ref(false);
 
 const emit = defineEmits(["remove"]);
