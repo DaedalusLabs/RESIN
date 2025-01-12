@@ -36,7 +36,7 @@
                         v-for="property in items"
                         :key="property.id"
                         :property="property"
-                        @open-gallery="openGallery(property.images)"
+                        @open-gallery="openGallery(property.thumbnails)"
                      />
                   </template>
                </ais-infinite-hits>
@@ -47,6 +47,7 @@
             <FlowbiteImageDrawer
                :show-drawer="showDrawer"
                :image-urls="currentPropertyImages"
+               :thumbnails="currentPropertyImages"
                @close="showDrawer = false"
             />
          </div>

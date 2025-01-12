@@ -159,7 +159,7 @@ const isFavorite = computed(() =>
 const emit = defineEmits(["open-gallery"]);
 
 const openGallery = () => {
-   emit("open-gallery", props.imageUrls);
+   emit("open-gallery", props.property.images, props.property.thumbnails);
 };
 
 const openDetails = () => {

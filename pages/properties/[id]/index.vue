@@ -70,6 +70,7 @@
       <FlowbiteImageDrawer
          :show-drawer="showDrawer"
          :image-urls="property?.images"
+         :thumbnails="property?.thumbnails"
          @close="showDrawer = false"
       />
 

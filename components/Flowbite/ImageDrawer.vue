@@ -1,7 +1,7 @@
 <script setup>
 import { PhX } from "@phosphor-icons/vue";
 
-defineProps({
+const props =defineProps({
    showDrawer: {
       type: Boolean,
       default: false,
@@ -10,7 +10,27 @@ defineProps({
       type: Array,
       required: true,
    },
+   thumbnails: {
+      type: Array,
+      default: () => [],
+   }
 });
+
+const getDefaultImage = (index) => {
+   const thumbnailSet = props.thumbnails[index];
+   if (!thumbnailSet) return props.imageUrls[index];
+   
+   // Find the largest thumbnail for default display
+   const largeThumbnail = thumbnailSet.find(thumb => thumb.width === 1280);
+   return largeThumbnail?.url || thumbnailSet[0]?.url || props.imageUrls[index];
+};
+
+const getSrcSet = (index) => {
+   const thumbnailSet = props.thumbnails[index];
+   if (!thumbnailSet) return '';
+   
+   return thumbnailSet.map(thumb => `${thumb.url} ${thumb.width}w`).join(', ');
+};
 
 const emit = defineEmits(["close"]);
 </script>
@@ -53,7 +73,9 @@ const emit = defineEmits(["close"]);
                <NuxtImg
                   v-for="(imageUrl, index) in imageUrls"
                   :key="index"
-                  :src="imageUrl"
+                  :src="getDefaultImage(index)"
+                  :srcset="getSrcSet(index)"
+                  :sizes="'(max-width: 1024px) 100vw, 50vw'"
                   :class="{
                      'col-span-2':
                         imageUrls.length % 2 !== 0 &&
