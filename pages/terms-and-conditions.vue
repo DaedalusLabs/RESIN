@@ -109,6 +109,10 @@ const goBack = () => {
    router.back();
 };
 
+useHead({
+   title: t("termsAndConditions.title"),
+});
+
 definePageMeta({
    layout: "white",
 });
