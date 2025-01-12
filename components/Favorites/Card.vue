@@ -7,6 +7,8 @@
    >
       <NuxtImg
          :src="smallThumbnailUrl"
+         :srcset="property.thumbnails?.[0]?.map(thumb => `${thumb.url} ${thumb.width}w`).join(', ')"
+         sizes="64px"
          alt="Favorite image"
          class="mr-4 h-16 w-16 rounded-md object-cover object-center"
       />

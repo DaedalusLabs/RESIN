@@ -13,7 +13,7 @@ onMounted(() => {
             <NuxtImg
                v-if="isDesktop"
                class="h-full w-full object-cover"
-               src="/images/introduction-desktop.webp"
+               src="/images/introduction-d.webp"
                alt="background"
                placeholder
                loading="lazy"

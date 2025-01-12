@@ -2,7 +2,7 @@
    <div v-if="property" class="overflow-hidden rounded-2xl bg-white shadow-lg">
       <div class="relative">
          <FlowbiteCarousel
-            :items="thumbnailUrls"
+            :items="property.thumbnails"
             :blurhash="property.blurhash"
             :class="[
                'z-0 w-full object-cover',
@@ -129,9 +129,9 @@ const toggleFavorite = () => {
 };
 
 const thumbnailUrls = computed(() => {
-   if (!props.property.thumbnails) return [];
+   if (!props.property.thumbnails) return props.property.images;
    return props.property.thumbnails.map(thumbnailSet => {
-      // Find the thumbnail with width 600 in each set
+      // Find the thumbnail with width 600 for default display
       const mediumThumbnail = thumbnailSet.find(thumb => thumb.width === 600);
       return mediumThumbnail ? mediumThumbnail.url : thumbnailSet[0].url;
    });

@@ -76,7 +76,9 @@
       <div class="relative xl:hidden">
          <NuxtImg
             v-if="property.images?.length"
-            :src="property.images[0]"
+            :src="property.thumbnails?.[0]?.[2]?.url || property.images[0]"
+            :srcset="property.thumbnails?.[0]?.map(thumb => `${thumb.url} ${thumb.width}w`).join(', ')"
+            sizes="(max-width: 1280px) 100vw, 1280px"
             alt="Property Image"
             class="h-64 w-full object-cover"
          />
@@ -104,7 +106,9 @@
             <div>
                <NuxtImg
                   v-if="property.images?.length"
-                  :src="property.images[0]"
+                  :src="property.thumbnails?.[0]?.[2]?.url || property.images[0]"
+                  :srcset="property.thumbnails?.[0]?.map(thumb => `${thumb.url} ${thumb.width}w`).join(', ')"
+                  sizes="(max-width: 1280px) 40vw, 512px"
                   alt="Property Image"
                   class="h-96 w-full object-cover"
                />
