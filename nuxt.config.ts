@@ -34,6 +34,7 @@ export default defineNuxtConfig({
       "pinia-plugin-persistedstate/nuxt",
       "@nuxt/test-utils",
       "@nuxtjs/sitemap",
+      "@nuxtjs/robots",
    ],
 
    i18n: {
@@ -198,10 +199,6 @@ export default defineNuxtConfig({
             maxAge: 0, // Disable caching for service worker
          },
       ],
-      routeRules: {
-         "/robots.txt": { static: true },
-         "/sitemap.xml": { static: true },
-      },
    },
    routeRules: {
       "/payment/**": { robots: false },
@@ -227,5 +224,14 @@ export default defineNuxtConfig({
          return urls;
       },
       sources: [`${process.env.BACKEND_ENDPOINT}/listings/urls`],
+   },
+   robots: {
+      groups: [
+         {
+            userAgent: "*",
+            allow: "/",
+         },
+      ],
+      sitemap: "/sitemap.xml",
    },
 });
