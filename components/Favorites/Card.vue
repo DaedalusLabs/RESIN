@@ -100,8 +100,11 @@ const handleRemove = () => {
 const openDetails = () => {
    const localeRoute = useLocaleRoute();
    const route = localeRoute({
-      name: "properties-id",
-      params: { id: props.property.id.toString() },
+      name: "properties-id-slug",
+      params: {
+         id: props.property.id.toString(),
+         slug: props.property.slug || props.property.id,
+      },
    });
    if (route) {
       return navigateTo(route.fullPath);

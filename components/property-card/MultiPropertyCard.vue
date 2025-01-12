@@ -180,8 +180,13 @@ const previousProperty = () => {
 const openDetails = () => {
    const localeRoute = useLocaleRoute();
    const route = localeRoute({
-      name: "properties-id",
-      params: { id: props.properties[currentIndex.value].id.toString() },
+      name: "properties-id-slug",
+      params: {
+         id: props.properties[currentIndex.value].id.toString(),
+         slug:
+            props.properties[currentIndex.value].slug ||
+            props.properties[currentIndex.value].id,
+      },
    });
    if (route) {
       return navigateTo(route.fullPath);

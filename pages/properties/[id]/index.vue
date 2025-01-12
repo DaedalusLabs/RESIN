@@ -267,9 +267,6 @@ onMounted(async () => {
          return;
       }
 
-      console.log("isFavorite", propertiesStore.isFavorite(foundProperty.id));
-      isFavorite.value = propertiesStore.isFavorite(foundProperty.id);
-
       property.value = foundProperty;
 
       if (typeof property.value === "string") {

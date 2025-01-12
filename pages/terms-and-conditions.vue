@@ -53,80 +53,67 @@
    </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { PhCaretLeft, PhCaretDown } from "@phosphor-icons/vue";
 import SafeHtml from "~/components/SafeHtml.vue";
 
+interface Section {
+   title: string;
+   content: string;
+}
+
 const { t } = useI18n();
+const router = useRouter();
 
-const openSections = ref(new Array(13).fill(true));
+const openSections = ref<boolean[]>([]);
+const sections = ref<Section[]>([]);
 
-const sections = [
-   {
-      title: t("termsAndConditions.sections.acceptanceOfTerms.title"),
-      content: t("termsAndConditions.sections.acceptanceOfTerms.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.descriptionOfService.title"),
-      content: t("termsAndConditions.sections.descriptionOfService.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.userEligibility.title"),
-      content: t("termsAndConditions.sections.userEligibility.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.userAccounts.title"),
-      content: t("termsAndConditions.sections.userAccounts.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.userConduct.title"),
-      content: t("termsAndConditions.sections.userConduct.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.content.title"),
-      content: t("termsAndConditions.sections.content.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.paymentAndFees.title"),
-      content: t("termsAndConditions.sections.paymentAndFees.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.transactions.title"),
-      content: t("termsAndConditions.sections.transactions.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.disclaimers.title"),
-      content: t("termsAndConditions.sections.disclaimers.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.termination.title"),
-      content: t("termsAndConditions.sections.termination.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.governingLaw.title"),
-      content: t("termsAndConditions.sections.governingLaw.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.changes.title"),
-      content: t("termsAndConditions.sections.changes.content"),
-   },
-   {
-      title: t("termsAndConditions.sections.contactInfo.title"),
-      content: t("termsAndConditions.sections.contactInfo.content"),
-   },
-];
+const getSectionContent = (key: string): Section => {
+   try {
+      return {
+         title: t(`termsAndConditions.sections.${key}.title`),
+         content: t(`termsAndConditions.sections.${key}.content`),
+      };
+   } catch (error) {
+      console.error(`Error loading translation for ${key}:`, error);
+      return {
+         title: key,
+         content: "Content not available",
+      };
+   }
+};
 
-const toggleSection = (index) => {
+onMounted(() => {
+   // Define section keys
+   const sectionKeys = [
+      "acceptanceOfTerms",
+      "descriptionOfService",
+      "userEligibility",
+      "userAccounts",
+      "userConduct",
+      "content",
+      "paymentAndFees",
+      "transactions",
+      "disclaimers",
+      "termination",
+      "governingLaw",
+      "changes",
+      "contactInfo",
+   ];
+
+   // Initialize sections safely
+   sections.value = sectionKeys.map((key) => getSectionContent(key));
+
+   // Initialize openSections array based on actual sections length
+   openSections.value = new Array(sections.value.length).fill(true);
+});
+
+const toggleSection = (index: number) => {
    openSections.value[index] = !openSections.value[index];
 };
 
 const goBack = () => {
-   if (window.history.length > 1) {
-      window.history.back();
-   } else {
-      const { localePath } = useNuxtApp();
-      window.location.href = localePath("home");
-   }
+   router.back();
 };
 
 definePageMeta({
