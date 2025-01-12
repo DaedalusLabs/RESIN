@@ -7,20 +7,28 @@
       >
          <NuxtLinkLocale
             to="home"
+            data-testid="nav-home"
+            :title="$t('navigation.home')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isHomeView }"
          >
             <PhHouseSimple :size="24" weight="regular" class="mb-1" />
+            <span class="sr-only">{{ $t('navigation.home') }}</span>
          </NuxtLinkLocale>
          <NuxtLinkLocale
             to="properties"
+            data-testid="nav-properties"
+            :title="$t('navigation.properties')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isPropertiesView }"
          >
             <PhMagnifyingGlass :size="24" weight="regular" class="mb-1" />
+            <span class="sr-only">{{ $t('navigation.properties') }}</span>
          </NuxtLinkLocale>
          <NuxtLinkLocale
             to="my-resin"
+            data-testid="nav-resin"
+            :title="$t('navigation.myResin')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isResinView }"
          >
@@ -31,9 +39,12 @@
                class="mb-1 hover:brightness-50 active:brightness-100"
                :class="{ 'hover:brightness-100': isResinView }"
             />
+            <span class="sr-only">{{ $t('navigation.myResin') }}</span>
          </NuxtLinkLocale>
          <NuxtLinkLocale
             to="favorites"
+            data-testid="nav-favorites"
+            :title="$t('navigation.favorites')"
             class="flex flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isFavoritesView }"
          >
@@ -42,14 +53,18 @@
                :weight="hasFavorites ? 'fill' : 'regular'"
                class="mb-1"
             />
+            <span class="sr-only">{{ $t('navigation.favorites') }}</span>
          </NuxtLinkLocale>
          <NuxtLinkLocale
             to="profile"
+            data-testid="nav-profile"
+            :title="$t('navigation.profile')"
             class="relative flex cursor-pointer flex-col items-center text-pirate-500 hover:text-pirate-900"
             :class="{ 'text-resin-500 hover:text-resin-500': isProfileView }"
             @click="handleProfileClick"
          >
             <PhUser :size="24" weight="regular" class="mb-1" />
+            <span class="sr-only">{{ $t('navigation.profile') }}</span>
             <span
                v-if="hasUnreadMessages"
                class="absolute right-0 top-0 h-2 w-2 rounded-full bg-resin-500 text-sm font-medium"
