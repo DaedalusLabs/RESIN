@@ -184,7 +184,11 @@ export default defineNuxtConfig({
             baseURL: "/",
             dir: "public",
             maxAge: 0, // Disable caching for service worker
-         },
+         }
       ],
+      routeRules: {
+         '/robots.txt': { static: true },
+         '/sitemap.xml': { static: true }
+      }
    },
 });
