@@ -96,7 +96,8 @@
    "messages": {
       "title": "Berichten",
       "typeMessage": "Schrijf een bericht...",
-      "send": "Bericht verzenden"
+      "send": "Bericht verzenden",
+      "scrollToLatest": "Scroll naar laatste"
    },
    "property": {
       "notFound": {

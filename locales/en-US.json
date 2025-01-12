@@ -95,7 +95,8 @@
    "messages": {
       "title": "Messages",
       "typeMessage": "Type a message...",
-      "send": "Send message"
+      "send": "Send message",
+      "scrollToLatest": "Scroll to latest"
    },
    "property": {
       "notFound": {

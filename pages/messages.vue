@@ -15,13 +15,24 @@
       </div>
 
       <!-- Messages -->
-      <div ref="chatContainer" class="flex-1 overflow-y-auto bg-gray-50 p-4">
+      <div ref="chatContainer" class="flex-1 overflow-y-auto bg-gray-50 p-4" @scroll="handleScroll">
+         <!-- Scroll to bottom overlay -->
+         <div v-if="showScrollButton" class="sticky top-0 z-10 flex justify-center">
+            <button 
+               @click="scrollToBottom"
+               class="flex items-center gap-2 rounded-full bg-pirate-500 px-4 py-2 text-sm text-white shadow-lg transition hover:bg-pirate-600"
+            >
+               <PhArrowDown :size="16" />
+               {{ $t("messages.scrollToLatest") }}
+            </button>
+         </div>
+
          <FlowbiteChatBubble
             v-for="msg in messages"
             :key="msg.id"
             :message="msg.content"
             :name="formatDisplayName(msg.userProfile?.name, msg.pubkey)"
-            :time="new Date(msg.created_at * 1000).toLocaleString()"
+            :time="new Date(msg.created_at * 1000).toLocaleString(i18n.locale)"
             :profile-image="
                msg.userProfile?.image ||
                '/images/logos/Resin_Hexagon_Orange_Fill.svg'
@@ -64,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { PhArrowLeft } from "@phosphor-icons/vue";
+import { PhArrowLeft, PhArrowDown } from "@phosphor-icons/vue";
 import { useChatStore } from "~/stores/chat";
 import { useNostrStore } from "~/stores/nostr";
 import type { ChatMessage } from "~/stores/chat";
@@ -75,6 +86,7 @@ interface MessageWithProperty extends ChatMessage {
 }
 
 const { t } = useI18n();
+const i18n = useI18n();
 
 useHead({
    title: t("messages.title"),
@@ -91,6 +103,7 @@ const nostrStore = useNostrStore();
 const runtimeConfig = useRuntimeConfig();
 const chatContainer = ref<HTMLElement | null>(null);
 const isSending = ref(false);
+const showScrollButton = ref(false);
 
 const messages = computed(() => {
    const whitelist = runtimeConfig.public.PUBKEY_WHITELIST || [];
@@ -107,10 +120,24 @@ const messages = computed(() => {
       .sort((a, b) => a.created_at - b.created_at);
 });
 
+function handleScroll(event: Event) {
+   const container = event.target as HTMLElement;
+   const { scrollTop, scrollHeight, clientHeight } = container;
+   // Show button if we've scrolled up more than 200px from bottom
+   showScrollButton.value = scrollHeight - scrollTop - clientHeight > 200;
+}
+
 function scrollToBottom() {
    nextTick(() => {
       if (chatContainer.value) {
-         chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+         // Force layout recalculation to ensure all content is rendered
+         void chatContainer.value.offsetHeight;
+         // Use scrollHeight to get the full height including overflow
+         const scrollHeight = chatContainer.value.scrollHeight;
+         chatContainer.value.scrollTo({
+            top: scrollHeight,
+            behavior: 'smooth'
+         });
       }
    });
 }
