@@ -76,6 +76,7 @@ const emit = defineEmits(["close"]);
                   :src="getDefaultImage(index)"
                   :srcset="getSrcSet(index)"
                   :sizes="'(max-width: 1024px) 100vw, 50vw'"
+                  :alt="`Property image ${index}`"
                   :class="{
                      'col-span-2':
                         imageUrls.length % 2 !== 0 &&

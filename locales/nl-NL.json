@@ -1,398 +1,436 @@
 {
-   "rentToOwn": "Huur tot aankoop",
-   "withoutALoan": "zonder een lening",
-   "introductionTitle": "Koop een huis zonder de bank",
-   "introductionButton": "Aan de slag",
-   "signIn": "Inloggen",
-   "checkCountryAvailability": "Controleer landbeschikbaarheid",
-   "propertyType": "Wat voor soort woning zoek je?",
-   "propertyTypes": {
-      "shortToMediumTermStay": {
-         "title": "Korte tot middellange termijn verblijf",
-         "description": "Ideaal voor digitale nomaden of expats die tijdelijke huisvesting nodig hebben."
+  "rentToOwn": "Huur tot aankoop",
+  "withoutALoan": "zonder een lening",
+  "introductionTitle": "Koop een huis zonder de bank",
+  "introductionButton": "Aan de slag",
+  "signIn": "Inloggen",
+  "checkCountryAvailability": "Controleer landbeschikbaarheid",
+  "propertyType": "Wat voor soort woning zoek je?",
+  "propertyTypes": {
+    "shortToMediumTermStay": {
+      "title": "Korte tot middellange termijn verblijf",
+      "description": "Ideaal voor digitale nomaden of expats die tijdelijke huisvesting nodig hebben."
+    },
+    "longerTermResidentialHouse": {
+      "title": "Een langer termijn woonhuis",
+      "description": "Geschikt voor gezinnen of mensen die op zoek zijn naar een permanent huis."
+    },
+    "commercialProperty": {
+      "title": "Commercieel vastgoed",
+      "description": "Perfect voor het kopen van kantoorgebouwen of winkelruimtes voor bedrijven."
+    }
+  },
+  "chooseLocation": "Kies locatie",
+  "skip": "Overslaan",
+  "fetching": "Nostr ophalen...",
+  "details": "Details",
+  "continueButton": "Volgende",
+  "navigation": {
+    "home": "Home",
+    "properties": "Objecten",
+    "myResin": "Mijn Resin",
+    "favorites": "Favorieten",
+    "profile": "Profiel",
+    "map": "Kaart",
+    "messages": "Berichten",
+    "settings": "Instellingen"
+  },
+  "menu": {
+    "account": "Account",
+    "profile": "Profiel",
+    "messages": "Berichten",
+    "messagesWithCount": "Berichten ({count})",
+    "nostrKeys": "Nostr Sleutels",
+    "settings": "Instellingen",
+    "help": "Help",
+    "logout": "Uitloggen",
+    "termsAndConditions": "Algemene voorwaarden"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "currency": {
+      "label": "Valuta",
+      "usd": "USD - US Dollar",
+      "srd": "SRD - Surinamese Dollar"
+    },
+    "language": {
+      "label": "Taal",
+      "en": "Engels",
+      "en-US": "Engels",
+      "nl": "Nederlands",
+      "nl-NL": "Nederlands"
+    },
+    "profile": {
+      "title": "Profiel",
+      "personalInfo": "Persoonlijke informatie",
+      "displayName": {
+        "label": "Weergavenaam",
+        "placeholder": "Voer je naam in"
       },
-      "longerTermResidentialHouse": {
-         "title": "Een langer termijn woonhuis",
-         "description": "Geschikt voor gezinnen of mensen die op zoek zijn naar een permanent huis."
+      "about": {
+        "label": "Over mij",
+        "placeholder": "Vertel ons iets over jezelf"
       },
-      "commercialProperty": {
-         "title": "Commercieel vastgoed",
-         "description": "Perfect voor het kopen van kantoorgebouwen of winkelruimtes voor bedrijven."
-      }
-   },
-   "chooseLocation": "Kies locatie",
-   "skip": "Overslaan",
-   "fetching": "Nostr ophalen...",
-   "details": "Details",
-   "continueButton": "Volgende",
-   "navigation": {
-      "home": "Home",
-      "properties": "Objecten",
-      "myResin": "Mijn Resin",
-      "favorites": "Favorieten",
-      "profile": "Profiel",
-      "map": "Kaart",
-      "messages": "Berichten",
-      "settings": "Instellingen"
-   },
-   "menu": {
-      "account": "Account",
-      "profile": "Profiel",
-      "messages": "Berichten",
-      "messagesWithCount": "Berichten ({count})",
-      "nostrKeys": "Nostr Sleutels",
-      "settings": "Instellingen",
-      "help": "Help",
-      "logout": "Uitloggen",
-      "termsAndConditions": "Algemene voorwaarden"
-   },
-   "settings": {
-      "title": "Instellingen",
-      "currency": {
-         "label": "Valuta",
-         "usd": "USD - US Dollar",
-         "srd": "SRD - Surinamese Dollar"
+      "picture": {
+        "alt": "Profiel foto",
+        "upload": "Upload profiel foto"
       },
-      "language": {
-         "label": "Taal",
-         "en": "Engels",
-         "en-US": "Engels",
-         "nl": "Nederlands",
-         "nl-NL": "Nederlands"
-      },
-      "profile": {
-         "title": "Profiel",
-         "personalInfo": "Persoonlijke informatie",
-         "displayName": {
-            "label": "Weergavenaam",
-            "placeholder": "Voer je naam in"
-         },
-         "about": {
-            "label": "Over mij",
-            "placeholder": "Vertel ons iets over jezelf"
-         },
-         "picture": {
-            "alt": "Profiel foto",
-            "upload": "Upload profiel foto"
-         },
-         "saveChanges": "Opslaan",
-         "saved": "Profiel opgeslagen"
-      },
-      "nostrKeys": {
-         "title": "NOSTR Keys",
-         "npub": "npub",
-         "publicKey": "Openbare sleutel (Hex)",
-         "recoveryPhrase": "Herstelwoord",
-         "privateKey": "Geheime sleutel",
-         "show": "Tonen",
-         "hide": "Verbergen",
-         "privateKeyNotAvailable": "Uw geheime sleutel kan niet worden getoond door RESIN, omdat het wordt beheerd door een extensie.",
-         "copied": "Gekopieerd"
-      },
-      "languageDescription": "Kies je voorkeurstaal",
-      "pushNotifications": "Push Meldingen",
-      "pushNotificationsDescription": "Ontvang meldingen wanneer je nieuwe berichten krijgt"
-   },
-   "messages": {
-      "title": "Berichten",
-      "typeMessage": "Schrijf een bericht...",
-      "send": "Bericht verzenden"
-   },
-   "property": {
-      "notFound": {
-         "title": "Object niet gevonden",
-         "message": "Het object dat u zoekt kon niet worden gevonden. Controleer de URL of ga terug naar de lijst met objecten.",
-         "backToProperties": "Terug naar objecten →"
-      },
-      "types": {
-         "buyNow": "Koop nu",
-         "rentToOwn": "Huur tot aankoop"
+      "saveChanges": "Opslaan",
+      "saved": "Profiel opgeslagen"
+    },
+    "nostrKeys": {
+      "title": "NOSTR Keys",
+      "npub": "npub",
+      "publicKey": "Openbare sleutel (Hex)",
+      "recoveryPhrase": "Herstelwoord",
+      "privateKey": "Geheime sleutel",
+      "show": "Tonen",
+      "hide": "Verbergen",
+      "privateKeyNotAvailable": "Uw geheime sleutel kan niet worden getoond door RESIN, omdat het wordt beheerd door een extensie.",
+      "copied": "Gekopieerd"
+    },
+    "languageDescription": "Kies je voorkeurstaal",
+    "pushNotifications": "Push Meldingen",
+    "pushNotificationsDescription": "Ontvang meldingen wanneer je nieuwe berichten krijgt"
+  },
+  "messages": {
+    "title": "Berichten",
+    "typeMessage": "Schrijf een bericht...",
+    "send": "Bericht verzenden"
+  },
+  "property": {
+    "notFound": {
+      "title": "Object niet gevonden",
+      "message": "Het object dat u zoekt kon niet worden gevonden. Controleer de URL of ga terug naar de lijst met objecten.",
+      "backToProperties": "Terug naar objecten →"
+    },
+    "types": {
+      "buyNow": "Koop nu",
+      "rentToOwn": "Huur tot aankoop"
+    },
+    "actions": {
+      "contactAgent": "Contact agent",
+      "rentProperty": "Huur dit object",
+      "rentToOwn": "Huur tot aankoop",
+      "share": "Deel object",
+      "favorite": "Toevoegen aan favorieten"
+    },
+    "details": {
+      "addressNotAvailable": "Adres niet beschikbaar",
+      "requestSuccess": "Uw informatie is succesvol verzonden.",
+      "summary": {
+        "title": "Samenvatting",
+        "readMore": "Lees volledige beschrijving",
+        "collapse": "Samenvatting sluiten"
       },
       "actions": {
-         "contactAgent": "Contact agent",
-         "rentProperty": "Huur dit object",
-         "rentToOwn": "Huur tot aankoop",
-         "share": "Deel object",
-         "favorite": "Toevoegen aan favorieten"
+        "contactAgent": "Contact opnemen met makelaar",
+        "requestTour": "Bezichtiging aanvragen",
+        "rentProperty": "Dit object huren",
+        "rentToOwn": "Huur tot aankoop"
       },
-      "details": {
-         "addressNotAvailable": "Adres niet beschikbaar",
-         "requestSuccess": "Uw informatie is succesvol verzonden.",
-         "summary": {
-            "title": "Samenvatting",
-            "readMore": "Lees volledige beschrijving",
-            "collapse": "Samenvatting sluiten"
-         },
-         "actions": {
-            "contactAgent": "Contact opnemen met makelaar",
-            "requestTour": "Bezichtiging aanvragen",
-            "rentProperty": "Dit object huren",
-            "rentToOwn": "Huur tot aankoop"
-         },
-         "map": {
-            "title": "Locatie",
-            "viewOnMap": "Bekijk op kaart"
-         },
-         "nearby": {
-            "title": "Nabijgelegen objecten",
-            "noProperties": "Geen nabijgelegen objecten gevonden"
-         },
-         "prices": {
-            "rentPrice": "Huurprijs",
-            "propertyPrice": "Objectprijs",
-            "perMonth": "per maand"
-         },
-         "size": {
-            "bed": "slaapkamer",
-            "beds": "slaapkamers",
-            "squareMeters": "m²"
-         },
-         "additional": {
-            "title": "Extra Details",
-            "yes": "Ja",
-            "no": "Nee"
-         },
-         "keyFeatures": {
-            "title": "Belangrijke kenmerken"
-         }
+      "map": {
+        "title": "Locatie",
+        "viewOnMap": "Bekijk op kaart"
       },
-      "overview": {
-         "noProperties": "Geen objecten te tonen",
-         "filters": {
-            "toggle": "Filter weergeven",
-            "apply": "Filter toepassen",
-            "clear": "Filter wissen",
-            "price": {
-               "label": "Prijs",
-               "min": "Min prijs",
-               "max": "Max prijs"
-            },
-            "size": {
-               "label": "Grootte",
-               "min": "Min grootte",
-               "max": "Max grootte"
-            },
-            "bedrooms": {
-               "label": "Slaapkamers",
-               "min": "Min slaapkamers",
-               "max": "Max slaapkamers"
-            },
-            "bathrooms": {
-               "label": "Badkamers",
-               "min": "Min badkamers",
-               "max": "Max badkamers"
-            },
-            "propertyType": {
-               "label": "Type woning",
-               "house": "Woonhuis",
-               "apartment": "Appartement",
-               "commercial": "Commercieel vastgoed"
-            }
-         },
-         "sort": {
-            "label": "Sorteer op",
-            "newest": "Nieuwste eerst",
-            "priceAsc": "Prijs (laag naar hoog)",
-            "priceDesc": "Prijs (hoog naar laag)",
-            "sizeAsc": "Grootte (klein naar groot)",
-            "sizeDesc": "Grootte (groot naar klein)"
-         }
+      "nearby": {
+        "title": "Nabijgelegen objecten",
+        "noProperties": "Geen nabijgelegen objecten gevonden"
       },
-      "card": {
-         "perMonth": "per maand",
-         "beds": "Slaapkamers",
-         "size": {
-            "squareMeters": "m²"
-         }
+      "prices": {
+        "rentPrice": "Huurprijs",
+        "propertyPrice": "Objectprijs",
+        "perMonth": "per maand"
+      },
+      "size": {
+        "bed": "slaapkamer",
+        "beds": "slaapkamers",
+        "squareMeters": "m²"
+      },
+      "additional": {
+        "title": "Extra Details",
+        "yes": "Ja",
+        "no": "Nee"
+      },
+      "keyFeatures": {
+        "title": "Belangrijke kenmerken"
       }
-   },
-   "myResin": {
-      "title": "Mijn Resin",
-      "favorites": {
-         "title": "Favorieten",
-         "noProperties": "U heeft nog geen objecten in uw favorietenlijst."
-      }
-   },
-   "home": {
-      "recentSearches": {
-         "title": "Recent zoekopdrachten",
-         "noSearches": "Geen recente zoekopdrachten"
+    },
+    "overview": {
+      "noProperties": "Geen objecten te tonen",
+      "filters": {
+        "toggle": "Filter weergeven",
+        "apply": "Filter toepassen",
+        "clear": "Filter wissen",
+        "price": {
+          "label": "Prijs",
+          "min": "Min prijs",
+          "max": "Max prijs"
+        },
+        "size": {
+          "label": "Grootte",
+          "min": "Min grootte",
+          "max": "Max grootte"
+        },
+        "bedrooms": {
+          "label": "Slaapkamers",
+          "min": "Min slaapkamers",
+          "max": "Max slaapkamers"
+        },
+        "bathrooms": {
+          "label": "Badkamers",
+          "min": "Min badkamers",
+          "max": "Max badkamers"
+        },
+        "propertyType": {
+          "label": "Type woning",
+          "house": "Woonhuis",
+          "apartment": "Appartement",
+          "commercial": "Commercieel vastgoed"
+        }
       },
-      "recentlyViewed": {
-         "title": "Recent bekeken",
-         "noProperties": "Geen recent bekeken objecten"
-      },
-      "trendingAreas": {
-         "title": "Trending gebieden",
-         "noAreas": "Geen trending gebieden"
+      "sort": {
+        "label": "Sorteer op",
+        "newest": "Nieuwste eerst",
+        "priceAsc": "Prijs (laag naar hoog)",
+        "priceDesc": "Prijs (hoog naar laag)",
+        "sizeAsc": "Grootte (klein naar groot)",
+        "sizeDesc": "Grootte (groot naar klein)"
       }
-   },
-   "favorites": {
+    },
+    "card": {
+      "perMonth": "per maand",
+      "beds": "Slaapkamers",
+      "size": {
+        "squareMeters": "m²"
+      },
+      "countof": "Eigendom { aantal } van { totaal }"
+    }
+  },
+  "myResin": {
+    "title": "Mijn Resin",
+    "favorites": {
       "title": "Favorieten",
-      "noFavorites": "U heeft nog geen favorieten",
-      "browseListings": "Bekijk objecten",
-      "share": {
-         "title": "Resin",
-         "text": "Bekijk deze objecten op Resin"
-      }
-   },
-   "introduction": {
-      "login": {
-         "title": "Inloggen met NOSTR",
-         "description": "Kies een optie hieronder om toegang te krijgen tot je account.",
-         "recoveryPhrase": {
-            "button": "Gebruik herstelzin (12 woorden)",
-            "title": "Inloggen met herstelzin",
-            "wordPlaceholder": "Woord {number}",
-            "error": "Vul je herstelzin in",
-            "invalidPhrase": "Onjuiste herstelzin"
-         },
-         "extension": {
-            "useExtension": "Gebruik browser extensie",
-            "noExtension": "Geen extensie gevonden - meer info",
-            "noNip44": "Je Nostr Extensie ondersteunt NIP-44 niet"
-         }
+      "noProperties": "U heeft nog geen objecten in uw favorietenlijst."
+    }
+  },
+  "home": {
+    "recentSearches": {
+      "title": "Recent zoekopdrachten",
+      "noSearches": "Geen recente zoekopdrachten"
+    },
+    "recentlyViewed": {
+      "title": "Recent bekeken",
+      "noProperties": "Geen recent bekeken objecten"
+    },
+    "trendingAreas": {
+      "title": "Trending gebieden",
+      "noAreas": "Geen trending gebieden"
+    },
+    "title": "Thuis"
+  },
+  "favorites": {
+    "title": "Favorieten",
+    "noFavorites": "U heeft nog geen favorieten",
+    "browseListings": "Bekijk objecten",
+    "share": {
+      "title": "Resin",
+      "text": "Bekijk deze objecten op Resin"
+    }
+  },
+  "introduction": {
+    "login": {
+      "title": "Inloggen met NOSTR",
+      "description": "Kies een optie hieronder om toegang te krijgen tot je account.",
+      "recoveryPhrase": {
+        "button": "Gebruik herstelzin (12 woorden)",
+        "title": "Inloggen met herstelzin",
+        "wordPlaceholder": "Woord {number}",
+        "error": "Vul je herstelzin in",
+        "invalidPhrase": "Onjuiste herstelzin"
       },
-      "nsec": {
-         "title": "Inloggen met NOSTR privésleutel",
-         "placeholder": "Voer je nsec in",
-         "error": "Vul je Nsec sleutel in",
-         "invalidKey": "Ongeldige Nsec sleutel"
+      "extension": {
+        "useExtension": "Gebruik browser extensie",
+        "noExtension": "Geen extensie gevonden - meer info",
+        "noNip44": "Je Nostr Extensie ondersteunt NIP-44 niet"
       }
-   },
-   "nostr": {
-      "creating": "NOSTR sleutel aanmaken...",
-      "created": "NOSTR account aangemaakt!",
-      "addDetails": "Je kunt later je persoonlijke gegevens toevoegen als je wilt.",
-      "continue": "Doorgaan met RESIN",
-      "loading": {
-         "title": "Nostr Gegevens Laden",
-         "description": "Even geduld terwijl we je favorieten en berichten van Nostr herstellen..."
-      }
-   },
-   "help": {
-      "title": "Help",
-      "search": "Zoeken",
-      "categories": {
-         "all": "Alles",
-         "account": "Account",
-         "properties": "Objecten",
-         "payments": "Betalingen",
-         "technical": "Technisch"
+    },
+    "nsec": {
+      "title": "Inloggen met NOSTR privésleutel",
+      "placeholder": "Voer je nsec in",
+      "error": "Vul je Nsec sleutel in",
+      "invalidKey": "Ongeldige Nsec sleutel"
+    },
+    "title": "Invoering"
+  },
+  "nostr": {
+    "creating": "NOSTR sleutel aanmaken...",
+    "created": "NOSTR account aangemaakt!",
+    "addDetails": "Je kunt later je persoonlijke gegevens toevoegen als je wilt.",
+    "continue": "Doorgaan met RESIN",
+    "loading": {
+      "title": "Nostr Gegevens Laden",
+      "description": "Even geduld terwijl we je favorieten en berichten van Nostr herstellen..."
+    }
+  },
+  "help": {
+    "title": "Help",
+    "search": "Zoeken",
+    "categories": {
+      "all": "Alles",
+      "account": "Account",
+      "properties": "Objecten",
+      "payments": "Betalingen",
+      "technical": "Technisch"
+    },
+    "cantFind": "Kunt u niet vinden wat u zoekt?",
+    "contactSupport": "Neem contact op met Support",
+    "faq": {
+      "whatIsNostr": {
+        "question": "Wat is NOSTR en waarom heb ik het nodig?",
+        "answer": "NOSTR is een gedecentraliseerd protocol waarmee u eigenaar bent van uw identiteit en gegevens. RESIN gebruikt NOSTR om ervoor te zorgen dat uw account en transacties veilig en privé zijn."
       },
-      "cantFind": "Kunt u niet vinden wat u zoekt?",
-      "contactSupport": "Neem contact op met Support",
-      "faq": {
-         "whatIsNostr": {
-            "question": "Wat is NOSTR en waarom heb ik het nodig?",
-            "answer": "NOSTR is een gedecentraliseerd protocol waarmee u eigenaar bent van uw identiteit en gegevens. RESIN gebruikt NOSTR om ervoor te zorgen dat uw account en transacties veilig en privé zijn."
-         },
-         "accountRecovery": {
-            "question": "Hoe herstel ik mijn account?",
-            "answer": "U kunt uw account herstellen met uw herstelzin van 12 woorden of uw NOSTR privésleutel. Bewaar deze goed, want dit is de enige manier om weer toegang te krijgen tot uw account."
-         },
-         "rentToOwn": {
-            "question": "Hoe werkt huur tot aankoop?",
-            "answer": "Bij huur tot aankoop kunt u een woning huren terwijl u vermogen opbouwt voor eigendom. Een deel van uw maandelijkse betaling gaat naar uw toekomstige eigendom van de woning."
-         },
-         "listProperty": {
-            "question": "Kan ik mijn object op RESIN aanbieden?",
-            "answer": "Ja, eigenaren kunnen hun objecten op RESIN aanbieden. Neem contact op met ons supportteam voor meer informatie over het aanbiedingsproces en de vereisten."
-         },
-         "paymentMethods": {
-            "question": "Welke betaalmethoden worden geaccepteerd?",
-            "answer": "RESIN accepteert momenteel verschillende betaalmethoden, waaronder bankoverschrijvingen en cryptocurrency. De beschikbare opties kunnen per regio verschillen."
-         },
-         "equityCalculation": {
-            "question": "Hoe wordt mijn vermogen berekend?",
-            "answer": "Uw vermogen wordt berekend op basis van het deel van uw maandelijkse betalingen dat naar eigendom gaat, zoals gespecificeerd in uw huur tot aankoop overeenkomst."
-         },
-         "browsers": {
-            "question": "Welke browsers worden ondersteund?",
-            "answer": "RESIN werkt het beste op moderne browsers zoals Chrome, Firefox, Safari en Edge. Zorg ervoor dat uw browser up-to-date is voor de beste ervaring."
-         },
-         "dataSecurity": {
-            "question": "Zijn mijn gegevens veilig?",
-            "answer": "Ja, RESIN gebruikt het NOSTR-protocol en industriestandaard encryptie om uw gegevens te beschermen. Uw privésleutels en gevoelige informatie verlaten nooit uw apparaat."
-         }
+      "accountRecovery": {
+        "question": "Hoe herstel ik mijn account?",
+        "answer": "U kunt uw account herstellen met uw herstelzin van 12 woorden of uw NOSTR privésleutel. Bewaar deze goed, want dit is de enige manier om weer toegang te krijgen tot uw account."
+      },
+      "rentToOwn": {
+        "question": "Hoe werkt huur tot aankoop?",
+        "answer": "Bij huur tot aankoop kunt u een woning huren terwijl u vermogen opbouwt voor eigendom. Een deel van uw maandelijkse betaling gaat naar uw toekomstige eigendom van de woning."
+      },
+      "listProperty": {
+        "question": "Kan ik mijn object op RESIN aanbieden?",
+        "answer": "Ja, eigenaren kunnen hun objecten op RESIN aanbieden. Neem contact op met ons supportteam voor meer informatie over het aanbiedingsproces en de vereisten."
+      },
+      "paymentMethods": {
+        "question": "Welke betaalmethoden worden geaccepteerd?",
+        "answer": "RESIN accepteert momenteel verschillende betaalmethoden, waaronder bankoverschrijvingen en cryptocurrency. De beschikbare opties kunnen per regio verschillen."
+      },
+      "equityCalculation": {
+        "question": "Hoe wordt mijn vermogen berekend?",
+        "answer": "Uw vermogen wordt berekend op basis van het deel van uw maandelijkse betalingen dat naar eigendom gaat, zoals gespecificeerd in uw huur tot aankoop overeenkomst."
+      },
+      "browsers": {
+        "question": "Welke browsers worden ondersteund?",
+        "answer": "RESIN werkt het beste op moderne browsers zoals Chrome, Firefox, Safari en Edge. Zorg ervoor dat uw browser up-to-date is voor de beste ervaring."
+      },
+      "dataSecurity": {
+        "question": "Zijn mijn gegevens veilig?",
+        "answer": "Ja, RESIN gebruikt het NOSTR-protocol en industriestandaard encryptie om uw gegevens te beschermen. Uw privésleutels en gevoelige informatie verlaten nooit uw apparaat."
       }
-   },
-   "termsAndConditions": {
-      "title": "Algemene voorwaarden",
-      "lastUpdated": "Laatst bijgewerkt: {date}",
-      "sections": {
-         "acceptanceOfTerms": {
-            "title": "Acceptatie van voorwaarden",
-            "content": "Door toegang te krijgen tot of gebruik te maken van RESIN, gaat u akkoord met deze Algemene voorwaarden (\"Voorwaarden\"). Als u niet akkoord gaat met alle voorwaarden van deze overeenkomst, mag u de website niet bezoeken of gebruik maken van diensten."
-         },
-         "descriptionOfService": {
-            "title": "Beschrijving van de dienst",
-            "content": "RESIN biedt een online platform voor vastgoedtransacties, waaronder het aanbieden, marketing en verkoop of langdurige verhuur van woningen. Onze diensten omvatten, maar zijn niet beperkt tot, objectaanbiedingen, het faciliteren van communicatie tussen kopers/huurders en verkopers/verhuurders, en het bieden van tools voor transactiebeheer."
-         },
-         "userEligibility": {
-            "title": "Gebruikersgeschiktheid",
-            "content": "U moet minimaal 18 jaar oud zijn om deze dienst te gebruiken. Door toegang te krijgen tot of gebruik te maken van RESIN, verklaart en garandeert u dat u het recht, de bevoegdheid en de capaciteit heeft om deze overeenkomst aan te gaan en om alle voorwaarden van deze overeenkomst na te leven."
-         },
-         "userAccounts": {
-            "title": "Gebruikersaccounts",
-            "content": "Account aanmaken: U moet mogelijk een account aanmaken om bepaalde functies van de dienst te gebruiken. U gaat ermee akkoord om nauwkeurige, actuele en volledige informatie te verstrekken tijdens het registratieproces en om dergelijke informatie bij te werken om deze nauwkeurig, actueel en volledig te houden.<br><br>Accountbeveiliging: U bent verantwoordelijk voor het beveiligen van de privésleutel die u gebruikt om toegang te krijgen tot de Service en voor alle activiteiten of acties onder uw privésleutel. RESIN kan en zal niet aansprakelijk zijn voor verlies of schade door uw nalatigheid om aan deze beveiligingsverplichting te voldoen."
-         },
-         "userConduct": {
-            "title": "Gebruikersgedrag",
-            "content": "U gaat ermee akkoord om RESIN niet te gebruiken voor:<br>• Het schenden van lokale, provinciale, nationale of internationale wet- of regelgeving.<br>• Het schenden van onze intellectuele eigendomsrechten of de intellectuele eigendomsrechten van anderen.<br>• Het verzenden van virussen, wormen, defecten, Trojaanse paarden of items van destructieve aard.<br>• Het vertonen van gedrag dat beledigend, intimiderend, bedreigend of lasterlijk is."
-         },
-         "content": {
-            "title": "Inhoud",
-            "content": "Gebruikersinhoud: U bent als enige verantwoordelijk voor de inhoud die u op RESIN plaatst. U behoudt alle rechten op, en bent als enige verantwoordelijk voor, de Gebruikersinhoud die u op de Service plaatst."
-         },
-         "paymentAndFees": {
-            "title": "Betaling en kosten",
-            "content": "Alle kosten voor het aanbieden van objecten, transactiediensten of aanvullende functies zijn direct verschuldigd en niet-restitueerbaar, tenzij anders vermeld. RESIN kan gebruik maken van externe betalingsverwerkers voor het afhandelen van betalingstransacties."
-         },
-         "transactions": {
-            "title": "Transacties",
-            "content": "Alle vastgoedtransacties die via RESIN worden gefaciliteerd, zijn onderworpen aan de voorwaarden die door de betrokken partijen zijn overeengekomen. RESIN treedt niet op als makelaar, bemiddelaar of tussenpersoon bij deze transacties, maar biedt alleen een platform waar deze activiteiten kunnen plaatsvinden."
-         },
-         "disclaimers": {
-            "title": "Disclaimers en aansprakelijkheidsbeperking",
-            "content": "RESIN wordt \"as is\" en \"as available\" aangeboden zonder enige garantie. We wijzen alle garanties af voor zover toegestaan door de wet.<br><br>In geen geval zullen RESIN, haar functionarissen, directeuren, werknemers of agenten aansprakelijk zijn jegens u voor enige indirecte, incidentele, speciale, gevolg- of punitieve schade."
-         },
-         "termination": {
-            "title": "Beëindiging",
-            "content": "We kunnen de toegang tot onze Service onmiddellijk beëindigen of opschorten, zonder voorafgaande kennisgeving of aansprakelijkheid, om welke reden dan ook, inclusief zonder beperking als u de Voorwaarden schendt."
-         },
-         "governingLaw": {
-            "title": "Toepasselijk recht",
-            "content": "Deze Voorwaarden worden beheerst door en geïnterpreteerd in overeenstemming met de wetten van de staat Delaware, zonder rekening te houden met de bepalingen inzake wetsconflicten."
-         },
-         "changes": {
-            "title": "Wijzigingen in de voorwaarden",
-            "content": "RESIN behoudt zich het recht voor om deze Voorwaarden naar eigen goeddunken op elk moment te wijzigen of te vervangen. Als een herziening materieel is, zullen we proberen ten minste 30 dagen van tevoren kennisgeving te doen voordat nieuwe voorwaarden van kracht worden."
-         },
-         "contactInfo": {
-            "title": "Contactgegevens",
-            "content": "Voor vragen over deze Voorwaarden kunt u contact met ons opnemen via hello@daedaluslabs.io"
-         }
+    }
+  },
+  "termsAndConditions": {
+    "title": "Algemene voorwaarden",
+    "lastUpdated": "Laatst bijgewerkt: {date}",
+    "sections": {
+      "acceptanceOfTerms": {
+        "title": "Acceptatie van voorwaarden",
+        "content": "Door toegang te krijgen tot of gebruik te maken van RESIN, gaat u akkoord met deze Algemene voorwaarden (\"Voorwaarden\"). Als u niet akkoord gaat met alle voorwaarden van deze overeenkomst, mag u de website niet bezoeken of gebruik maken van diensten."
+      },
+      "descriptionOfService": {
+        "title": "Beschrijving van de dienst",
+        "content": "RESIN biedt een online platform voor vastgoedtransacties, waaronder het aanbieden, marketing en verkoop of langdurige verhuur van woningen. Onze diensten omvatten, maar zijn niet beperkt tot, objectaanbiedingen, het faciliteren van communicatie tussen kopers/huurders en verkopers/verhuurders, en het bieden van tools voor transactiebeheer."
+      },
+      "userEligibility": {
+        "title": "Gebruikersgeschiktheid",
+        "content": "U moet minimaal 18 jaar oud zijn om deze dienst te gebruiken. Door toegang te krijgen tot of gebruik te maken van RESIN, verklaart en garandeert u dat u het recht, de bevoegdheid en de capaciteit heeft om deze overeenkomst aan te gaan en om alle voorwaarden van deze overeenkomst na te leven."
+      },
+      "userAccounts": {
+        "title": "Gebruikersaccounts",
+        "content": "Account aanmaken: U moet mogelijk een account aanmaken om bepaalde functies van de dienst te gebruiken. U gaat ermee akkoord om nauwkeurige, actuele en volledige informatie te verstrekken tijdens het registratieproces en om dergelijke informatie bij te werken om deze nauwkeurig, actueel en volledig te houden.<br><br>Accountbeveiliging: U bent verantwoordelijk voor het beveiligen van de privésleutel die u gebruikt om toegang te krijgen tot de Service en voor alle activiteiten of acties onder uw privésleutel. RESIN kan en zal niet aansprakelijk zijn voor verlies of schade door uw nalatigheid om aan deze beveiligingsverplichting te voldoen."
+      },
+      "userConduct": {
+        "title": "Gebruikersgedrag",
+        "content": "U gaat ermee akkoord om RESIN niet te gebruiken voor:<br>• Het schenden van lokale, provinciale, nationale of internationale wet- of regelgeving.<br>• Het schenden van onze intellectuele eigendomsrechten of de intellectuele eigendomsrechten van anderen.<br>• Het verzenden van virussen, wormen, defecten, Trojaanse paarden of items van destructieve aard.<br>• Het vertonen van gedrag dat beledigend, intimiderend, bedreigend of lasterlijk is."
+      },
+      "content": {
+        "title": "Inhoud",
+        "content": "Gebruikersinhoud: U bent als enige verantwoordelijk voor de inhoud die u op RESIN plaatst. U behoudt alle rechten op, en bent als enige verantwoordelijk voor, de Gebruikersinhoud die u op de Service plaatst."
+      },
+      "paymentAndFees": {
+        "title": "Betaling en kosten",
+        "content": "Alle kosten voor het aanbieden van objecten, transactiediensten of aanvullende functies zijn direct verschuldigd en niet-restitueerbaar, tenzij anders vermeld. RESIN kan gebruik maken van externe betalingsverwerkers voor het afhandelen van betalingstransacties."
+      },
+      "transactions": {
+        "title": "Transacties",
+        "content": "Alle vastgoedtransacties die via RESIN worden gefaciliteerd, zijn onderworpen aan de voorwaarden die door de betrokken partijen zijn overeengekomen. RESIN treedt niet op als makelaar, bemiddelaar of tussenpersoon bij deze transacties, maar biedt alleen een platform waar deze activiteiten kunnen plaatsvinden."
+      },
+      "disclaimers": {
+        "title": "Disclaimers en aansprakelijkheidsbeperking",
+        "content": "RESIN wordt \"as is\" en \"as available\" aangeboden zonder enige garantie. We wijzen alle garanties af voor zover toegestaan door de wet.<br><br>In geen geval zullen RESIN, haar functionarissen, directeuren, werknemers of agenten aansprakelijk zijn jegens u voor enige indirecte, incidentele, speciale, gevolg- of punitieve schade."
+      },
+      "termination": {
+        "title": "Beëindiging",
+        "content": "We kunnen de toegang tot onze Service onmiddellijk beëindigen of opschorten, zonder voorafgaande kennisgeving of aansprakelijkheid, om welke reden dan ook, inclusief zonder beperking als u de Voorwaarden schendt."
+      },
+      "governingLaw": {
+        "title": "Toepasselijk recht",
+        "content": "Deze Voorwaarden worden beheerst door en geïnterpreteerd in overeenstemming met de wetten van de staat Delaware, zonder rekening te houden met de bepalingen inzake wetsconflicten."
+      },
+      "changes": {
+        "title": "Wijzigingen in de voorwaarden",
+        "content": "RESIN behoudt zich het recht voor om deze Voorwaarden naar eigen goeddunken op elk moment te wijzigen of te vervangen. Als een herziening materieel is, zullen we proberen ten minste 30 dagen van tevoren kennisgeving te doen voordat nieuwe voorwaarden van kracht worden."
+      },
+      "contactInfo": {
+        "title": "Contactgegevens",
+        "content": "Voor vragen over deze Voorwaarden kunt u contact met ons opnemen via hello@daedaluslabs.io"
       }
-   },
-   "map": {
-      "viewProperties": "Bekijk {count} objecten",
-      "search": {
-         "placeholder": "Stad, regio, land...",
-         "clear": "Zoekopdracht wissen"
-      }
-   },
-   "chat": {
-      "title": "Berichten",
-      "search": "Zoek gesprekken",
-      "typeMessage": "Typ een bericht...",
-      "send": "Verstuur bericht",
-      "selectConversation": "Selecteer een gesprek om te beginnen met chatten",
-      "loading": "Berichten laden...",
-      "retry": "Probeer opnieuw",
-      "processing": {
-         "title": "Berichten Verwerken",
-         "description": "{count} berichten aan het verwerken..."
-      }
-   }
+    }
+  },
+  "map": {
+    "viewProperties": "Bekijk {count} objecten",
+    "search": {
+      "placeholder": "Stad, regio, land...",
+      "clear": "Zoekopdracht wissen"
+    },
+    "multipleProperties": "Er zijn {count} eigendommen op deze locatie",
+    "title": "Kaart"
+  },
+  "chat": {
+    "title": "Berichten",
+    "search": "Zoek gesprekken",
+    "typeMessage": "Typ een bericht...",
+    "send": "Verstuur bericht",
+    "selectConversation": "Selecteer een gesprek om te beginnen met chatten",
+    "loading": "Berichten laden...",
+    "retry": "Probeer opnieuw",
+    "processing": {
+      "title": "Berichten Verwerken",
+      "description": "{count} berichten aan het verwerken..."
+    },
+    "fetchHistory": "Geschiedenis ophalen",
+    "loadingHistory": "Geschiedenis laden..."
+  },
+  "financials": {
+    "noData": {
+      "description": "Zodra u gaat beleggen in vastgoed verschijnt hier uw financieel overzicht.",
+      "title": "Nog geen financiële gegevens"
+    },
+    "title": "Financiële gegevens"
+  },
+  "logIn": "Inloggen",
+  "maintenance": {
+    "description": "We ondervinden enkele technische problemen. \nWe zijn zo terug.",
+    "nextRetry": "Volgende nieuwe poging over {seconden} seconden",
+    "title": "Onderhoud van de site"
+  },
+  "my-properties": {
+    "title": "Mijn eigendommen"
+  },
+  "my-resin": {
+    "title": "Mijn hars"
+  },
+  "next": "Volgende",
+  "previous": "Vorig",
+  "properties": {
+    "title": "Eigenschappen"
+  },
+  "transactions": {
+    "noTransactions": {
+      "description": "Uw transactiegeschiedenis wordt hier weergegeven zodra u begint met betalen.",
+      "title": "Nog geen transacties"
+    },
+    "title": "Transacties"
+  }
 }

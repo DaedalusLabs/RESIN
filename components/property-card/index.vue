@@ -12,6 +12,7 @@
          <button
             v-if="showMediaIcon && !compact"
             class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+            title="Open gallery"
             @click="openGallery"
          >
             <PhImages :size="20" />

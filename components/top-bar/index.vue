@@ -12,7 +12,7 @@
          >
             <NuxtImg
                src="/images/logos/resin-orange.svg"
-               alt="Logo"
+               alt="RESIN Logo"
                class="h-full"
             />
          </NuxtLinkLocale>

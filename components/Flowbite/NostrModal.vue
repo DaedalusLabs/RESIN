@@ -13,7 +13,7 @@
          <!-- Dynamic content based on loading state -->
          <section class="relative w-24 mx-auto">
             <NuxtImg :src="loading ? '/images/running-nostrich.webp' : '/images/still-nostrich.webp'"
-               class="mx-auto w-24" />
+               class="mx-auto w-24" :alt="loading ? 'Loading nostrich' : 'Nostrich'" />
             <PhCheckCircle v-if="!loading" class="absolute -right-6 -top-2 w-8"  weight="bold" size="36" color="#9C27B0" />
          </section>
          <p class="mt-4 font-extrabold text-gray-900">

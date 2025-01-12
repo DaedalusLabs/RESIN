@@ -6,7 +6,7 @@
          <div class="flex w-full justify-between">
             <NuxtImg
                :src="property?.images[0]"
-               alt="Favorite image"
+               :alt="property?.title"
                class="mr-4 h-16 w-16 rounded-md object-cover object-center"
             />
             <div class="w-full flex-1">

@@ -22,7 +22,7 @@
                :srcset="getSrcSet(item)"
                :sizes="sizes"
                class="absolute inset-0 h-full w-full object-cover"
-               alt="..."
+               :alt="`Property image ${index}`"
                @load="handleImageLoad(index)"
             />
          </div>

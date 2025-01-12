@@ -38,6 +38,7 @@
                height="32"
                class="mb-1 hover:brightness-50 active:brightness-100"
                :class="{ 'hover:brightness-100': isResinView }"
+               :alt="$t('navigation.myResin')"
             />
             <span class="sr-only">{{ $t('navigation.myResin') }}</span>
          </NuxtLinkLocale>

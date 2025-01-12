@@ -21,7 +21,7 @@
 
       <div class="flex h-full flex-col items-center justify-between">
          <!-- Main page layout -->
-         <NuxtImg src="/images/logos/resin-text.png" alt="Logo" class="h-10" />
+         <NuxtImg src="/images/logos/resin-text.png" alt="RESIN Logo" class="h-10" />
          <div class="flex flex-col items-center justify-center gap-6">
             <div>
                <h1

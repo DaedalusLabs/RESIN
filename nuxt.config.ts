@@ -40,10 +40,14 @@ export default defineNuxtConfig({
          {
             code: "en-US",
             name: "English",
+            language: "en",
+            iso: "en-US",
          },
          {
             code: "nl-NL",
             name: "Nederlands",
+            language: "nl",
+            iso: "nl-NL",
          },
       ],
       strategy: "prefix_except_default",

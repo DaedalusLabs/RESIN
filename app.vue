@@ -76,7 +76,7 @@
    </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { usePropertiesStore } from "~/stores/properties";
 import { useNostrStore } from "~/stores/nostr";
 import { useChatStore } from "~/stores/chat";
@@ -124,8 +124,19 @@ const connectedRelays = computed(() => {
       .map((relay) => relay.url);
 });
 
+const i18nHead = useLocaleHead({
+   lang: true,
+   dir: true,
+});
+
 useHead({
    titleTemplate: (title) => (title ? `${title} | Resin` : "Resin"),
+   htmlAttrs: {
+      lang: i18nHead.value?.htmlAttrs?.lang || 'en',
+      dir: i18nHead.value?.htmlAttrs?.dir || 'ltr'
+   },
+   meta: [...(i18nHead.value?.meta || [])],
+   link: [...(i18nHead.value?.link || [])]
 });
 
 onMounted(() => {
