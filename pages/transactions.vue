@@ -56,5 +56,6 @@ function startShare() {
 
 definePageMeta({
    layout: "white",
+   middleware: ["auth"],
 });
 </script>

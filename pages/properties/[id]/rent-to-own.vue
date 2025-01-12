@@ -54,13 +54,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { usePropertiesStore } from "~/stores/properties";
+import type { Property } from "~/types/property";
 
 const propertiesStore = usePropertiesStore();
 const nostrStore = useNostrStore();
 const route = useRoute();
 const showDrawer = ref(false);
 
-const property = ref({});
+const property = ref<Property | null>(null);
 
 const isModalOpen = ref(false);
 const isRequestSent = ref(false);
@@ -69,7 +70,7 @@ const showSuccessAlert = ref(false);
 const skipKeyBackup = ref(false);
 
 onMounted(async () => {
-   const foundProperty = await propertiesStore.get(route.params.id);
+   const foundProperty = await propertiesStore.get(route.params.id as string);
    if (!foundProperty) {
       return;
    }
@@ -80,24 +81,20 @@ onMounted(async () => {
    }
 });
 
-const sections = ref([
+const sections = [
    {
-      title: "Own without the bank",
-      text: "Rent-to-own offers a flexible path to homeownership. You can start living in this modern home at Mahonylaan 5, Paramaribo, Suriname, while     gradually working towards owning it. Pay monthly rent with a portion       going towards the purchase price, making it easier to transition from    renting to owning without a large upfront payment. Enjoy the benefits  of homeownership, including building equity and having a place to call       your own, while taking your time to complete the purchase..",
+      title: "What is rent-to-own?",
+      text: "Rent-to-own is a way to buy a home without a traditional mortgage. You rent the home for a period of time, and a portion of your rent goes towards your down payment. At the end of the rental period, you can buy the home using the down payment you've built up.",
    },
    {
-      title: "Low interest rates",
-      text: " Enjoy lower interest rates compared to traditional loans and save  more over time as you work towards homeownership.",
+      title: "How does it work?",
+      text: "You'll pay a monthly rent that's slightly higher than market rate. The extra amount goes into a savings account that you can use as a down payment when you're ready to buy. You'll also have the option to buy the home at any time during your lease.",
    },
    {
-      title: "Grow your equity",
-      text: " Build equity over time by owning part of the property as you    continue paying rent.",
+      title: "What are the benefits?",
+      text: "Rent-to-own lets you move into your dream home now, while building up a down payment. You can also lock in the purchase price today, protecting you from rising home prices. And since you're living in the home, you can make sure it's the right fit before committing to buy.",
    },
-   {
-      title: "Rent payment options",
-      text: "Flexible rent payment plans are available to suit your financial    situation and help you transition into homeownership with ease.",
-   },
-]);
+];
 
 const onCloseDrawer = () => {
    showDrawer.value = false;
@@ -112,6 +109,7 @@ function handleShowDrawer() {
 }
 
 const propertyAddress = computed(() => {
+   if (!property.value?.location) return "";
    return `${property.value.location.street}, ${property.value.location.city}, ${property.value.location.country}`;
 });
 

@@ -33,6 +33,7 @@ export default defineNuxtConfig({
       "@vueuse/nuxt",
       "pinia-plugin-persistedstate/nuxt",
       "@nuxt/test-utils",
+      "@nuxtjs/sitemap",
    ],
 
    i18n: {
@@ -201,5 +202,28 @@ export default defineNuxtConfig({
          "/robots.txt": { static: true },
          "/sitemap.xml": { static: true },
       },
+   },
+   routeRules: {
+      "/payment/**": { robots: false },
+      "/settings/**": { robots: false },
+      "/choose-property-type": { robots: false },
+      "/my-*": { robots: false },
+   },
+   sitemap: {
+      exclude: [
+         "/payment/**",
+         "/settings/**",
+         "/choose-property-type",
+         "/favorites",
+         "/messages",
+         "/transactions",
+         "/financials",
+         new RegExp("/my-.*"),
+      ],
+      urls: async () => {
+         const urls = await fetch("http://localhost:3001/listings/urls");
+         return urls;
+      },
+      sources: [`${process.env.BACKEND_ENDPOINT}/listings/urls`],
    },
 });

@@ -84,11 +84,14 @@ export const useNostrStore = defineStore("nostr", {
          const profile = await (await ndk?.signer?.user())?.fetchProfile();
          return profile || null;
       },
+      isAuthenticated(): boolean {
+         return this.authenticated;
+      },
    },
    actions: {
       async checkAuthenticated() {
          if (import.meta.client && this.typeKey) {
-            console.log("check authenticated");
+            console.log("check authenticated", this.authenticated);
             switch (this.typeKey) {
                case NostrLoginType.Extension:
                   {
@@ -121,6 +124,7 @@ export const useNostrStore = defineStore("nostr", {
                this.user = await ndk.signer?.user();
             }
 
+            this.authenticated = true;
             return this.authenticated;
          }
       },

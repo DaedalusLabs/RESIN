@@ -130,5 +130,6 @@ onMounted(async () => {
 
 definePageMeta({
    layout: "white",
+   middleware: ["auth"],
 });
 </script>

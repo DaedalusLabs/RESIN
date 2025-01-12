@@ -114,12 +114,14 @@
                </span>
             </p>
          </div>
-         <FlowbiteButton :text="$t('details')" size="sm" @click="openDetails" />
+         <NuxtLinkLocale :to="propertyLink">
+            <FlowbiteButton :text="$t('details')" size="sm" />
+         </NuxtLinkLocale>
       </div>
    </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
    PhBed,
    PhRuler,
@@ -129,10 +131,38 @@ import {
 } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
 import { useNostrStore } from "~/stores/nostr";
+import type { Property } from "~/types/property";
+
+const props = defineProps({
+   property: {
+      type: Object as PropType<Property>,
+      required: true,
+   },
+   compact: {
+      type: Boolean,
+      default: false,
+   },
+   showMediaIcon: {
+      type: Boolean,
+      default: true,
+   },
+});
+
+const emit = defineEmits(["openGallery"]);
+
 const propertiesStore = usePropertiesStore();
 const nostrStore = useNostrStore();
 
-const isAuthenticated = computed(() => nostrStore.isAuthenticated);
+const isAuthenticated = computed(() => nostrStore.authenticated);
+const isFavorite = computed(() =>
+   props.property ? propertiesStore.isFavorite(props.property.id) : false,
+);
+
+const propertyLink = computed(() => {
+   return props.property.slug
+      ? `/properties/${props.property.id}/${props.property.slug}`
+      : `/properties/${props.property.id}`;
+});
 
 const toggleFavorite = () => {
    if (isAuthenticated.value) {
@@ -140,36 +170,18 @@ const toggleFavorite = () => {
    }
 };
 
-const props = defineProps({
-   property: {
-      type: Object,
-      required: true,
-   },
-   showMediaIcon: {
-      type: Boolean,
-      default: true,
-   },
-   compact: {
-      type: Boolean,
-      default: false,
-   },
-});
-
-const isFavorite = computed(() =>
-   propertiesStore.isFavorite(props.property.id),
-);
-
-const emit = defineEmits(["open-gallery"]);
-
 const openGallery = () => {
-   emit("open-gallery", props.property.images);
+   emit("openGallery", props.property.images);
 };
 
 const openDetails = () => {
    const localeRoute = useLocaleRoute();
    const route = localeRoute({
-      name: "properties-id",
-      params: { id: props.property.id.toString() },
+      name: "properties-id-slug",
+      params: {
+         id: props.property.id.toString(),
+         slug: props.property.slug || props.property.id,
+      },
    });
    if (route) {
       return navigateTo(route.fullPath);

@@ -225,7 +225,7 @@
    </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { PhImages, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
@@ -234,18 +234,20 @@ import { fixNestedStrings } from "~/utils/jsonParser";
 import ModalContactAgent from "~/components/Modal/contact-agent.vue";
 import ModalRequestTour from "~/components/Modal/request-tour.vue";
 import { propertyImageUtils } from "~/types/property";
+import type { Property } from "~/types/property";
+
 const propertiesStore = usePropertiesStore();
 const nostrStore = useNostrStore();
 const { t } = useI18n();
 
 const route = useRoute();
+const router = useRouter();
 const error = ref(false);
 const isLoading = ref(true);
-const property = ref(null);
+const property = ref<Property | null>(null);
 const isRequestSent = ref(false);
 const isModalOpen = ref(false);
 const referenceNumber = ref(0);
-//const isFavorite = ref(null);
 const showDrawer = ref(false);
 const showSuccessAlert = ref(false);
 
@@ -254,40 +256,11 @@ const isFavorite = computed(() =>
    property.value ? propertiesStore.isFavorite(property.value.id) : false,
 );
 
-const handleShowModal = () => {
-   isModalOpen.value = true;
-};
-
-const buttonText = computed(() => {
-   return property.value && property.value["resin-type"] !== "Rent to Own"
-      ? t("property.actions.rentProperty")
-      : t("property.actions.rentToOwn");
-});
-
-const { share, isSupported } = useShare();
-
-function startShare() {
-   share({
-      title: `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`,
-      text: "Check out these listings on Resin",
-      url: location.href,
-   });
-}
-
-const toggleFavorite = () => {
-   if (isAuthenticated.value) {
-      isFavorite.value = !isFavorite.value;
-      propertiesStore.toggleFavorite(property.value.id);
-   }
-};
-
-onMounted(() => {
-   referenceNumber.value = 0;
-});
-
 onMounted(async () => {
    try {
-      const foundProperty = await propertiesStore.get(route.params.id);
+      const foundProperty = await propertiesStore.get(
+         route.params.id as string,
+      );
 
       if (!foundProperty) {
          error.value = true;
@@ -303,13 +276,54 @@ onMounted(async () => {
          fixNestedStrings(property);
       }
 
-      propertiesStore.addViewedProperty(route.params.id);
+      // Check if current URL matches the expected slug
+      const currentPath = route.path;
+      const expectedPath = `/properties/${route.params.id}/${property.value.slug}`;
+
+      if (property.value.slug && currentPath !== expectedPath) {
+         // Redirect to the correct URL with the slug
+         await router.replace(expectedPath);
+         return;
+      }
+
+      propertiesStore.addViewedProperty(route.params.id as string);
    } catch (e) {
       console.error("Error loading property:", e);
       error.value = true;
    } finally {
       isLoading.value = false;
    }
+});
+
+const handleShowModal = () => {
+   isModalOpen.value = true;
+};
+
+const buttonText = computed(() => {
+   return property.value && property.value["resin-type"] !== "Rent to Own"
+      ? t("property.actions.rentProperty")
+      : t("property.actions.rentToOwn");
+});
+
+const { share, isSupported } = useShare();
+
+function startShare() {
+   share({
+      title: `${property.value?.title} in ${property.value?.location?.city}, ${property.value?.location?.country}`,
+      text: "Check out these listings on Resin",
+      url: location.href,
+   });
+}
+
+const toggleFavorite = () => {
+   if (isAuthenticated.value && property.value) {
+      isFavorite.value = !isFavorite.value;
+      propertiesStore.toggleFavorite(property.value.id);
+   }
+};
+
+onMounted(() => {
+   referenceNumber.value = 0;
 });
 
 const handleSendRequest = async () => {

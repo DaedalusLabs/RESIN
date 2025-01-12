@@ -2,6 +2,7 @@ export type Property = {
    "id": string;
    "kind": number;
    "title": string;
+   "slug": string;
    "description": string;
    "attribution"?: string;
    "price": number;

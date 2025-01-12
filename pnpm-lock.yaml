@@ -25,6 +25,9 @@ importers:
          "@nuxtjs/i18n":
             specifier: ^9.1.1
             version: 9.1.1(@vue/compiler-dom@3.5.13)(eslint@9.17.0(jiti@2.4.2))(magicast@0.3.5)(rollup@4.28.1)(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
+         "@nuxtjs/sitemap":
+            specifier: 7.0.1
+            version: 7.0.1(h3@1.13.0)(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(vue@3.5.13(typescript@5.7.3))
          "@phosphor-icons/vue":
             specifier: ^2.2.1
             version: 2.2.1(vue@3.5.13(typescript@5.7.3))
@@ -2529,6 +2532,13 @@ packages:
          }
       engines: { node: ^14.16.0 || >=16.11.0 }
 
+   "@nuxtjs/sitemap@7.0.1":
+      resolution:
+         {
+            integrity: sha512-qtiOuOGPYId7fqzDY73fD1k+vLxlxcyJPk+5QaPCJ5tEkskImxz7r4IyivDluduB18U8qPM7sezlV95r03R9sg==,
+         }
+      engines: { node: ">=18.0.0" }
+
    "@nuxtjs/tailwindcss@6.12.2":
       resolution:
          {
@@ -4301,6 +4311,13 @@ packages:
       resolution:
          {
             integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==,
+         }
+      engines: { node: ^12.17.0 || ^14.13 || >=16.0.0 }
+
+   chalk@5.4.1:
+      resolution:
+         {
+            integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==,
          }
       engines: { node: ^12.17.0 || ^14.13 || >=16.0.0 }
 
@@ -6179,6 +6196,14 @@ packages:
          }
       engines: { node: ^12.20.0 || ^14.13.1 || >=16.0.0 }
 
+   h3-compression@0.3.2:
+      resolution:
+         {
+            integrity: sha512-B+yCKyDRnO0BXSfjAP4tCXJgJwmnKp3GyH5Yh66mY9KuOCrrGQSPk/gBFG2TgH7OyB/6mvqNZ1X0XNVuy0qRsw==,
+         }
+      peerDependencies:
+         h3: ^1.6.0
+
    h3@1.13.0:
       resolution:
          {
@@ -7933,6 +7958,18 @@ packages:
       engines: { node: ^16.10.0 || >=18.0.0 }
       hasBin: true
 
+   nuxt-site-config-kit@3.0.6:
+      resolution:
+         {
+            integrity: sha512-QBOFzAIo+D02avFQQ7gNlRyA372/PQlgW2IjL2nttvjfHapqYbvP6tIP55soL+1+D8YvF/bGZgS+vJtfQhroUg==,
+         }
+
+   nuxt-site-config@3.0.6:
+      resolution:
+         {
+            integrity: sha512-Mkyen81br21/nA2sxlLCOtJZ2L8sGL+YzxHlsVhLhEnC355CP2SwKVtYqJNJ4aYFbxeusqZXJFiD4KbveHhk0w==,
+         }
+
    nuxt@3.13.1:
       resolution:
          {
@@ -9548,6 +9585,14 @@ packages:
          {
             integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==,
          }
+
+   site-config-stack@3.0.6:
+      resolution:
+         {
+            integrity: sha512-lqNI6Xvbwf4NBFqGJ1gNUIe12SOYw8YOuhrbl52JTVwBgtZZzXYh/ZQAwBHwXC7pxULvfIPUd8AJA35WtqU5YA==,
+         }
+      peerDependencies:
+         vue: ^3
 
    slash@5.1.0:
       resolution:
@@ -13224,6 +13269,29 @@ snapshots:
          - typescript
          - vue
 
+   "@nuxtjs/sitemap@7.0.1(h3@1.13.0)(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(vue@3.5.13(typescript@5.7.3))":
+      dependencies:
+         "@nuxt/devtools-kit": 1.6.4(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))
+         "@nuxt/kit": 3.15.1(magicast@0.3.5)(rollup@4.28.1)
+         chalk: 5.4.1
+         defu: 6.1.4
+         h3-compression: 0.3.2(h3@1.13.0)
+         nuxt-site-config: 3.0.6(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(vue@3.5.13(typescript@5.7.3))
+         ofetch: 1.4.1
+         pathe: 1.1.2
+         pkg-types: 1.3.0
+         radix3: 1.1.2
+         semver: 7.6.3
+         sirv: 3.0.0
+         ufo: 1.5.4
+      transitivePeerDependencies:
+         - h3
+         - magicast
+         - rollup
+         - supports-color
+         - vite
+         - vue
+
    "@nuxtjs/tailwindcss@6.12.2(magicast@0.3.5)(rollup@4.28.1)":
       dependencies:
          "@nuxt/kit": 3.14.1592(magicast@0.3.5)(rollup@4.28.1)
@@ -14492,6 +14560,8 @@ snapshots:
 
    chalk@5.3.0: {}
 
+   chalk@5.4.1: {}
+
    change-case@5.4.4: {}
 
    check-error@2.1.1: {}
@@ -15752,6 +15822,10 @@ snapshots:
       dependencies:
          duplexer: 0.1.2
 
+   h3-compression@0.3.2(h3@1.13.0):
+      dependencies:
+         h3: 1.13.0
+
    h3@1.13.0:
       dependencies:
          cookie-es: 1.2.2
@@ -16818,6 +16892,38 @@ snapshots:
          boolbase: 1.0.0
 
    nuxi@3.16.0: {}
+
+   nuxt-site-config-kit@3.0.6(magicast@0.3.5)(rollup@4.28.1)(vue@3.5.13(typescript@5.7.3)):
+      dependencies:
+         "@nuxt/kit": 3.15.1(magicast@0.3.5)(rollup@4.28.1)
+         "@nuxt/schema": 3.15.1
+         pkg-types: 1.3.0
+         site-config-stack: 3.0.6(vue@3.5.13(typescript@5.7.3))
+         std-env: 3.8.0
+         ufo: 1.5.4
+      transitivePeerDependencies:
+         - magicast
+         - rollup
+         - supports-color
+         - vue
+
+   nuxt-site-config@3.0.6(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(vue@3.5.13(typescript@5.7.3)):
+      dependencies:
+         "@nuxt/devtools-kit": 1.6.4(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))
+         "@nuxt/kit": 3.15.1(magicast@0.3.5)(rollup@4.28.1)
+         "@nuxt/schema": 3.15.1
+         nuxt-site-config-kit: 3.0.6(magicast@0.3.5)(rollup@4.28.1)(vue@3.5.13(typescript@5.7.3))
+         pathe: 1.1.2
+         pkg-types: 1.3.0
+         sirv: 3.0.0
+         site-config-stack: 3.0.6(vue@3.5.13(typescript@5.7.3))
+         ufo: 1.5.4
+      transitivePeerDependencies:
+         - magicast
+         - rollup
+         - supports-color
+         - vite
+         - vue
 
    nuxt@3.13.1(@parcel/watcher@2.5.0)(@types/node@22.10.2)(bufferutil@4.0.8)(eslint@9.17.0(jiti@2.4.2))(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.28.1)(terser@5.37.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0)):
       dependencies:
@@ -17905,6 +18011,11 @@ snapshots:
          totalist: 3.0.1
 
    sisteransi@1.0.5: {}
+
+   site-config-stack@3.0.6(vue@3.5.13(typescript@5.7.3)):
+      dependencies:
+         ufo: 1.5.4
+         vue: 3.5.13(typescript@5.7.3)
 
    slash@5.1.0: {}
 
