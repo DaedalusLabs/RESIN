@@ -279,11 +279,11 @@
          },
          "userAccounts": {
             "title": "User Accounts",
-            "content": "Account Creation: You may need to create an account to use certain features of the service. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.<br><br>Account Security: You are responsible for safeguarding the private key that you use to access the Service and for any activities or actions under your private key. RESIN cannot and will not be liable for any loss or damage from your failure to comply with this security obligation."
+            "content": "Account Creation: You may need to create an account to use certain features of the service. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.\n\nAccount Security: You are responsible for safeguarding the private key that you use to access the Service and for any activities or actions under your private key. RESIN cannot and will not be liable for any loss or damage from your failure to comply with this security obligation."
          },
          "userConduct": {
             "title": "User Conduct",
-            "content": "You agree not to use RESIN to:<br>• Violate any local, state, national, or international law or regulation.<br>• Infringe upon or violate our intellectual property rights or the intellectual property rights of others.<br>• Transmit any viruses, worms, defects, Trojan horses, or any items of a destructive nature.<br>• Engage in any behavior that is abusive, harassing, threatening, or defamatory."
+            "content": "You agree not to use RESIN to:\n\n• Violate any local, state, national, or international law or regulation.\n• Infringe upon or violate our intellectual property rights or the intellectual property rights of others.\n• Transmit any viruses, worms, defects, Trojan horses, or any items of a destructive nature.\n• Engage in any behavior that is abusive, harassing, threatening, or defamatory."
          },
          "content": {
             "title": "Content",
@@ -299,7 +299,7 @@
          },
          "disclaimers": {
             "title": "Disclaimers and Limitation of Liability",
-            "content": "RESIN is provided \"as is\" and \"as available\" without warranty of any kind. We disclaim all warranties to the fullest extent permitted by law.<br><br>In no event will RESIN, its officers, directors, employees, or agents be liable to you for any indirect, incidental, special, consequential or punitive damages."
+            "content": "RESIN is provided \"as is\" and \"as available\" without warranty of any kind. We disclaim all warranties to the fullest extent permitted by law.\n\nIn no event will RESIN, its officers, directors, employees, or agents be liable to you for any indirect, incidental, special, consequential or punitive damages."
          },
          "termination": {
             "title": "Termination",
@@ -315,7 +315,7 @@
          },
          "contactInfo": {
             "title": "Contact Information",
-            "content": "For any questions about these Terms, please contact us at hello@daedaluslabs.io"
+            "content": "For any questions about these Terms, please contact us at {contact}"
          }
       }
    },

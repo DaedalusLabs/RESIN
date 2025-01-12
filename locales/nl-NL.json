@@ -339,11 +339,11 @@
          },
          "userAccounts": {
             "title": "Gebruikersaccounts",
-            "content": "Account aanmaken: U moet mogelijk een account aanmaken om bepaalde functies van de dienst te gebruiken. U gaat ermee akkoord om nauwkeurige, actuele en volledige informatie te verstrekken tijdens het registratieproces en om dergelijke informatie bij te werken om deze nauwkeurig, actueel en volledig te houden.<br><br>Accountbeveiliging: U bent verantwoordelijk voor het beveiligen van de privésleutel die u gebruikt om toegang te krijgen tot de Service en voor alle activiteiten of acties onder uw privésleutel. RESIN kan en zal niet aansprakelijk zijn voor verlies of schade door uw nalatigheid om aan deze beveiligingsverplichting te voldoen."
+            "content": "Account aanmaken: U moet mogelijk een account aanmaken om bepaalde functies van de dienst te gebruiken. U gaat ermee akkoord om nauwkeurige, actuele en volledige informatie te verstrekken tijdens het registratieproces en om dergelijke informatie bij te werken om deze nauwkeurig, actueel en volledig te houden.\n\nAccountbeveiliging: U bent verantwoordelijk voor het beveiligen van de privésleutel die u gebruikt om toegang te krijgen tot de Service en voor alle activiteiten of acties onder uw privésleutel. RESIN kan en zal niet aansprakelijk zijn voor verlies of schade door uw nalatigheid om aan deze beveiligingsverplichting te voldoen."
          },
          "userConduct": {
             "title": "Gebruikersgedrag",
-            "content": "U gaat ermee akkoord om RESIN niet te gebruiken voor:<br>• Het schenden van lokale, provinciale, nationale of internationale wet- of regelgeving.<br>• Het schenden van onze intellectuele eigendomsrechten of de intellectuele eigendomsrechten van anderen.<br>• Het verzenden van virussen, wormen, defecten, Trojaanse paarden of items van destructieve aard.<br>• Het vertonen van gedrag dat beledigend, intimiderend, bedreigend of lasterlijk is."
+            "content": "U gaat ermee akkoord om RESIN niet te gebruiken voor:\n\n• Het schenden van lokale, provinciale, nationale of internationale wet- of regelgeving.\n• Het schenden van onze intellectuele eigendomsrechten of de intellectuele eigendomsrechten van anderen.\n• Het verzenden van virussen, wormen, defecten, Trojaanse paarden of items van destructieve aard.\n• Het vertonen van gedrag dat beledigend, intimiderend, bedreigend of lasterlijk is."
          },
          "content": {
             "title": "Inhoud",
@@ -359,7 +359,7 @@
          },
          "disclaimers": {
             "title": "Disclaimers en aansprakelijkheidsbeperking",
-            "content": "RESIN wordt \"as is\" en \"as available\" aangeboden zonder enige garantie. We wijzen alle garanties af voor zover toegestaan door de wet.<br><br>In geen geval zullen RESIN, haar functionarissen, directeuren, werknemers of agenten aansprakelijk zijn jegens u voor enige indirecte, incidentele, speciale, gevolg- of punitieve schade."
+            "content": "RESIN wordt \"as is\" en \"as available\" aangeboden zonder enige garantie. We wijzen alle garanties af voor zover toegestaan door de wet.\n\nIn geen geval zullen RESIN, haar functionarissen, directeuren, werknemers of agenten aansprakelijk zijn jegens u voor enige indirecte, incidentele, speciale, gevolg- of punitieve schade."
          },
          "termination": {
             "title": "Beëindiging",
@@ -375,7 +375,7 @@
          },
          "contactInfo": {
             "title": "Contactgegevens",
-            "content": "Voor vragen over deze Voorwaarden kunt u contact met ons opnemen via hello@daedaluslabs.io"
+            "content": "Voor vragen over deze Voorwaarden kunt u contact met ons opnemen via {contact}"
          }
       }
    },

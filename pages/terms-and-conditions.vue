@@ -43,9 +43,9 @@
                   v-show="openSections[index]"
                   class="border-t border-gray-200 px-4 py-3"
                >
-                  <p class="text-sm text-pirate-600">
-                     <SafeHtml :content="section.content" />
-                  </p>
+                  <div class="prose prose-sm text-pirate-600">
+                     <MarkdownRenderer :content="section.content" />
+                  </div>
                </div>
             </div>
          </div>
@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { PhCaretLeft, PhCaretDown } from "@phosphor-icons/vue";
-import SafeHtml from "~/components/SafeHtml.vue";
+import MarkdownRenderer from "~/components/MarkdownRenderer.vue";
 
 interface Section {
    title: string;
@@ -67,21 +67,6 @@ const router = useRouter();
 
 const openSections = ref<boolean[]>([]);
 const sections = ref<Section[]>([]);
-
-const getSectionContent = (key: string): Section => {
-   try {
-      return {
-         title: t(`termsAndConditions.sections.${key}.title`),
-         content: t(`termsAndConditions.sections.${key}.content`),
-      };
-   } catch (error) {
-      console.error(`Error loading translation for ${key}:`, error);
-      return {
-         title: key,
-         content: "Content not available",
-      };
-   }
-};
 
 onMounted(() => {
    // Define section keys
@@ -102,7 +87,15 @@ onMounted(() => {
    ];
 
    // Initialize sections safely
-   sections.value = sectionKeys.map((key) => getSectionContent(key));
+   sections.value = sectionKeys.map((key) => {
+      const title = t(`termsAndConditions.sections.${key}.title`) || key;
+      const content =
+         t(`termsAndConditions.sections.${key}.content`, {
+            contact: "hello@daedaluslabs.io",
+         }) || "Content not available";
+
+      return { title, content };
+   });
 
    // Initialize openSections array based on actual sections length
    openSections.value = new Array(sections.value.length).fill(true);
