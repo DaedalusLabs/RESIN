@@ -69,7 +69,7 @@
 
       <FlowbiteImageDrawer
          :show-drawer="showDrawer"
-         :image-urls="property?.images"
+         :images="property.images"
          @close="showDrawer = false"
       />
 
@@ -224,7 +224,7 @@ import { usePropertiesStore } from "~/stores/properties";
 import { fixNestedStrings } from "~/utils/jsonParser";
 import ModalContactAgent from "~/components/Modal/contact-agent.vue";
 import ModalRequestTour from "~/components/Modal/request-tour.vue";
-
+import { propertyImageUtils } from "~/types/property";
 const propertiesStore = usePropertiesStore();
 const { t } = useI18n();
 
@@ -319,7 +319,7 @@ useHead({
    meta: [
       { name: "og:title", content: () => property.value ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}` : "Property Details" },
       { name: "og:description", content: () => property.value ? `${property.value.description}` : "Property Details" },
-      { name: "og:image", content: () => property.value ? `${property.value.thumbnails?.[0]?.[2]?.url || property.value.images[0]}` : "/android-chrome-256x256.png" },
+      { name: "og:image", content: () => property.value ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}` : "/android-chrome-256x256.png" },
       { name: "description", content: () => property.value ? `${property.value.description}` : "Property Details" },
    ],
 });
@@ -332,8 +332,9 @@ useSeoMeta({
    description: () => property.value ? `${property.value.description}` : "Property Details",
    ogTitle: () => property.value ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}` : "Property Details",
    ogDescription: () => property.value ? `${property.value.description}` : "Property Details",
-   ogImage: () => property.value ? `${property.value.thumbnails?.[0]?.[2]?.url || property.value.images[0]}` : "/android-chrome-256x256.png",   
+   ogImage: () => property.value ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}` : "/android-chrome-256x256.png",   
 });
+
 
 defineProps({
    showToasts: {

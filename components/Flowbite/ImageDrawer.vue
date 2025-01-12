@@ -6,14 +6,15 @@ const props = defineProps({
       type: Boolean,
       default: false,
    },
-   imageUrls: {
+   images: {
       type: Array,
       required: true,
+      default: () => [],
    },
 });
 
 const getDefaultImage = (index) => {
-   const imageSet = props.imageUrls[index]?.files;
+   const imageSet = props.images[index]?.files;
    if (!imageSet) return null;
 
    // Find the largest image for default display
@@ -22,7 +23,7 @@ const getDefaultImage = (index) => {
 };
 
 const getSrcSet = (index) => {
-   const imageSet = props.imageUrls[index]?.files;
+   const imageSet = props.images[index]?.files;
    if (!imageSet) return "";
 
    return imageSet
@@ -43,7 +44,7 @@ const emit = defineEmits(["close"]);
          <div
             :class="[
                'h-[75vh] w-full bg-white lg:self-end',
-               { 'overflow-y-auto': imageUrls.length > 1 },
+               { 'overflow-y-auto': images.length > 1 },
             ]"
          >
             <div class="sticky top-0 z-50">
@@ -54,7 +55,7 @@ const emit = defineEmits(["close"]);
                />
                <!-- X Close Button  -->
                <button
-                  v-if="imageUrls.length > 0"
+                  v-if="images.length > 0"
                   class="text-pirate-850 absolute right-12 top-12 hidden h-14 w-14 items-center justify-center rounded-full border-2 bg-white hover:border-resin-500 lg:flex"
                   @click="emit('close')"
                >
@@ -63,13 +64,13 @@ const emit = defineEmits(["close"]);
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2">
                <div
-                  v-if="imageUrls.length === 0"
-                  class="col-span-full text-center text-gray-500"
+                  v-if="images.length === 0"
+                  class="col-span-full flex h-full items-center justify-center text-gray-500"
                >
                   No images to display
                </div>
                <NuxtImg
-                  v-for="(imageUrl, index) in imageUrls"
+                  v-for="(image, index) in images"
                   :key="index"
                   :src="getDefaultImage(index)"
                   :srcset="getSrcSet(index)"
@@ -77,8 +78,8 @@ const emit = defineEmits(["close"]);
                   :alt="`Property image ${index}`"
                   :class="{
                      'col-span-2':
-                        imageUrls.length % 2 !== 0 &&
-                        index === imageUrls.length - 1,
+                        images.length % 2 !== 0 &&
+                        index === images.length - 1,
                   }"
                   class="h-72 w-full rounded-md object-cover object-center shadow-lg lg:h-[75vh]"
                   loading="lazy"

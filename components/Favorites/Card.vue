@@ -83,9 +83,10 @@ const smallThumbnailUrl = computed(() => {
 });
 
 const swipeHandler = () => {
-   if (!props.isRemovable) {
-      return;
-   }
+   console.log('swipeHandler');
+   // if (!props.isRemovable) {
+   //    return;
+   // }
    isRemoving.value = true;
    setTimeout(() => {
       emit("remove");
