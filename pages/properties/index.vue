@@ -87,7 +87,6 @@ onMounted(async () => {
    // Check for query parameter and update search state
    const searchQuery = route.query.q;
    if (searchQuery && typeof searchQuery === "string") {
-      console.log(route.query.q);
       searchStore.updateRefinements({ query: searchQuery });
    }
 });

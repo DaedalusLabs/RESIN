@@ -85,7 +85,7 @@
 
 <script setup>
 import { useFlowbite } from "~/composables/useFlowbite";
-import BlurhashCanvas from './BlurhashCanvas.vue';
+import BlurhashCanvas from "./BlurhashCanvas.vue";
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -102,23 +102,23 @@ const handleImageLoad = (index) => {
 
 const getDefaultImage = (item) => {
    // If item is a string (legacy support), return it directly
-   if (typeof item === 'string') return item;
-   
+   if (typeof item === "string") return item;
+
    // If item is a thumbnail set, find the medium size or return first
    if (Array.isArray(item)) {
-      const mediumThumbnail = item.find(thumb => thumb.width === 600);
+      const mediumThumbnail = item.find((thumb) => thumb.width === 600);
       return mediumThumbnail?.url || item[0]?.url;
    }
-   
-   return '';
+
+   return "";
 };
 
 const getSrcSet = (item) => {
    // If item is a string (legacy support) or not an array, return empty srcset
-   if (typeof item === 'string' || !Array.isArray(item)) return '';
-   
+   if (typeof item === "string" || !Array.isArray(item)) return "";
+
    // If item is a thumbnail set, create srcset
-   return item.map(thumb => `${thumb.url} ${thumb.width}w`).join(', ');
+   return item.map((thumb) => `${thumb.url} ${thumb.width}w`).join(", ");
 };
 
 defineProps({
@@ -132,7 +132,7 @@ defineProps({
    },
    sizes: {
       type: String,
-      default: '100vw',
-   }
+      default: "100vw",
+   },
 });
 </script>

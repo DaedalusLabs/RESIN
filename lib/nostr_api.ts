@@ -110,7 +110,7 @@ export class NostrAPI {
          "kinds": [REQUEST_KIND],
          "#p": [user.pubkey],
       };
-      console.log("Subscribing to requests for:", user.pubkey);
+
       const subOptions: NDKSubscriptionOptions = { closeOnEose: false };
       const subscription = this.ndk.subscribe(filter, subOptions);
 

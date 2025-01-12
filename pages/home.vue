@@ -106,9 +106,7 @@ function searchPropertiesOnMap(search) {
    }
 }
 
-onMounted(() => {
-
-})
+onMounted(() => {});
 
 function updateQuery(newQuery, latitude, longitude) {
    query.value = newQuery;

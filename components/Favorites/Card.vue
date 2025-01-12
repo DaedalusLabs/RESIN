@@ -7,7 +7,11 @@
    >
       <NuxtImg
          :src="smallThumbnailUrl"
-         :srcset="property.thumbnails?.[0]?.map(thumb => `${thumb.url} ${thumb.width}w`).join(', ')"
+         :srcset="
+            property.thumbnails?.[0]
+               ?.map((thumb) => `${thumb.url} ${thumb.width}w`)
+               .join(', ')
+         "
          sizes="64px"
          alt="Favorite image"
          class="mr-4 h-16 w-16 rounded-md object-cover object-center"
@@ -72,7 +76,9 @@ const props = defineProps({
 
 const smallThumbnailUrl = computed(() => {
    if (!props.property?.thumbnails?.[0]) return props.property?.images[0];
-   const smallThumbnail = props.property.thumbnails[0].find(thumb => thumb.width === 375);
+   const smallThumbnail = props.property.thumbnails[0].find(
+      (thumb) => thumb.width === 375,
+   );
    return smallThumbnail?.url || props.property?.images[0];
 });
 

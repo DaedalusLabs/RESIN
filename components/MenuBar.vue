@@ -130,7 +130,7 @@ const handleCloseDrawer = () => {
 };
 
 const logout = async () => {
-   console.log("logout");
+   // console.log("logout");
    try {
       await nostrStore.logout();
    } catch (error) {

@@ -10,17 +10,17 @@ export default defineNuxtConfig({
       },
       optimizeDeps: {
          include: [
-            "@phosphor-icons/vue", 
+            "@phosphor-icons/vue",
             "flowbite",
             "maplibre-gl",
             "pmtiles",
             "apexcharts",
-            "blurhash"
+            "blurhash",
          ],
          force: true,
          holdUntilCrawlEnd: true,
-         noDiscovery: false
-      }
+         noDiscovery: false,
+      },
    },
    modules: [
       "@nuxt/image",
@@ -184,11 +184,11 @@ export default defineNuxtConfig({
             baseURL: "/",
             dir: "public",
             maxAge: 0, // Disable caching for service worker
-         }
+         },
       ],
       routeRules: {
-         '/robots.txt': { static: true },
-         '/sitemap.xml': { static: true }
-      }
+         "/robots.txt": { static: true },
+         "/sitemap.xml": { static: true },
+      },
    },
 });

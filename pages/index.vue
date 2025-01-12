@@ -10,7 +10,7 @@
 definePageMeta({
    layout: "startup",
    middleware: [
-      async function (to, from, next) {
+      async function (_to, _from, _next) {
          const store = useNostrStore();
 
          const isAuthenticated = await store.checkAuthenticated();
@@ -20,9 +20,6 @@ definePageMeta({
          } else {
             return navigateTo("/introduction");
          }
-         console.log("to", to);
-         console.log("from", from);
-         next();
       },
    ],
 });

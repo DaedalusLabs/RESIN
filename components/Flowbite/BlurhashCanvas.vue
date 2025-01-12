@@ -1,45 +1,45 @@
 <template>
-   <canvas 
-      ref="canvas" 
-      :width="width" 
-      :height="height" 
-      :class="[$attrs.class, 'transition-opacity duration-200']" 
-      :style="{ 
-         width: '100%', 
-         height: '100%', 
+   <canvas
+      ref="canvas"
+      :width="width"
+      :height="height"
+      :class="[$attrs.class, 'transition-opacity duration-200']"
+      :style="{
+         width: '100%',
+         height: '100%',
          visibility: isVisible ? 'visible' : 'hidden',
-         opacity: shouldFadeOut ? '0' : '1'
-      }" 
+         opacity: shouldFadeOut ? '0' : '1',
+      }"
    />
 </template>
 
 <script setup>
-import { decode } from 'blurhash';
+import { decode } from "blurhash";
 
 const props = defineProps({
    hash: {
       type: String,
-      required: true
+      required: true,
    },
    width: {
       type: Number,
-      default: 32
+      default: 32,
    },
    height: {
       type: Number,
-      default: 32
+      default: 32,
    },
    punch: {
       type: Number,
-      default: 1
+      default: 1,
    },
    priority: {
       type: Boolean,
-      default: false
-   }
+      default: false,
+   },
 });
 
-const emit = defineEmits(['blurhash-ready']);
+const emit = defineEmits(["blurhash-ready"]);
 
 const canvas = ref(null);
 const isVisible = ref(false);
@@ -61,13 +61,13 @@ const renderBlurhash = () => {
    requestAnimationFrame(() => {
       try {
          const pixels = decodeHash(props.hash);
-         const ctx = canvas.value.getContext('2d');
+         const ctx = canvas.value.getContext("2d");
          const imageData = ctx.createImageData(props.width, props.height);
          imageData.data.set(pixels);
          ctx.putImageData(imageData, 0, 0);
-         emit('blurhash-ready');
+         emit("blurhash-ready");
       } catch (error) {
-         console.warn('Failed to render blurhash:', error);
+         console.warn("Failed to render blurhash:", error);
       }
    });
 };
@@ -87,17 +87,20 @@ onMounted(() => {
       return;
    }
 
-   const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-         if (entry.isIntersecting) {
-            isVisible.value = true;
-            renderBlurhash();
-            observer.disconnect();
-         }
-      });
-   }, {
-      rootMargin: '50px'
-   });
+   const observer = new IntersectionObserver(
+      (entries) => {
+         entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+               isVisible.value = true;
+               renderBlurhash();
+               observer.disconnect();
+            }
+         });
+      },
+      {
+         rootMargin: "50px",
+      },
+   );
 
    if (canvas.value) {
       observer.observe(canvas.value);
@@ -109,15 +112,18 @@ onMounted(() => {
 });
 
 // Update canvas when hash changes and component is visible
-watch(() => props.hash, () => {
-   if (isVisible.value) {
-      shouldFadeOut.value = false;
-      renderBlurhash();
-   }
-});
+watch(
+   () => props.hash,
+   () => {
+      if (isVisible.value) {
+         shouldFadeOut.value = false;
+         renderBlurhash();
+      }
+   },
+);
 
 // Cleanup cache when component is unmounted
 onUnmounted(() => {
    pixelCache.clear();
 });
-</script> 
+</script>

@@ -5,12 +5,21 @@
          :show-toast="wrongPhrase"
          @close-toast="wrongPhrase = false"
       />
-      <FlowbiteDrawer :is-open="showDrawer" slide-from="bottom" @close="handleCloseDrawer">
+      <FlowbiteDrawer
+         :is-open="showDrawer"
+         slide-from="bottom"
+         @close="handleCloseDrawer"
+      >
          <template #title>
             {{ $t("introduction.login.recoveryPhrase.title") }}
          </template>
          <template #content>
-            <form action="#" method="POST" @submit.prevent="validatePhrase" class="pb-safe">
+            <form
+               action="#"
+               method="POST"
+               class="pb-safe"
+               @submit.prevent="validatePhrase"
+            >
                <div class="grid grid-cols-2 gap-4">
                   <FlowbiteTextInput
                      v-for="(word, index) in recoveryPhrase"

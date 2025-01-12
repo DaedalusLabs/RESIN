@@ -77,7 +77,6 @@ onMounted(async () => {
 
    if (nostrStore.typeKey == NostrLoginType.Extension) {
       skipKeyBackup.value = true;
-      console.log("skipKeyBackup", skipKeyBackup.value);
    }
 });
 
@@ -101,7 +100,6 @@ const sections = ref([
 ]);
 
 const onCloseDrawer = () => {
-   console.log("onCloseDrawer");
    showDrawer.value = false;
 };
 

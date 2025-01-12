@@ -132,11 +132,11 @@ const i18nHead = useLocaleHead({
 useHead({
    titleTemplate: (title) => (title ? `${title} | Resin` : "Resin"),
    htmlAttrs: {
-      lang: i18nHead.value?.htmlAttrs?.lang || 'en',
-      dir: i18nHead.value?.htmlAttrs?.dir || 'ltr'
+      lang: i18nHead.value?.htmlAttrs?.lang || "en",
+      dir: i18nHead.value?.htmlAttrs?.dir || "ltr",
    },
    meta: [...(i18nHead.value?.meta || [])],
-   link: [...(i18nHead.value?.link || [])]
+   link: [...(i18nHead.value?.link || [])],
 });
 
 onMounted(() => {

@@ -2,6 +2,14 @@
    <div class="relative flex h-full w-full items-center justify-center">
       <div ref="mapContainer" class="h-full w-full" />
 
+      <!-- Loading Indicator -->
+      <div
+         v-if="isMapLoading"
+         class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75"
+      >
+         <div class="loader"></div>
+      </div>
+
       <!-- Button to View Properties -->
 
       <NuxtLinkLocale class="fixed bottom-20 lg:hidden" to="properties">
@@ -54,11 +62,11 @@
 import { usePropertiesStore } from "~/stores/properties";
 import { PhGps } from "@phosphor-icons/vue";
 import { fixNestedStrings } from "~/utils/jsonParser";
-import maplibregl, { Map } from "maplibre-gl";
 import { Protocol } from "pmtiles";
 import MultiPropertyCard from "~/components/property-card/MultiPropertyCard.vue";
 
 const protocol = new Protocol();
+let maplibregl = null;
 
 const propertiesStore = usePropertiesStore();
 let properties = propertiesStore.properties;
@@ -72,6 +80,7 @@ const clickedLocations = ref([]);
 const route = useRoute();
 const showOverlapAlert = ref(false);
 const overlapCount = ref(0);
+const isMapLoading = ref(true);
 
 const props = defineProps({
    mapCenter: {
@@ -132,13 +141,14 @@ const refreshProperties = () => {
    map.value.getSource("properties")?.setData(geojson);
 };
 
-onMounted(() => {
+onMounted(async () => {
+   // Dynamically import maplibre-gl
+   maplibregl = (await import("maplibre-gl")).default;
    maplibregl.addProtocol("pmtiles", protocol.tile);
 
-   map.value = new Map({
+   map.value = new maplibregl.Map({
       container: mapContainer.value,
       style: "/map-liberty.json",
-      //   style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
       center: [props.mapCenter.lng, props.mapCenter.lat],
       zoom: zoom.value,
       maxZoom: 15,
@@ -150,6 +160,7 @@ onMounted(() => {
    });
 
    map.value.on("load", () => {
+      isMapLoading.value = false;
       refreshProperties();
 
       map.value.addSource("properties", {
@@ -430,4 +441,24 @@ watchEffect(() => {
 :deep(.maplibregl-canvas-container.maplibregl-interactive[class*="unclustered-point"]:hover) {
   cursor: pointer !important;
 } */
+
+.loader {
+   width: 48px;
+   height: 48px;
+   border: 5px solid #f07e19;
+   border-bottom-color: transparent;
+   border-radius: 50%;
+   display: inline-block;
+   box-sizing: border-box;
+   animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+   0% {
+      transform: rotate(0deg);
+   }
+   100% {
+      transform: rotate(360deg);
+   }
+}
 </style>

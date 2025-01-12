@@ -62,7 +62,6 @@ const emit = defineEmits(["close"]);
 
 const close = () => {
    emit("close");
-   console.log("close");
 };
 
 watchEffect(() => {

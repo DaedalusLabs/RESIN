@@ -129,15 +129,6 @@ const toggleFavorite = () => {
    propertiesStore.toggleFavorite(props.property.id);
 };
 
-const thumbnailUrls = computed(() => {
-   if (!props.property.thumbnails) return props.property.images;
-   return props.property.thumbnails.map(thumbnailSet => {
-      // Find the thumbnail with width 600 for default display
-      const mediumThumbnail = thumbnailSet.find(thumb => thumb.width === 600);
-      return mediumThumbnail ? mediumThumbnail.url : thumbnailSet[0].url;
-   });
-});
-
 const props = defineProps({
    property: {
       type: Object,
@@ -171,19 +162,6 @@ const openDetails = () => {
    });
    if (route) {
       return navigateTo(route.fullPath);
-   }
-};
-
-const blurhashRef = ref(null);
-const imageLoaded = ref(false);
-const blurhashReady = ref(false);
-
-const handleImageLoad = () => {
-   // Only start transition once both blurhash is ready and image is loaded
-   if (blurhashReady.value) {
-      imageLoaded.value = true;
-      // Fade out the blurhash
-      blurhashRef.value?.fadeOut();
    }
 };
 </script>

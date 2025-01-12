@@ -13,7 +13,7 @@
             :class="{ 'text-resin-500 hover:text-resin-500': isHomeView }"
          >
             <PhHouseSimple :size="24" weight="regular" class="mb-1" />
-            <span class="sr-only">{{ $t('navigation.home') }}</span>
+            <span class="sr-only">{{ $t("navigation.home") }}</span>
          </NuxtLinkLocale>
          <NuxtLinkLocale
             to="properties"
@@ -23,7 +23,7 @@
             :class="{ 'text-resin-500 hover:text-resin-500': isPropertiesView }"
          >
             <PhMagnifyingGlass :size="24" weight="regular" class="mb-1" />
-            <span class="sr-only">{{ $t('navigation.properties') }}</span>
+            <span class="sr-only">{{ $t("navigation.properties") }}</span>
          </NuxtLinkLocale>
          <NuxtLinkLocale
             to="my-resin"
@@ -40,7 +40,7 @@
                :class="{ 'hover:brightness-100': isResinView }"
                :alt="$t('navigation.myResin')"
             />
-            <span class="sr-only">{{ $t('navigation.myResin') }}</span>
+            <span class="sr-only">{{ $t("navigation.myResin") }}</span>
          </NuxtLinkLocale>
          <NuxtLinkLocale
             to="favorites"
@@ -54,7 +54,7 @@
                :weight="hasFavorites ? 'fill' : 'regular'"
                class="mb-1"
             />
-            <span class="sr-only">{{ $t('navigation.favorites') }}</span>
+            <span class="sr-only">{{ $t("navigation.favorites") }}</span>
          </NuxtLinkLocale>
          <NuxtLinkLocale
             to="profile"
@@ -65,7 +65,7 @@
             @click="handleProfileClick"
          >
             <PhUser :size="24" weight="regular" class="mb-1" />
-            <span class="sr-only">{{ $t('navigation.profile') }}</span>
+            <span class="sr-only">{{ $t("navigation.profile") }}</span>
             <span
                v-if="hasUnreadMessages"
                class="absolute right-0 top-0 h-2 w-2 rounded-full bg-resin-500 text-sm font-medium"

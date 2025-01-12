@@ -60,7 +60,6 @@ const favorites = ref([]);
 watch(
    () => propertiesStore.favorites,
    async (newFavorites) => {
-      console.log("newFavorites", newFavorites);
       favorites.value = await propertiesStore.getBulk(newFavorites);
    },
    { immediate: true, deep: true },

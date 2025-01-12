@@ -5,7 +5,7 @@ export const useSearchStore = defineStore("search", {
    state: () => ({
       refinements: {},
       searchState: {
-         "nostr_listing": {}
+         nostr_listing: {},
       },
    }),
    actions: {

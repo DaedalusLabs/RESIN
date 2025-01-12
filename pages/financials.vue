@@ -96,16 +96,10 @@ const nostrStore = useNostrStore();
 watch(
    () => nostrStore.authenticated,
    async (isAuthenticated) => {
-      console.log("finacials: watch authenticated");
       if (isAuthenticated) {
          const ndk = useNDK();
-
-         console.log("finacials: is authenticated");
          const nostrApi = new NostrAPI(ndk);
-         console.log("fetching transactions");
          await transactionsStore.fetchTransactions(nostrApi);
-      } else {
-         console.log("finacials: is not authenticated");
       }
    },
 );
@@ -127,9 +121,7 @@ function startShare() {
 
 // Fetch data when component mounts
 onMounted(async () => {
-   console.log("finacials: on mounted", nostrStore.authenticated);
    if (nostrStore.authenticated) {
-      console.log("finacials: authenticated");
       const ndk = useNDK();
       const nostrApi = new NostrAPI(ndk);
       await transactionsStore.fetchTransactions(nostrApi);

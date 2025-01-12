@@ -1,7 +1,7 @@
 <script setup>
 import { PhX } from "@phosphor-icons/vue";
 
-const props =defineProps({
+const props = defineProps({
    showDrawer: {
       type: Boolean,
       default: false,
@@ -13,23 +13,25 @@ const props =defineProps({
    thumbnails: {
       type: Array,
       default: () => [],
-   }
+   },
 });
 
 const getDefaultImage = (index) => {
    const thumbnailSet = props.thumbnails[index];
    if (!thumbnailSet) return props.imageUrls[index];
-   
+
    // Find the largest thumbnail for default display
-   const largeThumbnail = thumbnailSet.find(thumb => thumb.width === 1280);
+   const largeThumbnail = thumbnailSet.find((thumb) => thumb.width === 1280);
    return largeThumbnail?.url || thumbnailSet[0]?.url || props.imageUrls[index];
 };
 
 const getSrcSet = (index) => {
    const thumbnailSet = props.thumbnails[index];
-   if (!thumbnailSet) return '';
-   
-   return thumbnailSet.map(thumb => `${thumb.url} ${thumb.width}w`).join(', ');
+   if (!thumbnailSet) return "";
+
+   return thumbnailSet
+      .map((thumb) => `${thumb.url} ${thumb.width}w`)
+      .join(", ");
 };
 
 const emit = defineEmits(["close"]);

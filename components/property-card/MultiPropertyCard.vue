@@ -176,16 +176,6 @@ const openDetails = () => {
       return navigateTo(route.fullPath);
    }
 };
-
-const thumbnailUrls = computed(() => {
-   const property = props.properties[currentIndex.value];
-   if (!property.thumbnails) return property.images;
-   return property.thumbnails.map(thumbnailSet => {
-      // Find the thumbnail with width 600 for default display
-      const mediumThumbnail = thumbnailSet.find(thumb => thumb.width === 600);
-      return mediumThumbnail ? mediumThumbnail.url : thumbnailSet[0].url;
-   });
-});
 </script>
 
 <style scoped>
