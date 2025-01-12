@@ -14,8 +14,8 @@
             <PhMagnifyingGlass :size="12" class="mr-2 flex-shrink-0" />
             <span class="truncate font-semibold hover:text-resin-500">
                <template
-                  v-for="(part, index) in highlightQuery(suggestion)"
-                  :key="index"
+                  v-for="(part, i) in highlightQuery(suggestion)"
+                  :key="i"
                >
                   <span :class="{ 'text-resin-500': part.highlight }">
                      {{ part.text }}

@@ -40,12 +40,8 @@
                   class="w-full rounded-lg border border-gray-300 p-2.5 text-pirate-950 focus:border-resin-500 focus:ring-resin-500"
                   @change="switchLanguage($event.target.value)"
                >
-                  <option
-                     v-for="locale in locales"
-                     :key="locale.code"
-                     :value="locale.code"
-                  >
-                     {{ $t(`settings.language.${locale.code}`) }}
+                  <option v-for="l in locales" :key="l.code" :value="l.code">
+                     {{ $t(`settings.language.${l.code}`) }}
                   </option>
                </select>
             </div>

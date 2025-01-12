@@ -253,7 +253,7 @@ const { share, isSupported } = useShare();
 
 function startShare() {
    share({
-      title: "Resin",
+      title: `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`,
       text: "Check out these listings on Resin",
       url: location.href,
    });
@@ -317,10 +317,34 @@ useHead({
          ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
          : "Property Details",
    meta: [
-      { name: "og:title", content: () => property.value ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}` : "Property Details" },
-      { name: "og:description", content: () => property.value ? `${property.value.description}` : "Property Details" },
-      { name: "og:image", content: () => property.value ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}` : "/android-chrome-256x256.png" },
-      { name: "description", content: () => property.value ? `${property.value.description}` : "Property Details" },
+      {
+         name: "og:title",
+         content: () =>
+            property.value
+               ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
+               : "Property Details",
+      },
+      {
+         name: "og:description",
+         content: () =>
+            property.value
+               ? `${property.value.description}`
+               : "Property Details",
+      },
+      {
+         name: "og:image",
+         content: () =>
+            property.value
+               ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}`
+               : "/android-chrome-256x256.png",
+      },
+      {
+         name: "description",
+         content: () =>
+            property.value
+               ? `${property.value.description}`
+               : "Property Details",
+      },
    ],
 });
 
@@ -329,12 +353,19 @@ useSeoMeta({
       property.value
          ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
          : "Property Details",
-   description: () => property.value ? `${property.value.description}` : "Property Details",
-   ogTitle: () => property.value ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}` : "Property Details",
-   ogDescription: () => property.value ? `${property.value.description}` : "Property Details",
-   ogImage: () => property.value ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}` : "/android-chrome-256x256.png",   
+   description: () =>
+      property.value ? `${property.value.description}` : "Property Details",
+   ogTitle: () =>
+      property.value
+         ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
+         : "Property Details",
+   ogDescription: () =>
+      property.value ? `${property.value.description}` : "Property Details",
+   ogImage: () =>
+      property.value
+         ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}`
+         : "/android-chrome-256x256.png",
 });
-
 
 defineProps({
    showToasts: {

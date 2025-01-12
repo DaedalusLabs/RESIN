@@ -72,7 +72,9 @@
                   v-show="openSections[index]"
                   class="border-t border-gray-200 px-4 py-3"
                >
-                  <p class="text-sm text-pirate-600" v-html="qa.answer"></p>
+                  <p class="text-sm text-pirate-600">
+                     <SafeHtml :content="qa.answer" />
+                  </p>
                </div>
             </div>
          </div>
@@ -101,6 +103,7 @@ import {
    PhCaretDown,
    PhMagnifyingGlass,
 } from "@phosphor-icons/vue";
+import SafeHtml from "~/components/SafeHtml.vue";
 
 const { t } = useI18n();
 

@@ -32,7 +32,7 @@ const props = defineProps({
 onMounted(() => {
    map.value = new maplibregl.Map({
       container: mapContainer.value,
-      style: "https://api.jawg.io/styles/jawg-streets.json?access-token=ZhCsSw2AlckiNMZu9HZ1EubtLRNYKqP5xfDQmpI9BpouMugsh5NrknvugQUTGhNs",
+      style: "/map-liberty.json",
       center: [
          props.property.location.coordinates[0],
          props.property.location.coordinates[1],

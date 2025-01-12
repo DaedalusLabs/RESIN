@@ -26,9 +26,7 @@ const getSrcSet = (index) => {
    const imageSet = props.images[index]?.files;
    if (!imageSet) return "";
 
-   return imageSet
-      .map((file) => `${file.url} ${file.width}w`)
-      .join(", ");
+   return imageSet.map((file) => `${file.url} ${file.width}w`).join(", ");
 };
 
 const emit = defineEmits(["close"]);
@@ -78,8 +76,7 @@ const emit = defineEmits(["close"]);
                   :alt="`Property image ${index}`"
                   :class="{
                      'col-span-2':
-                        images.length % 2 !== 0 &&
-                        index === images.length - 1,
+                        images.length % 2 !== 0 && index === images.length - 1,
                   }"
                   class="h-72 w-full rounded-md object-cover object-center shadow-lg lg:h-[75vh]"
                   loading="lazy"

@@ -1,7 +1,7 @@
 <template>
    <div
       v-touch:swipe.left="swipeHandler"
-      class="group relative flex items-center rounded-lg border-2 border-pirate-100 bg-white p-4 shadow-sm transition-transform duration-300 ease-in-out"
+      class="group relative flex cursor-pointer items-center rounded-lg border-2 border-pirate-100 bg-white p-4 shadow-sm transition-transform duration-300 ease-in-out"
       :class="{ '-translate-x-96 transform': isRemoving }"
       @click="openDetails"
    >
@@ -83,7 +83,7 @@ const smallThumbnailUrl = computed(() => {
 });
 
 const swipeHandler = () => {
-   console.log('swipeHandler');
+   console.log("swipeHandler");
    // if (!props.isRemovable) {
    //    return;
    // }

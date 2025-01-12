@@ -9,14 +9,14 @@
       <ul v-for="index in filteredSuggestions" :key="index.indexId">
          <p class="pb-2 pl-4 text-sm font-semibold text-white">Places</p>
          <li
-            v-for="(suggestion, index) in index.hits"
-            :key="index.id"
+            v-for="(suggestion, idx) in index.hits"
+            :key="idx"
             class="flex cursor-pointer items-center overflow-hidden px-4 py-2 text-sm text-gray-400"
             @click="selectSuggestion(suggestion)"
          >
             <PhMagnifyingGlass :size="12" class="mr-2 flex-shrink-0" />
             <span class="w-full truncate font-semibold hover:text-resin-500">
-               <span v-html="highlightQuery(suggestion)" />
+               <SafeHtml :content="highlightQuery(suggestion)" />
             </span>
          </li>
       </ul>

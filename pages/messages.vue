@@ -15,12 +15,19 @@
       </div>
 
       <!-- Messages -->
-      <div ref="chatContainer" class="flex-1 overflow-y-auto bg-gray-50 p-4" @scroll="handleScroll">
+      <div
+         ref="chatContainer"
+         class="flex-1 overflow-y-auto bg-gray-50 p-4"
+         @scroll="handleScroll"
+      >
          <!-- Scroll to bottom overlay -->
-         <div v-if="showScrollButton" class="sticky top-0 z-10 flex justify-center">
-            <button 
-               @click="scrollToBottom"
+         <div
+            v-if="showScrollButton"
+            class="sticky top-0 z-10 flex justify-center"
+         >
+            <button
                class="flex items-center gap-2 rounded-full bg-pirate-500 px-4 py-2 text-sm text-white shadow-lg transition hover:bg-pirate-600"
+               @click="scrollToBottom"
             >
                <PhArrowDown :size="16" />
                {{ $t("messages.scrollToLatest") }}
@@ -136,7 +143,7 @@ function scrollToBottom() {
          const scrollHeight = chatContainer.value.scrollHeight;
          chatContainer.value.scrollTo({
             top: scrollHeight,
-            behavior: 'smooth'
+            behavior: "smooth",
          });
       }
    });

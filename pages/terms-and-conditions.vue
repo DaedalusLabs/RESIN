@@ -1,3 +1,4 @@
+// eslint-disable-next-line vue/no-v-html
 <template>
    <section class="flex max-h-full flex-col justify-between">
       <!-- Header -->
@@ -42,10 +43,9 @@
                   v-show="openSections[index]"
                   class="border-t border-gray-200 px-4 py-3"
                >
-                  <p
-                     class="text-sm text-pirate-600"
-                     v-html="section.content"
-                  ></p>
+                  <p class="text-sm text-pirate-600">
+                     <SafeHtml :content="section.content" />
+                  </p>
                </div>
             </div>
          </div>
@@ -55,12 +55,9 @@
 
 <script setup>
 import { PhCaretLeft, PhCaretDown } from "@phosphor-icons/vue";
+import SafeHtml from "~/components/SafeHtml.vue";
 
 const { t } = useI18n();
-
-useHead({
-   title: t("termsAndConditions.title"),
-});
 
 const openSections = ref(new Array(13).fill(true));
 

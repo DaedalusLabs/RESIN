@@ -1,5 +1,3 @@
-import { Title } from "#components";
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
    compatibilityDate: "2024-04-03",
@@ -150,8 +148,16 @@ export default defineNuxtConfig({
             { name: "icon", content: "/site.webmanifest", rel: "manifest" },
             { name: "manifest", content: "/site.webmanifest", rel: "manifest" },
             { name: "og:title", content: "Resin", property: "og:title" },
-            { name: "og:description", content: "Resin - Rent to own, without a loan", property: "og:description" },
-            { name: "og:image", content: "/android-chrome-256x256.png", property: "og:image" },
+            {
+               name: "og:description",
+               content: "Resin - Rent to own, without a loan",
+               property: "og:description",
+            },
+            {
+               name: "og:image",
+               content: "/android-chrome-256x256.png",
+               property: "og:image",
+            },
          ],
       },
    },
