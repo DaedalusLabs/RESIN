@@ -4,7 +4,9 @@ import { defineStore } from "pinia";
 export const useSearchStore = defineStore("search", {
    state: () => ({
       refinements: {},
-      searchState: {},
+      searchState: {
+         "nostr_listing": {}
+      },
    }),
    actions: {
       updateSearchState(newState) {

@@ -66,7 +66,7 @@ export const usePropertiesStore = defineStore("properties", {
    persist: {
       key: "properties",
       storage: piniaPluginPersistedstate.localStorage(),
-      pick: ["hasSeenMapToast"],
+      pick: ["hasSeenMapToast", "viewedProperties", "searches"],
    },
    getters: {
       getLocations(): Property[] {
@@ -88,6 +88,27 @@ export const usePropertiesStore = defineStore("properties", {
       },
 
       viewedLocations(): Property[] {
+         if (!this.isInitialized) return [];
+         // // Perform a multi-ID search using Typesense InstantSearch
+         // const viewedIds = this.viewedProperties;
+         // if (!viewedIds.length) return [];
+         
+         // // Create a filter string for multiple IDs using OR conditions
+         // const filterString = this.viewedProperties.map(id => `id:=${id}`).join(' || ');
+         
+         // // Use searchClient to query properties matching the IDs
+         // const searchResults = this.searchClient.search([{
+         //    indexName: 'nostr_listing',
+         //    params: {
+         //       filter_by: filterString,
+         //       per_page: viewedIds.length
+         //    }
+         // }]);
+         // console.log("searchResults", await searchResults);
+         // // Return the filtered properties in order of viewing
+         // return [];
+
+         console.log("viewedProperties", this.viewedProperties, this.properties);
          return this.properties.filter((location) =>
             this.viewedProperties.includes(location.id),
          );
@@ -112,6 +133,19 @@ export const usePropertiesStore = defineStore("properties", {
          this.initializeSearch();
 
          this.isInitialized = true;
+
+      // Listen for initial search results from searchClient
+      this.searchClient.search([{
+        indexName: 'nostr_listing',
+        params: {
+          per_page: 1000
+        }
+      }]).then((results) => {
+        console.log("Initial search results loaded:", results.results[0].hits.length);
+        this.properties = results.results[0].hits;
+      }).catch((err) => {
+        console.error("Error loading initial search results:", err);
+      });
       },
 
       async loadNostrPreferences() {
@@ -167,7 +201,36 @@ export const usePropertiesStore = defineStore("properties", {
             throw error;
          }
       },
+
+      async getBulk(ids: string[]) {
+         if (!ids.length) return [];
+         
+         try {
+            // Create a filter string for multiple IDs using OR conditions
+            const filterString = ids.map(id => `id:=${id}`).join(' || ');
+            
+            // Use searchClient to query properties matching the IDs
+            const results = await this.searchClient.search([{
+               indexName: 'nostr_listing',
+               params: {
+                  filter_by: filterString,
+                  per_page: ids.length
+               }
+            }]);
+
+            // Get the hits from the results
+            const properties = results.results[0].hits;
+
+            // Sort the properties to match the order of the input ids
+            return ids.map(id => properties.find(prop => prop.id === id)).filter(Boolean);
+         } catch (error) {
+            console.error('Error fetching bulk properties:', error);
+            return [];
+         }
+      },
+
       initializeSearch() {
+         console.log("initializing search");
          const typesenseAdapter = new TypesenseInstantSearchAdapter({
             server: {
                apiKey: this.typesenseApiKey,
