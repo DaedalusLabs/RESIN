@@ -33,7 +33,11 @@
          </div>
       </div>
       <!-- Pie Chart -->
-      <div v-if="hasData" id="pie-chart" class="py-6"></div>
+      <div v-if="hasData" class="py-6">
+         <div class="h-[350px]">
+            <Pie :data="chartData" :options="chartOptions" />
+         </div>
+      </div>
       <div v-else class="flex items-center justify-center py-6 text-gray-400">
          No equity data available
       </div>
@@ -42,8 +46,12 @@
 
 <script setup>
 import { PhInfo, PhXCircle } from "@phosphor-icons/vue";
-const { formatCurrency } = useFormatNumber();
+import { Pie } from "vue-chartjs";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const { formatCurrency } = useFormatNumber();
 const showTooltip = ref(false);
 
 const props = defineProps({
@@ -59,84 +67,45 @@ const props = defineProps({
 
 const hasData = computed(() => props.equity > 0 || props.payOffAmount > 0);
 
-const getChartOptions = () => {
-   return {
-      series: [props.equity, props.payOffAmount],
-      colors: ["#F97316", "#6C6D6E"],
-      chart: {
-         height: 350,
-         type: "pie",
+const total = computed(() => props.equity + props.payOffAmount);
+
+const chartData = computed(() => ({
+   labels: ["Equity", "Payoff"],
+   datasets: [
+      {
+         data: [props.equity, props.payOffAmount],
+         backgroundColor: ["#F97316", "#6C6D6E"],
+         borderWidth: 0,
       },
-      labels: ["Equity", "Payoff"],
-      stroke: {
-         width: 0,
-      },
-      plotOptions: {
-         pie: {
-            dataLabels: {
-               offset: -40,
-               minAngleToShowLabel: 10,
-            },
-            donut: {
-               size: "0%", // Ensures no donut hole for a solid pie chart
-            },
-         },
-      },
-      dataLabels: {
-         enabled: true,
-         textAnchor: "middle",
-         style: {
-            fontFamily: "Inter, sans-serif",
-            fontWeight: "400",
-            fontSize: "16px",
-            colors: ["#FFFF"], // Text color on the pie chart
-         },
-         formatter: function (val, opts) {
-            return (
-               opts.w.config.labels[opts.seriesIndex] +
-               " " +
-               val.toFixed(2) +
-               "%"
-            );
-         },
-         dropShadow: {
-            enabled: false,
-         },
-      },
+   ],
+}));
+
+const chartOptions = {
+   responsive: true,
+   maintainAspectRatio: false,
+   plugins: {
       legend: {
          position: "bottom",
-         fontSize: "12px",
-         fontFamily: "Inter, sans-serif",
          labels: {
-            colors: "#6B7280",
-         },
-         markers: {
-            width: 8,
-            height: 8,
-            radius: 12,
+            font: {
+               family: "Inter, sans-serif",
+               size: 12,
+            },
+            color: "#6B7280",
+            usePointStyle: true,
+            pointStyle: "circle",
          },
       },
-      responsive: [
-         {
-            breakpoint: 480,
-            options: {
-               chart: {
-                  height: 300,
-               },
+      tooltip: {
+         callbacks: {
+            label: function (context) {
+               const label = context.label || "";
+               const value = context.raw;
+               const percentage = ((value / total.value) * 100).toFixed(2);
+               return `${label}: ${percentage}%`;
             },
          },
-      ],
-   };
+      },
+   },
 };
-
-onMounted(async () => {
-   if (import.meta.client && hasData.value) {
-      const ApexCharts = (await import("apexcharts")).default;
-      const chart = new ApexCharts(
-         document.getElementById("pie-chart"),
-         getChartOptions(),
-      );
-      chart.render();
-   }
-});
 </script>

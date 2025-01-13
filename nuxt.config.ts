@@ -14,7 +14,6 @@ export default defineNuxtConfig({
             "flowbite",
             "maplibre-gl",
             "pmtiles",
-            "apexcharts",
             "blurhash",
             "marked",
             "dompurify",
