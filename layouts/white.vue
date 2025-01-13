@@ -1,5 +1,7 @@
 <template>
-   <div class="flex h-dvh flex-col bg-hex-white bg-cover bg-center">
+   <div
+      class="flex h-dvh flex-col bg-hex-white bg-[length:200px] bg-center bg-top"
+   >
       <main
          class="h-full flex-1 overflow-scroll"
          :class="{ 'pb-14': !$route.meta.hideBottomBar }"

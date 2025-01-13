@@ -1,6 +1,6 @@
 <template>
    <div
-      class="flex h-dvh flex-col bg-pirate-950 bg-hex-dark bg-cover bg-center"
+      class="flex h-dvh flex-col bg-pirate-950 bg-hex-dark bg-[length:200px] bg-center bg-top"
    >
       <main class="h-full flex-1 overflow-scroll pb-14">
          <slot />

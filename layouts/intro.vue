@@ -7,7 +7,9 @@ onMounted(() => {
 </script>
 
 <template>
-   <div class="fixed inset-0 bg-pirate-950 bg-hex-dark bg-cover bg-center">
+   <div
+      class="fixed inset-0 bg-pirate-950 bg-hex-dark bg-[length:200px] bg-center bg-top"
+   >
       <main class="relative flex h-screen">
          <div class="hidden h-full w-3/5 lg:block">
             <NuxtImg
