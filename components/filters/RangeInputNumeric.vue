@@ -1,7 +1,7 @@
 <template>
    <div class="mb-6">
       <label class="filter-title" :for="id">{{ label }}</label>
-      <div class="mt-2 flex items-center space-x-2">
+      <div class="mt-2 flex flex-wrap gap-2">
          <input
             :id="`${id}-start`"
             v-model="startValue"
@@ -9,10 +9,14 @@
             :min="rangeMin"
             :max="rangeMax"
             :placeholder="placeholder || rangeMin.toString()"
-            class="range-input"
+            class="range-input w-[42.5%]"
             @change="emitStartValue"
          />
-         <span class="px-2 text-sm font-medium">To</span>
+         <span
+            class="flex w-[7%] items-center justify-center text-sm font-medium"
+         >
+            to
+         </span>
          <input
             :id="`${id}-end`"
             v-model="endValue"
@@ -20,10 +24,16 @@
             :min="rangeMin"
             :max="rangeMax"
             :placeholder="placeholder || rangeMax.toString()"
-            class="range-input"
+            class="range-input w-[42.5%]"
             @change="emitEndValue"
          />
-         <span v-if="unit" class="text-sm">{{ unit }}</span>
+         <span
+            v-if="unit"
+            class="flex w-[7%] items-center justify-center text-sm"
+         >
+            {{ unit }}
+         </span>
+         <span v-else class="w-[7%]"></span>
       </div>
    </div>
 </template>

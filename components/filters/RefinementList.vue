@@ -12,6 +12,7 @@
             value-property="value"
             :options="items"
             :model-value="items"
+            :capitalize-words="capitalizeWords"
             @update:model-value="(event) => refine(event.currentTarget.value)"
          />
       </template>
@@ -30,6 +31,11 @@ const props = defineProps({
    label: {
       type: String,
       required: true,
+   },
+   capitalizeWords: {
+      type: Boolean,
+      required: false,
+      default: false,
    },
 });
 

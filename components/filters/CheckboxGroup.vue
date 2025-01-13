@@ -18,7 +18,9 @@
                />
                <div class="ml-2 grow text-sm">
                   {{
-                     props.valueProperty ? option[valueProperty] : option.label
+                     capitalizeWords
+                        ? toTitleCase(option[valueProperty] || option.label)
+                        : option[valueProperty] || option.label
                   }}
                </div>
                <div class="text-sm text-gray-400">{{ option.count }}</div>
@@ -54,6 +56,11 @@ const props = defineProps({
       type: String,
       required: true,
    },
+   capitalizeWords: {
+      type: Boolean,
+      required: false,
+      default: false,
+   },
    options: {
       type: Array,
       required: true,
@@ -66,6 +73,14 @@ const props = defineProps({
 });
 
 const showMore = ref(false);
+
+const toTitleCase = (str) => {
+   if (!str) return str;
+   return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+};
 
 const visibleOptions = computed(() => {
    return showMore.value ? props.options : props.options.slice(0, 4);

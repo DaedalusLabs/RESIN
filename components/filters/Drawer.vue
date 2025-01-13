@@ -57,10 +57,22 @@
                label="District"
             ></FiltersRefinementList>
 
+            <FiltersRefinementList
+               attribute="additional_details.type"
+               label="Type"
+               :capitalize-words="true"
+            ></FiltersRefinementList>
+
+            <FiltersRefinementList
+               attribute="key_features"
+               label="Key Features"
+               :capitalize-words="true"
+            ></FiltersRefinementList>
+
             <FiltersRefinementRangeNumber
                attribute="price"
                label="Price"
-               unit="€"
+               unit="$"
             />
             <FiltersRefinementRangeNumber
                attribute="property.bedrooms"
