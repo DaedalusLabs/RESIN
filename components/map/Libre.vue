@@ -62,11 +62,9 @@
 import { usePropertiesStore } from "~/stores/properties";
 import { PhGps } from "@phosphor-icons/vue";
 import { fixNestedStrings } from "~/utils/jsonParser";
-import { Protocol } from "pmtiles";
 import MultiPropertyCard from "~/components/property-card/MultiPropertyCard.vue";
 
-const protocol = new Protocol();
-let maplibregl = null;
+const { $createMap } = useNuxtApp();
 
 const propertiesStore = usePropertiesStore();
 let properties = propertiesStore.properties;
@@ -142,13 +140,7 @@ const refreshProperties = () => {
 };
 
 onMounted(async () => {
-   // Dynamically import maplibre-gl
-   maplibregl = (await import("maplibre-gl")).default;
-   maplibregl.addProtocol("pmtiles", protocol.tile);
-
-   map.value = new maplibregl.Map({
-      container: mapContainer.value,
-      style: "/map-liberty.json",
+   map.value = $createMap(mapContainer.value, {
       center: [props.mapCenter.lng, props.mapCenter.lat],
       zoom: zoom.value,
       maxZoom: 15,

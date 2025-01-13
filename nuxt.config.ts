@@ -12,8 +12,6 @@ export default defineNuxtConfig({
          include: [
             "@phosphor-icons/vue",
             "flowbite",
-            "maplibre-gl",
-            "pmtiles",
             "blurhash",
             "marked",
             "dompurify",

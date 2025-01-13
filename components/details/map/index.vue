@@ -18,8 +18,9 @@
 </template>
 
 <script setup>
-import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+
+const { $createMap, $maplibregl: maplibregl } = useNuxtApp();
 const mapContainer = ref(null);
 const map = ref(null);
 const props = defineProps({
@@ -30,9 +31,7 @@ const props = defineProps({
 });
 
 onMounted(() => {
-   map.value = new maplibregl.Map({
-      container: mapContainer.value,
-      style: "/map-liberty.json",
+   map.value = $createMap(mapContainer.value, {
       center: [
          props.property.location.coordinates[0],
          props.property.location.coordinates[1],
