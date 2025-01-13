@@ -8,10 +8,63 @@ export default defineNuxtConfig({
             overlay: false,
          },
       },
+      build: {
+         chunkSizeWarningLimit: 1000,
+         rollupOptions: {
+            output: {
+               manualChunks(id) {
+                  // UI libraries
+                  if (
+                     id.includes("node_modules/@phosphor-icons") ||
+                     id.includes("node_modules/flowbite")
+                  ) {
+                     return "ui-libs";
+                  }
+                  // Map related
+                  if (id.includes("node_modules/maplibre-gl")) {
+                     return "map-libs";
+                  }
+                  // Nostr related
+                  if (
+                     id.includes("node_modules/@nostr-dev-kit") ||
+                     id.includes("node_modules/nostr-tools")
+                  ) {
+                     return "nostr-libs";
+                  }
+                  // Search related
+                  if (
+                     id.includes("node_modules/@nuxtjs/algolia") ||
+                     id.includes(
+                        "node_modules/typesense-instantsearch-adapter",
+                     ) ||
+                     id.includes("node_modules/vue-instantsearch")
+                  ) {
+                     return "search-libs";
+                  }
+                  // State management
+                  if (
+                     id.includes("node_modules/pinia") ||
+                     id.includes("node_modules/@pinia")
+                  ) {
+                     return "state-libs";
+                  }
+                  // Utilities
+                  if (
+                     id.includes("node_modules/@vueuse") ||
+                     id.includes("node_modules/marked") ||
+                     id.includes("node_modules/dompurify")
+                  ) {
+                     return "util-libs";
+                  }
+               },
+            },
+         },
+      },
       optimizeDeps: {
          include: [
             "@phosphor-icons/vue",
             "flowbite",
+            "maplibre-gl",
             "blurhash",
             "marked",
             "dompurify",

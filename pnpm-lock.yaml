@@ -79,9 +79,6 @@ importers:
          pinia-plugin-persistedstate:
             specifier: ^4.2.0
             version: 4.2.0(@pinia/nuxt@0.9.0(magicast@0.3.5)(pinia@2.3.0(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3)))(rollup@4.28.1))(magicast@0.3.5)(pinia@2.3.0(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3)))(rollup@4.28.1)
-         pmtiles:
-            specifier: ^4.1.0
-            version: 4.1.0
          prettier-plugin-tailwindcss:
             specifier: ^0.6.9
             version: 0.6.9(prettier@3.4.2)
@@ -5783,12 +5780,6 @@ packages:
          picomatch:
             optional: true
 
-   fflate@0.8.2:
-      resolution:
-         {
-            integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==,
-         }
-
    file-entry-cache@8.0.0:
       resolution:
          {
@@ -8486,12 +8477,6 @@ packages:
             integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==,
          }
       engines: { node: ">=4" }
-
-   pmtiles@4.1.0:
-      resolution:
-         {
-            integrity: sha512-wymKYI61y3yI/iTzYHW18l6ViYBnF7TXbFnXb9q7RcWqkQ2EfgQVDzEIc5lImd3aAVkxu2tuWaoYhokov6N9VA==,
-         }
 
    portfinder@1.0.32:
       resolution:
@@ -15623,8 +15608,6 @@ snapshots:
       optionalDependencies:
          picomatch: 4.0.2
 
-   fflate@0.8.2: {}
-
    file-entry-cache@8.0.0:
       dependencies:
          flat-cache: 4.0.1
@@ -17402,10 +17385,6 @@ snapshots:
          fsevents: 2.3.2
 
    pluralize@8.0.0: {}
-
-   pmtiles@4.1.0:
-      dependencies:
-         fflate: 0.8.2
 
    portfinder@1.0.32:
       dependencies:

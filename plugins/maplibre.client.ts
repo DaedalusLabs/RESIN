@@ -1,7 +1,7 @@
-import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
+export default defineNuxtPlugin(async () => {
+   const maplibregl = await import("maplibre-gl");
+   await import("maplibre-gl/dist/maplibre-gl.css");
 
-export default defineNuxtPlugin(() => {
    // Configure maplibre for 2D only
    const createMap = (
       container: HTMLElement,
@@ -14,7 +14,7 @@ export default defineNuxtPlugin(() => {
          pitchWithRotate: false,
       };
 
-      return new maplibregl.Map({
+      return new maplibregl.default.Map({
          ...defaultOptions,
          ...options,
          container,
@@ -24,7 +24,7 @@ export default defineNuxtPlugin(() => {
    return {
       provide: {
          createMap,
-         maplibregl,
+         maplibregl: maplibregl.default,
       },
    };
 });

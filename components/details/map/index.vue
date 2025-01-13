@@ -30,33 +30,37 @@ const props = defineProps({
    },
 });
 
-onMounted(() => {
-   map.value = $createMap(mapContainer.value, {
-      center: [
-         props.property.location.coordinates[0],
-         props.property.location.coordinates[1],
-      ],
-      zoom: 13,
-      dragPan: false,
-   });
+onMounted(async () => {
+   try {
+      map.value = await $createMap(mapContainer.value, {
+         center: [
+            props.property.location.coordinates[0],
+            props.property.location.coordinates[1],
+         ],
+         zoom: 13,
+         dragPan: false,
+      });
 
-   map.value.scrollZoom.disable();
+      map.value.scrollZoom.disable();
 
-   const el = document.createElement("div");
-   el.className = "marker";
+      const el = document.createElement("div");
+      el.className = "marker";
 
-   el.style.background = "#F07E19";
-   el.style.width = "20px";
-   el.style.height = "20px";
-   el.style.borderRadius = "50%";
-   el.style.border = "2px solid #fff";
+      el.style.background = "#F07E19";
+      el.style.width = "20px";
+      el.style.height = "20px";
+      el.style.borderRadius = "50%";
+      el.style.border = "2px solid #fff";
 
-   new maplibregl.Marker({ element: el })
-      .setLngLat([
-         props.property.location.coordinates[0],
-         props.property.location.coordinates[1],
-      ])
-      .addTo(map.value);
+      new maplibregl.Marker({ element: el })
+         .setLngLat([
+            props.property.location.coordinates[0],
+            props.property.location.coordinates[1],
+         ])
+         .addTo(map.value);
+   } catch (error) {
+      console.error("Error initializing map:", error);
+   }
 });
 
 const goToMap = () => {
