@@ -16,6 +16,8 @@ export default defineNuxtConfig({
             "pmtiles",
             "apexcharts",
             "blurhash",
+            "marked",
+            "dompurify",
          ],
          force: true,
          holdUntilCrawlEnd: true,

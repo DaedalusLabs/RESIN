@@ -99,7 +99,7 @@
 import { useNostrStore } from "~/stores/nostr";
 import { PhCaretLeft, PhCamera } from "@phosphor-icons/vue";
 import { useNDK } from "~/composables/useNDK";
-import type { NDKUserProfile } from "@nostr-dev-kit/ndk";
+import { NDKEvent, type NDKUserProfile } from "@nostr-dev-kit/ndk";
 
 const { t } = useI18n();
 
@@ -108,7 +108,7 @@ useHead({
 });
 
 const nostrStore = useNostrStore();
-const { ndk } = useNDK();
+const ndk = useNDK();
 const showSavedAlert = ref(false);
 const fileInput = ref<HTMLInputElement | null>(null);
 
@@ -167,9 +167,12 @@ const handleFileChange = async (event: Event) => {
 
 const saveProfile = async () => {
    try {
-      if (!ndk.value || !nostrStore.user) return;
+      if (!ndk || !nostrStore.user) return;
 
-      const event = await nostrStore.user.setMetadata({
+      const event = new NDKEvent(ndk);
+
+      event.kind = 0;
+      event.content = JSON.stringify({
          name: profile.value.name,
          about: profile.value.about,
          picture: profile.value.picture,
