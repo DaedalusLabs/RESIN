@@ -20,35 +20,43 @@ export default defineConfig({
    projects: [
       {
          name: "chromium",
-         use: { ...devices["Desktop Chrome"] },
+         use: {
+            ...devices["Desktop Chrome"],
+            permissions: ["clipboard-read", "clipboard-write"],
+         },
       },
       {
          name: "firefox",
          use: { ...devices["Desktop Firefox"] },
       },
       {
-         name: "safari",
-         use: { ...devices["Desktop Safari"] },
-      },
-      {
          name: "iPhone 15",
-         use: { ...devices["iPhone 15"] },
+         use: {
+            ...devices["iPhone 15"],
+            permissions: ["clipboard-read", "clipboard-write"],
+            browserName: "chromium",
+         },
       },
       {
          name: "Pixel 7",
-         use: { ...devices["Pixel 7"] },
+         use: {
+            ...devices["Pixel 7"],
+            permissions: ["clipboard-read", "clipboard-write"],
+         },
       },
       {
          name: "MacBook 13",
          use: {
             viewport: { width: 1280, height: 800 },
             deviceScaleFactor: 2,
+            permissions: ["clipboard-read", "clipboard-write"],
+            browserName: "chromium",
          },
       },
    ],
 
    webServer: {
-      command: "pnpm build && pnpm run preview",
+      command: "pnpm nuxt generate && npx serve .output/public",
       url: "http://localhost:3000",
       reuseExistingServer: !process.env.CI,
       env: {

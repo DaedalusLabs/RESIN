@@ -59,6 +59,7 @@
                   </p>
                </div>
                <FlowbiteSwitch
+                  data-testid="push-notifications-switch"
                   :model-value="nostrStore.notificationsEnabled"
                   @update:model-value="togglePushNotifications"
                />

@@ -4,6 +4,7 @@
          type="checkbox"
          :checked="modelValue"
          class="peer sr-only"
+         v-bind="$attrs"
          @change="handleChange"
       />
       <div
