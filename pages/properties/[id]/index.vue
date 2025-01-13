@@ -74,18 +74,29 @@
       />
 
       <div class="relative xl:hidden">
-         <NuxtImg
-            v-if="property.images?.length"
-            :src="property.images[0]?.files[2]?.url"
-            :srcset="
-               property.images[0]?.files
-                  ?.map((file) => `${file.url} ${file.width}w`)
-                  .join(', ')
-            "
-            sizes="(max-width: 1280px) 100vw, 1280px"
-            alt="Property Image"
-            class="h-64 w-full object-cover"
-         />
+         <div v-if="property?.images?.length" class="relative h-64">
+            <div v-if="property.images[0]?.blurhash" class="absolute inset-0">
+               <BlurhashCanvas
+                  :hash="property.images[0].blurhash"
+                  :width="320"
+                  :height="240"
+                  class="h-full w-full"
+                  :style="{ display: mobileImageLoaded ? 'none' : 'block' }"
+               />
+            </div>
+            <NuxtImg
+               :src="property.images[0]?.files[2]?.url"
+               :srcset="
+                  property.images[0]?.files
+                     ?.map((file) => `${file.url} ${file.width}w`)
+                     .join(', ')
+               "
+               sizes="(max-width: 1280px) 100vw, 1280px"
+               alt="Property Image"
+               class="absolute inset-0 h-full w-full object-cover"
+               @load="mobileImageLoaded = true"
+            />
+         </div>
 
          <span
             v-if="property && property['resin-type'] === 'Buy Now'"
@@ -107,19 +118,35 @@
          <div
             class="sticky top-16 hidden flex-shrink flex-col gap-5 lg:w-[40%] xl:flex"
          >
-            <div>
-               <NuxtImg
-                  v-if="property.images?.length"
-                  :src="property.images[0]?.files[2]?.url"
-                  :srcset="
-                     property.images[0]?.files
-                        ?.map((file) => `${file.url} ${file.width}w`)
-                        .join(', ')
-                  "
-                  sizes="(max-width: 1280px) 40vw, 512px"
-                  alt="Property Image"
-                  class="h-96 w-full object-cover"
-               />
+            <div class="relative h-96">
+               <div v-if="property?.images?.length">
+                  <div
+                     v-if="property.images[0]?.blurhash"
+                     class="absolute inset-0"
+                  >
+                     <BlurhashCanvas
+                        :hash="property.images[0].blurhash"
+                        :width="320"
+                        :height="240"
+                        class="h-full w-full"
+                        :style="{
+                           display: desktopImageLoaded ? 'none' : 'block',
+                        }"
+                     />
+                  </div>
+                  <NuxtImg
+                     :src="property.images[0]?.files[2]?.url"
+                     :srcset="
+                        property.images[0]?.files
+                           ?.map((file) => `${file.url} ${file.width}w`)
+                           .join(', ')
+                     "
+                     sizes="(max-width: 1280px) 40vw, 512px"
+                     alt="Property Image"
+                     class="absolute inset-0 h-full w-full object-cover"
+                     @load="desktopImageLoaded = true"
+                  />
+               </div>
                <button
                   class="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
                   @click="showDrawer = true"
@@ -238,6 +265,7 @@ import ModalContactAgent from "~/components/Modal/contact-agent.vue";
 import ModalRequestTour from "~/components/Modal/request-tour.vue";
 import { propertyImageUtils } from "~/types/property";
 import type { Property } from "~/types/property";
+import BlurhashCanvas from "~/components/Flowbite/BlurhashCanvas.vue";
 
 const propertiesStore = usePropertiesStore();
 const nostrStore = useNostrStore();
@@ -258,6 +286,10 @@ const isAuthenticated = computed(() => nostrStore.isAuthenticated);
 const isFavorite = computed(() =>
    property.value ? propertiesStore.isFavorite(property.value.id) : false,
 );
+
+// Add refs for tracking image load states
+const mobileImageLoaded = ref(false);
+const desktopImageLoaded = ref(false);
 
 onMounted(async () => {
    try {

@@ -5,18 +5,30 @@
       :class="{ '-translate-x-96 transform': isRemoving }"
       @click="openDetails"
    >
-      <NuxtImg
-         :src="smallThumbnailUrl"
-         :srcset="
-            propertyImageUtils
-               .getImagesUpToWidth(property.images[0]?.files, 100)
-               ?.map((file) => `${file.url} ${file.width}w`)
-               .join(', ')
-         "
-         sizes="64px"
-         alt="Favorite image"
-         class="mr-4 h-16 w-16 rounded-md object-cover object-center"
-      />
+      <div class="relative mr-4 h-16 w-16">
+         <div v-if="property.images[0]?.blurhash" class="absolute inset-0">
+            <BlurhashCanvas
+               :hash="property.images[0].blurhash"
+               :width="64"
+               :height="64"
+               class="h-full w-full rounded-md"
+               :style="{ display: imageLoaded ? 'none' : 'block' }"
+            />
+         </div>
+         <NuxtImg
+            :src="smallThumbnailUrl"
+            :srcset="
+               propertyImageUtils
+                  .getImagesUpToWidth(property.images[0]?.files, 100)
+                  ?.map((file) => `${file.url} ${file.width}w`)
+                  .join(', ')
+            "
+            sizes="64px"
+            alt="Favorite image"
+            class="absolute inset-0 h-full w-full rounded-md object-cover object-center"
+            @load="imageLoaded = true"
+         />
+      </div>
       <div class="min-w-0 flex-1">
          <h3 class="truncate text-lg font-bold text-resin-500">
             {{ property?.title }}
@@ -61,8 +73,10 @@
 
 <script setup>
 import { propertyImageUtils } from "~/types/property";
+import BlurhashCanvas from "~/components/Flowbite/BlurhashCanvas.vue";
 
 const isRemoving = ref(false);
+const imageLoaded = ref(false);
 
 const emit = defineEmits(["remove"]);
 
