@@ -263,7 +263,7 @@ import { useNostrStore } from "~/stores/nostr";
 import { fixNestedStrings } from "~/utils/jsonParser";
 import ModalContactAgent from "~/components/Modal/contact-agent.vue";
 import ModalRequestTour from "~/components/Modal/request-tour.vue";
-import { propertyImageUtils } from "~/types/property";
+import { propertyImageUtils, propertyJsonLdUtils } from "~/types/property";
 import type { Property } from "~/types/property";
 import BlurhashCanvas from "~/components/Flowbite/BlurhashCanvas.vue";
 
@@ -430,6 +430,25 @@ useSeoMeta({
          ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}`
          : "/android-chrome-256x256.png",
 });
+
+useJsonld(() =>
+   property.value
+      ? [
+           {
+              "@context": "https://schema.org",
+              "@type": "RealEstateListing",
+              ...propertyJsonLdUtils.toRealEstateListingJsonLd(property.value),
+           },
+           {
+              "@context": "https://schema.org",
+              "@type": "SingleFamilyResidence",
+              ...propertyJsonLdUtils.toSingleFamilyResidenceJsonLd(
+                 property.value,
+              ),
+           },
+        ]
+      : [],
+);
 
 defineProps({
    showToasts: {

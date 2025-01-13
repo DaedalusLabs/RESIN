@@ -35,6 +35,7 @@ export default defineNuxtConfig({
       "@nuxt/test-utils",
       "@nuxtjs/sitemap",
       "@nuxtjs/robots",
+      "nuxt-jsonld",
    ],
 
    i18n: {

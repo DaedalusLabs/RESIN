@@ -22,7 +22,7 @@
                :srcset="getSrcSet(item)"
                :sizes="sizes"
                class="absolute inset-0 h-full w-full object-cover"
-               :alt="`Property image ${index}`"
+               :alt="`${propertyTitle} photo ${index + 1} of ${items.length}`"
                @load="handleImageLoad(index)"
             />
          </div>
@@ -133,6 +133,11 @@ defineProps({
    sizes: {
       type: String,
       default: "100vw",
+   },
+   propertyTitle: {
+      type: String,
+      required: false,
+      default: "Property Photo",
    },
 });
 </script>

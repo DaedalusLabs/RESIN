@@ -11,6 +11,7 @@
                )
             "
             :blurhash="properties[currentIndex].images[0]?.blurhash"
+            :property-title="properties[currentIndex].title"
             class="z-0 h-48 w-full object-cover"
          />
 

@@ -8,6 +8,7 @@
                )
             "
             :blurhash="property.images[0]?.blurhash"
+            :property-title="property.title"
             :class="[
                'z-0 w-full object-cover',
                compact ? 'h-32' : 'h-48 md:h-48',
