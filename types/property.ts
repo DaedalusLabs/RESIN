@@ -32,6 +32,63 @@ export type Property = {
    "resin-type": "Buy Now" | "Rent to Own";
 };
 
+export const propertyJsonLdUtils = {
+   /**
+    * Convert a Property to Schema.org RealEstateListing JSON-LD
+    */
+   toRealEstateListingJsonLd: (property: Property) => ({
+      "@context": "https://schema.org",
+      "@type": "RealEstateListing",
+      "name": `${property.title} in ${property.location.city}, ${property.location.country}`,
+      "description": property.description,
+      "countryOfOrigin": property.location.country,
+      "address": {
+         "@type": "PostalAddress",
+         "streetAddress": property.location.street,
+         "addressLocality": property.location.city,
+         "addressCountry": property.location.country,
+         "addressRegion": property.location.district,
+      },
+      "geo": {
+         "@type": "GeoCoordinates",
+         "latitude": property.location.coordinates[0],
+         "longitude": property.location.coordinates[1],
+      },
+      "image": property.images[0]?.files.map((file) => file.url),
+   }),
+
+   /**
+    * Convert a Property to Schema.org SingleFamilyResidence JSON-LD
+    */
+   toSingleFamilyResidenceJsonLd: (property: Property) => ({
+      "@context": "https://schema.org",
+      "@type": "SingleFamilyResidence",
+      "name": `${property.title}`,
+      "description": property.description,
+      "numberOfRooms": property.property.bedrooms + property.property.bathrooms,
+      "numberOfBedrooms": property.property.bedrooms,
+      "numberOfBathroomsTotal": property.property.bathrooms,
+      "floorSize": {
+         "@type": "QuantitativeValue",
+         "value": property.property.size,
+         "unitCode": "MTK",
+      },
+      "address": {
+         "@type": "PostalAddress",
+         "streetAddress": property.location.street,
+         "addressLocality": property.location.city,
+         "addressCountry": property.location.country,
+         "addressRegion": property.location.district,
+      },
+      "geo": {
+         "@type": "GeoCoordinates",
+         "latitude": property.location.coordinates[0],
+         "longitude": property.location.coordinates[1],
+      },
+      "image": property.images[0]?.files.map((file) => file.url),
+   }),
+};
+
 export type PropertyImage = Property["images"][number];
 export type PropertyImageFile = PropertyImage["files"][number];
 
