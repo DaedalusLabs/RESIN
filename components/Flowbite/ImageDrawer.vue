@@ -1,5 +1,6 @@
 <script setup>
 import { PhX } from "@phosphor-icons/vue";
+import BlurhashCanvas from "./BlurhashCanvas.vue";
 
 const props = defineProps({
    showDrawer: {
@@ -12,6 +13,12 @@ const props = defineProps({
       default: () => [],
    },
 });
+
+const imageLoaded = ref({});
+
+const handleImageLoad = (index) => {
+   imageLoaded.value[index] = true;
+};
 
 const getDefaultImage = (index) => {
    const imageSet = props.images[index]?.files;
@@ -67,20 +74,36 @@ const emit = defineEmits(["close"]);
                >
                   No images to display
                </div>
-               <NuxtImg
+               <div
                   v-for="(image, index) in images"
                   :key="index"
-                  :src="getDefaultImage(index)"
-                  :srcset="getSrcSet(index)"
-                  :sizes="'(max-width: 1024px) 100vw, 50vw'"
-                  :alt="`Property image ${index}`"
                   :class="{
                      'col-span-2':
                         images.length % 2 !== 0 && index === images.length - 1,
                   }"
-                  class="h-72 w-full rounded-md object-cover object-center shadow-lg lg:h-[75vh]"
-                  loading="lazy"
-               />
+                  class="relative h-72 lg:h-[75vh]"
+               >
+                  <div v-if="image.blurhash" class="absolute inset-0">
+                     <BlurhashCanvas
+                        :hash="image.blurhash"
+                        :width="320"
+                        :height="240"
+                        class="h-full w-full"
+                        :style="{
+                           display: imageLoaded[index] ? 'none' : 'block',
+                        }"
+                     />
+                  </div>
+                  <NuxtImg
+                     :src="getDefaultImage(index)"
+                     :srcset="getSrcSet(index)"
+                     :sizes="'(max-width: 1024px) 100vw, 50vw'"
+                     :alt="`Property image ${index}`"
+                     class="h-full w-full rounded-md object-cover object-center shadow-lg"
+                     loading="lazy"
+                     @load="handleImageLoad(index)"
+                  />
+               </div>
             </div>
          </div>
       </div>
