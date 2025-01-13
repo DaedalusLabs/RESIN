@@ -70,7 +70,9 @@ export default defineNuxtConfig({
    spaLoadingTemplate: true,
    pwa: {
       registerType: "autoUpdate",
+      manifestFilename: "site.webmanifest",
       manifest: {
+         id: "https://resin.estate/",
          name: "Resin",
          short_name: "Resin",
          theme_color: "#F07E19",
@@ -85,6 +87,12 @@ export default defineNuxtConfig({
                src: "android-chrome-192x192.png",
                sizes: "192x192",
                type: "image/png",
+            },
+            {
+               src: "web-app-manifest-512x512.png",
+               sizes: "512x512",
+               type: "image/png",
+               purpose: "maskable",
             },
          ],
       },
@@ -150,8 +158,6 @@ export default defineNuxtConfig({
                rel: "apple-touch-icon",
                sizes: "180x180",
             },
-            { name: "icon", content: "/site.webmanifest", rel: "manifest" },
-            { name: "manifest", content: "/site.webmanifest", rel: "manifest" },
             { name: "og:title", content: "Resin", property: "og:title" },
             {
                name: "og:description",

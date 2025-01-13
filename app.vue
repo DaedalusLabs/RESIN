@@ -1,6 +1,6 @@
 <template>
    <div>
-      <VitePwaManifest />
+      <NuxtPwaAssets />
 
       <!-- Maintenance Notice -->
       <ResinNotificationBar

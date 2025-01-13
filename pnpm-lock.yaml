@@ -45,7 +45,7 @@ importers:
             version: 3.2.0
          "@vite-pwa/nuxt":
             specifier: ^0.10.6
-            version: 0.10.6(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(workbox-build@7.3.0)(workbox-window@7.3.0)
+            version: 0.10.6(@vite-pwa/assets-generator@0.2.6)(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(workbox-build@7.3.0)(workbox-window@7.3.0)
          apexcharts:
             specifier: ^4.3.0
             version: 4.3.0
@@ -119,6 +119,9 @@ importers:
          "@playwright/test":
             specifier: ^1.42.1
             version: 1.49.1
+         "@vite-pwa/assets-generator":
+            specifier: ^0.2.6
+            version: 0.2.6
          "@vitejs/plugin-vue":
             specifier: ^5.0.4
             version: 5.2.1(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(vue@3.5.13(typescript@5.7.3))
@@ -1126,6 +1129,12 @@ packages:
       resolution:
          {
             integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==,
+         }
+
+   "@canvas/image-data@1.0.0":
+      resolution:
+         {
+            integrity: sha512-BxOqI5LgsIQP1odU5KMwV9yoijleOPzHL18/YvNqF9KFSGF2K/DLlYAbDQsWqd/1nbaFuSkYD/191dpMtNh4vw==,
          }
 
    "@capsizecss/metrics@2.2.0":
@@ -3477,6 +3486,14 @@ packages:
       engines: { node: ">=16" }
       hasBin: true
 
+   "@vite-pwa/assets-generator@0.2.6":
+      resolution:
+         {
+            integrity: sha512-kK44dXltvoubEo5B+6tCGjUrOWOE1+dA4DForbFpO1rKy2wSkAVGrs8tyfN6DzTig89/QKyV8XYodgmaKyrYng==,
+         }
+      engines: { node: ">=16.14.0" }
+      hasBin: true
+
    "@vite-pwa/nuxt@0.10.6":
       resolution:
          {
@@ -4501,6 +4518,12 @@ packages:
             integrity: sha512-Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==,
          }
 
+   colorette@2.0.20:
+      resolution:
+         {
+            integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==,
+         }
+
    combined-stream@1.0.8:
       resolution:
          {
@@ -4914,6 +4937,20 @@ packages:
       peerDependenciesMeta:
          supports-color:
             optional: true
+
+   decode-bmp@0.2.1:
+      resolution:
+         {
+            integrity: sha512-NiOaGe+GN0KJqi2STf24hfMkFitDUaIoUU3eKvP/wAbLe8o6FuW5n/x7MHPR0HKvBokp6MQY/j7w8lewEeVCIA==,
+         }
+      engines: { node: ">=8.6.0" }
+
+   decode-ico@0.4.1:
+      resolution:
+         {
+            integrity: sha512-69NZfbKIzux1vBOd31al3XnMnH+2mqDhEgLdpygErm4d60N+UwA5Sq5WFjmEDQzumgB9fElojGwWG0vybVfFmA==,
+         }
+      engines: { node: ">=8.6" }
 
    decompress-response@6.0.0:
       resolution:
@@ -6417,6 +6454,12 @@ packages:
             integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==,
          }
       engines: { node: ">=16.17.0" }
+
+   ico-endec@0.1.6:
+      resolution:
+         {
+            integrity: sha512-ZdLU38ZoED3g1j3iEyzcQj+wAkY2xfWNkymszfJPoxucIUhK7NayQ+/C4Kv0nDFMIsbtbEHldv3V8PU494/ueQ==,
+         }
 
    idb@7.1.1:
       resolution:
@@ -9530,6 +9573,12 @@ packages:
             integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==,
          }
 
+   sharp-ico@0.1.5:
+      resolution:
+         {
+            integrity: sha512-a3jODQl82NPp1d5OYb0wY+oFaPk7AvyxipIowCHk7pBsZCWgbe0yAkU2OOXdoH0ENyANhyOQbs9xkAiRHcF02Q==,
+         }
+
    sharp@0.32.6:
       resolution:
          {
@@ -10175,6 +10224,12 @@ packages:
          }
       engines: { node: ">=14.0.0" }
 
+   to-data-view@1.1.0:
+      resolution:
+         {
+            integrity: sha512-1eAdufMg6mwgmlojAx3QeMnzB/BTVp7Tbndi3U7ftcT2zCZadjxkkmLmd97zmaxWi+sgGcgWrokmpEoy0Dn0vQ==,
+         }
+
    to-regex-range@5.0.1:
       resolution:
          {
@@ -10413,6 +10468,12 @@ packages:
             integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==,
          }
       engines: { node: ">= 0.4" }
+
+   unconfig@0.3.13:
+      resolution:
+         {
+            integrity: sha512-N9Ph5NC4+sqtcOjPfHrRcHekBCadCXWTBzp2VYYbySOHW0PfD9XLCeXshTXjkPYwLrBr9AtSeU0CZmkYECJhng==,
+         }
 
    uncrypto@0.1.3:
       resolution:
@@ -12186,6 +12247,8 @@ snapshots:
          "@babel/helper-validator-identifier": 7.25.9
 
    "@bcoe/v8-coverage@0.2.3": {}
+
+   "@canvas/image-data@1.0.0": {}
 
    "@capsizecss/metrics@2.2.0": {}
 
@@ -13962,12 +14025,23 @@ snapshots:
          - rollup
          - supports-color
 
-   "@vite-pwa/nuxt@0.10.6(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(workbox-build@7.3.0)(workbox-window@7.3.0)":
+   "@vite-pwa/assets-generator@0.2.6":
+      dependencies:
+         cac: 6.7.14
+         colorette: 2.0.20
+         consola: 3.3.3
+         sharp: 0.32.6
+         sharp-ico: 0.1.5
+         unconfig: 0.3.13
+
+   "@vite-pwa/nuxt@0.10.6(@vite-pwa/assets-generator@0.2.6)(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(workbox-build@7.3.0)(workbox-window@7.3.0)":
       dependencies:
          "@nuxt/kit": 3.14.1592(magicast@0.3.5)(rollup@4.28.1)
          pathe: 1.1.2
          ufo: 1.5.4
-         vite-plugin-pwa: 0.21.1(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(workbox-build@7.3.0)(workbox-window@7.3.0)
+         vite-plugin-pwa: 0.21.1(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(workbox-build@7.3.0)(workbox-window@7.3.0)
+      optionalDependencies:
+         "@vite-pwa/assets-generator": 0.2.6
       transitivePeerDependencies:
          - magicast
          - rollup
@@ -14470,7 +14544,6 @@ snapshots:
          buffer: 5.7.1
          inherits: 2.0.4
          readable-stream: 3.6.2
-      optional: true
 
    blob-to-buffer@1.2.9: {}
 
@@ -14517,7 +14590,6 @@ snapshots:
       dependencies:
          base64-js: 1.5.1
          ieee754: 1.2.1
-      optional: true
 
    buffer@6.0.3:
       dependencies:
@@ -14661,8 +14733,7 @@ snapshots:
       dependencies:
          readdirp: 4.0.2
 
-   chownr@1.1.4:
-      optional: true
+   chownr@1.1.4: {}
 
    chownr@2.0.0: {}
 
@@ -14712,17 +14783,17 @@ snapshots:
       dependencies:
          color-name: 1.1.4
          simple-swizzle: 0.2.2
-      optional: true
 
    color@4.2.3:
       dependencies:
          color-convert: 2.0.1
          color-string: 1.9.1
-      optional: true
 
    colord@2.9.3: {}
 
    colorette@1.4.0: {}
+
+   colorette@2.0.20: {}
 
    combined-stream@1.0.8:
       dependencies:
@@ -14952,6 +15023,17 @@ snapshots:
       optionalDependencies:
          supports-color: 9.4.0
 
+   decode-bmp@0.2.1:
+      dependencies:
+         "@canvas/image-data": 1.0.0
+         to-data-view: 1.1.0
+
+   decode-ico@0.4.1:
+      dependencies:
+         "@canvas/image-data": 1.0.0
+         decode-bmp: 0.2.1
+         to-data-view: 1.1.0
+
    decompress-response@6.0.0:
       dependencies:
          mimic-response: 3.1.0
@@ -14960,8 +15042,7 @@ snapshots:
 
    deep-equal@1.0.1: {}
 
-   deep-extend@0.6.0:
-      optional: true
+   deep-extend@0.6.0: {}
 
    deep-is@0.1.4: {}
 
@@ -15558,8 +15639,7 @@ snapshots:
          signal-exit: 4.1.0
          strip-final-newline: 3.0.0
 
-   expand-template@2.0.3:
-      optional: true
+   expand-template@2.0.3: {}
 
    expect-type@1.1.0: {}
 
@@ -15707,8 +15787,7 @@ snapshots:
 
    fresh@0.5.2: {}
 
-   fs-constants@1.0.0:
-      optional: true
+   fs-constants@1.0.0: {}
 
    fs-extra@11.2.0:
       dependencies:
@@ -15816,8 +15895,7 @@ snapshots:
       dependencies:
          git-up: 7.0.0
 
-   github-from-package@0.0.0:
-      optional: true
+   github-from-package@0.0.0: {}
 
    gl-matrix@3.4.3: {}
 
@@ -16016,6 +16094,8 @@ snapshots:
 
    human-signals@5.0.0: {}
 
+   ico-endec@0.1.6: {}
+
    idb@7.1.1: {}
 
    ieee754@1.2.1: {}
@@ -16150,8 +16230,7 @@ snapshots:
 
    is-arrayish@0.2.1: {}
 
-   is-arrayish@0.3.2:
-      optional: true
+   is-arrayish@0.3.2: {}
 
    is-async-function@2.1.0:
       dependencies:
@@ -16759,8 +16838,7 @@ snapshots:
 
    mitt@3.0.1: {}
 
-   mkdirp-classic@0.5.3:
-      optional: true
+   mkdirp-classic@0.5.3: {}
 
    mkdirp@0.3.0: {}
 
@@ -16801,8 +16879,7 @@ snapshots:
 
    nanotar@0.1.1: {}
 
-   napi-build-utils@1.0.2:
-      optional: true
+   napi-build-utils@1.0.2: {}
 
    natural-compare@1.4.0: {}
 
@@ -16905,10 +16982,8 @@ snapshots:
    node-abi@3.71.0:
       dependencies:
          semver: 7.6.3
-      optional: true
 
-   node-addon-api@6.1.0:
-      optional: true
+   node-addon-api@6.1.0: {}
 
    node-addon-api@7.1.1: {}
 
@@ -17621,7 +17696,6 @@ snapshots:
          simple-get: 4.0.1
          tar-fs: 2.1.1
          tunnel-agent: 0.6.0
-      optional: true
 
    prelude-ls@1.2.1: {}
 
@@ -17698,7 +17772,6 @@ snapshots:
          ini: 1.3.8
          minimist: 1.2.8
          strip-json-comments: 2.0.1
-      optional: true
 
    read-cache@1.0.0:
       dependencies:
@@ -17732,7 +17805,6 @@ snapshots:
          inherits: 2.0.4
          string_decoder: 1.3.0
          util-deprecate: 1.0.2
-      optional: true
 
    readable-stream@4.5.2:
       dependencies:
@@ -18023,6 +18095,12 @@ snapshots:
 
    setprototypeof@1.2.0: {}
 
+   sharp-ico@0.1.5:
+      dependencies:
+         decode-ico: 0.4.1
+         ico-endec: 0.1.6
+         sharp: 0.32.6
+
    sharp@0.32.6:
       dependencies:
          color: 4.2.3
@@ -18033,7 +18111,6 @@ snapshots:
          simple-get: 4.0.1
          tar-fs: 3.0.6
          tunnel-agent: 0.6.0
-      optional: true
 
    shebang-command@2.0.0:
       dependencies:
@@ -18077,15 +18154,13 @@ snapshots:
 
    signal-exit@4.1.0: {}
 
-   simple-concat@1.0.1:
-      optional: true
+   simple-concat@1.0.1: {}
 
    simple-get@4.0.1:
       dependencies:
          decompress-response: 6.0.0
          once: 1.4.0
          simple-concat: 1.0.1
-      optional: true
 
    simple-git@3.27.0:
       dependencies:
@@ -18098,7 +18173,6 @@ snapshots:
    simple-swizzle@0.2.2:
       dependencies:
          is-arrayish: 0.3.2
-      optional: true
 
    sirv@3.0.0:
       dependencies:
@@ -18268,8 +18342,7 @@ snapshots:
       dependencies:
          min-indent: 1.0.1
 
-   strip-json-comments@2.0.1:
-      optional: true
+   strip-json-comments@2.0.1: {}
 
    strip-json-comments@3.1.1: {}
 
@@ -18377,7 +18450,6 @@ snapshots:
          mkdirp-classic: 0.5.3
          pump: 3.0.2
          tar-stream: 2.2.0
-      optional: true
 
    tar-fs@3.0.6:
       dependencies:
@@ -18386,7 +18458,6 @@ snapshots:
       optionalDependencies:
          bare-fs: 2.3.5
          bare-path: 2.1.3
-      optional: true
 
    tar-stream@2.2.0:
       dependencies:
@@ -18395,7 +18466,6 @@ snapshots:
          fs-constants: 1.0.0
          inherits: 2.0.4
          readable-stream: 3.6.2
-      optional: true
 
    tar-stream@3.1.7:
       dependencies:
@@ -18481,6 +18551,8 @@ snapshots:
 
    tinyspy@3.0.2: {}
 
+   to-data-view@1.1.0: {}
+
    to-regex-range@5.0.1:
       dependencies:
          is-number: 7.0.0
@@ -18514,7 +18586,6 @@ snapshots:
    tunnel-agent@0.6.0:
       dependencies:
          safe-buffer: 5.2.1
-      optional: true
 
    type-check@0.4.0:
       dependencies:
@@ -18607,6 +18678,12 @@ snapshots:
          has-bigints: 1.1.0
          has-symbols: 1.1.0
          which-boxed-primitive: 1.1.1
+
+   unconfig@0.3.13:
+      dependencies:
+         "@antfu/utils": 0.7.10
+         defu: 6.1.4
+         jiti: 1.21.6
 
    uncrypto@0.1.3: {}
 
@@ -18892,7 +18969,7 @@ snapshots:
          - rollup
          - supports-color
 
-   vite-plugin-pwa@0.21.1(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(workbox-build@7.3.0)(workbox-window@7.3.0):
+   vite-plugin-pwa@0.21.1(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.10.2)(terser@5.37.0))(workbox-build@7.3.0)(workbox-window@7.3.0):
       dependencies:
          debug: 4.4.0(supports-color@9.4.0)
          pretty-bytes: 6.1.1
@@ -18900,6 +18977,8 @@ snapshots:
          vite: 5.4.11(@types/node@22.10.2)(terser@5.37.0)
          workbox-build: 7.3.0
          workbox-window: 7.3.0
+      optionalDependencies:
+         "@vite-pwa/assets-generator": 0.2.6
       transitivePeerDependencies:
          - supports-color
 
