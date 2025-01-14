@@ -3,5 +3,11 @@
    "tabWidth": 3,
    "quoteProps": "consistent",
    "plugins": ["prettier-plugin-tailwindcss"],
-   "htmlWhitespaceSensitivity": "ignore"
+   "htmlWhitespaceSensitivity": "ignore",
+   "overrides": [
+      {
+         "files": "pnpm-lock.yaml",
+         "options": { "requirePragma": true }
+      }
+   ]
 }

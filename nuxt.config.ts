@@ -282,7 +282,9 @@ export default defineNuxtConfig({
          );
          return urls;
       },
-      sources: [`${process.env.BACKEND_ENDPOINT || "https://api.resin.estate"}/listings/urls`],
+      sources: [
+         `${process.env.BACKEND_ENDPOINT || "https://api.resin.estate"}/listings/urls`,
+      ],
    },
    robots: {
       groups: [
