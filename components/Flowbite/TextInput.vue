@@ -3,13 +3,14 @@
       <input
          id="default-input"
          :placeholder="placeholder"
-         type="text"
+         :type="type"
          class="block w-full rounded-lg border p-2.5 text-sm text-gray-900 focus:ring-transparent"
          :class="{
             'border-gray-300 bg-gray-50 focus:border-gray-300': !showError,
             'border-red-500 bg-red-50 focus:border-red-500': showError,
          }"
          :value="modelValue"
+         v-bind="$attrs"
          @input="onInput"
       />
    </div>
@@ -31,6 +32,15 @@ const props = defineProps({
       type: String,
       default: "",
    },
+   type: {
+      type: String,
+      default: "text",
+   },
+});
+
+// Disable attribute inheritance on the root element
+defineOptions({
+   inheritAttrs: false,
 });
 
 const emit = defineEmits(["update:modelValue"]);

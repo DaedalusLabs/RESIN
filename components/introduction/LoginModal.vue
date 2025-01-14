@@ -1,38 +1,64 @@
 <template>
    <FlowbiteModal :is-open="isModalOpen" @update:is-open="handleModalUpdate">
-      <template #title>Log in with NOSTR</template>
-      <p class="my-6 text-sm">Choose an option below to access your account.</p>
+      <template #title>{{ $t("introduction.login.title") }}</template>
+      <p class="my-6 text-sm">{{ $t("introduction.login.description") }}</p>
       <div class="mt-4 flex w-full flex-col gap-4">
-         <NuxtLinkLocale to="properties" class="block">
-            <FlowbiteBorderButton
-               :text="`Use browser extension`"
-               class="w-full"
-            />
-         </NuxtLinkLocale>
+         <FlowbiteBorderButton
+            :text="$t('introduction.login.recoveryPhrase.button')"
+            @click="
+               () => {
+                  emit('openPhraseDrawer');
+                  handleModalUpdate(false);
+               }
+            "
+         />
 
-         <FlowbiteBorderButton
-            :text="`Use private key (NSEC)`"
-            @click="emit('openNsecDrawer')"
-         />
-         <FlowbiteBorderButton
-            :text="`Use recovery phrase (12 words)`"
-            @click="emit('openPhraseDrawer')"
-         />
+         <section v-if="hasExtension()">
+            <FlowbiteBorderButton
+               v-if="hasNip44()"
+               :text="
+                  hasExtension()
+                     ? $t('introduction.login.extension.useExtension')
+                     : $t('introduction.login.extension.noExtension')
+               "
+               class="border-gray text-gray w-full"
+               @click="
+                  hasExtension() ? handleExtensionLogin() : openExtensionApps()
+               "
+            />
+            <button
+               v-else-if="!hasNip44()"
+               class="inline-flex w-full items-center justify-center rounded-lg border border-pirate-500 bg-transparent px-4 py-2 text-center text-sm font-medium text-pirate-500"
+               disabled
+            >
+               {{ $t("introduction.login.extension.noNip44") }}
+            </button>
+         </section>
+         <section v-else>
+            <FlowbiteBorderButton
+               :text="$t('introduction.login.extension.noExtension')"
+               class="w-full"
+               color="gray-500"
+               hover-text-color="gray-500"
+               @click="openExtensionApps()"
+            />
+         </section>
       </div>
-      <p class="mt-4 text-center text-xs">
-         Or
-         <span class="text-resin-500">create a new account</span>
-         if you don't have one yet. Have questions?
-         <NuxtLinkLocale class="text-resin-500" to="#">
-            Contact us
-         </NuxtLinkLocale>
-         for assistance.
-      </p>
    </FlowbiteModal>
 </template>
 
 <script setup>
+import { useNostr } from "~/composables/useNostr";
+const {
+   loginWithExtension,
+   isAuthenticated,
+   hasExtension,
+   hasNip44,
+   checkAuthenticated,
+} = useNostr();
+
 const emit = defineEmits(["openNsecDrawer", "openPhraseDrawer", "close"]);
+const localePath = useLocalePath();
 
 const isModalOpen = ref(false);
 
@@ -52,4 +78,29 @@ const handleModalUpdate = (value) => {
       emit("close");
    }
 };
+
+async function handleExtensionLogin() {
+   try {
+      handleModalUpdate(false);
+      await loginWithExtension();
+      await checkAuthenticated();
+      await usePropertiesStore().init();
+
+      if (isAuthenticated) {
+         navigateTo(localePath("properties"));
+      }
+   } catch (err) {
+      // Error is handled in composable
+      console.error("Login failed:", err);
+   }
+}
+
+function openExtensionApps() {
+   handleModalUpdate(false);
+   navigateTo("https://nostrapps.com/#signers", {
+      open: {
+         target: "_blank",
+      },
+   });
+}
 </script>

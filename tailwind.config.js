@@ -16,11 +16,11 @@ export default {
       extend: {
          backgroundImage: {
             "hex-dark":
-               "url('~/assets/images/backgrounds/BG_Hexagon_Dark10.webp')",
+               "url('~/assets/images/backgrounds/BG_Hexagon_Dark10-crop.webp')",
             "hex-white":
-               "url('~/assets/images/backgrounds/BG_Hexagon_White10.webp')",
+               "url('~/assets/images/backgrounds/BG_Hexagon_White10-crop.webp')",
             "hex-resin":
-               "url('~/assets/images/backgrounds/BG_Hexagon_RESIN.webp')",
+               "url('~/assets/images/backgrounds/BG_Hexagon_RESIN-crop.webp')",
          },
          animation: {
             spring: "spring 1200ms cubic-bezier(0.7, -0.4, 0.4, 1.4) forwards",

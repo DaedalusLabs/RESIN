@@ -1,17 +1,40 @@
 <template>
-   <div class="flex h-dvh flex-col bg-hex-white bg-cover bg-center">
-      <main class="h-full flex-1 overflow-scroll pb-14">
+   <div
+      class="flex h-dvh flex-col bg-hex-white bg-[length:200px] bg-center bg-top"
+   >
+      <main
+         class="h-full flex-1 overflow-scroll"
+         :class="{ 'pb-14': !$route.meta.hideBottomBar }"
+      >
          <slot />
       </main>
-      <MenuBar :show-drawer="showDrawer" @close="showDrawer = false" />
-      <BottomBar v-if="!showDrawer" @toggle-menu-bar="handleToggleMenuBar" />
+      <MenuBar :show-drawer="showDrawer" @close="handleCloseDrawer" />
+      <BottomBar
+         v-if="!showDrawer && !$route.meta.hideBottomBar"
+         @toggle-menu-bar="handleToggleMenuBar"
+      />
    </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useNostrStore } from "~/stores/nostr";
+import { useChatStore } from "~/stores/chat";
+
+const nostrStore = useNostrStore();
+const chatStore = useChatStore();
 const showDrawer = ref(false);
+
+onMounted(async () => {
+   if (nostrStore.authenticated) {
+      await chatStore.init();
+   }
+});
 
 const handleToggleMenuBar = () => {
    showDrawer.value = true;
+};
+
+const handleCloseDrawer = () => {
+   showDrawer.value = false;
 };
 </script>

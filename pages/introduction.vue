@@ -1,6 +1,6 @@
 <template>
    <section
-      class="flex h-full flex-col items-center justify-between px-12 py-20"
+      class="relative isolate flex h-full flex-col items-center justify-between px-12 py-20"
    >
       <!-- Overlays -->
       <IntroductionLoginModal
@@ -21,7 +21,11 @@
 
       <div class="flex h-full flex-col items-center justify-between">
          <!-- Main page layout -->
-         <NuxtImg src="/images/logos/resin-text.png" alt="Logo" class="h-10" />
+         <NuxtImg
+            src="/images/logos/resin-text.png"
+            alt="RESIN Logo"
+            class="h-10"
+         />
          <div class="flex flex-col items-center justify-center gap-6">
             <div>
                <h1
@@ -35,6 +39,15 @@
             </div>
 
             <FlowbiteButton
+               v-if="authenticationStatus"
+               class="px-5 py-3"
+               :text="$t('continueButton')"
+               :show-icon="false"
+               @click="skipRegistration"
+            />
+
+            <FlowbiteButton
+               v-else
                class="px-5 py-3"
                :text="$t('introductionButton')"
                :show-icon="false"
@@ -49,6 +62,7 @@
 
          <div class="flex flex-col items-center justify-center gap-2">
             <FlowbiteButton
+               v-if="!authenticationStatus"
                :text="$t('signIn')"
                class="border border-pirate-400 bg-transparent px-3 py-3 font-normal text-pirate-50"
                :show-icon="false"
@@ -57,15 +71,26 @@
             <NuxtLinkLocale
                to="#"
                class="mb-2 me-2 mt-10 rounded-lg px-5 py-2.5 text-sm font-medium text-pirate-400 hover:bg-white hover:text-pirate-700"
-            >
-               {{ $t("checkCountryAvailability") }}
-            </NuxtLinkLocale>
+            ></NuxtLinkLocale>
          </div>
       </div>
    </section>
 </template>
 
 <script setup>
+const { checkAuthenticated, isAuthenticated } = useNostr();
+const localePath = useLocalePath();
+
+const authenticationStatus = ref(false);
+
+authenticationStatus.value = await checkAuthenticated();
+
+const { t } = useI18n();
+
+useHead({
+   title: t("introduction.title"),
+});
+
 definePageMeta({
    layout: "intro",
 });
@@ -100,5 +125,11 @@ const handleCloseDrawer = () => {
 const handleCloseModal = () => {
    showLoginModal.value = false;
    showRegisterModal.value = false;
+};
+
+const skipRegistration = () => {
+   if (isAuthenticated) {
+      navigateTo(localePath("properties"));
+   }
 };
 </script>

@@ -5,11 +5,11 @@
    >
       <div v-if="isExpanded" class="flex items-center space-x-2">
          <PhArrowUp weight="bold" />
-         <p>Collapse</p>
+         <p>{{ $t("property.details.summary.collapse") }}</p>
       </div>
       <div v-else class="flex items-center space-x-2">
          <PhArrowDown weight="bold" />
-         <p>Read full description</p>
+         <p>{{ $t("property.details.summary.readMore") }}</p>
       </div>
    </button>
 </template>

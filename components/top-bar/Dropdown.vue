@@ -13,7 +13,14 @@
          >
             <PhMagnifyingGlass :size="12" class="mr-2 flex-shrink-0" />
             <span class="truncate font-semibold hover:text-resin-500">
-               <span v-html="highlightQuery(suggestion)" />
+               <template
+                  v-for="(part, i) in highlightQuery(suggestion)"
+                  :key="i"
+               >
+                  <span :class="{ 'text-resin-500': part.highlight }">
+                     {{ part.text }}
+                  </span>
+               </template>
             </span>
          </li>
       </ul>
@@ -39,7 +46,7 @@ const props = defineProps({
 const emit = defineEmits(["update:query"]);
 
 function selectSuggestion(suggestion) {
-   const fullAddress = `${suggestion.location.address.street}, ${suggestion.location.address.city}, ${suggestion.location.address.country}`;
+   const fullAddress = `${suggestion.location.street}, ${suggestion.location.city}, ${suggestion.location.country}`;
    emit(
       "update:query",
       fullAddress,
@@ -50,8 +57,27 @@ function selectSuggestion(suggestion) {
 }
 
 function highlightQuery(suggestion) {
-   const fullAddress = `${suggestion.location.address.street}, ${suggestion.location.address.city}, ${suggestion.location.address.country}`;
+   const fullAddress = `${suggestion.location.street}, ${suggestion.location.city}, ${suggestion.location.country}`;
    const regex = new RegExp(`(${props.query})`, "gi");
-   return fullAddress.replace(regex, '<span class="text-resin-500">$1</span>');
+   const parts = [];
+   let lastIndex = 0;
+   let match;
+
+   while ((match = regex.exec(fullAddress)) !== null) {
+      if (match.index > lastIndex) {
+         parts.push({
+            text: fullAddress.slice(lastIndex, match.index),
+            highlight: false,
+         });
+      }
+      parts.push({ text: match[0], highlight: true });
+      lastIndex = regex.lastIndex;
+   }
+
+   if (lastIndex < fullAddress.length) {
+      parts.push({ text: fullAddress.slice(lastIndex), highlight: false });
+   }
+
+   return parts;
 }
 </script>

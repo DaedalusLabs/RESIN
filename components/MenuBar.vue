@@ -7,7 +7,7 @@
    >
       <template #title>
          <div class="mb-5 flex items-center justify-between text-pirate-300">
-            <h2 class="text-base font-semibold">Account</h2>
+            <h2 class="text-base font-semibold">{{ $t("menu.account") }}</h2>
             <PhX :size="20" class="cursor-pointer" @click="handleCloseDrawer" />
          </div>
       </template>
@@ -32,7 +32,7 @@
                            class="text-pirate-500 group-hover:text-resin-500"
                         />
                         <span
-                           v-if="item.hasNotification"
+                           v-show="item.hasNotification"
                            class="absolute right-0 top-0 h-2 w-2 rounded-full bg-resin-500 text-sm font-medium"
                         ></span>
                      </div>
@@ -44,16 +44,21 @@
             </ul>
 
             <div class="mb-10">
-               <a
-                  href="#"
-                  class="flex items-center space-x-2 px-4 py-3 text-red-600 hover:text-pirate-500"
+               <NuxtLinkLocale
+                  class="flex cursor-pointer items-center space-x-2 px-4 py-3 text-red-600 hover:underline"
+                  @click="logout"
                >
                   <PhSignOut :size="16" />
-                  <span>Log out</span>
-               </a>
+                  <span>{{ $t("menu.logout") }}</span>
+               </NuxtLinkLocale>
 
                <div class="mt-4 px-4 text-pirate-500">
-                  <a href="#" class="text-sm">Terms & conditions</a>
+                  <NuxtLinkLocale
+                     to="/terms-and-conditions"
+                     @click="handleCloseDrawer"
+                  >
+                     {{ $t("menu.termsAndConditions") }}
+                  </NuxtLinkLocale>
                </div>
             </div>
          </div>
@@ -71,44 +76,68 @@ import {
    PhX,
    PhSignOut,
 } from "@phosphor-icons/vue";
-
+const nostrStore = useNostrStore();
+const { t } = useI18n();
+const localePath = useLocalePath();
 const emit = defineEmits(["close"]);
 defineProps({
    showDrawer: Boolean,
 });
 
+const hasUnreadMessages = computed(() => {
+   const count = nostrStore.unreadMessagesCount;
+   return count > 0;
+});
+
+const menuItems = [
+   {
+      label: t("menu.profile"),
+      icon: PhUser,
+      link: "/settings/profile",
+   },
+   {
+      label: computed(() => {
+         const count = nostrStore.unreadMessagesCount;
+         return count > 0
+            ? t("menu.messagesWithCount", { count })
+            : t("menu.messages");
+      }),
+      icon: PhChatCircle,
+      link: "/messages",
+      get hasNotification() {
+         return hasUnreadMessages.value;
+      },
+   },
+   {
+      label: t("menu.nostrKeys"),
+      icon: PhKey,
+      link: "/settings/nostr-keys",
+   },
+   {
+      label: t("menu.settings"),
+      icon: PhGear,
+      link: "/settings",
+   },
+   {
+      label: t("menu.help"),
+      icon: PhQuestion,
+      link: "/help",
+   },
+];
+
 const handleCloseDrawer = () => {
    emit("close");
 };
 
-const menuItems = [
-   {
-      label: "Profile",
-      icon: PhUser,
-      link: "#",
-   },
-   {
-      label: "Messages",
-      icon: PhChatCircle,
-      link: "/messages",
-      hasNotification: true,
-   },
-   {
-      label: "NOSTR keys",
-      icon: PhKey,
-      link: "#",
-   },
-   {
-      label: "Settings",
-      icon: PhGear,
-      link: "#",
-   },
-   {
-      label: "Help",
-      icon: PhQuestion,
-      link: "#",
-   },
-];
+const logout = async () => {
+   // console.log("logout");
+   try {
+      await nostrStore.logout();
+   } catch (error) {
+      console.error("Error logging out", error);
+   }
+   window.location.href = localePath("/");
+};
 </script>
 
 <style scoped>

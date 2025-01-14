@@ -1,18 +1,38 @@
 import { defineStore } from "pinia";
+import type { NostrAPI } from "~/lib/nostr_api";
+import { commands } from "~/lib/nostr_api";
+import { useRuntimeConfig } from "#app";
 
-interface Transaction {
+interface Property {
    id: string;
-   amount: number;
-   due: Date;
-   paid: Date;
-   status: "pending" | "paid" | "overdue";
+   name: string;
+   ownershipPercentages: Record<string, number>;
 }
 
-interface Agreement {
+interface Payment {
+   date: string;
+   amount: string;
+   currency: string;
+}
+
+export interface Transaction {
+   id: string;
+   amount: string;
+   currency: string;
+   status: "pending" | "paid" | "overdue";
+   dueDate: string;
+   property: Property;
+   payment: Payment | null;
+}
+
+export interface Agreement {
    id: string;
    title: string;
-   signed: Date;
-   downloadUrl: string;
+   sha256: string;
+   url: string;
+   isSigned: boolean;
+   signedDate: string;
+   property: Property;
 }
 
 interface Equity {
@@ -31,147 +51,18 @@ interface TransactionsState {
    agreements: Agreement[];
    equities: Equity[];
    ownerships: Ownership[];
+   isLoading: boolean;
+   error: string | null;
 }
 
 export const useTransactionsStore = defineStore("transactions", {
    state: (): TransactionsState => ({
-      transactions: [
-         {
-            id: "1",
-            amount: 2350,
-            due: new Date(),
-            paid: new Date(),
-            status: "pending",
-         },
-         {
-            id: "2",
-            amount: 4780,
-            due: new Date(),
-            paid: new Date(),
-            status: "paid",
-         },
-         {
-            id: "3",
-            amount: 1890,
-            due: new Date(),
-            paid: new Date(),
-            status: "paid",
-         },
-         {
-            id: "4",
-            amount: 3420,
-            due: new Date(),
-            paid: new Date(),
-            status: "pending",
-         },
-         {
-            id: "5",
-            amount: 5960,
-            due: new Date(),
-            paid: new Date(),
-            status: "paid",
-         },
-         {
-            id: "6",
-            amount: 2890,
-            due: new Date(),
-            paid: new Date(),
-            status: "pending",
-         },
-         {
-            id: "7",
-            amount: 4150,
-            due: new Date(),
-            paid: new Date(),
-            status: "paid",
-         },
-         {
-            id: "8",
-            amount: 3780,
-            due: new Date(),
-            paid: new Date(),
-            status: "pending",
-         },
-      ],
-      agreements: [
-         {
-            id: "1",
-            title: "Agreement 1",
-            signed: new Date(),
-            downloadUrl: "/agreements/agreement-1.pdf",
-         },
-         {
-            id: "2",
-            title: "Agreement 2",
-            signed: new Date(),
-            downloadUrl: "/agreements/agreement-2.pdf",
-         },
-         {
-            id: "3",
-            title: "Agreement 3",
-            signed: new Date(),
-            downloadUrl: "/agreements/agreement-3.pdf",
-         },
-      ],
-      equities: [
-         {
-            id: "1",
-            payoff: 2350,
-            total: 2350,
-         },
-         {
-            id: "2",
-            payoff: 4780,
-            total: 4780,
-         },
-         {
-            id: "3",
-            payoff: 1890,
-            total: 1890,
-         },
-         {
-            id: "4",
-            payoff: 3420,
-            total: 3420,
-         },
-         {
-            id: "5",
-            payoff: 5960,
-            total: 5960,
-         },
-         {
-            id: "6",
-            payoff: 2890,
-            total: 2890,
-         },
-         {
-            id: "7",
-            payoff: 4150,
-            total: 4150,
-         },
-         {
-            id: "8",
-            payoff: 3780,
-            total: 3780,
-         },
-      ],
-      ownerships: [
-         {
-            propertyId:
-               "1a5b8c2e4d7f3a6b9c2e5d8f4a7b3c6e9d2a5f8c1b4e7a3d6f9c2e5b8a4d",
-            percentage: 25,
-         },
-         {
-            propertyId:
-               "2b6c9d3f5e8a4b7c3f6e9d2a5f8c1b4e7a3d6f9c2e5b8a4d7f1a4b7c3e6",
-            percentage: 50,
-         },
-         {
-            propertyId:
-               "3c7d0e4f6f9b5c8d4f7e0e3b6f9c2e5b8a4d7f1a4b7c3e6d9f2a5b8c1e4",
-            percentage: 80,
-         },
-      ],
+      transactions: [],
+      agreements: [],
+      equities: [],
+      ownerships: [],
+      isLoading: false,
+      error: null,
    }),
 
    getters: {
@@ -179,6 +70,7 @@ export const useTransactionsStore = defineStore("transactions", {
          return this.transactions;
       },
       getPayedOffPercentage(): number {
+         if (this.transactions.length === 0) return 0;
          return (
             (this.transactions.filter(
                (transaction) => transaction.status === "paid",
@@ -189,19 +81,25 @@ export const useTransactionsStore = defineStore("transactions", {
       },
       getTotalAmount(): number {
          return this.transactions.reduce(
-            (acc, transaction) => acc + transaction.amount,
+            (acc, transaction) => acc + parseFloat(transaction.amount),
             0,
          );
       },
       getPaidOffAmount(): number {
          return this.transactions
             .filter((transaction) => transaction.status === "paid")
-            .reduce((acc, transaction) => acc + transaction.amount, 0);
+            .reduce(
+               (acc, transaction) => acc + parseFloat(transaction.amount),
+               0,
+            );
       },
       getToBePaidOffAmount(): number {
          return this.transactions
             .filter((transaction) => transaction.status === "pending")
-            .reduce((acc, transaction) => acc + transaction.amount, 0);
+            .reduce(
+               (acc, transaction) => acc + parseFloat(transaction.amount),
+               0,
+            );
       },
       getAgreements(): Agreement[] {
          return this.agreements;
@@ -210,11 +108,75 @@ export const useTransactionsStore = defineStore("transactions", {
 
    actions: {
       getOwnerShipPercentage(propertyId: string): number {
-         return (
-            this.ownerships.find(
-               (ownership) => ownership.propertyId === propertyId,
-            )?.percentage ?? 0
+         const transaction = this.transactions.find(
+            (t) => t.property.id === propertyId,
          );
+         if (!transaction) return 0;
+
+         // Get the first ownership percentage value (assuming one owner for now)
+         const percentages = Object.values(
+            transaction.property.ownershipPercentages,
+         );
+         return percentages.length > 0 ? percentages[0] : 0;
+      },
+
+      async fetchTransactions(nostrApi: NostrAPI) {
+         try {
+            this.isLoading = true;
+            this.error = null;
+            const config = useRuntimeConfig();
+            const targetPubkey = config.public.MESSAGES_PUBKEY;
+
+            // Fetch transactions
+            const transactionsData = await nostrApi.request<Transaction[]>(
+               targetPubkey,
+               commands.get_transactions,
+            );
+            this.transactions = transactionsData;
+
+            // Fetch agreements
+            const agreementsData = await nostrApi.request<Agreement[]>(
+               targetPubkey,
+               commands.get_agreements,
+            );
+            this.agreements = agreementsData;
+
+            // Calculate equities based on transactions
+            this.equities = this.transactions.map((transaction) => ({
+               id: transaction.id,
+               payoff:
+                  transaction.status === "paid"
+                     ? parseFloat(transaction.amount)
+                     : 0,
+               total: parseFloat(transaction.amount),
+            }));
+
+            // Calculate ownerships from transaction properties
+            const ownershipMap = new Map<string, number>();
+            this.transactions.forEach((transaction) => {
+               const percentages = Object.values(
+                  transaction.property.ownershipPercentages,
+               );
+               if (percentages.length > 0) {
+                  ownershipMap.set(transaction.property.id, percentages[0]);
+               }
+            });
+
+            this.ownerships = Array.from(ownershipMap.entries()).map(
+               ([propertyId, percentage]) => ({
+                  propertyId,
+                  percentage,
+               }),
+            );
+         } catch (error) {
+            console.error("Error fetching transactions:", error);
+            this.error =
+               error instanceof Error
+                  ? error.message
+                  : "Failed to fetch transactions";
+         } finally {
+            this.isLoading = false;
+         }
       },
    },
 });

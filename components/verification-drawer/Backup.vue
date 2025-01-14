@@ -38,7 +38,10 @@
 
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
+
+import { useNostrStore } from "~/stores/nostr";
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
 
 const showDrawer = ref(true);
 const recoveryPhrase = ref([]);
@@ -52,57 +55,15 @@ const props = defineProps({
    },
 });
 
-// Recovery phrase word list (you can expand this with more words)
-const wordList = [
-   "rain",
-   "utility",
-   "nerve",
-   "flock",
-   "useless",
-   "comic",
-   "sphere",
-   "resemble",
-   "science",
-   "key",
-   "amateur",
-   "salad",
-   "apple",
-   "banana",
-   "cloud",
-   "digital",
-   "energy",
-   "flow",
-   "gravity",
-   "horizon",
-   "ice",
-   "jungle",
-   "karma",
-   "lunar",
-];
-
 // Generate a random recovery phrase (12 words)
-const generateRecoveryPhrase = () => {
-   const selectedWords = [];
-   const totalWords = 12;
-
-   // Randomly pick 12 unique words from the wordList
-   while (selectedWords.length < totalWords) {
-      const randomIndex = Math.floor(Math.random() * wordList.length);
-      const word = wordList[randomIndex];
-
-      // Ensure no duplicates
-      if (!selectedWords.includes(word)) {
-         selectedWords.push(word);
-      }
-   }
-
-   return selectedWords;
+const getRecoveryPhrase = () => {
+   return nostrStore.mnemonic.split(" ");
 };
 
 watchEffect(() => {
    showDrawer.value = props.show;
    if (showDrawer.value) {
-      recoveryPhrase.value = generateRecoveryPhrase();
+      recoveryPhrase.value = getRecoveryPhrase();
    }
 });
 

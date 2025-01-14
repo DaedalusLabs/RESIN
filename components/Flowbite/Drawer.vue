@@ -1,14 +1,14 @@
 <template>
    <div>
-      <div v-if="show" class="fixed inset-0 z-40 overflow-hidden">
+      <div v-show="show" class="fixed inset-0 z-40 overflow-hidden">
          <div
             class="absolute inset-0 bg-black bg-opacity-75 transition-opacity"
-            @click="close"
+            @click="backdropClickHandler"
          />
       </div>
       <transition :name="transitionName">
          <div
-            v-if="show"
+            v-show="show"
             v-touch:swipe="swipeHandler"
             :class="[drawerClasses, props.slideFrom === 'side' ? 'h-dvh' : '']"
          >
@@ -18,7 +18,7 @@
                @click="close"
             />
 
-            <div class="mb-4 flex items-center px-4">
+            <div v-if="!props.hideTitle" class="mb-4 flex items-center px-4">
                <h3
                   id="drawer-title"
                   class="w-full text-center text-xl font-bold text-gray-900"
@@ -48,13 +48,20 @@ const props = defineProps({
       default: "bottom", // "bottom" or "side"
       validator: (value) => ["bottom", "side"].includes(value),
    },
+   hideTitle: {
+      type: Boolean,
+      default: false,
+   },
+   closeOnBackdropClick: {
+      type: Boolean,
+      default: true,
+   },
 });
 
 const emit = defineEmits(["close"]);
 
 const close = () => {
    emit("close");
-   console.log("close");
 };
 
 watchEffect(() => {
@@ -70,9 +77,15 @@ const swipeHandler = (direction) => {
    }
 };
 
+const backdropClickHandler = () => {
+   if (props.closeOnBackdropClick) {
+      close();
+   }
+};
+
 const drawerClasses = computed(() => {
    return props.slideFrom === "bottom"
-      ? "absolute inset-x-0 bottom-0 z-50 flex max-h-svh w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
+      ? "fixed inset-x-0 bottom-0 z-50 flex max-h-svh w-full flex-col rounded bg-white p-7 pt-0 shadow-lg"
       : "absolute top-0 left-0 z-50 flex h-full w-3/4 flex-col  bg-white p-7 shadow-lg";
 });
 

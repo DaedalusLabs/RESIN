@@ -1,31 +1,50 @@
 <template>
    <div
       v-touch:swipe.left="swipeHandler"
-      class="group relative flex items-center rounded-lg border-2 border-pirate-100 bg-white p-4 shadow-sm transition-transform duration-300 ease-in-out"
+      class="group relative flex cursor-pointer items-center rounded-lg border-2 border-pirate-100 bg-white p-4 shadow-sm transition-transform duration-300 ease-in-out"
       :class="{ '-translate-x-96 transform': isRemoving }"
       @click="openDetails"
    >
-      <NuxtImg
-         :src="property?.images[0]"
-         alt="Favorite image"
-         class="mr-4 h-16 w-16 rounded-md object-cover object-center"
-      />
+      <div class="relative mr-4 h-16 w-16">
+         <div v-if="property.images[0]?.blurhash" class="absolute inset-0">
+            <BlurhashCanvas
+               :hash="property.images[0].blurhash"
+               :width="64"
+               :height="64"
+               class="h-full w-full rounded-md"
+               :style="{ display: imageLoaded ? 'none' : 'block' }"
+            />
+         </div>
+         <NuxtImg
+            :src="smallThumbnailUrl"
+            :srcset="
+               propertyImageUtils
+                  .getImagesUpToWidth(property.images[0]?.files, 100)
+                  ?.map((file) => `${file.url} ${file.width}w`)
+                  .join(', ')
+            "
+            sizes="64px"
+            alt="Favorite image"
+            class="absolute inset-0 h-full w-full rounded-md object-cover object-center"
+            @load="imageLoaded = true"
+         />
+      </div>
       <div class="min-w-0 flex-1">
          <h3 class="truncate text-lg font-bold text-resin-500">
-            {{ property?.location.address.street }}
+            {{ property?.title }}
          </h3>
          <p class="text-sm text-pirate-950">
-            {{ property?.location.address.city }},
-            {{ property?.location.address.country }}
+            {{ property?.location.city }},
+            {{ property?.location.country }}
          </p>
          <p
-            v-if="property?.isBitcasaHome"
+            v-if="property['resin-type'] === 'Buy Now'"
             class="text-sm font-bold text-pirate-950"
          >
-            ${{ property?.pricingDetails.propertyPrice }}
+            $ {{ property?.price.toLocaleString() }}
          </p>
          <p v-else class="text-sm font-bold text-pirate-950">
-            ${{ property?.pricingDetails.rentPerMonth }} per month
+            $ {{ property?.price.toLocaleString() }} per month
          </p>
       </div>
       <div
@@ -53,7 +72,11 @@
 </template>
 
 <script setup>
+import { propertyImageUtils } from "~/types/property";
+import BlurhashCanvas from "~/components/Flowbite/BlurhashCanvas.vue";
+
 const isRemoving = ref(false);
+const imageLoaded = ref(false);
 
 const emit = defineEmits(["remove"]);
 
@@ -68,10 +91,19 @@ const props = defineProps({
    },
 });
 
+const smallThumbnailUrl = computed(() => {
+   if (!props.property?.images?.[0]?.files) return null;
+   const smallThumbnail = props.property.images[0].files.find(
+      (file) => file.width === 375,
+   );
+   return smallThumbnail?.url;
+});
+
 const swipeHandler = () => {
-   if (!props.isRemovable) {
-      return;
-   }
+   console.log("swipeHandler");
+   // if (!props.isRemovable) {
+   //    return;
+   // }
    isRemoving.value = true;
    setTimeout(() => {
       emit("remove");
@@ -85,8 +117,11 @@ const handleRemove = () => {
 const openDetails = () => {
    const localeRoute = useLocaleRoute();
    const route = localeRoute({
-      name: "properties-id",
-      params: { id: props.property.id.toString() },
+      name: "properties-id-slug",
+      params: {
+         id: props.property.id.toString(),
+         slug: props.property.slug || props.property.id,
+      },
    });
    if (route) {
       return navigateTo(route.fullPath);

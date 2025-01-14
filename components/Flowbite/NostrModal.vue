@@ -14,26 +14,40 @@
          }"
       >
          <!-- Dynamic content based on loading state -->
-         <NuxtImg
-            :src="loading ? '/icons/nostr.png' : '/icons/nostr-success.png'"
-            class="mx-auto w-24"
-         />
+         <section class="relative mx-auto w-24">
+            <NuxtImg
+               :src="
+                  loading
+                     ? '/images/running-nostrich.webp'
+                     : '/images/still-nostrich.webp'
+               "
+               class="mx-auto w-24"
+               :alt="loading ? 'Loading nostrich' : 'Nostrich'"
+            />
+            <PhCheckCircle
+               v-if="!loading"
+               class="absolute -right-6 -top-2 w-8"
+               weight="bold"
+               size="36"
+               color="#9C27B0"
+            />
+         </section>
          <p class="mt-4 font-extrabold text-gray-900">
-            {{ loading ? "Creating NOSTR key..." : "NOSTR account created!" }}
+            {{ loading ? $t("nostr.creating") : $t("nostr.created") }}
          </p>
 
          <!-- Wait for modal expansion before showing text and button -->
          <transition name="fade-in" mode="out-in" appear>
             <div v-if="!loading" key="success-message" class="mt-4">
                <p class="text-sm text-gray-500">
-                  You can add your personal details later if you like.
+                  {{ $t("nostr.addDetails") }}
                </p>
 
                <!-- Button for success state, only visible after loading -->
                <NuxtLinkLocale to="choose-property-type">
                   <FlowbiteButton
                      :show-icon="false"
-                     text="Continue with RESIN"
+                     :text="$t('nostr.continue')"
                      class="mt-4 text-center"
                   />
                </NuxtLinkLocale>
@@ -44,13 +58,23 @@
 </template>
 
 <script setup>
-const loading = ref(true);
+import { PhCheckCircle } from "@phosphor-icons/vue";
 
-onMounted(() => {
-   // Simulate API call delay of 3 seconds
+const loading = ref(true);
+const { generateKeyPair, isAuthenticated } = useNostr();
+
+onMounted(async () => {
    setTimeout(() => {
       loading.value = false;
-   }, 3000); // 3000ms = 3 seconds
+   }, 2000);
+   await generateKeyPair();
+
+   const timeout = setTimeout(() => {
+      if (isAuthenticated) {
+         loading.value = false;
+         clearTimeout(timeout);
+      }
+   }, 500);
 });
 </script>
 

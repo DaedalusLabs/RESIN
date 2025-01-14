@@ -1,0 +1,95 @@
+<div
+   style="
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   "
+>
+   <div
+      style="
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+         flex-direction: column;
+      "
+   >
+      <img
+         src="/images/logos/resin-text.png"
+         alt="Loading illustration"
+         class="h-20"
+      />
+      <div class="loader"></div>
+   </div>
+</div>
+<style>
+   body {
+      background: #fff url("/whitebg-crop.webp");
+      background-size: 200px;
+      background-position: top;
+   }
+
+   .loader {
+      margin-top: 25px;
+      width: 75px;
+      height: 75px;
+      box-sizing: border-box;
+      border: solid 10px transparent;
+      border-top-color: #f07e19;
+      border-right-color: rgba(240, 126, 25, 0.2);
+      border-bottom-color: rgba(240, 126, 25, 0.4);
+      border-left-color: rgba(240, 126, 25, 0.8);
+      border-radius: 50%;
+      animation: loader 1400ms ease-in-out infinite;
+   }
+
+   @-webkit-keyframes loader {
+      0% {
+         -webkit-transform: rotate(0deg);
+         border-top-color: #f07e19;
+         border-right-color: rgba(240, 126, 25, 0.2);
+         border-bottom-color: rgba(240, 126, 25, 0.4);
+         border-left-color: rgba(240, 126, 25, 0.8);
+      }
+
+      50% {
+         border-top-color: rgba(240, 126, 25, 0.8);
+         border-right-color: #f07e19;
+         border-bottom-color: rgba(240, 126, 25, 0.2);
+         border-left-color: rgba(240, 126, 25, 0.4);
+      }
+
+      100% {
+         -webkit-transform: rotate(360deg);
+         border-top-color: #f07e19;
+         border-right-color: rgba(240, 126, 25, 0.2);
+         border-bottom-color: rgba(240, 126, 25, 0.4);
+         border-left-color: rgba(240, 126, 25, 0.8);
+      }
+   }
+
+   @keyframes loader {
+      0% {
+         transform: rotate(0deg);
+         border-top-color: #f07e19;
+         border-right-color: rgba(240, 126, 25, 0.2);
+         border-bottom-color: rgba(240, 126, 25, 0.4);
+         border-left-color: rgba(240, 126, 25, 0.8);
+      }
+
+      50% {
+         border-top-color: rgba(240, 126, 25, 0.8);
+         border-right-color: #f07e19;
+         border-bottom-color: rgba(240, 126, 25, 0.2);
+         border-left-color: rgba(240, 126, 25, 0.4);
+      }
+
+      100% {
+         transform: rotate(360deg);
+         border-top-color: #f07e19;
+         border-right-color: rgba(240, 126, 25, 0.2);
+         border-bottom-color: rgba(240, 126, 25, 0.4);
+         border-left-color: rgba(240, 126, 25, 0.8);
+      }
+   }
+</style>

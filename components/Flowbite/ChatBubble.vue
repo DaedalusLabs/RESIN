@@ -30,7 +30,12 @@
          <div
             class="leading-1.5 flex flex-col rounded-e-xl rounded-es-xl border-gray-200 bg-gray-100 p-4 text-gray-900 dark:bg-gray-700"
          >
-            <p class="text-sm font-normal">{{ message }}</p>
+            <p class="whitespace-pre-wrap break-words text-sm font-normal">
+               {{ message }}
+            </p>
+         </div>
+         <div class="mt-2">
+            <slot name="below-message"></slot>
          </div>
       </div>
    </div>
@@ -59,6 +64,11 @@ defineProps({
    isSent: {
       type: Boolean,
       required: true,
+   },
+   profile: {
+      type: Object,
+      required: false,
+      default: null,
    },
 });
 </script>

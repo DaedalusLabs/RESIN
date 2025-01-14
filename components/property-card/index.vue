@@ -1,86 +1,152 @@
 <template>
-   <div class="overflow-hidden rounded-2xl bg-white shadow-lg">
+   <div v-if="property" class="overflow-hidden rounded-2xl bg-white shadow-lg">
       <div class="relative">
          <FlowbiteCarousel
-            :items="property.images"
-            class="z-0 h-48 w-full object-cover md:h-48"
+            :items="
+               property.images.map((img) =>
+                  propertyImageUtils.getImagesUpToWidth(img.files, 1280),
+               )
+            "
+            :blurhash="property.images[0]?.blurhash"
+            :property-title="property.title"
+            :class="[
+               'z-0 w-full object-cover',
+               compact ? 'h-32' : 'h-48 md:h-48',
+            ]"
          />
          <button
-            v-if="showMediaIcon"
-            class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+            v-if="showMediaIcon && !compact"
+            class="z-1 absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+            title="Open gallery"
             @click="openGallery"
          >
             <PhImages :size="20" />
          </button>
 
          <span
-            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
+            v-if="property['resin-type'] && !compact"
+            class="absolute bottom-4 right-4 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md"
          >
-            {{ property?.isBitcasaHome ? "For Sale" : "Rent to Own" }}
+            {{
+               $t(
+                  `property.types.${property["resin-type"]
+                     .split(" ")
+                     .map((word, index) =>
+                        index === 0
+                           ? word.toLowerCase()
+                           : word.charAt(0).toUpperCase() +
+                             word.slice(1).toLowerCase(),
+                     )
+                     .join("")}`,
+               )
+            }}
          </span>
       </div>
-      <div class="flex flex-col gap-2 p-4">
+      <div :class="['flex flex-col gap-2 text-left', compact ? 'p-2' : 'p-4']">
          <div class="flex items-center justify-between">
-            <h3 class="text-lg font-bold text-resin-500">
-               {{ property.location.address.street }}
+            <h3
+               :class="[
+                  'font-bold text-resin-500',
+                  compact ? 'text-base' : 'text-lg',
+               ]"
+            >
+               {{ property.title }}
             </h3>
             <PhHeartStraight
+               v-if="!compact"
                :size="21"
-               :class="{ 'text-resin-500': isFavorite }"
-               class="text-pirate-200 hover:cursor-pointer"
+               :class="[
+                  { 'text-resin-500': isFavorite },
+                  isAuthenticated
+                     ? 'hover:cursor-pointer'
+                     : 'cursor-not-allowed opacity-50',
+               ]"
+               class="text-pirate-200"
                :weight="isFavorite ? 'fill' : 'regular'"
                @click="toggleFavorite"
             />
          </div>
-         <p class="text-gray-600">
-            {{ property.location.address.city }},
-            {{ property.location.address.country }}
+         <p class="text-gray-600" :class="{ 'text-sm': compact }">
+            {{ property.location.city }},
+            {{ property.location.country }}
          </p>
-         <p
-            v-if="!property.isBitcasaHome"
-            class="text-sm font-bold text-gray-800"
-         >
-            ${{ property.pricingDetails.rentPerMonth.toLocaleString() }} per
-            month
-         </p>
-         <p v-else class="text-sm font-bold text-gray-800">
-            ${{ property.pricingDetails.propertyPrice.toLocaleString() }}
-         </p>
+         <div class="flex items-center justify-between">
+            <p
+               v-if="property['resin-type'] !== 'Buy Now'"
+               :class="[
+                  'font-bold text-gray-800',
+                  compact ? 'text-xs' : 'text-sm',
+               ]"
+            >
+               ${{ property.price.toLocaleString() }}
+               {{ $t("property.card.perMonth") }}
+            </p>
+            <p
+               v-else
+               :class="[
+                  'font-bold text-gray-800',
+                  compact ? 'text-xs' : 'text-sm',
+               ]"
+            >
+               ${{ property.price?.toLocaleString() }}
+            </p>
+            <button
+               v-if="compact"
+               class="text-resin-500 hover:text-resin-600"
+               @click="openDetails"
+            >
+               <PhArrowRight :size="16" />
+            </button>
+         </div>
       </div>
-      <div class="flex items-center justify-between p-4 pt-0 text-sm">
+      <div
+         v-if="!compact"
+         :class="['flex items-center justify-between pt-0', 'p-4 text-sm']"
+      >
          <div class="flex items-center gap-4">
             <p class="flex items-center gap-1">
                <PhRuler :size="20" class="inline" />
                <span class="text-gray-500">
-                  {{ property.propertyDetails.size.houseSizeM2 }} m²
+                  {{ property.property.size }}
+                  {{ $t("property.card.size.squareMeters") }}
                </span>
             </p>
             <p class="flex items-center gap-1">
                <PhBed :size="20" class="inline" />
                <span class="text-gray-500">
-                  {{ property.propertyDetails.bedrooms }} Beds
+                  {{ property.property.bedrooms }}
+                  {{ $t("property.card.beds") }}
                </span>
             </p>
          </div>
-         <FlowbiteButton :text="$t('details')" @click="openDetails" />
+         <NuxtLinkLocale :to="propertyLink">
+            <FlowbiteButton :text="$t('details')" size="sm" />
+         </NuxtLinkLocale>
       </div>
    </div>
 </template>
 
-<script setup>
-import { PhBed, PhRuler, PhHeartStraight, PhImages } from "@phosphor-icons/vue";
+<script setup lang="ts">
+import {
+   PhBed,
+   PhRuler,
+   PhHeartStraight,
+   PhImages,
+   PhArrowRight,
+} from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
-const propertiesStore = usePropertiesStore();
-
-const toggleFavorite = () => {
-   isFavorite.value = !isFavorite.value;
-   propertiesStore.toggleFavorite(props.property.id);
-};
+import { useNostrStore } from "~/stores/nostr";
+import type { Property } from "~/types/property";
+import { propertyImageUtils } from "~/types/property";
 
 const props = defineProps({
    property: {
-      type: Object,
+      type: Object as PropType<Property>,
       required: true,
+   },
+   compact: {
+      type: Boolean,
+      default: false,
    },
    showMediaIcon: {
       type: Boolean,
@@ -88,19 +154,40 @@ const props = defineProps({
    },
 });
 
-const isFavorite = ref(propertiesStore.isFavorite(props.property.id));
+const emit = defineEmits(["openGallery"]);
 
-const emit = defineEmits(["open-gallery"]);
+const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
+
+const isAuthenticated = computed(() => nostrStore.authenticated);
+const isFavorite = computed(() =>
+   props.property ? propertiesStore.isFavorite(props.property.id) : false,
+);
+
+const propertyLink = computed(() => {
+   return props.property.slug
+      ? `/properties/${props.property.id}/${props.property.slug}`
+      : `/properties/${props.property.id}`;
+});
+
+const toggleFavorite = () => {
+   if (isAuthenticated.value) {
+      propertiesStore.toggleFavorite(props.property.id);
+   }
+};
 
 const openGallery = () => {
-   emit("open-gallery", props.imageUrls);
+   emit("openGallery", props.property.images);
 };
 
 const openDetails = () => {
    const localeRoute = useLocaleRoute();
    const route = localeRoute({
-      name: "properties-id",
-      params: { id: props.property.id.toString() },
+      name: "properties-id-slug",
+      params: {
+         id: props.property.id.toString(),
+         slug: props.property.slug || props.property.id,
+      },
    });
    if (route) {
       return navigateTo(route.fullPath);

@@ -9,21 +9,21 @@
          <div class="mx-auto flex flex-col gap-5">
             <!-- Country Selector -->
             <div>
-               <label class="mb-1 block font-bold text-pirate-950"
-                  >Issuing country</label
-               >
+               <label class="mb-1 block font-bold text-pirate-950">
+                  Issuing country
+               </label>
                <div class="relative">
                   <button
                      class="flex w-full items-center justify-between rounded-md border border-gray-300 bg-gray-100 p-2.5 text-left focus:border-resin-500 focus:ring-resin-500"
                      @click="toggleDropdown"
                   >
                      <p v-if="selectedCountry" class="text-sm">
-                        <span class="flag-emoji">{{
-                           getFlagEmoji(selectedCountry.cca2)
-                        }}</span>
+                        <span class="flag-emoji">
+                           {{ getFlagEmoji(selectedCountry.cca2) }}
+                        </span>
                         {{ selectedCountry.name.common }}
                      </p>
-                     <span v-else class="text-sm"> Select a country </span>
+                     <span v-else class="text-sm">Select a country</span>
                      <PhCaretDown :size="20" />
                   </button>
                   <div
@@ -47,9 +47,9 @@
 
             <!-- Document Type Selector -->
             <div>
-               <label class="mb-1 block font-bold text-pirate-950"
-                  >Document Type</label
-               >
+               <label class="mb-1 block font-bold text-pirate-950">
+                  Document Type
+               </label>
                <div class="space-y-2">
                   <div
                      v-for="option in documentTypeOptions"

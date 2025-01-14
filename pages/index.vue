@@ -6,9 +6,21 @@
       />
    </div>
 </template>
-
 <script setup>
 definePageMeta({
    layout: "startup",
+   middleware: [
+      async function (_to, _from, _next) {
+         const store = useNostrStore();
+
+         const isAuthenticated = await store.checkAuthenticated();
+
+         if (isAuthenticated) {
+            return navigateTo("/home");
+         } else {
+            return navigateTo("/introduction");
+         }
+      },
+   ],
 });
 </script>

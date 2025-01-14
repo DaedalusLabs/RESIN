@@ -8,10 +8,22 @@
             :class="['duration-200 ease-linear', { hidden: index !== 0 }]"
             :data-carousel-item="index === 0 ? 'active' : ''"
          >
+            <div v-if="blurhash" class="absolute inset-0">
+               <BlurhashCanvas
+                  :hash="blurhash"
+                  :width="320"
+                  :height="240"
+                  class="h-full w-full"
+                  :style="{ display: imageLoaded[index] ? 'none' : 'block' }"
+               />
+            </div>
             <NuxtImg
-               :src="item"
+               :src="getDefaultImage(item)"
+               :srcset="getSrcSet(item)"
+               :sizes="sizes"
                class="absolute inset-0 h-full w-full object-cover"
-               alt="..."
+               :alt="`${propertyTitle} photo ${index + 1} of ${items.length}`"
+               @load="handleImageLoad(index)"
             />
          </div>
       </div>
@@ -73,6 +85,7 @@
 
 <script setup>
 import { useFlowbite } from "~/composables/useFlowbite";
+import BlurhashCanvas from "./BlurhashCanvas.vue";
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -81,10 +94,50 @@ onMounted(() => {
    });
 });
 
+const imageLoaded = ref({});
+
+const handleImageLoad = (index) => {
+   imageLoaded.value[index] = true;
+};
+
+const getDefaultImage = (item) => {
+   // If item is a string (legacy support), return it directly
+   if (typeof item === "string") return item;
+
+   // If item is a thumbnail set, find the medium size or return first
+   if (Array.isArray(item)) {
+      const mediumThumbnail = item.find((thumb) => thumb.width === 600);
+      return mediumThumbnail?.url || item[0]?.url;
+   }
+
+   return "";
+};
+
+const getSrcSet = (item) => {
+   // If item is a string (legacy support) or not an array, return empty srcset
+   if (typeof item === "string" || !Array.isArray(item)) return "";
+
+   // If item is a thumbnail set, create srcset
+   return item.map((thumb) => `${thumb.url} ${thumb.width}w`).join(", ");
+};
+
 defineProps({
    items: {
       type: Array,
       required: true,
+   },
+   blurhash: {
+      type: String,
+      default: null,
+   },
+   sizes: {
+      type: String,
+      default: "100vw",
+   },
+   propertyTitle: {
+      type: String,
+      required: false,
+      default: "Property Photo",
    },
 });
 </script>

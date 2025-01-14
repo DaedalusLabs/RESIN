@@ -1,5 +1,6 @@
 <template>
    <section
+      v-if="property && property.id"
       class="mx-auto flex w-10/12 flex-col items-center justify-center text-pirate-950"
    >
       <div class="mb-8 mt-10">
@@ -22,8 +23,8 @@
       <!-- Property Image -->
       <div class="relative mb-8 overflow-hidden rounded-2xl">
          <img
-            src="/images/mock/house.png"
-            alt="Thumbnail of your new property"
+            :src="property?.images[0]"
+            :alt="property?.title"
             class="h-[300px] w-full object-cover"
          />
       </div>
@@ -58,6 +59,19 @@
 
 <script setup>
 import { PhArrowRight, PhCheckCircle } from "@phosphor-icons/vue";
+
+const route = useRoute();
+const propertiesStore = usePropertiesStore();
+const property = ref({});
+
+onMounted(async () => {
+   const foundProperty = await propertiesStore.get(route.params.id);
+   if (!foundProperty) {
+      return;
+   }
+   property.value = foundProperty;
+});
+
 definePageMeta({
    layout: "white",
 });

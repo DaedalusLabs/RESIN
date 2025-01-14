@@ -28,16 +28,15 @@
             </div>
             <div>
                <h3 class="text-lg font-semibold text-gray-900">
-                  {{ getMonth(transaction.paid) }}
-                  {{ getYear(transaction.paid) }}
+                  {{ transaction.property.name }}
                </h3>
                <p class="text-sm text-gray-500">
                   {{ transaction.status === "paid" ? "Paid" : "Due" }}
-                  <span v-if="transaction.status === 'due'">
-                     {{ formatDate(transaction.due) }}
+                  <span v-if="transaction.status === 'pending'">
+                     {{ formatDate(transaction.dueDate) }}
                   </span>
-                  <span v-else>
-                     {{ formatDate(transaction.paid) }}
+                  <span v-else-if="transaction.payment">
+                     {{ formatDate(transaction.payment.date) }}
                   </span>
                </p>
             </div>
@@ -46,7 +45,7 @@
          <!-- Right side with amount and arrow -->
          <div class="flex items-center gap-1">
             <p class="text-lg font-semibold">
-               {{ formatCurrency(transaction.amount) }}
+               {{ formatCurrency(parseFloat(transaction.amount)) }}
             </p>
             <PhCaretRight
                v-if="transaction.status === 'pending'"
@@ -60,6 +59,7 @@
 
 <script setup lang="ts">
 import { PhCheckCircle, PhClock, PhCaretRight } from "@phosphor-icons/vue";
+import type { Transaction } from "~/stores/transactions";
 const { formatCurrency } = useFormatNumber();
 
 defineProps({
@@ -69,15 +69,8 @@ defineProps({
    },
 });
 
-function getMonth(date: Date) {
-   return date.toLocaleDateString("en-US", { month: "short" });
-}
-
-function getYear(date: Date) {
-   return date.getFullYear();
-}
-
-function formatDate(date: Date) {
+function formatDate(dateString: string) {
+   const date = new Date(dateString);
    const month = String(date.getMonth() + 1).padStart(2, "0");
    const day = String(date.getDate()).padStart(2, "0");
    const year = date.getFullYear();

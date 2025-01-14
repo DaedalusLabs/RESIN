@@ -5,14 +5,17 @@
             <NuxtLinkLocale to="my-resin">
                <PhCaretLeft :size="24" />
             </NuxtLinkLocale>
-            <h1 class="text-2xl font-extrabold leading-tight">Transactions</h1>
+            <h1 class="text-2xl font-extrabold leading-tight">
+               {{ t("transactions.title") }}
+            </h1>
          </div>
-         <button :v-if="isSupported" @click="startShare">
+         <button v-if="hasTransactions && isSupported" @click="startShare">
             <PhExport :size="28" class="text-xl text-pirate-950" />
          </button>
       </div>
       <div class="flex flex-col gap-8">
          <TransactionsBarChart
+            v-if="hasTransactions"
             :total-amount="transactionsStore.getTotalAmount"
             :paid-amount="transactionsStore.getPaidOffAmount"
             :remaining-amount="transactionsStore.getToBePaidOffAmount"
@@ -30,8 +33,18 @@ import { useTransactionsStore } from "~/stores/transactions";
 import { useShare } from "@vueuse/core";
 import { PhExport, PhCaretLeft } from "@phosphor-icons/vue";
 
+const { t } = useI18n();
+
+useHead({
+   title: t("transactions.title"),
+});
+
 const { share, isSupported } = useShare();
 const transactionsStore = useTransactionsStore();
+
+const hasTransactions = computed(
+   () => transactionsStore.getTransactions.length > 0,
+);
 
 function startShare() {
    share({
@@ -43,5 +56,6 @@ function startShare() {
 
 definePageMeta({
    layout: "white",
+   middleware: ["auth"],
 });
 </script>

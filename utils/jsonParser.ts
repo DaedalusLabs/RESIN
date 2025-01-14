@@ -25,9 +25,10 @@ export const fixNestedStrings = <T extends Record<string, unknown>>(
                const parsedValue = JSON.parse(value) as JsonValue;
                // If successful, replace the string with the parsed object or array
                obj[key] = parsedValue as T[typeof key];
-            } catch (e) {
+            } catch {
                // If parsing fails, keep the original string value
-               console.error(e);
+               //console.error(e, value);
+               obj[key] = value;
                continue;
             }
          }

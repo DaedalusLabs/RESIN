@@ -1,0 +1,28 @@
+{
+   "names": {
+      "_": "ab85f0dfb109b11a9b3943a9b4f9e81152c40d66acf56b0effcf9652f6bec6ec",
+      "nostr": "ab85f0dfb109b11a9b3943a9b4f9e81152c40d66acf56b0effcf9652f6bec6ec",
+      "dev": "c69fe100bead562c168a1091e4379e2f15e7e2686c228fdf5b23c939e7c089e9",
+      "dev2": "fd22007ee363ec08c2fe2a2b28173afeb2875d7c58e3c306b22a77dae8d3ee93"
+   },
+   "relays": {
+      "ab85f0dfb109b11a9b3943a9b4f9e81152c40d66acf56b0effcf9652f6bec6ec": [
+         "wss://nostr1.daedaluslabs.io",
+         "wss://nostr2.daedaluslabs.io",
+         "wss://nostr3.daedaluslabs.io",
+         "wss://nostr4.daedaluslabs.io"
+      ],
+      "c69fe100bead562c168a1091e4379e2f15e7e2686c228fdf5b23c939e7c089e9": [
+         "wss://nostr1.daedaluslabs.io",
+         "wss://nostr2.daedaluslabs.io",
+         "wss://nostr3.daedaluslabs.io",
+         "wss://nostr4.daedaluslabs.io"
+      ],
+      "fd22007ee363ec08c2fe2a2b28173afeb2875d7c58e3c306b22a77dae8d3ee93": [
+         "wss://nostr1.daedaluslabs.io",
+         "wss://nostr2.daedaluslabs.io",
+         "wss://nostr3.daedaluslabs.io",
+         "wss://nostr4.daedaluslabs.io"
+      ]
+   }
+}

@@ -2,6 +2,7 @@
    <div>
       <VerificationDrawerIntroduction
          :show="currentStep === 1"
+         :skip-key-backup="skipKeyBackup"
          @close="handleCloseDrawer"
          @next="handleNext"
       />
@@ -22,12 +23,18 @@
          @next="handleNext"
          @back="handleBack"
       />
-      <VerificationDrawerIdentity
+      <VerificationDrawerIdentitySumsub
          :show="currentStep === 5"
          @close="handleCloseDrawer"
          @next="handleNext"
       />
-      <VerificationDrawerCountrySelect
+      <VerificationDrawerPassed
+         :show="currentStep === 6"
+         @close="handleCloseDrawer"
+         @next="handleNext"
+      />
+      <!-- skip with subsub -->
+      <!-- <VerificationDrawerCountrySelect
          :show="currentStep === 6"
          @close="handleCloseDrawer"
          @next="handleNext"
@@ -61,21 +68,22 @@
          :show="currentStep === 11"
          @close="handleCloseDrawer"
          @next="handleNext"
-      />
-      <VerificationDrawerInformation
-         :show="currentStep === 12"
+      /> -->
+      <!-- end skip with subsub -->
+      <!-- <VerificationDrawerInformation
+         :show="currentStep === 2"
          @close="handleCloseDrawer"
          @next="handleNext"
-      />
+      /> -->
       <VerificationDrawerContract
-         :show="currentStep === 13"
+         :show="currentStep === 7"
          @close="handleCloseDrawer"
          @next="handleNext"
       />
       <VerificationDrawerSign
-         :show="currentStep === 14"
+         :show="currentStep === 8"
          @close="handleCloseDrawer"
-         @next="handleNext"
+         @next="handleFinish"
       />
    </div>
 </template>
@@ -83,6 +91,8 @@
 <script setup>
 import { usePropertiesStore } from "~/stores/properties";
 
+const router = useRouter();
+const localePath = useLocalePath();
 const propertiesStore = usePropertiesStore();
 const currentStep = ref(-1);
 const MAX_STEPS = 14;
@@ -95,8 +105,12 @@ const props = defineProps({
       default: false,
    },
    propertyId: {
-      type: Number,
+      type: String,
       required: true,
+   },
+   skipKeyBackup: {
+      type: Boolean,
+      default: false,
    },
 });
 
@@ -111,7 +125,26 @@ const handleCloseDrawer = () => {
    currentStep.value = -1;
 };
 
+const handleFinish = () => {
+   console.log("handleFinish", {
+      path: localePath(`/rent-to-own/${props.propertyId}/under-review`),
+   });
+   router.push({
+      path: localePath(`/rent-to-own/${props.propertyId}/under-review`),
+   });
+};
+
+console.log("skipKeyBackup", props.skipKeyBackup);
+
 const handleNext = () => {
+   if (props.skipKeyBackup && currentStep.value < 5) {
+      currentStep.value = 5;
+      return;
+   }
+   if (props.skipKeyBackup && currentStep.value === 1) {
+      currentStep.value = 5;
+      return;
+   }
    currentStep.value += 1;
 
    if (currentStep.value === MAX_STEPS) {

@@ -7,15 +7,16 @@
                {{ agreement.title }}
             </h3>
             <p class="text-xs text-gray-500">
-               Signed {{ formatDate(agreement.signed) }}
+               {{
+                  agreement.isSigned
+                     ? `Signed ${formatDate(agreement.signedDate)}`
+                     : "Not signed"
+               }}
             </p>
          </div>
       </div>
 
-      <NuxtLink
-         :to="agreement.downloadUrl"
-         class="text-sm font-bold text-resin-500"
-      >
+      <NuxtLink :to="agreement.url" class="text-sm font-bold text-resin-500">
          Download
       </NuxtLink>
    </div>
@@ -23,7 +24,8 @@
 
 <script setup lang="ts">
 import { PhFile } from "@phosphor-icons/vue";
-import type { Agreement } from "~/types/Agreement";
+import type { Agreement } from "~/stores/transactions";
+
 defineProps({
    agreement: {
       type: Object as PropType<Agreement>,
@@ -31,7 +33,8 @@ defineProps({
    },
 });
 
-function formatDate(date: Date) {
+function formatDate(dateString: string) {
+   const date = new Date(dateString);
    const day = date.getDate().toString().padStart(2, "0");
    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // +1 because months are 0-indexed
    const year = date.getFullYear();

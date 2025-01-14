@@ -25,12 +25,11 @@
             </div>
             <div class="ml-3">
                <h3 class="text-sm font-medium text-red-800">
-                  Property Not Found
+                  {{ $t("property.notFound.title") }}
                </h3>
                <div class="mt-2 text-sm text-red-700">
                   <p>
-                     The property you're looking for could not be found. Please
-                     check the URL or go back to the properties list.
+                     {{ $t("property.notFound.message") }}
                   </p>
                </div>
                <div class="mt-4">
@@ -38,7 +37,7 @@
                      to="properties"
                      class="text-sm font-medium text-red-800 hover:text-red-900"
                   >
-                     Go back to properties →
+                     {{ $t("property.notFound.backToProperties") }}
                   </NuxtLinkLocale>
                </div>
             </div>
@@ -47,47 +46,69 @@
    </section>
 
    <section v-else class="mb-28">
-      <FlowbiteCheckToast
-         :show-toast="isRequestSent && property?.isBitcasaHome"
-         :text="`Information submitted`"
-         @close-toast="isRequestSent = false"
-      />
-      <ModalContactAgent
-         v-if="property?.isBitcasaHome"
-         :is-open="isModalOpen"
-         :property-address="propertyAddress"
-         @update:is-open="isModalOpen = $event"
-         @send-request="handleSendRequest"
-      />
-      <ModalRequestTour
-         v-else
-         :is-open="isModalOpen"
-         :is-request-sent="isRequestSent"
-         :property-address="propertyAddress"
-         :reference-number="referenceNumber"
-         @update:is-open="isModalOpen = $event"
-         @send-request="handleSendRequest"
+      <ClientOnly fallback-tag="span">
+         <ModalContactAgent
+            v-if="isBuyNow"
+            :is-open="isModalOpen"
+            :property="property"
+            @update:is-open="isModalOpen = $event"
+            @send-request="handleSendRequest"
+         />
+         <ModalRequestTour
+            v-else
+            :is-open="isModalOpen"
+            :is-request-sent="isRequestSent"
+            :property="property"
+            :reference-number="referenceNumber"
+            @update:is-open="isModalOpen = $event"
+            @send-request="handleSendRequest"
+         />
+      </ClientOnly>
+
+      <BackgroundOverlay :show="showDrawer" @close="showDrawer = false" />
+
+      <FlowbiteImageDrawer
+         :show-drawer="showDrawer"
+         :images="property.images"
+         @close="showDrawer = false"
       />
 
-      <div class="relative">
-         <NuxtImg
-            v-if="property.images?.length"
-            :src="property.images[0]"
-            alt="Property Image"
-            class="h-64 w-full object-cover"
-         />
+      <div class="relative xl:hidden">
+         <div v-if="property?.images?.length" class="relative h-64">
+            <div v-if="property.images[0]?.blurhash" class="absolute inset-0">
+               <BlurhashCanvas
+                  :hash="property.images[0].blurhash"
+                  :width="320"
+                  :height="240"
+                  class="h-full w-full"
+                  :style="{ display: mobileImageLoaded ? 'none' : 'block' }"
+               />
+            </div>
+            <NuxtImg
+               :src="property.images[0]?.files[2]?.url"
+               :srcset="
+                  property.images[0]?.files
+                     ?.map((file) => `${file.url} ${file.width}w`)
+                     .join(', ')
+               "
+               sizes="(max-width: 1280px) 100vw, 1280px"
+               alt="Property Image"
+               class="absolute inset-0 h-full w-full object-cover"
+               @load="mobileImageLoaded = true"
+            />
+         </div>
 
          <span
-            v-if="property.isBitcasaHome"
-            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
+            v-if="property && property['resin-type'] === 'Buy Now'"
+            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md"
          >
-            For Sale
+            {{ $t("property.types.buyNow") }}
          </span>
          <span
             v-else
-            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md hover:border-white hover:bg-resin-500 hover:text-white"
+            class="absolute bottom-4 right-4 z-10 cursor-default rounded-full border-2 border-resin-500 bg-white px-2 py-1 text-xs font-semibold text-resin-500 shadow-md"
          >
-            Rent to Own
+            {{ $t("property.types.rentToOwn") }}
          </span>
 
          <DetailsTopBar :property="property" />
@@ -97,13 +118,35 @@
          <div
             class="sticky top-16 hidden flex-shrink flex-col gap-5 lg:w-[40%] xl:flex"
          >
-            <div>
-               <NuxtImg
-                  v-if="property.images?.length"
-                  :src="property.images[0]"
-                  alt="Property Image"
-                  class="h-96 w-full object-cover"
-               />
+            <div class="relative h-96">
+               <div v-if="property?.images?.length">
+                  <div
+                     v-if="property.images[0]?.blurhash"
+                     class="absolute inset-0"
+                  >
+                     <BlurhashCanvas
+                        :hash="property.images[0].blurhash"
+                        :width="320"
+                        :height="240"
+                        class="h-full w-full"
+                        :style="{
+                           display: desktopImageLoaded ? 'none' : 'block',
+                        }"
+                     />
+                  </div>
+                  <NuxtImg
+                     :src="property.images[0]?.files[2]?.url"
+                     :srcset="
+                        property.images[0]?.files
+                           ?.map((file) => `${file.url} ${file.width}w`)
+                           .join(', ')
+                     "
+                     sizes="(max-width: 1280px) 40vw, 512px"
+                     alt="Property Image"
+                     class="absolute inset-0 h-full w-full object-cover"
+                     @load="desktopImageLoaded = true"
+                  />
+               </div>
                <button
                   class="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
                   @click="showDrawer = true"
@@ -113,24 +156,8 @@
             </div>
             <div class="flex h-12 justify-between gap-3">
                <div class="flex justify-between gap-2">
-                  <!--
-                  <FlowbiteButton
-                     v-if="property?.isBitcasaHome"
-                     :text="`Contact Agent`"
-                     :show-icon="true"
-                     class="h-full"
-                     @click="handleShowAgentModal"
-                  />
-                  <FlowbiteButton
-                     v-else
-                     :text="`Request Tour`"
-                     :show-icon="false"
-                     class="secondary h-full"
-                     @click="handleShowTourModal"
-                  />
-                  -->
                   <NuxtLinkLocale
-                     v-if="!property?.isBitcasaHome"
+                     v-if="property && property['resin-type'] === 'Rent to Own'"
                      :to="`/properties/${route.params.id}/rent-to-own`"
                   >
                      <FlowbiteButton
@@ -139,23 +166,40 @@
                         @click="handleClick"
                      />
                   </NuxtLinkLocale>
+                  <NuxtLinkLocale v-else>
+                     <FlowbiteButton
+                        class="h-full"
+                        :text="$t('property.actions.contactAgent')"
+                        @click="handleShowModal"
+                     />
+                  </NuxtLinkLocale>
                </div>
                <div class="flex flex-shrink gap-2">
                   <button
                      :v-if="isSupported"
                      class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+                     :title="$t('property.actions.share')"
                      @click="startShare"
                   >
                      <PhExport class="h-6 w-6 text-black" />
                   </button>
                   <button
-                     class="flex h-full w-12 cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-md hover:border-resin-500"
+                     class="flex h-full w-12 items-center justify-center rounded-full border-2 bg-white shadow-md"
+                     :class="
+                        isAuthenticated
+                           ? 'cursor-pointer hover:border-resin-500'
+                           : 'cursor-not-allowed opacity-50'
+                     "
+                     :title="$t('property.actions.favorite')"
                      @click="toggleFavorite"
                   >
                      <PhHeartStraight
-                        :class="{ 'text-resin-500': isFavorite }"
+                        :class="[
+                           isAuthenticated ? 'text-black' : 'text-pirate-200',
+                           { 'text-resin-500': isFavorite },
+                        ]"
                         :weight="isFavorite ? 'fill' : 'regular'"
-                        class="h-6 w-6 text-black"
+                        class="h-6 w-6"
                      />
                   </button>
                </div>
@@ -164,101 +208,93 @@
 
          <!-- Property Details -->
          <div class="flex-1">
-            <div class="container w-11/12 xl:ml-auto xl:mr-0">
+            <div class="container w-full xl:ml-auto xl:mr-0 xl:w-11/12">
                <h1 class="text-2xl font-extrabold leading-tight">
                   {{
-                     property.location?.address?.street ||
-                     "Address not available"
+                     property.title ||
+                     $t("property.details.addressNotAvailable")
                   }}
                </h1>
                <p class="mt-1 text-sm">
-                  {{ property.location?.address?.city }},
-                  {{ property.location?.address?.country }}
+                  {{ property.location?.street }},
+                  {{ property.location?.city }},
+                  {{ property.location?.country }}
                </p>
+               <ResinAlert
+                  :show="showSuccessAlert"
+                  :text="$t('property.details.requestSuccess')"
+               />
                <DetailsSize :property="property" />
                <DetailsPrices :property="property" />
                <DetailsSummary :property="property" />
                <DetailsKeyFeatures :property="property" />
                <DetailsAdditional :property="property" />
                <p
+                  v-if="
+                     property.attribution && property.attribution?.length > 0
+                  "
                   class="my-12 rounded-lg bg-pirate-50 py-2 text-center text-sm font-medium text-pirate-300"
                >
-                  {{ property.message }}
+                  {{ property.attribution }}
                </p>
+               <ClientOnly fallback-tag="span">
+                  <DetailsMap :property="property" />
+               </ClientOnly>
             </div>
-            <ClientOnly fallback-tag="span">
-               <DetailsMap :property="property" />
-            </ClientOnly>
-            <DetailsNearby :property="property" />
-            <DetailsBottomBar
-               class="block xl:hidden"
-               :property="property"
-               @show-modal="handleShowModal"
-            />
          </div>
+
+         <DetailsBottomBar
+            class="block xl:hidden"
+            :property="property"
+            @show-modal="handleShowModal"
+         />
+      </div>
+      <div class="mx-auto mt-8 px-4 md:container md:px-0 xl:w-10/12 xl:px-16">
+         <DetailsNearby :property="property" />
       </div>
    </section>
 </template>
 
-<script setup>
-import { ref, onMounted, computed, defineProps } from "vue";
+<script setup lang="ts">
+import { ref, onMounted, computed } from "vue";
 import { PhImages, PhExport, PhHeartStraight } from "@phosphor-icons/vue";
 import { usePropertiesStore } from "~/stores/properties";
+import { useNostrStore } from "~/stores/nostr";
 import { fixNestedStrings } from "~/utils/jsonParser";
 import ModalContactAgent from "~/components/Modal/contact-agent.vue";
 import ModalRequestTour from "~/components/Modal/request-tour.vue";
+import { propertyImageUtils, propertyJsonLdUtils } from "~/types/property";
+import type { Property } from "~/types/property";
+import BlurhashCanvas from "~/components/Flowbite/BlurhashCanvas.vue";
 
 const propertiesStore = usePropertiesStore();
+const nostrStore = useNostrStore();
+const { t } = useI18n();
+
 const route = useRoute();
+const router = useRouter();
 const error = ref(false);
 const isLoading = ref(true);
-const property = ref(null);
+const property = ref<Property | null>(null);
 const isRequestSent = ref(false);
 const isModalOpen = ref(false);
 const referenceNumber = ref(0);
-const email = ref("");
-const formError = ref(false);
-const phone = ref("");
-const isFavorite = ref(null);
 const showDrawer = ref(false);
+const showSuccessAlert = ref(false);
 
-const handleShowModal = () => {
-   isModalOpen.value = true;
-};
+const isAuthenticated = computed(() => nostrStore.isAuthenticated);
+const isFavorite = computed(() =>
+   property.value ? propertiesStore.isFavorite(property.value.id) : false,
+);
 
-const toggleFavorite = () => {
-   isFavorite.value = !isFavorite.value;
-   propertiesStore.toggleFavorite(property.value.id);
-};
-
-const buttonText = computed(() => {
-   return route.path.includes("rent-to-own")
-      ? "Rent this property"
-      : "Rent-to-own";
-});
-
-const { share, isSupported } = useShare();
-
-function startShare() {
-   share({
-      title: "Resin",
-      text: "Check out these listings on Resin",
-      url: location.href,
-   });
-}
-
-const generateRef = () => {
-   return Math.floor(Math.random() * 9000) + 1000;
-};
-
-onMounted(() => {
-   referenceNumber.value = generateRef();
-});
+// Add refs for tracking image load states
+const mobileImageLoaded = ref(false);
+const desktopImageLoaded = ref(false);
 
 onMounted(async () => {
    try {
-      const foundProperty = propertiesStore.properties.find(
-         (p) => p.id === route.params.id,
+      const foundProperty = await propertiesStore.get(
+         route.params.id as string,
       );
 
       if (!foundProperty) {
@@ -268,13 +304,21 @@ onMounted(async () => {
 
       property.value = foundProperty;
 
-      isFavorite.value = propertiesStore.isFavorite(foundProperty.id);
-
       if (typeof property.value === "string") {
          fixNestedStrings(property);
       }
 
-      propertiesStore.addViewedProperty(route.params.id);
+      // Check if current URL matches the expected slug
+      const currentPath = route.path;
+      const expectedPath = `/properties/${route.params.id}/${property.value.slug}`;
+
+      if (property.value.slug && currentPath !== expectedPath) {
+         // Redirect to the correct URL with the slug
+         await router.replace(expectedPath);
+         return;
+      }
+
+      propertiesStore.addViewedProperty(route.params.id as string);
    } catch (e) {
       console.error("Error loading property:", e);
       error.value = true;
@@ -283,28 +327,128 @@ onMounted(async () => {
    }
 });
 
-const handleSendRequest = () => {
-   if (property?.value.isBitcasaHome) {
-      if (email.value || phone.value) {
-         isModalOpen.value = false;
-         isRequestSent.value = true;
-         formError.value = false;
-      } else {
-         formError.value = true;
-         console.log("Form error");
-      }
-   } else {
-      isRequestSent.value = true;
+const handleShowModal = () => {
+   isModalOpen.value = true;
+};
+
+const buttonText = computed(() => {
+   return property.value && property.value["resin-type"] !== "Rent to Own"
+      ? t("property.actions.rentProperty")
+      : t("property.actions.rentToOwn");
+});
+
+const { share, isSupported } = useShare();
+
+function startShare() {
+   share({
+      title: `${property.value?.title} in ${property.value?.location?.city}, ${property.value?.location?.country}`,
+      text: "Check out these listings on Resin",
+      url: location.href,
+   });
+}
+
+const toggleFavorite = () => {
+   if (isAuthenticated.value && property.value) {
+      isFavorite.value = !isFavorite.value;
+      propertiesStore.toggleFavorite(property.value.id);
    }
 };
 
-const propertyAddress = computed(() => {
-   return `${property.value.location.address.street}, ${property.value.location.address.city}, ${property.value.location.address.country}`;
+onMounted(() => {
+   referenceNumber.value = 0;
+});
+
+const handleSendRequest = async () => {
+   isModalOpen.value = false;
+
+   showSuccessAlert.value = true;
+   setTimeout(() => {
+      showSuccessAlert.value = false;
+   }, 5000);
+};
+
+const isBuyNow = computed(() => {
+   return property.value && property.value["resin-type"] === "Buy Now";
 });
 
 definePageMeta({
    layout: "white",
 });
+
+useHead({
+   title: () =>
+      property.value
+         ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
+         : "Property Details",
+   meta: [
+      {
+         name: "og:title",
+         content: () =>
+            property.value
+               ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
+               : "Property Details",
+      },
+      {
+         name: "og:description",
+         content: () =>
+            property.value
+               ? `${property.value.description}`
+               : "Property Details",
+      },
+      {
+         name: "og:image",
+         content: () =>
+            property.value
+               ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}`
+               : "/android-chrome-256x256.png",
+      },
+      {
+         name: "description",
+         content: () =>
+            property.value
+               ? `${property.value.description}`
+               : "Property Details",
+      },
+   ],
+});
+
+useSeoMeta({
+   title: () =>
+      property.value
+         ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
+         : "Property Details",
+   description: () =>
+      property.value ? `${property.value.description}` : "Property Details",
+   ogTitle: () =>
+      property.value
+         ? `${property.value.title} in ${property.value.location?.city}, ${property.value.location?.country}`
+         : "Property Details",
+   ogDescription: () =>
+      property.value ? `${property.value.description}` : "Property Details",
+   ogImage: () =>
+      property.value
+         ? `${propertyImageUtils.getSmallestImage(property.value.images[0]?.files)?.url}`
+         : "/android-chrome-256x256.png",
+});
+
+useJsonld(() =>
+   property.value
+      ? [
+           {
+              "@context": "https://schema.org",
+              "@type": "RealEstateListing",
+              ...propertyJsonLdUtils.toRealEstateListingJsonLd(property.value),
+           },
+           {
+              "@context": "https://schema.org",
+              "@type": "SingleFamilyResidence",
+              ...propertyJsonLdUtils.toSingleFamilyResidenceJsonLd(
+                 property.value,
+              ),
+           },
+        ]
+      : [],
+);
 
 defineProps({
    showToasts: {
@@ -317,9 +461,5 @@ defineProps({
 <style scoped>
 .z-top {
    z-index: 1000;
-}
-
-.secondary {
-   @apply bg-pirate-700 !important;
 }
 </style>

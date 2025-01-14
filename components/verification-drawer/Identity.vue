@@ -12,12 +12,12 @@
                   <PhIdentificationCard :size="36" />
                </div>
                <div class="flex flex-col">
-                  <span class="text-sm font-semibold text-gray-500"
-                     >Step 1</span
-                  >
-                  <span class="text-md font-semibold text-pirate-950"
-                     >Provide an identity document</span
-                  >
+                  <span class="text-sm font-semibold text-gray-500">
+                     Step 1
+                  </span>
+                  <span class="text-md font-semibold text-pirate-950">
+                     Provide an identity document
+                  </span>
                </div>
             </div>
             <div class="flex items-center gap-3">
@@ -25,12 +25,12 @@
                   <PhCamera :size="36" />
                </div>
                <div class="flex flex-col">
-                  <span class="text-sm font-semibold text-gray-500"
-                     >Step 2</span
-                  >
-                  <span class="text-md font-semibold text-pirate-950"
-                     >Get ready for a live face scan</span
-                  >
+                  <span class="text-sm font-semibold text-gray-500">
+                     Step 2
+                  </span>
+                  <span class="text-md font-semibold text-pirate-950">
+                     Get ready for a live face scan
+                  </span>
                </div>
             </div>
 
@@ -41,8 +41,9 @@
                   class="px-5 py-3"
                   @click="handleNext"
                />
-            </div></div
-      ></template>
+            </div>
+         </div>
+      </template>
    </FlowbiteDrawer>
 </template>
 
