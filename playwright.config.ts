@@ -61,14 +61,19 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       env: {
          BACKEND_ENDPOINT:
-            process.env.BACKEND_ENDPOINT || "http://localhost:3001",
+            process.env.BACKEND_ENDPOINT || "https://api.resin.estate",
          IMAGES_BASE_URL:
-            process.env.IMAGES_BASE_URL || "http://localhost:3001",
-         TYPESENSE_HOST: process.env.TYPESENSE_HOST || "localhost",
-         TYPESENSE_PORT: process.env.TYPESENSE_PORT || "8109",
+            process.env.IMAGES_BASE_URL || "https://api.resin.estate",
+         TYPESENSE_HOST: process.env.TYPESENSE_HOST || "api.resin.estate",
+         TYPESENSE_PORT: process.env.TYPESENSE_PORT || "443",
          TYPESENSE_API_KEY:
-            process.env.TYPESENSE_API_KEY || "resin_development",
-         MESSAGES_PUBKEY: process.env.MESSAGES_PUBKEY || "",
+            process.env.TYPESENSE_API_KEY || "IAc8hL8tUngzHRFrPP6iorEik8TyaSbV",
+         MESSAGES_PUBKEY:
+            process.env.MESSAGES_PUBKEY ||
+            "fd22007ee363ec08c2fe2a2b28173afeb2875d7c58e3c306b22a77dae8d3ee93",
+         PUBKEY_WHITELIST:
+            process.env.PUBKEY_WHITELIST ||
+            "fd22007ee363ec08c2fe2a2b28173afeb2875d7c58e3c306b22a77dae8d3ee93",
          BTCPAY_BASE_URL:
             process.env.BTCPAY_BASE_URL || "https://btcpay.resin.estate",
       },
