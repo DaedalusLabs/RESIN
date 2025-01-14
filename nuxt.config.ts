@@ -278,11 +278,11 @@ export default defineNuxtConfig({
       ],
       urls: async () => {
          const urls = await fetch(
-            `${process.env.BACKEND_ENDPOINT}/listings/urls`,
+            `${process.env.BACKEND_ENDPOINT || "https://api.resin.estate"}/listings/urls`,
          );
          return urls;
       },
-      sources: [`${process.env.BACKEND_ENDPOINT}/listings/urls`],
+      sources: [`${process.env.BACKEND_ENDPOINT || "https://api.resin.estate"}/listings/urls`],
    },
    robots: {
       groups: [
