@@ -24,8 +24,6 @@ export function useNDK() {
             "wss://nostr.dbtc.link",
             "wss://nostr1.daedaluslabs.io",
             "wss://nostr2.daedaluslabs.io",
-            "wss://nostr3.daedaluslabs.io",
-            // Add more relays as needed
          ],
          signer,
       });
