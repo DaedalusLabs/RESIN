@@ -1,6 +1,6 @@
 {
    "name": "resin",
-   "private": true,
+   "license": "MIT",
    "type": "module",
    "scripts": {
       "build": "nuxt build",
@@ -24,7 +24,7 @@
       "@nostr-dev-kit/ndk-cache-dexie": "^2.5.9",
       "@nuxt/fonts": "^0.10.3",
       "@nuxtjs/algolia": "^1.10.2",
-      "@nuxtjs/i18n": "^9.1.1",
+      "@nuxtjs/i18n": "^9.1.2",
       "@nuxtjs/robots": "5.1.0",
       "@nuxtjs/sitemap": "7.0.1",
       "@phosphor-icons/vue": "^2.2.1",
@@ -33,6 +33,7 @@
       "@vite-pwa/nuxt": "^0.10.6",
       "blurhash": "^2.0.5",
       "chart.js": "^4.4.7",
+      "dexie": "^4.0.11",
       "dompurify": "^3.2.3",
       "flowbite": "^2.5.2",
       "maplibre-gl": "^5.0.1",
@@ -74,6 +75,12 @@
       "tailwindcss": "^3.4.17",
       "typescript": "^5.7.3",
       "vitest": "^2.1.8"
+   },
+   "resolutions": {
+      "vite": ">=5.4.12",
+      "glob": ">=11.0.0",
+      "mkdirp": ">=3.0.1",
+      "sourcemap-codec": "npm:@jridgewell/sourcemap-codec@>=1.5.0"
    },
    "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
 }
