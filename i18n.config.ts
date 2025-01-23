@@ -11,4 +11,7 @@ export default defineI18nConfig(() => ({
       "nl-NL": nlNL,
       "nl": nlNL,
    },
+   allowComposition: true,
+   missingWarn: false,
+   fallbackWarn: false,
 }));
