@@ -1,0 +1,14 @@
+[package]
+name = "resin-front"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+yew = { version = "0.21.0", features = ["csr"] }
+nostr-minions.workspace = true
+resin-core.workspace = true
+nostro2.workspace = true
+gloo = "0.11.0"
+lucide-yew = "1.1.0"
+yew-router = "0.18.0"
+web-sys = "0.3.77"
