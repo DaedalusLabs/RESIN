@@ -1,6 +1,11 @@
+pub mod chat;
 pub mod favorites;
 pub mod home;
+pub mod keys;
+pub mod listing;
 pub mod login;
 pub mod my_resin;
 pub mod profile;
 pub mod search;
+pub mod settings;
+pub mod terms;

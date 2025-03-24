@@ -1,30 +1,23 @@
 {
     "id": "/",
     "start_url": "/",
-    "name": "Fuente e-Commerce for Suriname",
-    "short_name": "Fuente",
-    "description": "A Nostr and Bitcoin based e-Commerce platform bringing secure and private shopping to Suriname.",
-    "theme_color": "#4167e8",
+    "name": "Wioso",
+    "short_name": "Wioso",
+    "description": "Wioso - Buy a home without a bank",
+    "theme_color": "#F07E19",
     "background_color": "#ffffff",
     "display": "standalone",
     "screenshots": [
         {
-            "src": "/public/assets/img/screenshot1.png",
+            "src": "/public/screenshot1.png",
             "sizes": "640x320",
             "type": "image/png",
-            "label": "Fuente Home"
-        },
-        {
-            "src": "/public/assets/img/screenshot2.png",
-            "sizes": "640x320",
-            "type": "image/png",
-            "form_factor": "wide",
-            "label": "Checkout"
+            "label": "Resin Introduction"
         }
-    ],
+   ],
     "icons": [
         {
-            "src": "/public/assets/img/logo.png",
+            "src": "/public/BrandIcon_RESIN.png",
             "sizes": "any"
         }
     ]

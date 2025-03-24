@@ -9,3 +9,4 @@ nostro2.workspace = true
 nostro2-signer.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
+wasm-bindgen-test = "0.3.50"

@@ -1,20 +1,13 @@
 [workspace]
 resolver = "2"
-members = [ "resin-core", "resin-front"]
+members = [ "resin-core", "resin-front", "resin-server"]
 exclude = [ "listing-test" ]
 
 [workspace.dependencies]
 serde = "1"
-# nostro2 = "0.2.6"
-# nostr-minions = "0.1.10"
-
+nostr-minions = "0.1.13"
 resin-core = { path = "resin-core" }
-
 nostro2 = "0.3.1"
 nostro2-signer = "0.1.0"
-nostr-minions = "0.1.11"
-# nostr-minions = "0.1.10"
 serde_json = "1"
 sha2 = "0.10.8"
-
-

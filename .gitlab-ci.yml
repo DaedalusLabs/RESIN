@@ -1,0 +1,72 @@
+stages:
+  - check
+  - build
+  - deploy
+  ## # Install TailwindCSS
+  ## RUN mkdir -p /root/.local/bin && \
+  ##     curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v4.0.6/tailwindcss-linux-x64 && \
+  ##     chmod +x tailwindcss-linux-x64 && \
+  ##     mv tailwindcss-linux-x64 /root/.local/bin/tailwindcss
+  ## 
+  ## # Install Trunk using cargo-binstall
+  ## RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash && \
+  ##     cargo binstall trunk --no-confirm
+
+default: 
+  image: rust:1.84-bookworm
+  before_script:
+    - apt-get update
+    - apt-get install -y libssl3 libssl-dev libgcc-s1 libstdc++6 curl clang lld 
+    - rm -rf /var/lib/apt/lists/*
+    - rustup target add wasm32-unknown-unknown
+    - rustup component add clippy
+    - mkdir -p /root/.local/bin 
+    - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v4.0.6/tailwindcss-linux-x64
+    - chmod +x tailwindcss-linux-x64
+    - mv tailwindcss-linux-x64 /root/.local/bin/tailwindcss4
+    - curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+    - cargo binstall trunk --no-confirm
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - target/
+    - public/
+
+check_workspace:
+  stage: check
+  script:
+    - cargo check -p resin-core --release
+    - cargo check --target wasm32-unknown-unknown -p resin-front --release
+    - cargo check -p resin-server --release
+    - cargo clippy -- -D "clippy::pedantic" -D "clippy::all" -D "clippy::style" -D "clippy::nursery"
+
+build_front: 
+  stage: build
+  script:
+    - trunk build --config resin-front/Trunk.toml --release
+  artifacts:
+    paths:
+      - resin-front/dist/
+    expire_in: 1 week
+
+build_binary:
+  stage: build
+  script:
+    - cargo build -p resin-server --release
+  artifacts:
+    paths:
+      - target/release/resin-server
+    expire_in: 1 week
+
+deploy_front:
+  stage: deploy
+  image: oven/bun:1.2.2-alpine
+  dependencies:
+    - build_front
+  before_script:
+    - bun install wrangler --save-dev
+  script:
+    - bunx wrangler pages deploy resin-front/dist --project-name=resin
+  when: manual
+

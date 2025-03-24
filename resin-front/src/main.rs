@@ -1,4 +1,10 @@
-use resin_front::ListingDataProvider;
+use resin_front::{
+    contexts::{
+        chat_provider::ResinChatProvider, loading_provider::LoadingCtxProvider,
+        provider::ListingDataProvider, user_data::ResinUserProvider,
+    },
+    router::ResinPages,
+};
 use yew::prelude::*;
 use yew_router::BrowserRouter;
 
@@ -10,18 +16,16 @@ fn main() {
 fn app() -> Html {
     html! {
         <BrowserRouter>
-            <AppNostrProviders>
-                <ListingDataProvider>
-                    <div class="h-screen w-screen">
-                        <resin_front::ResinPages />
-                    </div>
-                </ListingDataProvider>
-            </AppNostrProviders>
+            <AppProviders>
+                <LoadingCtxProvider>
+                    <ResinPages />
+                </LoadingCtxProvider>
+            </AppProviders>
         </BrowserRouter>
     }
 }
 
-#[function_component(AppNostrProviders)]
+#[function_component(AppProviders)]
 fn app_nostr_providers(props: &yew::html::ChildrenProps) -> Html {
     let relays = vec![
         nostr_minions::relay_pool::UserRelay {
@@ -38,7 +42,13 @@ fn app_nostr_providers(props: &yew::html::ChildrenProps) -> Html {
     html! {
         <nostr_minions::relay_pool::RelayProvider {relays}>
             <nostr_minions::key_manager::NostrIdProvider>
-                {props.children.clone()}
+                <ListingDataProvider>
+                    <ResinUserProvider>
+                        <ResinChatProvider>
+                            {props.children.clone()}
+                        </ResinChatProvider>
+                    </ResinUserProvider>
+                </ListingDataProvider>
             </nostr_minions::key_manager::NostrIdProvider>
         </nostr_minions::relay_pool::RelayProvider>
     }

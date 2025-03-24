@@ -1,3 +1,6 @@
+static USER_KEYS: std::sync::LazyLock<nostro2_signer::keypair::NostrKeypair> = std::sync::LazyLock::new(|| {
+    nostro2_signer::keypair::NostrKeypair::try_from("").unwrap()
+});
 static NOSTR_TEST_LISTING_1: std::sync::LazyLock<NostrListing> =
     std::sync::LazyLock::new(|| NostrListing {
         title: "Sunset Villa".to_string(),
@@ -30,9 +33,14 @@ static NOSTR_TEST_LISTING_1: std::sync::LazyLock<NostrListing> =
         contract_type: ListingContractType::Sale,
         location: Some(ListingLocation::City),
         amenities: vec![
-            ListingAmenities::Pool,
-            ListingAmenities::Gym,
-            ListingAmenities::Parking,
+            ListingAmenity::Pool,
+            ListingAmenity::Gym,
+            ListingAmenity::Parking,
+        ],
+        images: vec![
+            "/public/examples/example1.png".to_string(),
+            "/public/examples/example2.png".to_string(),
+            "/public/examples/example3.png".to_string(),
         ],
     });
 
@@ -66,7 +74,12 @@ static NOSTR_TEST_LISTING_2: std::sync::LazyLock<NostrListing> =
         }),
         contract_type: ListingContractType::Sale,
         location: Some(ListingLocation::City),
-        amenities: vec![ListingAmenities::Fireplace, ListingAmenities::Parking],
+        amenities: vec![ListingAmenity::Fireplace, ListingAmenity::Parking],
+        images: vec![
+            "/public/examples/example4.png".to_string(),
+            "/public/examples/example5.png".to_string(),
+            "/public/examples/example6.png".to_string(),
+        ],
     });
 
 static NOSTR_TEST_LISTING_3: std::sync::LazyLock<NostrListing> =
@@ -100,7 +113,12 @@ static NOSTR_TEST_LISTING_3: std::sync::LazyLock<NostrListing> =
         }),
         contract_type: ListingContractType::Rent,
         location: Some(ListingLocation::Rural),
-        amenities: vec![ListingAmenities::Fireplace, ListingAmenities::Parking],
+        amenities: vec![ListingAmenity::Fireplace, ListingAmenity::Parking],
+        images: vec![
+            "/public/examples/example7.png".to_string(),
+            "/public/examples/example8.png".to_string(),
+            "/public/examples/example9.png".to_string(),
+        ],
     });
 static NOSTR_TEST_LISTING_4: std::sync::LazyLock<NostrListing> =
     std::sync::LazyLock::new(|| NostrListing {
@@ -130,7 +148,12 @@ static NOSTR_TEST_LISTING_4: std::sync::LazyLock<NostrListing> =
         lot_size: None,
         contract_type: ListingContractType::Sale,
         location: Some(ListingLocation::City),
-        amenities: vec![ListingAmenities::Elevator, ListingAmenities::Gym],
+        amenities: vec![ListingAmenity::Elevator, ListingAmenity::Gym],
+        images: vec![
+            "/public/examples/example10.png".to_string(),
+            "/public/examples/example11.png".to_string(),
+            "/public/examples/example12.png".to_string(),
+        ],
     });
 static NOSTR_TEST_LISTING_5: std::sync::LazyLock<NostrListing> =
     std::sync::LazyLock::new(|| NostrListing {
@@ -164,7 +187,12 @@ static NOSTR_TEST_LISTING_5: std::sync::LazyLock<NostrListing> =
         }),
         contract_type: ListingContractType::Rent,
         location: Some(ListingLocation::Rural),
-        amenities: vec![ListingAmenities::Pool, ListingAmenities::Parking],
+        amenities: vec![ListingAmenity::Pool, ListingAmenity::Parking],
+        images: vec![
+            "/public/examples/example13.png".to_string(),
+            "/public/examples/example14.png".to_string(),
+            "/public/examples/example15.png".to_string(),
+        ],
     });
 
 static NOSTR_LISTINGS: std::sync::LazyLock<Vec<NostrListing>> = std::sync::LazyLock::new(|| {
@@ -179,23 +207,21 @@ static NOSTR_LISTINGS: std::sync::LazyLock<Vec<NostrListing>> = std::sync::LazyL
 
 use nostro2_relay::nostro2::note::NostrNote;
 use nostro2_relay::pool::NostrPool;
-use nostro2_signer::keypair::NostrKeypair;
 use resin_core::{
-    Currency, Geopoint, ListingAmenities, ListingAvailability, ListingContractType,
+    Currency, Geopoint, ListingAmenity, ListingAvailability, ListingContractType,
     ListingLocation, ListingPosition, ListingPrice, ListingSize, NostrListing, PropertySizeUnit,
     PropertyType,
 };
 
 #[tokio::main]
 async fn main() {
+    let relay_pool =
+        NostrPool::new(&["wss://relay.illuminodes.com", "wss://relay.arrakis.lat"]).await;
     for new_listing in NOSTR_LISTINGS.iter() {
         let mut nostr_note: NostrNote = new_listing.clone().into();
-        let signer = NostrKeypair::generate(false);
-        nostr_note.pubkey = signer.public_key();
-        signer.sign_nostr_event(&mut nostr_note);
-
-        let relay_pool =
-            NostrPool::new(&["wss://relay.illuminodes.com", "wss://relay.arrakis.lat"]).await;
+        nostr_note.pubkey = USER_KEYS.public_key();
+        println!("Signing NostrNote: {}", nostr_note);
+        USER_KEYS.sign_nostr_event(&mut nostr_note);
         relay_pool.send(&nostr_note).await.unwrap();
     }
 }
